@@ -1,0 +1,51 @@
+external:
+  - id: "https://example.org/anno/1"
+    type: "Annotation"
+    "dcterms:hasVersion": [
+      "https://example.org/anno/1/rev/1"
+    ]
+    creator: "https://example.org/user/john-doe"
+  - id: "https://example.org/anno/1/comment/1"
+    type: "Annotation"
+    target: "https://example.org/anno/1"
+    creator: "https://example.org/user/jane-dee"
+    body:
+      type: "TextualBody"
+      value: "<p>foo</p>"
+      format: "text/html"
+  - id: "https://example.org/anno/1/rev/1"
+    type: "Annotation"
+    body:
+      - type: "TextualBody"
+        value: "<p>foo</p>"
+        format: "text/html"
+    target:
+      - source:  "https://example.org/somePage"
+        selector:
+          type: "FragmentSelector"
+          value: 'xywh=1,1,1,1'
+internal:
+  anno:
+    - _id: '1'
+      _revisions:
+        - body:
+            - type: "TextualBody"
+              value: "<p>foo</p>"
+              format: "text/html"
+          target:
+            - source:  "https://example.org/somePage"
+              selector:
+                type: "FragmentSelector"
+                value: 'xywh=1,1,1,1'
+      _comments:
+        - _revisions:
+          - body:
+              type: "TextualBody"
+              value: "<p>This is interesting!</p>"
+              format: "text/html"
+            _comments:
+              - _revisions:
+                - body:
+                    type: "TextualBody"
+                    value: "<p>No it is not!</p>"
+                    format: "text/html"

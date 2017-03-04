@@ -1,0 +1,30 @@
+definitions:
+
+  User:
+    type: 'object'
+    properties:
+      email:
+        type: 'string'
+        format: 'email'
+      groups:
+
+  AnnotationTarget:
+      type: 'object'
+      properties:
+
+  Annotation:
+    type: object
+    properties:
+      id:
+        type: 'string'
+        format: 'url'
+      modified:
+        type: 'date'
+      creator:
+        type:
+          $ref: '#/definitions/User'
+      revisions:
+        type: 'array'
+        items:
+          type: '#/definitions/AnnotationRevision'
+
