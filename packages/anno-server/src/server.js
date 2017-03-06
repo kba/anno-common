@@ -23,6 +23,7 @@ function start (app, cb) {
     const routes = {
         '/anno': require('./controller/anno-controller'),
         '/token': require('./controller/token-controller'),
+        '/swagger': require('./controller/swagger-controller'),
     }
     async.eachOf(db, (coll, collName, doneColl) => {
         coll.loadDatabase(doneColl)
@@ -46,6 +47,8 @@ start(app, (err) => {
         }
         return next(err, req, res)
     })
+    // Static files
+    app.use(express.static(__dirname + '/../public'))
     app.listen(3000,() => {
         console.log("Listening on port 3000")
     })

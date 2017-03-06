@@ -1,0 +1,44 @@
+swagger: '2.0'
+info:
+  title: 'Anno Server API'
+consumes:
+  - application/ld+json
+produces:
+  - application/ld+json
+paths:
+  '/anno/':
+    get:
+      summary: 'Get all annotations'
+      parameters: {}
+      responses:
+        200:
+          description: all okay
+
+  User:
+    type: 'object'
+    properties:
+      email:
+        type: 'string'
+        format: 'email'
+      groups:
+
+  AnnotationTarget:
+      type: 'object'
+      properties:
+
+  Annotation:
+    type: object
+    properties:
+      id:
+        type: 'string'
+        format: 'url'
+      modified:
+        type: 'date'
+      creator:
+        type:
+          $ref: '#/definitions/User'
+      revisions:
+        type: 'array'
+        items:
+          type: '#/definitions/AnnotationRevision'
+
