@@ -26,5 +26,8 @@
     "js-yaml": "^3.8.2",
     "jsonwebtoken": "^7.3.0",
     "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "tap": "^10.3.0"
   }
 }

@@ -1,25 +1,21 @@
 const express = require('express')
-const nedb = require('nedb')
 const ajv = require('ajv')
 const async = require('async')
-const jsonMiddleware = require('body-parser').json({type: '*/*'})
+const nedb = require('nedb')
 
-const jwtMiddleware = require('./jwt-middleware')
+const config                 = require('./config')
+const jsonMiddleware         = require('./middleware/json-parser-middleware')
+const jsonwebtokenMiddleware = require('./middleware/jsonwebtoken-middleware')
+const NedbStore              = require('./store/nedb-store')
+
 const fixtures = require('./fixtures')
-
-const config = {
-    JWT_SECRET: 'S3cr3t!',
-    // baseUri: 'http://ub.uni-hd.de/anno-service',
-    baseUri: 'http://localhost:3000',
-}
-
 
 function start (app, cb) {
     const db = {
-        anno: new nedb({filename: './anno.nedb'}),
-        perm: new nedb({filename: './perm.nedb'}),
+        anno: new nedb({filename: `/anno.nedb`}),
+        perm: new nedb({filename: `/perm.nedb`}),
     }
-    const guard = jwtMiddleware(db, config)
+    const guard = jsonwebtokenMiddleware(db, config)
     const routes = {
         '/anno': require('./controller/anno-controller'),
         '/token': require('./controller/token-controller'),
@@ -28,6 +24,7 @@ function start (app, cb) {
     async.eachOf(db, (coll, collName, doneColl) => {
         coll.loadDatabase(doneColl)
     }, (err) => {
+        const Anno = new NedbStore({db, config})
         async.eachOf(routes, (routerFn, routerPath, done) => {
             app.use(routerPath, jsonMiddleware, routerFn({db, guard, config}))
             done()

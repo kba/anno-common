@@ -1,147 +1,36 @@
 const {Router} = require('express')
-// const PROP_HAS_COMMENT = 'http://purl.org/stuff/rev#hasReview'
-const PROP_HAS_COMMENT = 'ns:hasReview'
-// const PROP_HAS_VERSION = 'http://purl.org/dcterms/hasVersion'
-const PROP_HAS_VERSION = 'ns:hasVersion'
-// const PROP_VERSION_OF = 'http://purl.org/dcterms/versionOf'
-const PROP_VERSION_OF = 'ns:versionOf'
 
-class AnnoStore {
+module.exports = ({store, guard, config}) => {
 
-    constructor({db, config}) {
-        this.db = db
-        this.config = config
-    }
-
-    _toJSONLD(annoId, anno, options={}) {
-        const ret = {}
-        if (!options.skipContext) {
-            ret['@context'] = 'http://www.w3.org/ns/anno.jsonld'
-        }
-        ret.id = `${this.config.baseUri}/anno/${annoId}`
-        ret.type = "Annotation"
-        if (anno.body) ret.body = anno.body
-
-        if (anno._revisions !== undefined && anno._revisions.length > 0) {
-            var revId = 0
-            ret[PROP_HAS_VERSION] = anno._revisions.map(revision => {
-                const revisionLD = this._toJSONLD(`${annoId}/rev/${revId}`, revision,
-                    {skipContext: true})
-                revisionLD[PROP_VERSION_OF] = ret.id
-                return revisionLD
-            })
-        }
-
-        if (anno._comments !== undefined && anno._comments.length > 0) {
-            var commentId = 0
-            ret[PROP_HAS_COMMENT] = anno._comments.map(comment => {
-                const commentLD = this._toJSONLD(`${annoId}/comment/${commentId}`, comment,
-                    {skipContext: true})
-                commentLD.target = [ret.id]
-                return commentLD
-            })
-        }
-
-        return ret
-    }
-
-    _traverseChain(parent, chain, cb) {
-        var anno = parent
-        var lastPath;
-        for (var i = 0; i < chain.length ; i += 2) {
-            var [path, length] = chain.slice(i, i+2)
-            if (path === 'rev') path = '_revisions'
-            else if (path === 'comment') path = '_comments'
-            else return cb(`Invalid chain: ${JSON.stringify(chain)}`)
-            length = parseInt(length)
-            if (!anno[path]) return cb(`Invalid chain: ${JSON.stringify(chain)}`)
-            if (!anno[path][length]) return cb(`Invalid chain: ${JSON.stringify(chain)}`)
-            anno = anno[path][length]
-            lastPath = path
-        }
-        if (chain.length > 2) {
-            const parentId = `${this.config.baseUri}/anno/${chain.slice(0, chain.length -2).join('/')}`
-            if (lastPath === 'comment') anno.target = [parentId]
-            else anno[PROP_VERSION_OF] = parentId
-        }
-        return cb(null, anno)
-    }
-
-    getAnnotation(annoId, chain, cb) {
-        if (typeof chain === 'function') {
-            [cb, chain] = [chain, []]
-        }
-        this.db.anno.findOne({_id: annoId}, (err, doc) => {
-            if (err) return cb(err)
-            if (!doc) return cb(404)
-            this._traverseChain(doc, chain, (err, anno) => {
-                if (err) return cb(err)
-                const id = `${annoId}/${chain.join('/')}`.replace(/\/$/,'')
-                return cb(null, this._toJSONLD(id, anno))
-            })
-        })
-    }
-
-}
-
-module.exports = ({db, guard, config}) => {
-
-    const Anno = new AnnoStore({db, config})
     const router = Router()
 
     router.get('/', (req, resp) => { 
-        db.anno.find({}, function(err, docs) {
-            return resp.send(docs)
+        store.searchAnnotations(req.query, (err, docs) => {
+            resp.send(docs)
         })
     })
 
-    router.post('/', guard('post-anno'), (req, resp) => { 
-        db.anno.insert(req.body, function(err) {
-            return resp.send(arguments)
+    router.post('/', guard('post-anno'), (req, res, next) => { 
+        store.createNewAnnotation(req.body, (err, anno) => {
+            if (err) return next(err)
+            return res.send(anno)
         })
     })
 
     router.get('/:annoId', (req, resp, next) => { 
-        Anno.getAnnotation(req.params.annoId, (err, doc) => {
+        store.getAnnotation(req.params.annoId, (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
         })
     })
+
+    // XXX TODO
     router.get('/:annoId/**', (req, resp, next) => { 
         var chain = req.path.split('/')
         const annoId = chain[1]
-        Anno.getAnnotation(req.params.annoId, chain.slice(2), (err, doc) => {
+        store.getAnnotation(req.params.annoId, chain.slice(2), (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
-        })
-    })
-
-    router.get('/:annoId/rev/:revId', (req, resp, next) => {
-        db.anno.findOne({'_id': req.params.annoId}, (err, doc) => {
-            if (err) return next(err)
-            const rev = doc._revisions[parseInt(req.params.revId)]
-            if (!rev) return next({status: 404, message: "No such revision"})
-            resp.send(rev)
-        })
-    })
-
-    router.get('/:annoId/comment/:commentId', (req, resp, next) => {
-        db.anno.findOne({'_id': req.params.annoId}, (err, doc) => {
-            if (err) return next(err)
-            const comment = doc._comments[parseInt(req.params.commentId)]
-            if (!comment) return next({status: 404, message: "No such comment"})
-            resp.send(comment)
-        })
-    })
-
-    router.get('/:annoId/comment/:commentId/rev/:commentRevId', (req, resp, next) => {
-        db.anno.findOne({'_id': req.params.annoId}, (err, doc) => {
-            if (err) return next(err)
-            const comment = doc._comments[parseInt(req.params.commentId)]
-            if (!comment) return next({status: 404, message: "No such comment"})
-            const rev = comment._revisions[parseInt(req.params.commentRevId)]
-            if (!rev) return next({status: 404, message: "No such revision"})
-            resp.send(rev)
         })
     })
 
