@@ -1,0 +1,14 @@
+{
+  "name": "@kba/anno-config",
+  "version": "0.0.1",
+  "description": "Anno namespaces and such",
+  "main": "src/config.js",
+  "scripts": {
+      "test": "tap test/*.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "tap": "^10.3.0"
+  }
+}

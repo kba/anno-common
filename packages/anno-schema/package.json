@@ -1,0 +1,18 @@
+{
+  "name": "@kba/anno-schema",
+  "version": "0.0.1",
+  "description": "Anno JSON schema",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "tap": "^10.3.0"
+  },
+  "dependencies": {
+    "ajv": "^4.11.4",
+    "js-yaml": "^3.8.2"
+  }
+}

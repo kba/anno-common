@@ -1,9 +1,9 @@
-process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
+process.env.ANNO_NEDB_DIR = `${__dirname}/../../../temp`
 
 const async = require('async')
 const tap = require('tap')
-const NedbStore = require('../src/store/nedb-store')
-const fixtures = require('./fixtures/schema-cases')
+const NedbStore = require('../src/nedb-store')
+const fixtures = require('../../../fixtures/schema-cases')
 
 tap.test('nedb-store', t => {
     const input1 = fixtures.AnnotationToPost.ok[0]
@@ -11,25 +11,38 @@ tap.test('nedb-store', t => {
     const input3 = fixtures.AnnotationToPost.ok[2]
     const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
     const store = new NedbStore()
+    var savedId;
     async.waterfall([
         cb => store.wipe(cb),
-        cb => store.create(input1, (err, saved) => {
-            t.equals(saved.target, input1.target, 'target kept')
+        cb => store.init(cb),
+        cb => store.create(input1, cb),
+        (saved, cb) => {
+            t.equals(saved.target.source, input1.target, 'target kept (string)')
+            savedId = saved.id
+            cb()
+        },
+        cb => store.get(savedId, cb),
+        (found, cb) => {
+            t.equals(found.id, savedId, `get by url: ${savedId}`)
+            cb()
+        },
+        cb => store.get('DOES-NOT-EXIST', (err) => {
+            t.equals(err.code, 404, "DOES-NOT-EXIST isnt found")
             cb()
         }),
         cb => store.create(input2, cb),
         (saved, cb) => {
-            t.equals(saved.target.source, input2.target.source, 'target kept')
+            t.equals(saved.target.source, input2.target.source, 'target kept (object)')
             cb()
         },
         cb => store.create(input3, cb),
         (saved, cb) => {
-            t.equals(saved.target[0].source, input3.target[0].source, 'target kept')
+            t.equals(saved.target.source, input3.target[0].source, 'target kept (array of objects)')
             cb()
         },
         cb => store.create(input4, cb),
         (saved, cb) => {
-            t.equals(saved.target, input4.target, 'target kept')
+            t.equals(saved.target.source, input4.target, 'target kept (string)')
             cb()
         },
         cb => store.search(cb),

@@ -1,10 +1,9 @@
 const nedb = require('nedb')
 const fs = require('fs')
+const Store = require('@kba/anno-store')
 
-const ns = require('../ns')
-const config = require('../config')()
-const schema = require('../schema')
-const Store = require('./store')
+const config = require('@kba/anno-config')()
+const schema = require('@kba/anno-schema')
 
 class NedbStore extends Store {
 
@@ -29,13 +28,14 @@ class NedbStore extends Store {
         })
     }
 
-    getAnnotation(annoId, chain, cb) {
+    get(annoId, chain, cb) {
         if (typeof chain === 'function') {
             [cb, chain] = [chain, []]
         }
+        annoId = this._idFromURL(annoId)
         this.db.findOne({_id: annoId}, (err, doc) => {
             if (err) return cb(err)
-            if (!doc) return cb(404)
+            if (!doc) return cb(this._notFoundException({_id: annoId}))
             this._traverseChain(doc, chain, (err, anno) => {
                 if (err) return cb(err)
                 const id = `${annoId}/${chain.join('/')}`.replace(/\/$/,'')
@@ -45,12 +45,14 @@ class NedbStore extends Store {
     }
 
     create(annoDoc, cb) {
+        annoDoc = JSON.parse(JSON.stringify(annoDoc))
         if (!schema.validate.AnnotationToPost(annoDoc)) {
             return cb(schema.validate.AnnotationToPost.errors)
         }
+        annoDoc = this._normalizeTarget(annoDoc)
         this.db.insert(annoDoc, (err, annoSaved) => {
             if (err) return cb(err)
-            return cb (null, this._toJSONLD(annoSaved._id, annoSaved))
+            return cb (null, this._toJSONLD(annoSaved))
         })
     }
 
@@ -61,16 +63,6 @@ class NedbStore extends Store {
             query.$or = [
                 { target: query.$target },
                 { 'target.source': query.$target },
-                // { 
-                //     target: {
-                //         $elemMatch: {
-                //             $or: [
-                //                 query.$target,
-                //                 { source: query.$target },
-                //             ]
-                //         }
-                //     }
-                // },
             ]
             delete query.$target
         }
@@ -79,7 +71,7 @@ class NedbStore extends Store {
             if (err) return cb(err)
             docs = (docs || [])
             // console.log(docs)
-            return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc)))
+            return cb(null, docs.map(doc => this._toJSONLD(doc)))
         })
     }
 

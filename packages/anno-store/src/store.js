@@ -1,16 +1,34 @@
-const ns = require('../ns')
-const config = require('../config')()
+const config = require('@kba/anno-config')()
 
 class Store {
 
     constructor() {
-        console.error("Store.constructor called")
+        // console.error("Store.constructor called")
     }
 
     init(cb) { return cb() }
     wipe(cb) { throw new Error("wipe not implemented"); }
 
+    _notFoundException(id) {
+        const err = new Error(`Not found in store: ${JSON.stringify(id)}`)
+        err.code = 404
+        return err
+    }
+
+    _idFromURL(url) {
+        return url.replace(config.BASE_URL + '/anno/', '')
+    }
+
+    _normalizeTarget(annoDoc) {
+        if (!Array.isArray(annoDoc.target)) annoDoc.target = [annoDoc.target]
+        annoDoc.target = annoDoc.target.map(target =>
+            (typeof target === 'string') ? {source: target} : target)
+        if (annoDoc.target.length === 1) annoDoc.target = annoDoc.target[0]
+        return annoDoc
+    }
+
     _toJSONLD(annoId, anno, options={}) {
+        if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
         const ret = {}
         if (!options.skipContext) {
             ret['@context'] = 'http://www.w3.org/ns/anno.jsonld'
@@ -22,17 +40,17 @@ class Store {
 
         if (anno._revisions !== undefined && anno._revisions.length > 0) {
             var revId = 0
-            ret[ns.PROP_HAS_VERSION] = anno._revisions.map(revision => {
+            ret[config.PROP_HAS_VERSION] = anno._revisions.map(revision => {
                 const revisionLD = this._toJSONLD(`${annoId}/rev/${revId}`, revision,
                     {skipContext: true})
-                revisionLD[ns.PROP_VERSION_OF] = ret.id
+                revisionLD[config.PROP_VERSION_OF] = ret.id
                 return revisionLD
             })
         }
 
         if (anno._comments !== undefined && anno._comments.length > 0) {
             var commentId = 0
-            ret[ns.PROP_HAS_COMMENT] = anno._comments.map(comment => {
+            ret[config.PROP_HAS_COMMENT] = anno._comments.map(comment => {
                 const commentLD = this._toJSONLD(`${annoId}/comment/${commentId}`, comment,
                     {skipContext: true})
                 commentLD.target = [ret.id]
@@ -60,7 +78,7 @@ class Store {
         if (chain.length > 2) {
             const parentId = `${config.BASE_URL}/anno/${chain.slice(0, chain.length -2).join('/')}`
             if (lastPath === 'comment') anno.target = [parentId]
-            else anno[ns.PROP_VERSION_OF] = parentId
+            else anno[config.PROP_VERSION_OF] = parentId
         }
         return cb(null, anno)
     }
