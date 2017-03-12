@@ -1,4 +1,4 @@
-const config = require('@kba/anno-config')()
+const config = require('@kba/anno-config').loadConfig()
 
 class Store {
 

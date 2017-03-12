@@ -2,15 +2,15 @@
   "name": "@kba/anno-store-nedb",
   "version": "0.0.1",
   "description": "Open Annotation nedb store",
-  "main": "server.js",
+  "main": "src/nedb-store.js",
   "scripts": {
     "test": "tap test/*.test.js"
   },
   "author": "kba",
   "license": "MIT",
   "repository": "github:kba/anno",
-  "bugs": "https://github.com/kba/anno-server/issues",
-  "homepage": "https://github.com/kba/anno-server#readme",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/packages/anno-store-nedb#readme",
   "dependencies": {
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-config": "^0.0.1",

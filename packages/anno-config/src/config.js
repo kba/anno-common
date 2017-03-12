@@ -4,7 +4,7 @@ const DEFAULTS = {
     JWT_SECRET: 'S3cr3t!',
     BASE_URL: 'http://localhost:3000',
     NEDB_DIR: __dirname + '/' + '../nedb',
-    STORE: 'NEDB',
+    STORE: '@kba/anno-store-nedb',
     // const PROP_HAS_COMMENT = 'http://purl.org/stuff/rev#hasReview'
     PROP_HAS_COMMENT: 'ns:hasReview',
     // const PROP_HAS_VERSION = 'http://purl.org/dcterms/hasVersion'
@@ -13,7 +13,7 @@ const DEFAULTS = {
     PROP_VERSION_OF: 'ns:versionOf',
 }
 
-module.exports = function loadConfig(localDefaults={}) {
+function loadConfig(localDefaults={}) {
 
     const CONFIG = JSON.parse(JSON.stringify(DEFAULTS))
     Object.assign(CONFIG, JSON.parse(JSON.stringify(localDefaults)))
@@ -26,4 +26,19 @@ module.exports = function loadConfig(localDefaults={}) {
         .forEach(k => process.env[`${PREFIX}_${k}`] = CONFIG[k])
 
     return CONFIG
+}
+
+// https://github.com/1602/jugglingdb/blob/master/lib/utils.js
+function safeRequire(require, module) {
+    try {
+        return require(module);
+    } catch (e) {
+        console.error(e)
+        console.error(`Run "npm install --global ${module}"  to use anno ${module}`);
+        process.exit(1);
+    }
+}
+
+module.exports = {
+    loadConfig, safeRequire
 }

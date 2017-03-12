@@ -1,0 +1,21 @@
+{
+  "name": "@kba/anno-cli",
+  "version": "0.0.1",
+  "description": "Anno CLI",
+  "author": "kba",
+  "license": "MIT",
+  "bin": {
+      "anno": "src/cli.js"
+  },
+  "XXX scripts": {
+    "test": "tap test/*.test.js"
+  },
+  "devDependencies": {
+    "tap": "^10.3.0"
+  },
+  "dependencies": {
+    "@kba/anno-store-nedb": "^0.0.1",
+    "@kba/anno-config": "^0.0.1",
+    "yargs": "^7.0.2"
+  }
+}

@@ -2,7 +2,7 @@ const nedb = require('nedb')
 const fs = require('fs')
 const Store = require('@kba/anno-store')
 
-const config = require('@kba/anno-config')()
+const config = require('@kba/anno-config').loadConfig({})
 const schema = require('@kba/anno-schema')
 
 class NedbStore extends Store {
