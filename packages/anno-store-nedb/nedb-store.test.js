@@ -1,9 +1,9 @@
-process.env.ANNO_NEDB_DIR = `${__dirname}/../../../temp`
+process.env.ANNO_NEDB_DIR = `${__dirname}/../../temp`
 
 const async = require('async')
 const tap = require('tap')
-const NedbStore = require('../src/nedb-store')
-const fixtures = require('../../../fixtures/schema-cases')
+const NedbStore = require('./nedb-store')
+const fixtures = require('../../fixtures/schema-cases')
 
 tap.test('nedb-store', t => {
     const input1 = fixtures.AnnotationToPost.ok[0]

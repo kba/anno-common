@@ -2,7 +2,7 @@
   "name": "@kba/anno-schema",
   "version": "0.0.1",
   "description": "Anno JSON schema",
-  "main": "index.js",
+  "main": "schema.js",
   "scripts": {
     "test": "make test"
   },

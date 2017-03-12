@@ -2,9 +2,9 @@
   "name": "@kba/anno-store-nedb",
   "version": "0.0.1",
   "description": "Open Annotation nedb store",
-  "main": "src/nedb-store.js",
+  "main": "nedb-store.js",
   "scripts": {
-    "test": "tap test/*.test.js"
+    "test": "tap *.test.js"
   },
   "author": "kba",
   "license": "MIT",

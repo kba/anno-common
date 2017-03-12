@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@kba/anno-store-nedb": "^0.0.1",
+    "@kba/anno-store": "^0.0.1",
     "@kba/anno-config": "^0.0.1",
     "yargs": "^7.0.2"
   }

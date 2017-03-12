@@ -1,6 +1,6 @@
-const fixtures = require('../../../fixtures/schema-cases')
+const fixtures = require('../../fixtures/schema-cases')
 const tap = require('tap')
-const schema = require('..')
+const schema = require('./schema')
 
 tap.test('smoketest schema', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')

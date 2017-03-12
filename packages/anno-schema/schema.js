@@ -4,7 +4,7 @@ const ajv = require('ajv')({
     allErrors: true
 });
 
-const schemaDef = yaml.safeLoad(fs.readFileSync(__dirname + '/../schema.yml'))
+const schemaDef = yaml.safeLoad(fs.readFileSync(`${__dirname}/schema.yml`))
 
 module.exports = {
     definitions: schemaDef.definitions,

@@ -1,10 +1,9 @@
 const tap = require('tap')
 
-const loadConfig = require('../src/config')
+const {loadConfig} = require('./config')
 
 tap.test('loadConfig', t => {
     var config = loadConfig()
-    t.equals(config.STORE, 'NEDB', 'config.STORE === NEDB')
 
     const expected = 'not secret'
     process.env.ANNO_JWT_SECRET = expected
@@ -24,5 +23,10 @@ tap.test('loadConfig', t => {
 
     config = loadConfig({XYZ: expected})
     t.equals(process.env.ANNO_XYZ, expected, 'config vars are exported to env')
+
+    config = loadConfig({BOOL: 'false'})
+    t.equals(typeof config.BOOL, 'boolean', 'strings "true"/"false" parsed as boolean')
+    t.equals(typeof process.env.ANNO_BOOL, 'string', 'strings "true"/"false" still strings in process.env')
+
     t.end()
 })

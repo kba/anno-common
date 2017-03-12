@@ -2,7 +2,7 @@
   "name": "@kba/anno-config",
   "version": "0.0.1",
   "description": "Anno namespaces and such",
-  "main": "src/config.js",
+  "main": "config.js",
   "scripts": {
       "test": "tap test/*.test.js"
   },

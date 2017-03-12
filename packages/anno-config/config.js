@@ -2,6 +2,7 @@ const PREFIX = 'ANNO';
 const PREFIX_RE = new RegExp(`^${PREFIX}_`)
 const DEFAULTS = {
     JWT_SECRET: 'S3cr3t!',
+    DEBUG: 'false',
     BASE_URL: 'http://localhost:3000',
     NEDB_DIR: __dirname + '/' + '../nedb',
     STORE: '@kba/anno-store-nedb',
@@ -23,7 +24,11 @@ function loadConfig(localDefaults={}) {
         .forEach(k => CONFIG[k.replace(PREFIX_RE, '')] = process.env[k])
 
     Object.keys(CONFIG)
-        .forEach(k => process.env[`${PREFIX}_${k}`] = CONFIG[k])
+        .forEach(k => {
+            if (CONFIG[k].match(/^true|false$/))
+                CONFIG[k] = CONFIG[k] !== 'false'
+            process.env[`${PREFIX}_${k}`] = CONFIG[k]
+        })
 
     return CONFIG
 }

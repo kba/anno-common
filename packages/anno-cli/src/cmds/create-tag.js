@@ -8,9 +8,7 @@ exports.builder = {
 exports.handler = function (argv) {
     argv.tags.unshift(argv.tag)
     delete argv.tag
-    const {loadConfig, safeRequire} = require('@kba/anno-config')
-    const config = loadConfig()
-    const store = new(safeRequire(require, config.STORE))()
+    const store = require('@kba/anno-store').load(module)
     store.init(err => {
         const anno = {target: argv.target, body: {type:['oa:Tag'], value: argv.tags[0]}}
         store.create(anno, (err, annoSaved) => {

@@ -1,5 +1,21 @@
 const config = require('@kba/anno-config').loadConfig()
 
+function load(loadingModule) {
+    if (!loadingModule)
+        throw new Error("Must pass the loading module to Store.load")
+    if (!config.STORE)
+        throw new Error("No store configured. Set the ANNO_STORE env var or STORE config option.")
+    if (config.DEBUG)
+        console.log(`Loading store ${config.STORE} for ${loadingModule.filename}`)
+    var impl;
+    try {
+        impl = loadingModule.require(config.STORE)
+    } catch (err) {
+        console.error(`Please install '${config.STORE}' configured as store`)
+    }
+    return new(impl)()
+}
+
 class Store {
 
     constructor() {
@@ -85,4 +101,4 @@ class Store {
 
 }
 
-module.exports = Store
+module.exports = {Store, load}
