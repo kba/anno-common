@@ -1,6 +1,6 @@
 const expressJWT = require('express-jwt')
 
-module.exports = (db, config) => {
+module.exports = (permDB, config) => {
     const jwtMiddleware = expressJWT({secret: config.JWT_SECRET})
     return (perm) => {
         return (req, res, next) => {

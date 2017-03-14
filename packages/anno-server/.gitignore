@@ -1,4 +1,3 @@
 *.nedb
 *.sqlite
 node_modules
-public

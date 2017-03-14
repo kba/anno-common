@@ -1,5 +1,8 @@
+#
+# Definitions are kept in @kba/anno-schema
+#
 swagger: '2.0'
-basePath: '{{ basePath }}'
+basePath: '/'
 info:
   title: 'Anno Server API'
   version: '0.0.1'
@@ -24,28 +27,12 @@ securityDefinitions:
 ##############################################################################
 paths:
 
-  '/anno':
-    'post':
-      tags:
-        - 'anno'
-      security:
-        - Bearer: []
-      summary: 'Post a new annotation'
-      parameters:
-        - in: 'body'
-          name: 'body'
-          description: 'New annotation to post'
-          schema:
-            $ref: '#/definitions/AnnotationToPost'
-      responses:
-        200:
-          description: all okay
-
   '/':
-    get:
+
+    head:
       tags:
         - 'anno'
-      summary: 'Get all annotations that adhere to query'
+      summary: 'Get all annotations that adhere to query without body'
       parameters:
         - in: 'query'
           name: 'url'
@@ -58,11 +45,66 @@ paths:
           schema:
             $ref: '#/definitions/ListOfFullAnnotations'
 
-  '/anno.cgi/?id={annoId}':
+    get:
+      tags:
+        - 'anno'
+      summary: 'Get all annotations that adhere to query'
+      parameters:
+        - in: 'query'
+          name: 'url'
+          required: true
+          type: 'string'
+          format: 'url'
+        - in: 'header'
+          name: 'Prefer'
+          description: '<a href="https://www.w3.org/TR/annotation-protocol/#container-representations">Preferred Container Representation</a>'
+          enum:
+            - 'return=representation;include="http://www.w3.org/ns/ldp#PreferMinimalContainer"'
+            - 'return=representation;include="http://www.w3.org/ns/oa#PreferContainedIRIs'
+            - 'return=representation;include="http://www.w3.org/ns/oa#PreferContainedDescriptions"'
+      responses:
+        200:
+          description: all okay
+          schema:
+            $ref: '#/definitions/ListOfFullAnnotations'
+
+    post:
+      tags:
+        - 'anno'
+      security:
+        - Bearer: []
+      summary: 'Post a new annotation'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'New annotation to post'
+          schema:
+            $ref: '#/definitions/AnnotationToPost'
+        - in: 'header'
+          name: 'Slug'
+          description: 'Preferred annotation ID'
+      responses:
+        200:
+          description: all okay
+
+  '/anno/{id}':
 
     get:
       tags: ['anno']
       summary: 'Get a single annotation including all revisions'
+      parameters:
+        - in: 'path'
+          name: 'annoId'
+          type: 'string'
+          required: true
+          description: 'ID of the annotation'
+      responses:
+        200:
+          description: 'all okay'
+
+    head:
+      tags: ['anno']
+      summary: 'Get a single annotation including all revisions without body'
       parameters:
         - in: 'path'
           name: 'annoId'
@@ -94,8 +136,12 @@ paths:
           schema:
             $ref: '#/definitions/FullAnnotation'
 
+    post:
+      tags:
+        - 'anno'
+      summary: 'Add a comment'
 
-  '/anno.cgi/?id={annoId}&rev={revId}':
+  '/anno/{annoId}/{revId}':
     get:
       tags:
         - 'anno'
@@ -115,126 +161,21 @@ paths:
         200:
           description: all okay
 
-##############################################################################
-#
-# DEFINITIONS
-#
-##############################################################################
-definitions:
-
-  AnnotationSelector:
-    type: 'object'
-    properties:
-      type:
-        type: 'string'
-        enum:
-          - 'FragmentSelector'
-          - 'SvgSelector'
-      value:
-        type: 'string'
-
-  AnnotationTarget:
-    type: 'object'
-    properties:
-      source:
-        type: 'string'
-        format: 'url'
-      selector:
-        maxItems: 1
-        $ref: '#/definitions/AnnotationSelector'
-
-  AnnotationBody:
-    type: 'object'
-    properties:
-      format:
-        type: 'string'
-        enum: ['text/html']
-      type:
-        type: 'string'
-        enum: ['TextualBody']
-      value:
-        type: 'string'
-
-  FullAnnotation:
-    type: 'object'
-    properties:
-      created:
-        type: 'string'
-        format: 'date-time'
-      modified:
-        type: 'string'
-        format: 'date-time'
-      creator:
-        $ref: '#/definitions/User'
-      hasVersion:
-        type: 'array'
-        items:
-          $ref: '#/definitions/AnnotationRevisionDescription'
-      hasComment:
-        type: 'array'
-        items:
-          $ref: '#/definitions/FullAnnotation'
-      body:
-        type: 'array'
-        items:
-          $ref: '#/definitions/AnnotationBody'
-      target:
-        type: 'array'
-        items:
-          minItems: 1
-          $ref: '#/definitions/AnnotationTarget'
-    requiredProperties:
-      - 'created'
-      - 'creator'
-      - 'target'
-      - 'comment'
-
-  AnnotationRevisionDescription:
-    type: 'object'
-    properties:
-      id:
-        type: 'string'
-        format: 'url'
-      modified:
-        type: 'string'
-        format: 'date'
-
-  RevisionToPut:
-    type: 'object'
-    additionalProperties: false
-    properties:
-      body:
-        type: 'array'
-        items:
-          $ref: '#/definitions/AnnotationBody'
-      target:
-        type: 'array'
-        items:
-          minItems: 1
-          $ref: '#/definitions/AnnotationTarget'
-
-  AnnotationToPost:
-    type: 'object'
-    additionalProperties: false
-    properties:
-      body:
-        type: 'array'
-        items:
-          $ref: '#/definitions/AnnotationBody'
-      target:
-        type: 'array'
-        items:
-          minItems: 1
-          $ref: '#/definitions/AnnotationTarget'
-
-  User:
-    type: 'object'
-    properties:
-      email:
-        type: 'string'
-        format: 'email'
-
-  ListOfFullAnnotations:
-    type: 'array'
-    items:
-      $ref: '#/definitions/FullAnnotation'
+    head:
+      tags:
+        - 'anno'
+      summary: 'Get a single revision of one annotation without body'
+      parameters:
+        - in: 'path'
+          name: 'annoId'
+          type: 'string'
+          required: true
+          description: 'ID of the annotation'
+        - in: 'path'
+          name: 'revId'
+          type: 'string'
+          required: true
+          description: "ID of the revision"
+      responses:
+        200:
+          description: all okay

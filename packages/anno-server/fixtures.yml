@@ -5,10 +5,15 @@ external:
       "https://example.org/anno/1/rev/1"
     ]
     creator: "https://example.org/user/john-doe"
+    target: "https://example.org/anno/1"
+    body:
+      type: "TextualBody"
+      value: "<p>foo</p>"
+      format: "text/html"
   - id: "https://example.org/anno/1/comment/1"
     type: "Annotation"
-    target: "https://example.org/anno/1"
     creator: "https://example.org/user/jane-dee"
+    target: "https://example.org/anno/1"
     body:
       type: "TextualBody"
       value: "<p>foo</p>"
@@ -26,7 +31,12 @@ external:
           value: 'xywh=1,1,1,1'
 internal:
   anno:
-    - _id: '1'
+    - target: "https://example.org/anno/1"
+      type: []
+      body:
+        type: ["oa:TextualBody"]
+        value: "<p>foo</p>"
+        format: "text/html"
       _revisions:
         - body:
             - type: "TextualBody"

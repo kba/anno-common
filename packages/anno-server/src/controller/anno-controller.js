@@ -5,20 +5,20 @@ module.exports = ({store, guard, config}) => {
     const router = Router()
 
     router.get('/', (req, resp) => { 
-        store.searchAnnotations(req.query, (err, docs) => {
+        store.search(req.query, (err, docs) => {
             resp.send(docs)
         })
     })
 
     router.post('/', guard('post-anno'), (req, res, next) => { 
-        store.createNewAnnotation(req.body, (err, anno) => {
+        store.create(req.body, (err, anno) => {
             if (err) return next(err)
             return res.send(anno)
         })
     })
 
     router.get('/:annoId', (req, resp, next) => { 
-        store.getAnnotation(req.params.annoId, (err, doc) => {
+        store.get(req.params.annoId, (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
         })
