@@ -2,14 +2,19 @@ const nedb = require('nedb')
 const fs = require('fs')
 const {Store} = require('@kba/anno-store')
 
-const config = require('@kba/anno-config').loadConfig({})
+const config = require('@kba/anno-config').loadConfig({
+    NEDB_DIR: `${process.env.HOME}/.anno/nedb`,
+    COLLECTION: 'default'
+})
 const schema = require('@kba/anno-schema')
 
 class NedbStore extends Store {
 
     constructor() {
         super()
+        // this.dbfilename = `${config.NEDB_DIR}/anno-${config.COLLECTION}.nedb`
         this.dbfilename = `${config.NEDB_DIR}/anno.nedb`
+        if (config.DEBUG) console.error(`nedb saved as ${this.dbfilename}`)
         this.db = new nedb({filename: this.dbfilename})
     }
 
@@ -44,15 +49,29 @@ class NedbStore extends Store {
         })
     }
 
-    create(annoDoc, cb) {
-        annoDoc = JSON.parse(JSON.stringify(annoDoc))
-        if (!schema.validate.AnnotationToPost(annoDoc)) {
-            return cb(schema.validate.AnnotationToPost.errors)
+    create(annosToCreate, cb) {
+        annosToCreate = JSON.parse(JSON.stringify(annosToCreate))
+        var wasArray = true
+        if (!Array.isArray(annosToCreate)) {
+            wasArray = false
+            annosToCreate = [annosToCreate]
         }
-        annoDoc = this._normalizeTarget(annoDoc)
-        this.db.insert(annoDoc, (err, annoSaved) => {
+        const errors = []
+        annosToCreate = annosToCreate.map(anno => {
+            if (!schema.validate.AnnotationToPost(anno)) {
+                return errors.push(schema.validate.AnnotationToPost.errors)
+            }
+            anno = this._normalizeTarget(anno)
+            anno = this._normalizeType(anno)
+            return anno
+        })
+        if (errors.length > 0) return cb(errors)
+        this.db.insert(annosToCreate, (err, saved) => {
             if (err) return cb(err)
-            return cb (null, this._toJSONLD(annoSaved))
+            if (!wasArray && saved.length === 1) {
+                return cb (null, this._toJSONLD(saved[0]))
+            }
+            return cb (null, saved.map(this._toJSONLD))
         })
     }
 

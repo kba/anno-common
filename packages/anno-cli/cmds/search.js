@@ -2,6 +2,16 @@ module.exports = {
     command: 'search [options]',
     desc: 'Search annotations',
     builder: {
+        json: {
+            describe: 'Dump results as JSON',
+            type: 'boolean',
+            default: false,
+        },
+        format: {
+            describe: 'mustache template for output',
+            type: 'string',
+            default: '{{ target.source }} -- {{ body.value }}',
+        },
         target: {
             describe: 'search by target',
             type: 'string'
@@ -20,14 +30,14 @@ module.exports = {
         }
     },
     handler: function (argv) {
-        const {loadConfig, safeRequire} = require('@kba/anno-config')
-        const config = loadConfig()
-        const store = new(safeRequire(require, config.STORE))()
+        const mustache = require('mustache')
+        process.env.ANNO_DEBUG = true
+        const store = require('@kba/anno-store').load(module)
         store.init(err => {
             if (err) return console.error(err)
             const query = []
 
-            if (argv.target) query.push({$target: argv.target}) 
+            if (argv.target) query.push({'target.source': argv.target}) 
 
             if (argv['target-type']) query.push({'target.type': argv.type})
 
@@ -38,7 +48,13 @@ module.exports = {
 
             store.search({$and: query}, (err, found) => {
                 if (err) return console.error(err)
-                console.log(found)
+                if (argv.json) {
+                    console.log(JSON.stringify(found,null,2))
+                } else {
+                    found.forEach(anno => {
+                        console.log(mustache.render(argv.format, anno))
+                    })
+                }
             })
         })
     }

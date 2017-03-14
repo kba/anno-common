@@ -5,18 +5,19 @@
   "author": "kba",
   "license": "MIT",
   "bin": {
-      "anno": "src/cli.js"
+    "anno": "cli.js"
   },
-  "XXX scripts": {
-    "test": "tap test/*.test.js"
+  "scripts": {
+    "test": "echo no test"
   },
   "devDependencies": {
     "tap": "^10.3.0"
   },
   "dependencies": {
-    "@kba/anno-store-nedb": "^0.0.1",
-    "@kba/anno-store": "^0.0.1",
     "@kba/anno-config": "^0.0.1",
+    "@kba/anno-store": "^0.0.1",
+    "@kba/anno-store-nedb": "^0.0.1",
+    "mustache": "^2.3.0",
     "yargs": "^7.0.2"
   }
 }

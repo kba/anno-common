@@ -43,6 +43,13 @@ class Store {
         return annoDoc
     }
 
+    _normalizeType(annoDoc) {
+        if (!('type' in annoDoc)) annoDoc.type = []
+        if (!Array.isArray(annoDoc.type)) annoDoc.type = [annoDoc.type]
+        if (annoDoc.type.indexOf('Annotation') === -1) annoDoc.type.push('Annotation')
+        return annoDoc
+    }
+
     _toJSONLD(annoId, anno, options={}) {
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
         const ret = {}

@@ -4,13 +4,13 @@
   "description": "Open Annotation Store (base class)",
   "main": "store.js",
   "scripts": {
-    "test": "tap test/*.test.js"
+    "test": "tap *.test.js"
   },
   "author": "kba",
   "license": "MIT",
   "repository": "github:kba/anno",
-  "bugs": "https://github.com/kba/anno-server/issues",
-  "homepage": "https://github.com/kba/anno-server#readme",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/packages/anno-server#readme",
   "dependencies": {
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-config": "^0.0.1"
