@@ -12,4 +12,3 @@ bootstrap:
 .PHONY: test
 test: $(TESTS)
 	tap -R$(REPORTER) $^
-

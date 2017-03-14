@@ -61,25 +61,25 @@ class Store {
         if (anno.body) ret.body = anno.body
         if (anno.target) ret.target = anno.target
 
-        if (anno._revisions !== undefined && anno._revisions.length > 0) {
-            var revId = 0
-            ret[config.PROP_HAS_VERSION] = anno._revisions.map(revision => {
-                const revisionLD = this._toJSONLD(`${annoId}/rev/${revId}`, revision,
-                    {skipContext: true})
-                revisionLD[config.PROP_VERSION_OF] = ret.id
-                return revisionLD
-            })
-        }
+        // if (anno._revisions !== undefined && anno._revisions.length > 0) {
+        //     var revId = 0
+        //     ret[config.PROP_HAS_VERSION] = anno._revisions.map(revision => {
+        //         const revisionLD = this._toJSONLD(`${annoId}/rev/${revId}`, revision,
+        //             {skipContext: true})
+        //         revisionLD[config.PROP_VERSION_OF] = ret.id
+        //         return revisionLD
+        //     })
+        // }
 
-        if (anno._comments !== undefined && anno._comments.length > 0) {
-            var commentId = 0
-            ret[config.PROP_HAS_COMMENT] = anno._comments.map(comment => {
-                const commentLD = this._toJSONLD(`${annoId}/comment/${commentId}`, comment,
-                    {skipContext: true})
-                commentLD.target = [ret.id]
-                return commentLD
-            })
-        }
+        // if (anno._comments !== undefined && anno._comments.length > 0) {
+        //     var commentId = 0
+        //     ret[config.PROP_HAS_COMMENT] = anno._comments.map(comment => {
+        //         const commentLD = this._toJSONLD(`${annoId}/comment/${commentId}`, comment,
+        //             {skipContext: true})
+        //         commentLD.target = [ret.id]
+        //         return commentLD
+        //     })
+        // }
 
         return ret
     }
