@@ -1,8 +1,8 @@
-process.env.ANNO_NEDB_DIR = `${__dirname}/../../temp`
+process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
 
 const async = require('async')
 const tap = require('tap')
-const fixtures = require('../../fixtures/schema-cases')
+const fixtures = require(__dirname + '/../fixtures/schema-cases')
 
 const NedbStore = require('./store-nedb')
 tap.test('nedb-store', t => {

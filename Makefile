@@ -1,6 +1,6 @@
 PATH := ./node_modules/.bin:$(PATH)
-PACKAGES = $(shell find packages -mindepth 1 -maxdepth 1 -type d)
-TESTS = $(shell find packages -mindepth 2 -maxdepth 3 -name '*.test.js')
+PACKAGES = $(shell find . -mindepth 1 -maxdepth 1 -name 'anno-*' -type d)
+TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
 # REPORTER = spec
 REPORTER = classic
 
