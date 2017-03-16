@@ -10,7 +10,7 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
-    router.post('/', guard('post-anno'), (req, res, next) => { 
+    router.post('/', (req, res, next) => { 
         store.create(req.body, (err, anno) => {
             if (err) return next(err)
             return res.send(anno)

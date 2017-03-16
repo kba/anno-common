@@ -4,6 +4,8 @@ TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
 # REPORTER = spec
 REPORTER = classic
 
+RM = rm -rf
+
 .PHONY: bootstrap
 bootstrap:
 	lerna bootstrap
@@ -12,3 +14,7 @@ bootstrap:
 .PHONY: test
 test: $(TESTS)
 	tap -R$(REPORTER) $^
+
+.PHONY: clean
+clean:
+	$(RM) ./temp

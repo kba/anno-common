@@ -1,6 +1,5 @@
-const config = require('@kba/anno-config').loadConfig()
-
 function load(loadingModule) {
+    const config = require('@kba/anno-config').loadConfig()
     if (!loadingModule)
         throw new Error("Must pass the loading module to Store.load")
     if (!config.STORE)
@@ -19,11 +18,40 @@ function load(loadingModule) {
 class Store {
 
     constructor() {
+        this.config = require('@kba/anno-config').loadConfig()
+        console.log(this.config)
         // console.error("Store.constructor called")
     }
 
+    /*
+     * Public API
+     */
+
     init(cb) { return cb() }
     wipe(cb) { throw new Error("wipe not implemented"); }
+
+    /**
+     * Create an annotation.
+     *
+     * @param {Object|Array<Object>} annosToCreate
+     * @param {Options={}} options
+     * @param String options.slug Proposal for the ID to create
+     * @param {function} callback
+     */
+    create(annosToCreate, options, cb) { throw new Error("create not implemented") }
+
+    /**
+     * Create an annotation.
+     *
+     * @param {String} annoId
+     * @param {Options={}} options
+     * @param {function} callback
+     */
+    get(annoId, options, cb) { throw new Error("get not implemented") }
+
+    /*
+     * Protected API
+     */
 
     _notFoundException(id) {
         const err = new Error(`Not found in store: ${JSON.stringify(id)}`)
@@ -32,7 +60,7 @@ class Store {
     }
 
     _idFromURL(url) {
-        return url.replace(config.BASE_URL + '/anno/', '')
+        return url.replace(this.config.BASE_URL + '/anno/', '')
     }
 
     _normalizeTarget(annoDoc) {
@@ -56,7 +84,7 @@ class Store {
         if (!options.skipContext) {
             ret['@context'] = 'http://www.w3.org/ns/anno.jsonld'
         }
-        ret.id = `${config.BASE_URL}/anno/${annoId}`
+        ret.id = `${this.config.BASE_URL}/anno/${annoId}`
         ret.type = "Annotation"
         if (anno.body) ret.body = anno.body
         if (anno.target) ret.target = anno.target
@@ -99,9 +127,9 @@ class Store {
             lastPath = path
         }
         if (chain.length > 2) {
-            const parentId = `${config.BASE_URL}/anno/${chain.slice(0, chain.length -2).join('/')}`
+            const parentId = `${this.config.BASE_URL}/anno/${chain.slice(0, chain.length -2).join('/')}`
             if (lastPath === 'comment') anno.target = [parentId]
-            else anno[config.PROP_VERSION_OF] = parentId
+            else anno[this.config.PROP_VERSION_OF] = parentId
         }
         return cb(null, anno)
     }

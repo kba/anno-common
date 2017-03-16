@@ -49,7 +49,7 @@ class MongolikeStore extends Store {
             if (!wasArray && saved.length === 1) {
                 return cb (null, this._toJSONLD(saved[0]))
             }
-            return cb (null, saved.map(this._toJSONLD))
+            return cb(null, saved.map(this._toJSONLD.bind(this)))
         })
     }
 

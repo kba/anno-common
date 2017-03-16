@@ -1,0 +1,5 @@
+[ ] config must be loaded on new
+[ ] http store
+    [ ] create
+    [ ] get
+    [ ] search
