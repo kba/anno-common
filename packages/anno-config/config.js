@@ -1,3 +1,4 @@
+const ENV = window ? window : process.env
 const PREFIX = 'ANNO';
 const PREFIX_RE = new RegExp(`^${PREFIX}_`)
 const DEFAULTS = {
@@ -11,15 +12,15 @@ function loadConfig(localDefaults={}) {
     const CONFIG = JSON.parse(JSON.stringify(DEFAULTS))
     Object.assign(CONFIG, JSON.parse(JSON.stringify(localDefaults)))
 
-    Object.keys(process.env)
+    Object.keys(ENV)
         .filter(k => k.match(PREFIX_RE))
-        .forEach(k => CONFIG[k.replace(PREFIX_RE, '')] = process.env[k])
+        .forEach(k => CONFIG[k.replace(PREFIX_RE, '')] = ENV[k])
 
     Object.keys(CONFIG)
         .forEach(k => {
-            if (CONFIG[k].match(/^true|false$/))
+            if (typeof CONFIG[k] === 'string' && CONFIG[k].match(/^true|false$/))
                 CONFIG[k] = CONFIG[k] !== 'false'
-            process.env[`${PREFIX}_${k}`] = CONFIG[k]
+            ENV[`${PREFIX}_${k}`] = CONFIG[k]
         })
 
     return CONFIG
