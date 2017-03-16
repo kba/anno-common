@@ -1,5 +1,3 @@
-const yaml = require('js-yaml')
-const fs = require('fs')
 const ajv = require('ajv')({
     allErrors: true
 });
@@ -12,7 +10,7 @@ const config = require('@kba/anno-config').loadConfig({
     PROP_VERSION_OF: 'ns:versionOf',
 })
 
-const schemaDef = yaml.safeLoad(fs.readFileSync(`${__dirname}/schema.yml`))
+const schemaDef = require('./schema.json')
 
 module.exports = {
     definitions: schemaDef.definitions,

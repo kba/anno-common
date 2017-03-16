@@ -1,0 +1,212 @@
+{
+  "definitions": {
+    "FullAnnotation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "motivation": {
+          "type": "string",
+          "enum": [
+            "oa:bookmarking",
+            "oa:classifying",
+            "oa:commenting",
+            "oa:describing",
+            "oa:editing",
+            "oa:highlighting",
+            "oa:identifying",
+            "oa:linking",
+            "oa:moderating",
+            "oa:questioning",
+            "oa:replying",
+            "oa:tagging"
+          ]
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "creator": {
+          "type": "string",
+          "format": "email"
+        },
+        "hasVersion": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotationRevisionDescription"
+          }
+        },
+        "hasReply": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FullAnnotation"
+          }
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotationBody"
+          }
+        },
+        "target": {
+          "$ref": "#/definitions/AnnotationTarget"
+        }
+      },
+      "required": [
+        "created",
+        "creator",
+        "body",
+        "target",
+        "hasReply"
+      ]
+    },
+    "AnnotationSelector": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FragmentSelector",
+            "SvgSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "AnnotationTargetObject": {
+      "type": "object",
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "format": "uri"
+        },
+        "selector": {
+          "$ref": "#/definitions/AnnotationSelector"
+        }
+      }
+    },
+    "AnnotationBody": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": [
+            "text/html"
+          ]
+        },
+        "type": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "oa:TextualBody",
+              "oa:Tag"
+            ]
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "AnnotationRevisionDescription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "AnnotationTarget": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "$ref": "#/definitions/AnnotationTargetObject"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/AnnotationTargetObject"
+          }
+        }
+      ]
+    },
+    "RevisionToPut": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotationBody"
+          }
+        },
+        "target": {
+          "$ref": "#/definitions/AnnotationTarget"
+        }
+      }
+    },
+    "AnnotationToPost": {
+      "type": "object",
+      "required": [
+        "body",
+        "target"
+      ],
+      "properties": {
+        "id": {
+          "not": {}
+        },
+        "creator": {
+          "not": {}
+        },
+        "created": {
+          "not": {}
+        },
+        "modified": {
+          "not": {}
+        },
+        "body": {
+          "$ref": "#/definitions/AnnotationBody"
+        },
+        "target": {
+          "$ref": "#/definitions/AnnotationTarget"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      }
+    },
+    "ListOfFullAnnotations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/FullAnnotation"
+      }
+    }
+  }
+}

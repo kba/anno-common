@@ -4,16 +4,17 @@
   "description": "Anno JSON schema",
   "main": "schema.js",
   "scripts": {
+    "prepublish": "node scripts/prepublish.js",
     "test": "tap *.test.js"
   },
   "author": "kba",
   "license": "MIT",
   "devDependencies": {
-    "tap": "^10.3.0"
+    "tap": "^10.3.0",
+    "js-yaml": "^3.8.2"
   },
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
-    "ajv": "^4.11.4",
-    "js-yaml": "^3.8.2"
+    "ajv": "^4.11.4"
   }
 }
