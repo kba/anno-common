@@ -1,4 +1,9 @@
-const ENV = window ? window : process.env
+var ENV
+try {
+    ENV = window
+} catch (e) {
+    ENV = process.env
+}
 const PREFIX = 'ANNO';
 const PREFIX_RE = new RegExp(`^${PREFIX}_`)
 const DEFAULTS = {
