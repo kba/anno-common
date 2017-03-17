@@ -17,7 +17,16 @@ class HttpStore extends Store {
     create(annosToCreate, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._httpClient.post('/', annosToCreate)
-            .then(resp => cb(null, resp))
+            .then(resp => cb(null, resp.data))
+            .catch(err => cb(err))
+    }
+
+    /* @override */
+    get(annoId, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        const getUrl = annoId.match('//') ? annoId : `/${annoId}`
+        this._httpClient.get(getUrl)
+            .then(resp => cb(null, resp.data))
             .catch(err => cb(err))
     }
 

@@ -49,6 +49,15 @@ class Store {
      */
     get(annoId, options, cb) { throw new Error("get not implemented") }
 
+    /**
+     * Revise an annotation.
+     *
+     * @param {String} annoId
+     * @param {Options={}} options
+     * @param {function} callback
+     */
+    createRevision(annoId, anno, options, cb) { throw new Error("createRevision not implemented") }
+
     /*
      * Protected API
      */

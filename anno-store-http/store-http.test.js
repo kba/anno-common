@@ -8,9 +8,14 @@ const HttpStore = require('./store-http')
 
 tap.test('store-http', t => {
     process.env.ANNO_STORE = '@kba/anno-store-http'
+    const annoToPost = fixtures.AnnotationToPost.ok[1]
     const store = new HttpStore()
-    store.create(fixtures.AnnotationToPost.ok[1], (err, resp) => {
-        console.log(err, resp)
-        t.end()
+    store.create(annoToPost, (err, saved) => {
+        t.equals(saved['@context'], 'http://www.w3.org/ns/anno.jsonld', '@context')
+        store.get(saved.id, (err, got) => {
+            t.deepEquals(saved, got, 'get works')
+            t.end()
+        })
+        // console.log(err, resp)
     })
 })

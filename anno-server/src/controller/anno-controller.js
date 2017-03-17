@@ -28,7 +28,7 @@ module.exports = ({store, guard, config}) => {
     router.get('/:annoId/**', (req, resp, next) => { 
         var chain = req.path.split('/')
         const annoId = chain[1]
-        store.getAnnotation(req.params.annoId, chain.slice(2), (err, doc) => {
+        store.get(req.params.annoId, chain.slice(2), (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
         })
