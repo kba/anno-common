@@ -4,6 +4,13 @@ module.exports = ({store, guard, config}) => {
 
     const router = Router()
 
+    router.delete('/', (req, resp, next) => { 
+        store.wipe((err) => {
+            if (err) return next(err)
+            resp.end()
+        })
+    })
+
     router.get('/', (req, resp) => { 
         store.search(req.query, (err, docs) => {
             resp.send(docs)

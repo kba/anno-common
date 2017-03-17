@@ -27,7 +27,7 @@ securityDefinitions:
 ##############################################################################
 paths:
 
-  '/':
+  '/anno':
 
     head:
       tags:
@@ -83,6 +83,17 @@ paths:
         - in: 'header'
           name: 'Slug'
           description: 'Preferred annotation ID'
+      responses:
+        200:
+          description: all okay
+
+    delete:
+      tags:
+        - 'anno'
+      security:
+        - Bearer: []
+      summary: 'Wipe the store'
+      parameters: []
       responses:
         200:
           description: all okay
