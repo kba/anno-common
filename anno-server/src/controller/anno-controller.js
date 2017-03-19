@@ -11,16 +11,17 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
-    router.get('/', (req, resp) => { 
+    router.get('/', (req, resp, next) => { 
         store.search(req.query, (err, docs) => {
+            if (err) return next(err)
             resp.send(docs)
         })
     })
 
-    router.post('/', (req, res, next) => { 
+    router.post('/', (req, resp, next) => { 
         store.create(req.body, (err, anno) => {
             if (err) return next(err)
-            return res.send(anno)
+            return resp.send(anno)
         })
     })
 
@@ -31,15 +32,25 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
-    // XXX TODO
-    router.get('/:annoId/**', (req, resp, next) => { 
-        var chain = req.path.split('/')
-        const annoId = chain[1]
-        store.get(req.params.annoId, chain.slice(2), (err, doc) => {
+    router.head('/:annoId', (req, resp, next) => { 
+        const options = {
+            metadataOnly: true
+        }
+        store.get(req.params.annoId, options, (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
         })
     })
+
+    // // XXX TODO
+    // router.get('/:annoId/**', (req, resp, next) => { 
+    //     var chain = req.path.split('/')
+    //     const annoId = chain[1]
+    //     store.get(req.params.annoId, chain.slice(2), (err, doc) => {
+    //         if (err) return next(err)
+    //         return resp.send(doc)
+    //     })
+    // })
 
     return router
 }

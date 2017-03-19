@@ -27,39 +27,60 @@ class Store {
      * Public API
      */
 
+    /**
+     * Initialize a connection to the store.
+     *
+     * @param {function} callback
+     */
     init(cb) { return cb() }
+
+    /**
+     * Wipe the store, revisions and all.
+     *
+     * @param {function} callback
+     *
+     */
     wipe(cb) { throw new Error("wipe not implemented"); }
+
+    /**
+     * Retrieve an annotation.
+     *
+     * @param {String} annoId
+     * @param {Options} options
+     * @param {boolean} options.metadataOnly Retrieve only metadata
+     * @param {function} callback
+     */
+    get(annoId, options, cb) { throw new Error("get not implemented") }
+
 
     /**
      * Create an annotation.
      *
      * @param {Object|Array<Object>} annosToCreate
-     * @param {Options={}} options
+     * @param {Options} options
      * @param String options.slug Proposal for the ID to create
      * @param {function} callback
      */
-    create(annosToCreate, options, cb) { throw new Error("create not implemented") }
-
-    /**
-     * Create an annotation.
-     *
-     * @param {String} annoId
-     * @param {Options={}} options
-     * @param {function} callback
-     */
-    get(annoId, options, cb) { throw new Error("get not implemented") }
+    create(annos, options, cb) { throw new Error("create not implemented") }
 
     /**
      * Revise an annotation.
      *
      * @param {String} annoId
-     * @param {Options={}} options
+     * @param {Options} options
      * @param {function} callback
      */
-    createRevision(annoId, anno, options, cb) { throw new Error("createRevision not implemented") }
+    update(annoId, anno, options, cb) { throw new Error("update not implemented") }
+
+
+
 
     /*
+     * *********************************************************************
+     *
      * Protected API
+     *
+     * *********************************************************************
      */
 
     _notFoundException(id) {
