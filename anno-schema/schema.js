@@ -32,6 +32,7 @@ module.exports = {
                 '@type': "@id",
             },
             AnnotationReply: {
+                '@id': 'annox:AnnotationReply',
                 'rdfs:subClassOf': 'oa:Annotation',
             },
             hasReply: {
@@ -59,7 +60,7 @@ module.exports = {
                 '@type': "'@id'"
             },
             versionOf: {
-                '@id': "ubhdanno:versionOf",
+                '@id': "annox:versionOf",
                 '@type': "'@id'",
                 'owl:inverseOf': {
                     '@id': "hasVersion"
