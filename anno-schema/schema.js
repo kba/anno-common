@@ -16,58 +16,45 @@ const schemaDef = require('./schema.json')
 module.exports = {
     definitions: schemaDef.definitions,
     validate: {},
-    jsonldContext: [
-        'http://www.w3.org/ns/anno.jsonld',
-        {
-            annox: {
-                '@id': 'https://github.com/kba/anno/context.jsonld',
-                '@type': "@id",
+    jsonldContext:{
+        '@context': [
+            'http://www.w3.org/ns/anno.jsonld',
+            {
+                annox: 'https://github.com/kba/anno/context.jsonld',
+                rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
+                sioc: 'http://rdfs.org/sioc/ns#',
+                AnnotationReply: {
+                    '@id': 'annox:AnnotationReply',
+                    'rdfs:subClassOf': 'oa:Annotation',
+                },
+                hasReply: {
+                    '@id': 'annox:hasReply',
+                    '@type': "@id",
+                    'rdfs:subClassOf': "sioc:has_reply",
+                    'rdfs:domain': "oa:Annotation",
+                    'rdfs:range': "annox:AnnotationComment",
+                    'owl:inverseOf': { '@id': "hasReply" }
+                },
+                replyTo: {
+                    '@id': "annox:replyTo",
+                    '@type': "@id",
+                    'rdfs:subClassOf': "sioc:reply_to",
+                    'rdfs:domain': "annox:AnnotationComment",
+                    'rdfs:range': "oa:Annotation",
+                    'owl:inverseOf': { '@id': "replyTo" }
+                },
+                hasVersion: {
+                    '@id': "http://purl.org/pav/hasVersion",
+                    '@type': "@id"
+                },
+                versionOf: {
+                    '@id': "annox:versionOf",
+                    '@type': "@id",
+                    'owl:inverseOf': { '@id': "hasVersion" }
+                },
             },
-            rdfs: {
-                '@id': 'http://www.w3.org/2000/01/rdf-schema#',
-                '@type': "@id",
-            },
-            sioc: {
-                '@id': 'http://rdfs.org/sioc/ns#',
-                '@type': "@id",
-            },
-            AnnotationReply: {
-                '@id': 'annox:AnnotationReply',
-                'rdfs:subClassOf': 'oa:Annotation',
-            },
-            hasReply: {
-                '@id': 'annox:hasReply',
-                '@type': "@id",
-                'rdfs:subClassOf': "sioc:has_reply",
-                'rdfs:domain': "oa:Annotation",
-                'rdfs:range': "annox:AnnotationComment",
-                'owl:inverseOf': {
-                    '@id': "hasReply"
-                }
-            },
-            replyTo: {
-                '@id': "annox:replyTo",
-                '@type': "@id",
-                'rdfs:subClassOf': "sioc:reply_to",
-                'rdfs:domain': "annox:AnnotationComment",
-                'rdfs:range': "oa:Annotation",
-                'owl:inverseOf': {
-                    '@id': "replyTo"
-                }
-            },
-            hasVersion: {
-                '@id': "http://purl.org/pav/hasVersion",
-                '@type': "'@id'"
-            },
-            versionOf: {
-                '@id': "annox:versionOf",
-                '@type': "'@id'",
-                'owl:inverseOf': {
-                    '@id': "hasVersion"
-                }
-            },
-        },
-    ],
+        ],
+    },
 }
 
 Object.keys(schemaDef.definitions).forEach(k => {
