@@ -31,11 +31,11 @@
       },
       "hasVersion": {
         "@id": "http://purl.org/pav/hasVersion",
-        "@type": "'@id'"
+        "@type": "@id"
       },
       "versionOf": {
         "@id": "annox:versionOf",
-        "@type": "'@id'",
+        "@type": "@id",
         "owl:inverseOf": {
           "@id": "hasVersion"
         }
