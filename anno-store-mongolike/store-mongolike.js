@@ -30,6 +30,10 @@ class MongolikeStore extends Store {
                     ? doc._revisions[_revid -1]
                     : doc._revisions[doc._revisions.length - 1]
                 if (!rev) return done(this._revisionNotFoundError(_id, _revid))
+                if (options.latest) {
+                    annoId = `${_id}-rev-${doc._revisions.length}`
+                    doc = rev
+                }
                 return done(null, this._toJSONLD(annoId, doc, options))
             })
         }, (err, annos) => {
@@ -70,22 +74,29 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    createRevision(annoId, anno, cb) {
-        const _id = this._idFromURL(annoId)
+    revise(annoId, anno, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        annoId = this._idFromURL(annoId)
+        var [_id, _revid] = annoId.split(/-rev-/)
         this.db.count({_id}, (err, count) => {
             if (err) return cb(err)
-            if (count !== 1) return cb(this._notFoundException(_id))
+            if (count !== 1) return cb(this._annotationNotFoundError(_id))
             anno = this._deleteId(anno)
             if (!schema.validate.AnnotationToPost(anno)) {
                 return cb(schema.validate.AnnotationToPost.errors)
             }
             anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)
+            const newData = JSON.parse(JSON.stringify(anno))
             anno.created = new Date()
             this.db.update({_id}, {
                 $push: {_revisions: anno},
-                $set: {modified: anno.created},
-            }, {}, cb)
+                $set: newData,
+            }, {}, (err, arg) => {
+                if (err) return cb(err)
+                options.latest = true
+                return this.get(_id, options, cb)
+            })
         })
     }
 
@@ -122,28 +133,6 @@ class MongolikeStore extends Store {
      * Protected API
      * ******************************************
      */
-    _traverseChain(parent, chain, cb) {
-        var anno = parent
-        var lastPath;
-        for (var i = 0; i < chain.length ; i += 2) {
-            var [path, length] = chain.slice(i, i+2)
-            if (path === 'rev') path = '_revisions'
-            else if (path === 'comment') path = '_comments'
-            else return cb(`Invalid chain: ${JSON.stringify(chain)}`)
-            length = parseInt(length)
-            if (!anno[path]) return cb(`Invalid chain: ${JSON.stringify(chain)}`)
-            if (!anno[path][length]) return cb(`Invalid chain: ${JSON.stringify(chain)}`)
-            anno = anno[path][length]
-            lastPath = path
-        }
-        if (chain.length > 2) {
-            const parentId = `${this.config.BASE_URL}/anno/${chain.slice(0, chain.length -2).join('/')}`
-            if (lastPath === 'comment') anno.target = [parentId]
-            else anno[this.config.PROP_VERSION_OF] = parentId
-        }
-        return cb(null, anno)
-    }
-
     _toJSONLD(annoId, anno, options={}) {
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
         const ret = {}

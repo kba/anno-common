@@ -45,12 +45,12 @@ class Store {
     /**
      * Retrieve an annotation.
      *
-     * @param {String} annoId
+     * @param {String|Array<String>} annoIds
      * @param {Options} options
-     * @param {boolean} options.metadataOnly Retrieve only metadata
+     * @param {Options} options.latest Return the latest revision
      * @param {function} callback
      */
-    get(annoId, options, cb) { throw new Error("get not implemented") }
+    get(annoIds, options, cb) { throw new Error("get not implemented") }
 
 
     /**
@@ -70,7 +70,7 @@ class Store {
      * @param {Options} options
      * @param {function} callback
      */
-    createRevision(annoId, anno, options, cb) { throw new Error("update not implemented") }
+    revise(annoId, anno, options, cb) { throw new Error("revise not implemented") }
 
     /**
      * Delete an annotation, i.e. set the deleted date.

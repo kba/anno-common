@@ -2,7 +2,8 @@ PATH := ./node_modules/.bin:$(PATH)
 PACKAGES = $(shell find . -mindepth 1 -maxdepth 1 -name 'anno-*' -type d)
 TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
 # REPORTER = spec
-REPORTER = classic
+REPORTER = tap
+# REPORTER = classic
 
 MKDIR = mkdir -p
 RM = rm -rf
@@ -11,10 +12,14 @@ RM = rm -rf
 bootstrap:
 	lerna bootstrap
 
-# for pkg in $(PACKAGES);do tap -Rspec $$pkg/test/*.test.js;done
 .PHONY: test
 test: $(TESTS)
 	tap -R$(REPORTER) $^
+
+.PHONY: anno-%
+test\:%: anno-%
+	tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
+	# tap -R$(REPORTER) $(find $^)
 
 .PHONY: clean
 clean:
