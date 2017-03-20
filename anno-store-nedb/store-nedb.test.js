@@ -1,3 +1,4 @@
+process.env.ANNO_BASE_URL = `http://localhost:3000`
 process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
 
 const async = require('async')
@@ -12,18 +13,26 @@ tap.test('nedb-store', t => {
     const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
     const store = new NedbStore()
     var savedId;
+    var savedRevId;
     async.waterfall([
         cb => store.wipe(cb),
         cb => store.init(cb),
         cb => store.create(input1, cb),
         (saved, cb) => {
+            console.log(saved)
             t.equals(saved.target.source, input1.target, 'target kept (string)')
             savedId = saved.id
+            savedRevId = `${savedId}-rev-1`
             cb()
         },
         cb => store.get(savedId, cb),
         (found, cb) => {
             t.equals(found.id, savedId, `get by url: ${savedId}`)
+            cb()
+        },
+        cb => store.get(savedRevId, cb),
+        (found, cb) => {
+            t.equals(found.id, savedRevId, `get by revision-id: ${savedRevId}`)
             cb()
         },
         cb => store.get('DOES-NOT-EXIST', (err) => {
@@ -44,8 +53,7 @@ tap.test('nedb-store', t => {
         (saved, cb) => {
             t.equals(saved.target.source, input4.target, 'target kept (string)')
             cb()
-        },
-        cb => store.search(cb),
+        }, cb => store.search(cb),
         (annos, cb) => {
             t.equals(annos.length, 4, '4 anno in store')
             cb()

@@ -8,6 +8,8 @@
 
 ### create
 
-### update
+### createRevision
 
 ### delete
+
+### search

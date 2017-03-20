@@ -2,6 +2,7 @@ const ajv = require('ajv')({
     allErrors: true
 });
 const config = require('@kba/anno-config').loadConfig({
+    CONTEXT_URL: 'https://kba.github.io/anno/context.jsonld',
     // PROP_HAS_REPLY: 'hasReply',
     // PROP_REPLY_TO: 'replyTo',
     // // PROP_HAS_COMMENT: 'ns:hasReview',
