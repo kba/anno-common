@@ -1,4 +1,4 @@
-const fixtures = require('../fixtures/schema-cases')
+const fixtures = require('../testlib/schema-cases')
 const tap = require('tap')
 const schema = require('./schema')
 

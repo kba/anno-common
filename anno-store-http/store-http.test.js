@@ -1,7 +1,7 @@
 process.env.ANNO_DEBUG = true
 
 const tap = require('tap')
-const fixtures = require(__dirname + '/../fixtures/schema-cases')
+const fixtures = require(__dirname + '/../testlib/schema-cases')
 const HttpStore = require('./store-http')
 
 // TODO start server
