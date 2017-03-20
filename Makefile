@@ -25,3 +25,4 @@ docs:
 	$(MKDIR) docs
 	node -e 'console.log(JSON.stringify(require("./anno-schema/schema.js").jsonldContext, null, 2));' \
 		> docs/context.jsonld
+	git commit -m 'updated docs' docs && git push
