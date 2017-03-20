@@ -2,18 +2,9 @@
   "@context": [
     "http://www.w3.org/ns/anno.jsonld",
     {
-      "annox": {
-        "@id": "https://github.com/kba/anno/context.jsonld",
-        "@type": "@id"
-      },
-      "rdfs": {
-        "@id": "http://www.w3.org/2000/01/rdf-schema#",
-        "@type": "@id"
-      },
-      "sioc": {
-        "@id": "http://rdfs.org/sioc/ns#",
-        "@type": "@id"
-      },
+      "annox": "https://github.com/kba/anno/context.jsonld",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+      "sioc": "http://rdfs.org/sioc/ns#",
       "AnnotationReply": {
         "@id": "annox:AnnotationReply",
         "rdfs:subClassOf": "oa:Annotation"
