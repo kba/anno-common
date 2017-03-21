@@ -16,6 +16,12 @@ class MongolikeStore extends Store {
     wipe(cb) { throw(new Error("Must override 'wipe'")) }
 
     /* @override */
+    connect(cb) { return cb(); }
+
+    /* @override */
+    disconnect(cb) { return cb(); }
+
+    /* @override */
     get(annoIds, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const wasArray = Array.isArray(annoIds)
@@ -63,13 +69,17 @@ class MongolikeStore extends Store {
             anno.modified = created
             anno.created = created
             anno._revisions[0].created = created
+            anno._id = this._genid()
             return anno
         })
         if (errors.length > 0) return cb(errors)
         this.db.insert(annosToCreate, (err, savedAnnos) => {
+            // Mongodb returns an object describing the result, nedb returns just the results
+            var {insertedIds} = savedAnnos
+            if (!insertedIds) insertedIds = savedAnnos.map(savedAnno => savedAnno._id)
             if (err) return cb(err)
-            if (!wasArray) return this.get(savedAnnos[0]._id, cb)
-            return this.get(savedAnnos.map(savedAnno => savedAnno._id), cb)
+            if (!wasArray) return this.get(insertedIds[0], cb)
+            return this.get(insertedIds, cb)
         })
     }
 
@@ -123,9 +133,15 @@ class MongolikeStore extends Store {
         // console.log(JSON.stringify(query, null, 2))
         this.db.find(query, _options, (err, docs) => {
             if (err) return cb(err)
-            docs = (docs || [])
-            // console.log(docs)
-            return cb(null, docs.map(doc => this._toJSONLD(doc)))
+            if (docs === undefined) docs = []
+            // mongodb returns a cursor, nedb a list of documents
+            if (Array.isArray(docs))
+                return cb(null, docs.map(doc => this._toJSONLD(doc)))
+            else
+                docs.toArray((err, docs) => {
+                    if (err) return cb(err)
+                    return cb(null, docs.map(doc => this._toJSONLD(doc)))
+                })
         })
     }
 

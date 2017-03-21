@@ -34,7 +34,8 @@
       "versionOf": {
         "@id": "annox:versionOf",
         "@type": "@id"
-      }
+      },
+      "deleted": "schema:dateDeleted"
     }
   ]
 }

@@ -12,8 +12,8 @@ module.exports = function testStore(store) {
         const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
         var savedId;
         var savedRevId;
-        var savedRevId2;
         async.waterfall([
+            cb => store.init(cb),
             cb => store.wipe(cb),
             cb => store.init(cb),
             cb => store.create(input1, cb),
@@ -39,8 +39,7 @@ module.exports = function testStore(store) {
                 store.revise(savedId, input1, cb)
             },
             (revised, cb) => {
-                // console.log(revised)
-                const revisedRevId = savedRevId.replace('1', '2')
+                const revisedRevId = savedRevId.replace(/1$/, '2')
                 t.equals(revised.id, revisedRevId, `revised revision-id: ${revisedRevId}`)
                 t.equals(revised.target.source, newTarget, 'target updated')
                 cb()
@@ -84,9 +83,13 @@ module.exports = function testStore(store) {
                 t.equals(annos.length, 3, `search {target.source: {$in: ${JSON.stringify([oldTarget, newTarget])}}} -> 3`)
                 cb()
             },
+            cb => store.disconnect(cb),
         ], (err) => {
             if (err) t.fail(err);
-            t.end();
+            t.end()
+            // store.disconnect(err => {
+            //     t.end();
+            // })
         })
     })
 }

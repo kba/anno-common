@@ -1,8 +1,8 @@
 {
-  "name": "@kba/anno-store",
+  "name": "@kba/anno-store-mongodb",
   "version": "0.0.1",
-  "description": "Open Annotation Store (base class)",
-  "main": "store.js",
+  "description": "Open Annotation mongodb store",
+  "main": "store-mongodb.js",
   "scripts": {
     "test": "tap *.test.js"
   },
@@ -10,11 +10,11 @@
   "license": "MIT",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/packages/anno-server#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/packages/anno-store-mongodb#readme",
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
-    "@kba/anno-schema": "^0.0.1",
-    "slugid": "^1.1.0"
+    "@kba/anno-store-mongolike": "^0.0.1",
+    "mongodb": "^2.2.25"
   },
   "devDependencies": {
     "tap": "^10.3.0"

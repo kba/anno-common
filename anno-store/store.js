@@ -1,3 +1,5 @@
+const slugid = require('slugid')
+
 function load(loadingModule) {
     const config = require('@kba/anno-config').loadConfig()
     if (!loadingModule)
@@ -41,6 +43,15 @@ class Store {
      *
      */
     wipe(cb) { throw new Error("wipe not implemented"); }
+
+    /**
+     * Disconnect a store.
+     *
+     * A disconnected store cannot be used until `init` is called again.
+     *
+     * @param {function} callback
+     */
+    disconnect(cb) { return cb() }
 
     /**
      * Retrieve an annotation.
@@ -126,6 +137,10 @@ class Store {
         delete anno._id
         delete anno.id
         return anno
+    }
+
+    _genid(slug='') {
+        return slug + slugid.v4()
     }
 
 }
