@@ -25,10 +25,6 @@ class Store {
         // console.error("Store.constructor called")
     }
 
-    /*
-     * Public API
-     */
-
     /**
      * Initialize a connection to the store.
      *
@@ -78,6 +74,7 @@ class Store {
      * Revise an annotation.
      *
      * @param {String} annoId
+     * @param {Object} anno
      * @param {Options} options
      * @param {function} callback
      */

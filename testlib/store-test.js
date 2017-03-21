@@ -2,7 +2,7 @@ const async = require('async')
 const tap = require('tap')
 const fixtures = require('./schema-cases')
 
-module.exports = function testStore(store) {
+module.exports = function testStore(store, done) {
     tap.test(`store-test: ${store.constructor.name}`, t => {
         const input1 = fixtures.AnnotationToPost.ok[0]
         const oldTarget = input1.target
@@ -87,9 +87,7 @@ module.exports = function testStore(store) {
         ], (err) => {
             if (err) t.fail(err);
             t.end()
-            // store.disconnect(err => {
-            //     t.end();
-            // })
+            done()
         })
     })
 }

@@ -30,6 +30,13 @@ class HttpStore extends Store {
             .catch(err => cb(err))
     }
 
+    /* @override */
+    wipe(cb) {
+        this._httpClient.delete('/')
+            .then(resp => cb(null, resp))
+            .catch(err => cb(err))
+    }
+
 }
 
 module.exports = HttpStore
