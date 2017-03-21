@@ -12,13 +12,23 @@ RM = rm -rf
 bootstrap:
 	lerna bootstrap
 
+start-all:
+	$(MAKE) -sC anno-store-mongodb start
+	$(MAKE) -sC anno-server start
+
+stop-all:
+	$(MAKE) -sC anno-store-mongodb stop
+	$(MAKE) -sC anno-server stop
+
 .PHONY: test
 test: $(TESTS)
-	tap -R$(REPORTER) $^
+	$(MAKE) start-all
+	-tap -R$(REPORTER) $^
+	$(MAKE) stop-all
 
 .PHONY: anno-%
 test\:%: anno-%
-	tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
+	-tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
 	# tap -R$(REPORTER) $(find $^)
 
 .PHONY: clean
