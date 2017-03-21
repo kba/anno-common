@@ -59,7 +59,6 @@ class Store {
      */
     get(annoIds, options, cb) { throw new Error("get not implemented") }
 
-
     /**
      * Create an annotation.
      *
@@ -84,10 +83,26 @@ class Store {
      * Delete an annotation, i.e. set the deleted date.
      *
      * @param {String} annoId
+     * @param {Options} options
      * @param {function} callback
      */
-    delete(annoId, options, cb) { throw new Error("delete not implemented") }
+    delete(annoId, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb(new Error("delete not implemented"))
+    }
 
+    /**
+     * Search the store.
+     *
+     * @param {Object} query
+     * @param {Options} options
+     * @param {function} callback
+     */
+    search(query, options, cb) {
+        if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        cb(new Error("search not implemented"))
+    }
 
 
 

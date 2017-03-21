@@ -15,7 +15,8 @@
     "@kba/anno-config": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
-    "axios": "^0.15.3"
+    "axios": "^0.15.3",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "tap": "^10.3.0"

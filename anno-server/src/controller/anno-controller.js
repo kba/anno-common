@@ -25,9 +25,24 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
+    router.put('/:annoId', (req, resp, next) => { 
+        store.revise(req.params.annoId, req.body, (err, doc) => {
+            if (err && err.code) {
+                resp.status(err.code)
+                return resp.send(err.message)
+            } else if(err)
+                return next(err)
+            return resp.send(doc)
+        })
+    })
+
     router.get('/:annoId', (req, resp, next) => { 
         store.get(req.params.annoId, (err, doc) => {
-            if (err) return next(err)
+            if (err && err.code) {
+                resp.status(err.code)
+                return resp.send(err.message)
+            } else if(err)
+                return next(err)
             return resp.send(doc)
         })
     })

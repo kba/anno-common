@@ -120,8 +120,9 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    search(query, cb) {
-        if (typeof query === 'function') [cb, query] = [query, {}]
+    search(query, options, cb) {
+        if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
+        if (typeof options === 'function') [cb, options] = [options, {}]
         const _options = {}
         if ('$target' in query) {
             query.$or = [
