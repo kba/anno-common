@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/packages/anno-server#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-store#readme",
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",

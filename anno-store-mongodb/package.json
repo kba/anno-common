@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/packages/anno-store-mongodb#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-store-mongodb#readme",
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
     "@kba/anno-store-mongolike": "^0.0.1",

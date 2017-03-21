@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Anno JSON schema",
   "main": "schema.js",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-schema#readme",
   "scripts": {
     "prepublish": "node scripts/prepublish.js",
     "test": "tap *.test.js"

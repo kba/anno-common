@@ -7,16 +7,11 @@
     "test": "tap test/*.test.js",
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kba/anno-server.git"
-  },
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-store-http#readme",
   "author": "kba",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kba/anno-server/issues"
-  },
-  "homepage": "https://github.com/kba/anno-server#readme",
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",

@@ -4,6 +4,9 @@
   "description": "Anno CLI",
   "author": "kba",
   "license": "MIT",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-cli#readme",
   "bin": {
     "anno": "cli.js"
   },
