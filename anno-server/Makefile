@@ -1,3 +1,5 @@
+MAKEFLAGS += --no-print-directory
+
 TEMPDIR = $(PWD)/../temp
 PIDFILE = $(TEMPDIR)/server.pid
 
@@ -11,7 +13,7 @@ serve: swagger-ui
 
 .PHONY: start
 start:
-	@if [ ! -e $(PIDFILE) ];then \
+	if [ ! -e $(PIDFILE) ];then \
 		ANNO_STORE='@kba/anno-store-nedb' \
 		ANNO_NEDB_DIR='$(TEMPDIR)' \
 		node src/server.js > $(TEMPDIR)/server.log 2>&1 & echo $$! > $(PIDFILE) \

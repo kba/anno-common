@@ -47,6 +47,17 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
+    router.delete('/:annoId', (req, resp, next) => { 
+        store.delete(req.params.annoId, (err, doc) => {
+            if (err && err.code) {
+                resp.status(err.code)
+                return resp.send(err.message)
+            } else if(err)
+                return next(err)
+            return resp.send(doc)
+        })
+    })
+
     router.head('/:annoId', (req, resp, next) => { 
         const options = {
             metadataOnly: true

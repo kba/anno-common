@@ -1,3 +1,5 @@
+MAKEFLAGS += --no-print-directory
+
 PATH := ./node_modules/.bin:$(PATH)
 PACKAGES = $(shell find . -mindepth 1 -maxdepth 1 -name 'anno-*' -type d)
 TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
@@ -28,8 +30,9 @@ test: $(TESTS)
 
 .PHONY: anno-%
 test\:%: anno-%
+	-$(MAKE) -sC $< start && sleep 2
 	-tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
-	# tap -R$(REPORTER) $(find $^)
+	-$(MAKE) -sC $< stop
 
 .PHONY: clean
 clean:

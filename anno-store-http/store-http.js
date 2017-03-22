@@ -25,12 +25,12 @@ class HttpStore extends Store {
     /* @override */
     get(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        const getUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.get(getUrl)
+        const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
+        this._httpClient.get(annoUrl)
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if(err.response.status === 404) {
-                    return cb(this._annotationNotFoundError(err.response.data))
+                    return cb(this._annotationNotFoundError(annoUrl))
                 }
                 return cb(err.response.data)
             })
@@ -48,12 +48,26 @@ class HttpStore extends Store {
     /* @override */
     revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        const putUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.put(putUrl, anno)
+        const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
+        this._httpClient.put(annoUrl, anno)
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if(err.response.status === 404) {
-                    return cb(this._annotationNotFoundError(err.response.data))
+                    return cb(this._annotationNotFoundError(annoUrl))
+                }
+                return cb(err.response.data)
+            })
+    }
+
+    /* @override */
+    delete(annoId, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
+        this._httpClient.delete(annoUrl)
+            .then(() => cb())
+            .catch(err => {
+                if(err.response.status === 404) {
+                    return cb(this._annotationNotFoundError(annoUrl))
                 }
                 return cb(err.response.data)
             })
@@ -62,7 +76,7 @@ class HttpStore extends Store {
     /* @override */
     wipe(cb) {
         return this._httpClient.delete('/')
-            .then(resp => cb())
+            .then(() => cb())
             .catch(cb)
     }
 
