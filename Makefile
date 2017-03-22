@@ -22,7 +22,7 @@ stop-all:
 
 .PHONY: test
 test: $(TESTS)
-	$(MAKE) start-all
+	$(MAKE) start-all && sleep 2
 	-tap -R$(REPORTER) $^
 	$(MAKE) stop-all
 

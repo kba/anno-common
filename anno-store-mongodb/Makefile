@@ -12,5 +12,5 @@ start:
 	fi
 
 .PHONY: stop
-stop: $(PIDFILE)
-	-kill `cat $<`; rm "$<"
+stop:
+	-kill `cat $(PIDFILE)`; rm "$(PIDFILE)"

@@ -19,8 +19,8 @@ start:
 	fi
 
 .PHONY: stop
-stop: $(PIDFILE)
-	-kill `cat $<`; rm "$<"
+stop:
+	-kill `cat $(PIDFILE)`; rm "$(PIDFILE)"
 
 .PHONY: swagger-ui
 swagger-ui:

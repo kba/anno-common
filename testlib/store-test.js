@@ -86,6 +86,7 @@ function testRevise(t, store, done) {
         return done(err)
     })
 }
+
 function testSearch(t, store, done) {
     t.comment("search")
     async.waterfall([
@@ -112,13 +113,29 @@ function testSearch(t, store, done) {
     })
 }
 
+function testDelete(t, store, done) {
+    t.comment("delete")
+    async.waterfall([
+        cb => store.delete(savedId, cb),
+        cb => store.search(cb),
+        (annos, cb) => {
+            t.equals(annos.length, 3, '3 anno after delete')
+            cb()
+        },
+    ], (err) => {
+        t.notOk(err, "delete worked")
+        return done(err)
+    })
+}
+
 module.exports = function testStore(store, testStoreCallback) {
-    tap.test(`store-test / ${store.constructor.name} / init-wipe-init`, t => {
+    tap.test(`store-test / ${store.constructor.name}`, t => {
         async.waterfall([
             cb => testWipe(t, store, cb),
             cb => testCreateGet(t, store, cb),
             cb => testRevise(t, store, cb),
             cb => testSearch(t, store, cb),
+            cb => testDelete(t, store, cb),
             cb => store.disconnect(cb),
         ], (err) => {
             if (err) t.fail(err);

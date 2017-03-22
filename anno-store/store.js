@@ -38,7 +38,7 @@ class Store {
      * @param {function} callback
      *
      */
-    wipe(cb) { throw new Error("wipe not implemented"); }
+    wipe(cb) { cb(new Error("wipe not implemented")) }
 
     /**
      * Disconnect a store.
@@ -57,7 +57,10 @@ class Store {
      * @param {Options} options.latest Return the latest revision
      * @param {function} callback
      */
-    get(annoIds, options, cb) { throw new Error("get not implemented") }
+    get(annoIds, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        cb(new Error("get not implemented"))
+    }
 
     /**
      * Create an annotation.
@@ -67,7 +70,10 @@ class Store {
      * @param String options.slug Proposal for the ID to create
      * @param {function} callback
      */
-    create(annos, options, cb) { throw new Error("create not implemented") }
+    create(annos, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        cb(new Error("create not implemented"))
+    }
 
     /**
      * Revise an annotation.
@@ -77,7 +83,10 @@ class Store {
      * @param {Options} options
      * @param {function} callback
      */
-    revise(annoId, anno, options, cb) { throw new Error("revise not implemented") }
+    revise(annoId, anno, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        cb(new Error("revise not implemented"))
+    }
 
     /**
      * Delete an annotation, i.e. set the deleted date.

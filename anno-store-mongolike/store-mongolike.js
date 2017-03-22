@@ -29,7 +29,8 @@ class MongolikeStore extends Store {
         async.map(annoIds, (annoId, done) => {
             annoId = this._idFromURL(annoId)
             var [_id, _revid] = annoId.split(/-rev-/)
-            this.db.findOne({_id}, (err, doc) => {
+            const query = {_id, deleted: {$exists: false}}
+            this.db.findOne(query, (err, doc) => {
                 if (err) return done(err)
                 if (!doc) return done(this._annotationNotFoundError(annoId))
                 const rev = (_revid) 
@@ -111,7 +112,8 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    delete(annoId, cb) {
+    delete(annoId, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
         const _id = this._idFromURL(annoId)
         this.db.update({_id}, {$set: {deleted: new Date()}}, (err) => {
             if (err) return cb(err)
@@ -130,6 +132,11 @@ class MongolikeStore extends Store {
                 { 'target.source': query.$target },
             ]
             delete query.$target
+        }
+        if (query.includeDeleted) {
+            delete query.includeDeleted
+        } else {
+            query.deleted = {$exists: false}
         }
         // console.log(JSON.stringify(query, null, 2))
         this.db.find(query, _options, (err, docs) => {
