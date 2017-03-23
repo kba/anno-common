@@ -1,211 +1,787 @@
 {
   "definitions": {
-    "FullAnnotation": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uri"
-        },
-        "motivation": {
-          "type": "string",
-          "enum": [
-            "oa:bookmarking",
-            "oa:classifying",
-            "oa:commenting",
-            "oa:describing",
-            "oa:editing",
-            "oa:highlighting",
-            "oa:identifying",
-            "oa:linking",
-            "oa:moderating",
-            "oa:questioning",
-            "oa:replying",
-            "oa:tagging"
-          ]
-        },
-        "created": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "creator": {
-          "type": "string",
-          "format": "email"
-        },
-        "hasVersion": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AnnotationRevisionDescription"
-          }
-        },
-        "hasReply": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/FullAnnotation"
-          }
-        },
-        "body": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AnnotationBody"
-          }
-        },
-        "target": {
-          "$ref": "#/definitions/AnnotationTarget"
-        }
-      },
-      "required": [
-        "created",
-        "creator",
-        "body",
-        "target",
-        "hasReply"
+    "xsd_dateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "iri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "mediaType": {
+      "type": "string",
+      "pattern": ".*/.*"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "[a-z]{3}"
+    },
+    "textDirection": {
+      "type": "string",
+      "enum": [
+        "",
+        "ltr",
+        "rtl",
+        "auto"
       ]
     },
-    "AnnotationSelector": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "FragmentSelector",
-            "SvgSelector"
-          ]
+    "Annotation": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/AnnotationMetadata"
         },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
-    "AnnotationTargetObject": {
-      "type": "object",
-      "required": [
-        "source"
-      ],
-      "properties": {
-        "source": {
-          "type": "string",
-          "format": "uri"
-        },
-        "selector": {
-          "$ref": "#/definitions/AnnotationSelector"
-        }
-      }
-    },
-    "AnnotationBody": {
-      "type": "object",
-      "properties": {
-        "format": {
-          "type": "string",
-          "enum": [
-            "text/html"
-          ]
-        },
-        "type": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "oa:TextualBody",
-              "oa:Tag"
-            ]
+        {
+          "type": "object",
+          "required": [
+            "target"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/iri"
+            },
+            "body": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/Resource"
+                },
+                {
+                  "$ref": "#/definitions/TextualBody"
+                },
+                {
+                  "$ref": "#/definitions/ChoiceBody"
+                },
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/Resource"
+                      },
+                      {
+                        "$ref": "#/definitions/TextualBody"
+                      },
+                      {
+                        "$ref": "#/definitions/ChoiceBody"
+                      },
+                      {
+                        "$ref": "#/definitions/iri"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "target": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/TargetResource"
+                },
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/TargetResource"
+                      },
+                      {
+                        "$ref": "#/definitions/iri"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
           }
-        },
-        "value": {
-          "type": "string"
         }
-      }
+      ]
     },
-    "AnnotationRevisionDescription": {
+    "Resource": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "uri"
+          "$ref": "#/definitions/iri"
         },
-        "modified": {
-          "type": "string",
-          "format": "date"
+        "format": {
+          "$ref": "#/definitions/mediaType"
+        },
+        "language": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/language"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/language"
+              }
+            }
+          ]
+        },
+        "processingLanguage": {
+          "$ref": "#/definitions/language"
+        },
+        "textDirection": {
+          "$ref": "#/definitions/textDirection"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ResourceClass"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ResourceClass"
+              }
+            }
+          ]
         }
       }
     },
-    "AnnotationTarget": {
-      "oneOf": [
+    "TargetResource": {
+      "allOf": [
         {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "type": "object",
+          "required": [
+            "source"
+          ],
+          "properties": {
+            "source": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "default": "http://foo"
+                }
+              ]
+            },
+            "scope": {
+              "$ref": "#/definitions/iri"
+            },
+            "selector": {
+              "$ref": "#/definitions/Selector"
+            }
+          }
+        }
+      ]
+    },
+    "AnnotationMetadata": {
+      "type": "object",
+      "properties": {
+        "created": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "modified": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "generated": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "creator": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Person"
+            }
+          ]
+        },
+        "generator": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Person"
+            }
+          ]
+        }
+      }
+    },
+    "ResourceClass": {
+      "type": "string",
+      "enum": [
+        "TextualBody",
+        "Dataset",
+        "Image",
+        "Video",
+        "Sound",
+        "Text"
+      ]
+    },
+    "TextualBody": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
           "type": "string",
-          "format": "uri"
+          "enum": [
+            "TextualBody"
+          ]
         },
-        {
-          "$ref": "#/definitions/AnnotationTargetObject"
+        "value": {
+          "type": "string"
         },
-        {
+        "format": {
+          "$ref": "#/definitions/mediaType"
+        }
+      }
+    },
+    "ChoiceBody": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Choice"
+          ]
+        },
+        "items": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "$ref": "#/definitions/AnnotationTargetObject"
+            "$ref": "#/definitions/Resource"
+          }
+        }
+      }
+    },
+    "Motivation": {
+      "type": "string",
+      "enum": [
+        "bookmarking",
+        "classifying",
+        "commenting",
+        "describing",
+        "editing",
+        "highlighting",
+        "identifying",
+        "linking",
+        "moderating",
+        "questioning",
+        "replying",
+        "tagging"
+      ]
+    },
+    "Agent": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Person",
+            "Organization",
+            "Software"
+          ]
+        },
+        "name": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "email_sha1": {
+          "type": "string"
+        },
+        "homepage": {
+          "$ref": "#/definitions/iri"
+        }
+      }
+    },
+    "Person": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Agent"
+        },
+        {
+          "required": [
+            "email",
+            "name"
+          ]
+        }
+      ]
+    },
+    "Selector": {
+      "type": "object",
+      "oneOf": [
+        {},
+        {
+          "$ref": "#/definitions/FragmentSelector"
+        },
+        {
+          "$ref": "#/definitions/CSSSelector"
+        },
+        {
+          "$ref": "#/definitions/XPathSelector"
+        },
+        {
+          "$ref": "#/definitions/TextQuoteSelector"
+        },
+        {
+          "$ref": "#/definitions/TextPositionSelector"
+        },
+        {
+          "$ref": "#/definitions/DataPositionSelector"
+        },
+        {
+          "$ref": "#/definitions/SVGSelector"
+        },
+        {
+          "$ref": "#/definitions/RangeSelector"
+        }
+      ]
+    },
+    "FragmentSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FragmentSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        },
+        "conformsTo": {
+          "type": "string",
+          "enum": [
+            "http://tools.ietf.org/rfc/rfc3236",
+            "http://tools.ietf.org/rfc/rfc3778",
+            "http://tools.ietf.org/rfc/rfc5147",
+            "http://tools.ietf.org/rfc/rfc3023",
+            "http://tools.ietf.org/rfc/rfc3870",
+            "http://tools.ietf.org/rfc/rfc7111",
+            "http://www.w3.org/TR/media-frags/",
+            "http://www.w3.org/TR/SVG/",
+            "http://www.idpf.org/epub/linking/cfi/epub-cfi.html"
+          ]
+        }
+      }
+    },
+    "CSSSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "CSSSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "XPathSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "XPathSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "TextQuoteSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "exact"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TextQuoteSelector"
+          ]
+        },
+        "exact": {
+          "type": "string"
+        },
+        "suffix": {
+          "type": "string"
+        }
+      }
+    },
+    "TextPositionSelector": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TextPositionSelector"
+          ]
+        },
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        }
+      }
+    },
+    "DataPositionSelector": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "DataPositionSelector"
+          ]
+        },
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        }
+      }
+    },
+    "SVGSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "SVGSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "RangeSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "startSelector",
+        "endSelector"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "RangeSelector"
+          ]
+        },
+        "startSelector": {
+          "$ref": "#/definitions/Selector"
+        },
+        "endSelector": {
+          "$ref": "#/definitions/Selector"
+        }
+      }
+    },
+    "State": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeState"
+        },
+        {
+          "$ref": "#/definitions/HttpRequestState"
+        }
+      ]
+    },
+    "TimeState": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TimeState"
+          ]
+        },
+        "sourceDate": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "sourceDateStart": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "sourceDateEnd": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "cached": {
+          "$ref": "#/definitions/iri"
+        }
+      }
+    },
+    "HttpRequestState": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "HttpRequestState"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "styleClass": {
+      "type": "string"
+    },
+    "CssStylesheet": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "CssStyleSheet"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "RenderingSystem": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Agent"
+        },
+        {
+          "required": [
+            "id",
+            "type",
+            "schema:softwareVersion"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/iri"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "Software"
+              ]
+            },
+            "schema:softwareVersion": {
+              "type": "string"
+            }
           }
         }
       ]
     },
-    "RevisionToPut": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "body": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AnnotationBody"
-          }
-        },
-        "target": {
-          "$ref": "#/definitions/AnnotationTarget"
-        }
-      }
-    },
-    "AnnotationToPost": {
+    "AnnotationCollection": {
       "type": "object",
       "required": [
-        "body",
-        "target"
+        "id",
+        "type"
       ],
       "properties": {
+        "@context": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/ns/anno.jsonld"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": [
+                "http://www.w3.org/ns/anno.jsonld"
+              ]
+            }
+          ]
+        },
         "id": {
-          "not": {}
+          "$ref": "#/definitions/iri"
         },
-        "creator": {
-          "not": {}
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "AnnotationCollection"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": [
+                "AnnotationCollection"
+              ]
+            }
+          ]
         },
-        "created": {
-          "not": {}
+        "label": {
+          "type": "string"
         },
-        "modified": {
-          "not": {}
+        "total": {
+          "type": "number"
         },
-        "body": {
-          "$ref": "#/definitions/AnnotationBody"
+        "first": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/AnnotationPage"
+            }
+          ]
         },
-        "target": {
-          "$ref": "#/definitions/AnnotationTarget"
+        "last": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/AnnotationPage"
+            }
+          ]
         }
       }
     },
-    "User": {
+    "AnnotationPage": {
       "type": "object",
       "properties": {
-        "email": {
-          "type": "string",
-          "format": "email"
+        "@context": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/ns/anno.jsonld"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": [
+                "http://www.w3.org/ns/anno.jsonld"
+              ]
+            }
+          ]
+        },
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "AnnotationPage"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": [
+                "AnnotationPage"
+              ]
+            }
+          ]
+        },
+        "partOf": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/AnnotationPage"
+            }
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Annotation"
+            }
+          ]
         }
-      }
-    },
-    "ListOfFullAnnotations": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/FullAnnotation"
       }
     }
   }

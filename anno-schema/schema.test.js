@@ -1,10 +1,10 @@
 const fixtures = require('../testlib/schema-cases')
 const tap = require('tap')
-const schema = require('./schema')
+const schema = require('.')
 
 tap.test('smoketest schema', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equals(Object.keys(schema.validate).length, 10, '10 classes in schema')
+    t.equals(Object.keys(schema.validate).length, 28, '28 classes in schema')
     t.end()
 })
 

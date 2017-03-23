@@ -17,8 +17,13 @@ const jsonldContext = require('./context.json')
 
 module.exports = {
     definitions: schemaDef.definitions,
+    jsonldContext: jsonldContext,
+    contentType: {
+        'anno':  'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',
+        'annox': 'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',
+    },
     validate: {},
-    jsonldContext
+
 }
 
 Object.keys(schemaDef.definitions).forEach(k => {
