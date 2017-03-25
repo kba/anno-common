@@ -39,8 +39,24 @@
             "id": {
               "$ref": "#/definitions/iri"
             },
-            "body": {
+            "canonical": {
+              "type": "string"
+            },
+            "via": {
+              "$ref": "#/definitions/iri"
+            },
+            "styledBy": {
               "oneOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "$ref": "#/definitions/CssStylesheet"
+                }
+              ]
+            },
+            "body": {
+              "anyOf": [
                 {
                   "$ref": "#/definitions/Resource"
                 },
@@ -48,7 +64,7 @@
                   "$ref": "#/definitions/TextualBody"
                 },
                 {
-                  "$ref": "#/definitions/ChoiceBody"
+                  "$ref": "#/definitions/Choice"
                 },
                 {
                   "$ref": "#/definitions/iri"
@@ -64,7 +80,7 @@
                         "$ref": "#/definitions/TextualBody"
                       },
                       {
-                        "$ref": "#/definitions/ChoiceBody"
+                        "$ref": "#/definitions/Choice"
                       },
                       {
                         "$ref": "#/definitions/iri"
@@ -155,6 +171,19 @@
             "source"
           ],
           "properties": {
+            "renderedVia": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "$ref": "#/definitions/Application"
+                }
+              ]
+            },
+            "styleClass": {
+              "type": "string"
+            },
             "source": {
               "allOf": [
                 {
@@ -241,7 +270,7 @@
         }
       }
     },
-    "ChoiceBody": {
+    "Choice": {
       "type": "object",
       "required": [
         "type"
@@ -592,9 +621,6 @@
         }
       }
     },
-    "styleClass": {
-      "type": "string"
-    },
     "CssStylesheet": {
       "type": "object",
       "required": [
@@ -605,7 +631,7 @@
         "type": {
           "type": "string",
           "enum": [
-            "CssStyleSheet"
+            "CssStylesheet"
           ]
         },
         "value": {
@@ -613,7 +639,7 @@
         }
       }
     },
-    "RenderingSystem": {
+    "Application": {
       "allOf": [
         {
           "$ref": "#/definitions/Agent"

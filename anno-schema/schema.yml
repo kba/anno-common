@@ -54,7 +54,7 @@ definitions:
           via:       {$ref: '#/definitions/iri'}
           styledBy:  {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/CssStylesheet'}]}
           body:
-            oneOf:
+            anyOf:
               - {$ref: '#/definitions/Resource'}
               - {$ref: '#/definitions/TextualBody'}
               - {$ref: '#/definitions/Choice'}
@@ -157,6 +157,7 @@ definitions:
 #
 # https://www.w3.org/TR/annotation-model/#embedded-textual-body
 #
+
   TextualBody:
     type: 'object'
     required:
@@ -166,6 +167,7 @@ definitions:
       type:   {type: 'string', enum: ['TextualBody']}
       value:  {type: 'string'}
       format: {$ref: '#/definitions/mediaType'}
+
 #}}}
 #{{{ 3.2.7 Choice Between Bodies
 #
