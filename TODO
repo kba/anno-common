@@ -32,3 +32,4 @@
     [ ] RDF conneg
     [ ] 410
     [X] 415 for invalid: The Annotation Client sent an entity-body that is not able to be processed by the Server, such as non-Annotation or in a context that is unrecognized.
+    [ ] hasParent undefined?

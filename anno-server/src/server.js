@@ -28,10 +28,6 @@ function start(app, cb) {
                 console.log(`Binding localhost:${config.PORT}/${routerPath}`)
                 app.use(`/${routerPath}`,
                     cors,
-                    (req, resp, next) => {
-                        resp.header('Allow', 'GET, HEAD, OPTIONS, DELETE, PUT')
-                        next()
-                    },
                     jsonParser,
                     routerFn({store, jwtGuard, config}))
                 done()

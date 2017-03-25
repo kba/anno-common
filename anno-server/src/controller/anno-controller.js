@@ -43,14 +43,13 @@ function prune(obj) {
 function errorHandler(err, req, resp, next) {
     if (err && err.code) {
         resp.status(err.code)
-        return resp.send(err.message)
-    } else if(err)
-        return next(err)
+        resp.send(err.message) } else if (err) next(err)
+    else next()
 }
 
 module.exports = ({store, guard, config}) => {
 
-    function getAnnotation(req, resp, next) { 
+    function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, (err, doc) => {
             if (err) return next(err)
             resp.header('Location', doc.id)
@@ -62,7 +61,7 @@ module.exports = ({store, guard, config}) => {
     }
 
     // TODO
-    function searchAnnotations(req, resp, next) { 
+    function searchAnnotations(req, resp, next) {
         var colUrl = config.BASE_URL + '/anno/'
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
@@ -94,7 +93,7 @@ module.exports = ({store, guard, config}) => {
                         startIndex: 0,
                         items: docs,
                     },
-                    last: { id: colUrl }
+                    last: { id: colUrl },
                 })
             }
             resp.send(col)
@@ -108,12 +107,18 @@ module.exports = ({store, guard, config}) => {
     // Web Annotation Protocol
     //----------------------------------------------------------------
 
+    // 'Allow' header
+    router.use((req, resp, next) => {
+        resp.header('Allow', 'GET, HEAD, OPTIONS, DELETE, PUT')
+        next()
+    })
+
     //
     // HEAD /anno
     //
     // NOTE: HEAD must be defined before GET because express
     //
-    router.head('/', (req, resp, next) => { 
+    router.head('/', (req, resp, next) => {
         req.query.metadataOnly = true
         next()
     }, searchAnnotations)
@@ -126,10 +131,10 @@ module.exports = ({store, guard, config}) => {
     //
     // POST /anno
     //
-    router.post('/', (req, resp, next) => { 
+    router.post('/', (req, resp, next) => {
         const anno = prune(req.body)
         store.create(anno, (err, anno) => {
-            if(err) return next(err)
+            if (err) return next(err)
             resp.status(201)
             req.params.annoId = anno.id
             return getAnnotation(req, resp, next)
@@ -152,9 +157,9 @@ module.exports = ({store, guard, config}) => {
     //
     // PUT /anno/{annoId}
     //
-    router.put('/:annoId', (req, resp, next) => { 
+    router.put('/:annoId', (req, resp, next) => {
         store.revise(req.params.annoId, req.body, (err, doc) => {
-            if(err) return next(err)
+            if (err) return next(err)
             resp.status(201)
             req.params.annoId = doc.id
             return getAnnotation(req, resp, next)
@@ -164,9 +169,9 @@ module.exports = ({store, guard, config}) => {
     //
     // DELETE /anno/{annoId}
     //
-    router.delete('/:annoId', (req, resp, next) => { 
+    router.delete('/:annoId', (req, resp, next) => {
         store.delete(req.params.annoId, (err, doc) => {
-            if(err) return next(err)
+            if (err) return next(err)
             resp.status(204)
             return resp.send(doc)
         })
@@ -181,7 +186,7 @@ module.exports = ({store, guard, config}) => {
     //
     router.post(':annoId/reply', (req, resp, next) => {
         store.reply(req.params.annoId, req.body, (err, doc) => {
-            if(err) return next(err)
+            if (err) return next(err)
             return resp.send(doc)
         })
     })
@@ -189,7 +194,7 @@ module.exports = ({store, guard, config}) => {
     //
     // DELETE /anno
     //
-    router.delete('/', (req, resp, next) => { 
+    router.delete('/', (req, resp, next) => {
         store.wipe((err) => {
             if (err) return next(err)
             resp.end()
