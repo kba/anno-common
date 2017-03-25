@@ -60,6 +60,7 @@ class MongolikeStore extends Store {
         const errors = []
         annosToCreate = annosToCreate.map(anno => {
             anno = this._deleteId(anno)
+            console.log(anno.canonical)
             const validFn = schema.validate.Annotation
             if (!validFn(anno)) {
                 return errors.push(this._invalidAnnotationError(anno, validFn.errors))
@@ -98,7 +99,8 @@ class MongolikeStore extends Store {
             if (!validFn(anno)) {
                 return cb(this._invalidAnnotationError(anno, validFn.errors))
             }
-            anno = this._normalizeTarget(anno)
+            // TODO no idempotency of targets with normalization -> disabled for now
+            // anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)
             const newData = JSON.parse(JSON.stringify(anno))
             anno.created = new Date()
@@ -169,8 +171,10 @@ class MongolikeStore extends Store {
         ret.type = "Annotation"
         if (anno.body) ret.body = anno.body
         if (anno.target) ret.target = anno.target
+        // TODO generalize this
+        if (anno.canonical) ret.canonical = anno.canonical
 
-        if (anno._revisions !== undefined && anno._revisions.length > 0) {
+        if (anno._revisions !== undefined && anno._revisions.length > 0 && ! options.skipVersions) {
             var revId = 0
             ret.hasVersion = anno._revisions.map(revision => {
                 const revisionLD = this._toJSONLD(`${annoId}-rev-${++revId}`, revision,

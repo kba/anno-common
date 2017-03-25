@@ -148,6 +148,7 @@ class Store {
         return url.replace(this.config.BASE_URL + '/anno/', '')
     }
 
+    // TODO no idempotency of targets with normalization -> disabled for now
     _normalizeTarget(annoDoc) {
         if (!Array.isArray(annoDoc.target)) annoDoc.target = [annoDoc.target]
         annoDoc.target = annoDoc.target.map(target =>
@@ -165,7 +166,10 @@ class Store {
 
     _deleteId(anno) {
         delete anno._id
-        delete anno.id
+        // if (anno.id) {
+            // anno.via = anno.id
+            delete anno.id
+        // }
         return anno
     }
 
