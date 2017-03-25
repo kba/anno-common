@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
+    "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-store-nedb": "^0.0.1",
     "mustache": "^2.3.0",
