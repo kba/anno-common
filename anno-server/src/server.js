@@ -2,13 +2,36 @@ const express = require('express')
 const async = require('async')
 const nedb = require('nedb')
 const morgan = require('morgan')
+const fs = require('fs')
 
 const config = require('@kba/anno-config').loadConfig({
     JWT_SECRET: 'S3cr3t!',
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
 })
-const fixtures = require('./fixtures')
+
+function loadFixtures(store, cb) {
+    const fixtureDir = `${__dirname}/../../fixtures/`
+    const fixtures = []
+    fs.readdir(fixtureDir, (err, files) => {
+        files.filter(_ => _.match(/\.json$/)).forEach(file => {
+            const fixtureFile = `${fixtureDir}/${file}`
+            console.log(`Loading fixture '${fixtureFile}'`)
+            fixtures.push(JSON.parse(fs.readFileSync(fixtureFile)))
+        })
+        store.create(fixtures, cb)
+    })
+}
+
+function errorHandler(err, req, res, next) {
+    if (err.code !== undefined && err.code >= 400) {
+        res.status(err.status)
+        return res.send({error: err})
+    } else if (Array.isArray(err)) {
+        return res.send({error: err})
+    }
+    return next(err, req, res)
+}
 
 function start(app, cb) {
     const store = require('@kba/anno-store').load(module)
@@ -33,20 +56,10 @@ function start(app, cb) {
                 done()
             }, (err) => {
                 if (err) return cb(err)
-                store.create(fixtures.internal.anno, cb)
+                return loadFixtures(store, cb)
             })
         })
     })
-}
-
-const errorHandler = (err, req, res, next) => {
-    if (err.code !== undefined && err.code >= 400) {
-        res.status(err.status)
-        return res.send({error: err})
-    } else if (Array.isArray(err)) {
-        return res.send({error: err})
-    }
-    return next(err, req, res)
 }
 
 const app = express()
