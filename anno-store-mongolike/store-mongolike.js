@@ -26,12 +26,7 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const wasArray = Array.isArray(annoIds)
         if (!wasArray) annoIds = [annoIds]
-        const projection = {}
-        if (options.metadataOnly)
-            Object.assign(projection, {
-                body: false,
-                target: false,
-            })
+        const projection = this._projectionFromOptions(options)
         async.map(annoIds, (annoId, done) => {
             annoId = this._idFromURL(annoId)
             var [_id, _revid] = annoId.split(/-rev-/)
@@ -91,14 +86,21 @@ class MongolikeStore extends Store {
         })
     }
 
+    // https://www.w3.org/TR/annotation-protocol/#update-an-existing-annotation
     /* @override */
     revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         annoId = this._idFromURL(annoId)
         var [_id, _revid] = annoId.split(/-rev-/)
-        this.db.count({_id}, (err, count) => {
+        this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
-            if (count !== 1) return cb(this._annotationNotFoundError(_id))
+            if (!existingAnno) return cb(this._annotationNotFoundError(_id))
+            ;['canonical', 'via', 'hasVersion', 'versionOf'].forEach(prop => {
+                if (anno[prop] && anno[prop] !== existingAnno[prop]) {
+                    return cb(this._readonlyValueError(annoId, 'canonical'))
+                }
+            })
+            // if (anno
             anno = this._deleteId(anno)
             const validFn = schema.validate.Annotation
             if (!validFn(anno)) {
@@ -148,18 +150,9 @@ class MongolikeStore extends Store {
             query.deleted = {$exists: false}
         }
 
-        const projection = {}
-        if (options.metadataOnly) {
-            Object.assign(projection, {
-                body: false, target: false,
-            })
-            for (let i = 0; i < 20; i++) {
-                projection[`_revisions.${i}.body`] = false
-                projection[`_revisions.${i}.target`] = false
-            }
-        }
+        const projection = this._projectionFromOptions(options)
 
-        // console.log(JSON.stringify({query, projection}, null, 2))
+        console.log(JSON.stringify({query, projection}, null, 2))
         this.db.find(query, projection, (err, docs) => {
             if (err) return cb(err)
             if (docs === undefined) docs = []
@@ -202,16 +195,22 @@ class MongolikeStore extends Store {
             }
         })
 
-        // if (anno._comments !== undefined && anno._comments.length > 0) {
-        //     var commentId = 0
-        //     ret[config.PROP_HAS_COMMENT] = anno._comments.map(comment => {
-        //         const commentLD = this._toJSONLD(`${annoId}/comment/${commentId}`, comment,
-        //             {skipContext: true})
-        //         commentLD.target = [ret.id]
-        //         return commentLD
-        //     })
-        // }
+        return ret
+    }
 
+    _projectionFromOptions(options) {
+        const ret = {}
+        if (options.metadataOnly) {
+            Object.assign(ret, {
+                body: false,
+                target: false,
+            })
+            // HACK
+            for (let i = 0; i < 20; i++) {
+                ret[`_revisions.${i}.body`] = false
+                ret[`_revisions.${i}.target`] = false
+            }
+        }
         return ret
     }
 
