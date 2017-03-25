@@ -12,7 +12,9 @@ function load(loadingModule) {
     try {
         impl = loadingModule.require(config.STORE)
     } catch (err) {
+        console.log(err)
         console.error(`Please install '${config.STORE}' configured as store`)
+        process.exit(1)
     }
     return new(impl)()
 }
