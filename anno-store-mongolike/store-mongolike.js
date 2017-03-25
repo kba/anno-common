@@ -62,7 +62,7 @@ class MongolikeStore extends Store {
             anno = this._deleteId(anno)
             const validFn = schema.validate.Annotation
             if (!validFn(anno)) {
-                return errors.push(validFn.errors)
+                return errors.push(this._invalidAnnotationError(anno, validFn.errors))
             }
             anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)
@@ -74,7 +74,7 @@ class MongolikeStore extends Store {
             anno._id = this._genid()
             return anno
         })
-        if (errors.length > 0) return cb(errors)
+        if (errors.length > 0) return cb(this._invalidAnnotationError({errors}))
         this.db.insert(annosToCreate, (err, savedAnnos) => {
             // Mongodb returns an object describing the result, nedb returns just the results
             var {insertedIds} = savedAnnos
@@ -94,8 +94,9 @@ class MongolikeStore extends Store {
             if (err) return cb(err)
             if (count !== 1) return cb(this._annotationNotFoundError(_id))
             anno = this._deleteId(anno)
-            if (!schema.validate.AnnotationToPost(anno)) {
-                return cb(schema.validate.AnnotationToPost.errors)
+            const validFn = schema.validate.Annotation
+            if (!validFn(anno)) {
+                return cb(this._invalidAnnotationError(anno, validFn.errors))
             }
             anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)

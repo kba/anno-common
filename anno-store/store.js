@@ -137,6 +137,13 @@ class Store {
         return err
     }
 
+    _invalidAnnotationError(anno, errors) {
+        const err = new Error(`Annotation is invalid: ` + JSON.stringify({anno, errors}, null, 2))
+        err.validationErrors = errors
+        err.code = 415
+        return err
+    }
+
     _idFromURL(url) {
         return url.replace(this.config.BASE_URL + '/anno/', '')
     }
