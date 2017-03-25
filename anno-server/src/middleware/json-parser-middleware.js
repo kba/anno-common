@@ -1,1 +1,1 @@
-module.exports = require('body-parser').json({type: '*/*'})
+module.exports = () => require('body-parser').json({type: '*/*'})

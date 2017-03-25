@@ -9,10 +9,12 @@ info:
 consumes:
   - application/ld+json
 produces:
-  - application/ld+json
+  - 'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"'
 tags:
   - name: anno
-    description: Handling annotations
+    description: Web Annotation Protocol
+  - name: extensions
+    description: Extensions to Web Annotation Protocol
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -29,13 +31,15 @@ paths:
 
   '/anno':
 
+    #
+    # HEAD /anno
+    #
     head:
-      tags:
-        - 'anno'
-      summary: 'Get all annotations that adhere to query without body'
+      tags: ['anno']
+      summary: 'Get all annotations that adhere to query without body/target'
       parameters:
         - in: 'query'
-          name: 'url'
+          name: '$target'
           required: true
           type: 'string'
           format: 'url'
@@ -43,16 +47,20 @@ paths:
         200:
           description: all okay
           schema:
-            $ref: '#/definitions/ListOfFullAnnotations'
+            type: 'array'
+            items:
+              $ref: '#/definitions/Annotation'
 
+    #
+    # GET /anno
+    #
     get:
-      tags:
-        - 'anno'
+      tags: ['anno']
       summary: 'Get all annotations that adhere to query'
       parameters:
         - in: 'query'
-          name: 'url'
-          required: true
+          name: 'target.source'
+          required: false
           type: 'string'
           format: 'url'
         - in: 'header'
@@ -66,20 +74,22 @@ paths:
         200:
           description: all okay
           schema:
-            $ref: '#/definitions/ListOfFullAnnotations'
+            type: 'array'
+            items:
+              $ref: '#/definitions/Annotation'
 
+    #
+    # POST /anno
+    #
     post:
-      tags:
-        - 'anno'
-      security:
-        - Bearer: []
+      tags: ['anno']
+      security: [{Bearer: []}]
       summary: 'Post a new annotation'
       parameters:
         - in: 'body'
           name: 'body'
           description: 'New annotation to post'
-          schema:
-            $ref: '#/definitions/AnnotationToPost'
+          schema: {$ref: '#/definitions/Annotation'}
         - in: 'header'
           name: 'Slug'
           description: 'Preferred annotation ID'
@@ -87,22 +97,26 @@ paths:
         200:
           description: all okay
 
+    #
+    # DELETE /anno
+    #
     delete:
-      tags:
-        - 'anno'
-      security:
-        - Bearer: []
+      tags: ['extensions']
+      security: [{Bearer: []}]
       summary: 'Wipe the store'
       parameters: []
       responses:
         200:
           description: all okay
 
-  '/anno/{id}':
+  '/anno/{annoId}':
 
+    #
+    # GET /anno/{annoId}
+    #
     get:
       tags: ['anno']
-      summary: 'Get a single annotation including all revisions'
+      summary: 'Get a single annotation'
       parameters:
         - in: 'path'
           name: 'annoId'
@@ -112,10 +126,15 @@ paths:
       responses:
         200:
           description: 'all okay'
+          schema:
+            $ref: '#/definitions/Annotation'
 
+    #
+    # HEAD /anno/{annoId}
+    #
     head:
       tags: ['anno']
-      summary: 'Get a single annotation including all revisions without body'
+      summary: 'Get a single annotation without body/target'
       parameters:
         - in: 'path'
           name: 'annoId'
@@ -126,6 +145,27 @@ paths:
         200:
           description: 'all okay'
 
+    #
+    # DELETE /anno/{annoId}
+    #
+    delete:
+      tags: ['anno']
+      summary: 'Delete an annotation'
+      parameters:
+        - in: 'path'
+          name: 'annoId'
+          type: 'string'
+          required: true
+          description: 'ID of the annotation'
+      responses:
+        200:
+          description: 'Annotation deleted'
+        404:
+          description: 'Annotation not found'
+
+    #
+    # PUT /anno/{annoId}
+    #
     put:
       tags: ['anno']
       summary: 'Store a new revision of an annotation'
@@ -140,22 +180,20 @@ paths:
           description: 'Updated annotation'
           required: true
           schema:
-            $ref: '#/definitions/FullAnnotation'
+            $ref: '#/definitions/Annotation'
       responses:
         200:
           description: Created a new revision
           schema:
-            $ref: '#/definitions/FullAnnotation'
+            $ref: '#/definitions/Annotation'
 
-    post:
-      tags:
-        - 'anno'
-      summary: 'Add a comment'
+  '/anno/{annoId}-rev-{revId}':
 
-  '/anno/{annoId}/{revId}':
+    #
+    # GET /anno/{annoId}-rev-{revId}
+    #
     get:
-      tags:
-        - 'anno'
+      tags: ['extensions']
       summary: 'Get a single revision of one annotation'
       parameters:
         - in: 'path'
@@ -172,10 +210,12 @@ paths:
         200:
           description: all okay
 
+    #
+    # GET /anno/{annoId}-rev-{revId}
+    #
     head:
-      tags:
-        - 'anno'
-      summary: 'Get a single revision of one annotation without body'
+      tags: ['extensions']
+      summary: 'Get a single revision of one annotation without body/target'
       parameters:
         - in: 'path'
           name: 'annoId'
@@ -190,3 +230,28 @@ paths:
       responses:
         200:
           description: all okay
+
+  '/anno/{annoId}/reply':
+
+    #
+    # POST /anno/{annoId}/reply
+    #
+    post:
+      tags: ['extensions']
+      summary: 'Reply to an annotation'
+      parameters:
+        - in: 'path'
+          name: 'annoId'
+          type: 'string'
+          required: true
+          description: 'ID of the annotation'
+        - in: 'body'
+          name: 'body'
+          required: true
+          description: 'Reply to post'
+          schema: {$ref: '#/definitions/AnnotationReply'}
+      responses:
+        201:
+          description: 'Reply created'
+        404:
+          description: 'Annotation not found'

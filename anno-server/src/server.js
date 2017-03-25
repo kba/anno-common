@@ -8,20 +8,17 @@ const config = require('@kba/anno-config').loadConfig({
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
 })
-const jsonMiddleware         = require('./middleware/json-parser-middleware')
-const jsonwebtokenMiddleware = require('./middleware/jsonwebtoken-middleware')
-
 const fixtures = require('./fixtures')
 
 function start(app, cb) {
     const store = require('@kba/anno-store').load(module)
-    // const db = {
-    //     anno: new nedb({filename: `/anno.nedb`}),
-    //     perm: new nedb({filename: `/perm.nedb`}),
-    // }
     const permDB = new nedb({filename: `./perm.nedb`})
-    const guard = jsonwebtokenMiddleware(permDB, config)
-    const routes = [ 'anno', 'token', 'swagger', ]
+
+    const cors       = require('./middleware/cors-middleware')()
+    const jsonParser = require('./middleware/json-parser-middleware')()
+    const jwtGuard   = require('./middleware/jsonwebtoken-middleware')(permDB, config)
+
+    const routes = [ 'anno', 'swagger', 'token' ]
     store.init(err => {
         if (err) return cb(err)
         permDB.loadDatabase(err => {
@@ -29,7 +26,10 @@ function start(app, cb) {
             async.each(routes, (routerPath, done) => {
                 const routerFn = require(`./controller/${routerPath}-controller`)
                 console.log(`Binding localhost:${config.PORT}/${routerPath}`)
-                app.use(`/${routerPath}`, jsonMiddleware, routerFn({store, guard, config}))
+                app.use(`/${routerPath}`,
+                    cors,
+                    jsonParser,
+                    routerFn({store, jwtGuard, config}))
                 done()
             }, (err) => {
                 if (err) return cb(err)
@@ -40,8 +40,10 @@ function start(app, cb) {
 }
 
 const errorHandler = (err, req, res, next) => {
-    if (err.status !== undefined && err.status >= 400) {
+    if (err.code !== undefined && err.code >= 400) {
         res.status(err.status)
+        return res.send({error: err})
+    } else if (Array.isArray(err)) {
         return res.send({error: err})
     }
     return next(err, req, res)
@@ -50,7 +52,7 @@ const errorHandler = (err, req, res, next) => {
 const app = express()
 app.use(morgan())
 start(app, (err) => {
-    if (err) throw err
+    if (err) throw JSON.stringify(err, null, 2)
     app.use(errorHandler)
     // Static files
     app.use(express.static(__dirname + '/../public'))
