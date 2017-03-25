@@ -28,6 +28,10 @@ function start(app, cb) {
                 console.log(`Binding localhost:${config.PORT}/${routerPath}`)
                 app.use(`/${routerPath}`,
                     cors,
+                    (req, resp, next) => {
+                        resp.header('Allow', 'GET, HEAD, OPTIONS, DELETE, PUT')
+                        next()
+                    },
                     jsonParser,
                     routerFn({store, jwtGuard, config}))
                 done()
@@ -52,7 +56,7 @@ const errorHandler = (err, req, res, next) => {
 const app = express()
 app.use(morgan())
 start(app, (err) => {
-    if (err) throw JSON.stringify(err, null, 2)
+    if (err) throw err
     app.use(errorHandler)
     // Static files
     app.use(express.static(__dirname + '/../public'))

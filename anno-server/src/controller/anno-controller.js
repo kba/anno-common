@@ -40,29 +40,155 @@ function prune(obj) {
     return obj
 }
 
+function errorHandler(err, req, resp, next) {
+    if (err && err.code) {
+        resp.status(err.code)
+        return resp.send(err.message)
+    } else if(err)
+        return next(err)
+}
+
 module.exports = ({store, guard, config}) => {
+
+    function getAnnotation(req, resp, next) { 
+        store.get(req.params.annoId, (err, doc) => {
+            if (err) return next(err)
+            resp.header('Location', doc.id)
+            resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
+            resp.header('Vary', 'Accept')
+            resp.header('Content-Type', 'application/ld+json')
+            return resp.send(doc)
+        })
+    }
+
+    // TODO
+    function searchAnnotations(req, resp, next) { 
+        var colUrl = config.BASE_URL + '/anno/'
+        const qs = querystring.stringify(req.query)
+        if (qs) colUrl += '?' + qs
+        const options = {}
+        if (req.query.skipVersions) {
+            options.skipVersions = true
+            delete req.query.skipVersions
+        }
+        store.search(req.query, options, (err, docs) => {
+            if (err) return next(err)
+            resp.header('Content-Location', colUrl)
+            resp.header('Vary', 'Accept, Prefer')
+            resp.header('Link',
+                '<http://www.w3.org/TR/annotation-protocol/>; rel="http://www.w3.org/ns/ldp#constrainedBy"')
+            resp.header('Link',
+                '<http://www.w3.org/TR/annotation-protocol/>; rel="http://www.w3.org/ns/ldp#constrainedBy"')
+            resp.header('Content-Type', 'application/ld+json')
+
+            resp.header('Link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
+            const col = {
+                type: ['BasicContainer', 'AnnotationCollection'],
+                id: colUrl,
+                total: docs.length,
+            }
+            if (col.total > 0) {
+                Object.assign(col, {
+                    first: {
+                        id: colUrl,
+                        startIndex: 0,
+                        items: docs,
+                    },
+                    last: { id: colUrl }
+                })
+            }
+            resp.send(col)
+        })
+    }
+
 
     const router = Router()
 
+    //----------------------------------------------------------------
+    // Web Annotation Protocol
+    //----------------------------------------------------------------
+
+    //
+    // HEAD /anno
+    //
+    // NOTE: HEAD must be defined before GET because express
+    //
     router.head('/', (req, resp, next) => { 
         req.query.metadataOnly = true
-        resp.redirect(`${req.originalUrl}?${querystring.stringify(req.query)}`)
-    })
+        next()
+    }, searchAnnotations)
 
-    router.get('/', (req, resp, next) => { 
-        store.search(req.query, (err, docs) => {
-            if (err) return next(err)
-            resp.send(docs)
-        })
-    })
+    //
+    // GET /anno
+    //
+    router.get('/', searchAnnotations)
 
+    //
+    // POST /anno
+    //
     router.post('/', (req, resp, next) => { 
-        store.create(prune(req.body), (err, anno) => {
-            if (err) return next(err)
-            return resp.send(anno)
+        const anno = prune(req.body)
+        store.create(anno, (err, anno) => {
+            if(err) return next(err)
+            resp.status(201)
+            req.params.annoId = anno.id
+            return getAnnotation(req, resp, next)
         })
     })
 
+    //
+    // HEAD /anno/{annoId}
+    //
+    router.head('/:annoId', (req, resp, next) => {
+        req.query.metadataOnly = true
+        next()
+    }, getAnnotation)
+
+    //
+    // GET /anno/{annoId}
+    //
+    router.get('/:annoId', getAnnotation)
+
+    //
+    // PUT /anno/{annoId}
+    //
+    router.put('/:annoId', (req, resp, next) => { 
+        store.revise(req.params.annoId, req.body, (err, doc) => {
+            if(err) return next(err)
+            resp.status(201)
+            req.params.annoId = doc.id
+            return getAnnotation(req, resp, next)
+        })
+    })
+
+    //
+    // DELETE /anno/{annoId}
+    //
+    router.delete('/:annoId', (req, resp, next) => { 
+        store.delete(req.params.annoId, (err, doc) => {
+            if(err) return next(err)
+            resp.status(204)
+            return resp.send(doc)
+        })
+    })
+
+    //----------------------------------------------------------------
+    // Extensions
+    //----------------------------------------------------------------
+
+    //
+    // POST /anno/{annoId}/reply
+    //
+    router.post(':annoId/reply', (req, resp, next) => {
+        store.reply(req.params.annoId, req.body, (err, doc) => {
+            if(err) return next(err)
+            return resp.send(doc)
+        })
+    })
+
+    //
+    // DELETE /anno
+    //
     router.delete('/', (req, resp, next) => { 
         store.wipe((err) => {
             if (err) return next(err)
@@ -70,54 +196,10 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
-    router.head('/:annoId', (req, resp, next) => { 
-        req.query.metadataOnly = true
-        resp.redirect(`${req.originalUrl}?${querystring.stringify(req.query)}`)
-    })
 
-    router.get('/:annoId', (req, resp, next) => { 
-        store.get(req.params.annoId, (err, doc) => {
-            if (err && err.code) {
-                resp.status(err.code)
-                return resp.send(err.message)
-            } else if(err)
-                return next(err)
-            return resp.send(doc)
-        })
-    })
 
-    router.put('/:annoId', (req, resp, next) => { 
-        store.revise(req.params.annoId, req.body, (err, doc) => {
-            if (err && err.code) {
-                resp.status(err.code)
-                return resp.send(err.message)
-            } else if(err)
-                return next(err)
-            return resp.send(doc)
-        })
-    })
-
-    router.delete('/:annoId', (req, resp, next) => { 
-        store.delete(req.params.annoId, (err, doc) => {
-            if (err && err.code) {
-                resp.status(err.code)
-                return resp.send(err.message)
-            } else if(err)
-                return next(err)
-            return resp.send(doc)
-        })
-    })
-
-    router.post(':annoId/reply', (req, resp, next) => {
-        store.reply(req.params.annoId, req.body, (err, doc) => {
-            if (err && err.code) {
-                resp.status(err.code)
-                return resp.send(err.message)
-            } else if(err)
-                return next(err)
-            return resp.send(doc)
-        })
-    })
+    // Error Handler
+    router.use(errorHandler)
 
     return router
 }
