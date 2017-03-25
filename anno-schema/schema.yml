@@ -364,12 +364,13 @@ definitions:
 
   SvgSelector:
     type: 'object'
-    required:
-      - 'type'
-      - 'value'
+    oneOf:
+      - required: ['id', 'type']
+      - required: ['value', 'type']
     properties:
-      value:     {type: 'string'}
+      id:    {$ref: '#/definitions/iri'}
       type:  {type: 'string', enum: ['SvgSelector']}
+      value: {type: 'string'}
 # TODO recursion messes with swagger
 #      refinedBy: {$ref: '#/definitions/Selector'}
 
