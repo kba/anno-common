@@ -121,7 +121,10 @@ definitions:
               - {$ref: '#/definitions/iri'}
               - default: 'http://foo'
           scope: {$ref: '#/definitions/iri'}
-          selector: {$ref: '#/definitions/Selector'}
+          selector:
+            oneOf:
+              - {$ref: '#/definitions/iri'}
+              - {$ref: '#/definitions/Selector'}
 
 #}}}
 #{{{ 3.3.1 Lifecycle Information
