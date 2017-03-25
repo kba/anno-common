@@ -26,11 +26,17 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const wasArray = Array.isArray(annoIds)
         if (!wasArray) annoIds = [annoIds]
+        const projection = {}
+        if (options.metadataOnly)
+            Object.assign(projection, {
+                body: false,
+                target: false,
+            })
         async.map(annoIds, (annoId, done) => {
             annoId = this._idFromURL(annoId)
             var [_id, _revid] = annoId.split(/-rev-/)
             const query = {_id, deleted: {$exists: false}}
-            this.db.findOne(query, (err, doc) => {
+            this.db.findOne(query, projection, (err, doc) => {
                 if (err) return done(err)
                 if (!doc) return done(this._annotationNotFoundError(annoId))
                 const rev = (_revid) 
@@ -128,7 +134,7 @@ class MongolikeStore extends Store {
     search(query, options, cb) {
         if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
         if (typeof options === 'function') [cb, options] = [options, {}]
-        const _options = {}
+
         if ('$target' in query) {
             query.$or = [
                 { target: query.$target },
@@ -141,17 +147,29 @@ class MongolikeStore extends Store {
         } else {
             query.deleted = {$exists: false}
         }
-        // console.log(JSON.stringify(query, null, 2))
-        this.db.find(query, _options, (err, docs) => {
+
+        const projection = {}
+        if (options.metadataOnly) {
+            Object.assign(projection, {
+                body: false, target: false,
+            })
+            for (let i = 0; i < 20; i++) {
+                projection[`_revisions.${i}.body`] = false
+                projection[`_revisions.${i}.target`] = false
+            }
+        }
+
+        // console.log(JSON.stringify({query, projection}, null, 2))
+        this.db.find(query, projection, (err, docs) => {
             if (err) return cb(err)
             if (docs === undefined) docs = []
             // mongodb returns a cursor, nedb a list of documents
             if (Array.isArray(docs))
-                return cb(null, docs.map(doc => this._toJSONLD(doc)))
+                return cb(null, docs.map(doc => this._toJSONLD(doc, {skipContext: true})))
             else
                 docs.toArray((err, docs) => {
                     if (err) return cb(err)
-                    return cb(null, docs.map(doc => this._toJSONLD(doc)))
+                    return cb(null, docs.map(doc => this._toJSONLD(doc, {skipContext: true})))
                 })
         })
     }
@@ -168,20 +186,21 @@ class MongolikeStore extends Store {
         }
         ret.id = `${this.config.BASE_URL}/anno/${annoId}`
         ret.type = "Annotation"
-        if (anno.body) ret.body = anno.body
-        if (anno.target) ret.target = anno.target
-        // TODO generalize this
-        if (anno.canonical) ret.canonical = anno.canonical
-
-        if (anno._revisions !== undefined && anno._revisions.length > 0 && ! options.skipVersions) {
-            var revId = 0
-            ret.hasVersion = anno._revisions.map(revision => {
-                const revisionLD = this._toJSONLD(`${annoId}-rev-${++revId}`, revision,
-                    {skipContext: true})
-                revisionLD[config.PROP_VERSION_OF] = ret.id
-                return revisionLD
-            })
-        }
+        Object.keys(anno).forEach(prop => {
+            if (prop === '_revisions') {
+                if (anno._revisions.length > 0 && !options.skipVersions) {
+                    var revId = 0
+                    ret.hasVersion = anno._revisions.map(revision => {
+                        const revisionLD = this._toJSONLD(`${annoId}-rev-${++revId}`, revision,
+                            {skipContext: true})
+                        revisionLD.versionOf = ret.id
+                        return revisionLD
+                    })
+                }
+            } else if (!prop.match(/^_/)) {
+                ret[prop] = anno[prop]
+            }
+        })
 
         // if (anno._comments !== undefined && anno._comments.length > 0) {
         //     var commentId = 0

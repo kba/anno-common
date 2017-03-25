@@ -66,10 +66,12 @@ module.exports = ({store, guard, config}) => {
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         const options = {}
-        if (req.query.skipVersions) {
-            options.skipVersions = true
-            delete req.query.skipVersions
-        }
+        ;['skipVersions', 'metadataOnly'].forEach(option => {
+            if (req.query[option]) {
+                options[option] = req.query[option]
+                delete req.query[option]
+            }
+        })
         store.search(req.query, options, (err, docs) => {
             if (err) return next(err)
             resp.header('Content-Location', colUrl)
