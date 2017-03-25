@@ -47,31 +47,37 @@ function errorHandler(err, req, resp, next) {
     else next()
 }
 
+function optionsFromRequest(req) {
+    const ret = {}
+    ;['skipVersions', 'metadataOnly'].forEach(option => {
+        if (req.query[option]) {
+            ret[option] = req.query[option]
+            delete req.query[option]
+        }
+    })
+    return ret
+}
+
 module.exports = ({store, guard, config}) => {
 
     function getAnnotation(req, resp, next) {
-        store.get(req.params.annoId, (err, doc) => {
+        const options = optionsFromRequest(req)
+        store.get(req.params.annoId, options, (err, doc) => {
             if (err) return next(err)
             resp.header('Location', doc.id)
             resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
             resp.header('Vary', 'Accept')
-            resp.header('Content-Type', 'application/ld+json')
+            resp.header('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
             return resp.send(doc)
         })
     }
 
     // TODO
-    function searchAnnotations(req, resp, next) {
+    function getCollection(req, resp, next) {
         var colUrl = config.BASE_URL + '/anno/'
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
-        const options = {}
-        ;['skipVersions', 'metadataOnly'].forEach(option => {
-            if (req.query[option]) {
-                options[option] = req.query[option]
-                delete req.query[option]
-            }
-        })
+        const options = optionsFromRequest(req)
         store.search(req.query, options, (err, docs) => {
             if (err) return next(err)
             resp.header('Content-Location', colUrl)
@@ -123,12 +129,12 @@ module.exports = ({store, guard, config}) => {
     router.head('/', (req, resp, next) => {
         req.query.metadataOnly = true
         next()
-    }, searchAnnotations)
+    }, getCollection)
 
     //
     // GET /anno
     //
-    router.get('/', searchAnnotations)
+    router.get('/', getCollection)
 
     //
     // POST /anno
