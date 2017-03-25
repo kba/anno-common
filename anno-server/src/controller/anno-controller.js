@@ -1,5 +1,7 @@
 const querystring = require('querystring')
 const {Router} = require('express')
+const jsonldRapper = require('jsonld-rapper')
+const j2r = new jsonldRapper()
 
 function pruneEmptyStrings(obj) {
     Object.keys(obj).forEach(k => {
@@ -40,13 +42,6 @@ function prune(obj) {
     return obj
 }
 
-function errorHandler(err, req, resp, next) {
-    if (err && err.code) {
-        resp.status(err.code)
-        resp.send(err.message) } else if (err) next(err)
-    else next()
-}
-
 function optionsFromRequest(req) {
     const ret = {}
     ;['skipVersions', 'metadataOnly'].forEach(option => {
@@ -56,6 +51,24 @@ function optionsFromRequest(req) {
         }
     })
     return ret
+}
+
+function errorHandler(err, req, resp, next) {
+    if (err && err.code) {
+        resp.status(err.code)
+        resp.send(err.message) } else if (err) next(err)
+    else next()
+}
+
+function contentNegotiation(req, resp, next) {
+    if (req.header('Accept').match(/text\/(turtle|n3)/)) {
+        j2r.convert(resp.jsonld, 'jsonld', 'turtle', (err, turtle) => {
+            if (err) return next(err)
+            return resp.send(turtle)
+        })
+    } else {
+        return resp.send(resp.jsonld)
+    }
 }
 
 module.exports = ({store, guard, config}) => {
@@ -68,7 +81,8 @@ module.exports = ({store, guard, config}) => {
             resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
             resp.header('Vary', 'Accept')
             resp.header('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
-            return resp.send(doc)
+            resp.jsonld = doc
+            return next()
         })
     }
 
@@ -90,6 +104,7 @@ module.exports = ({store, guard, config}) => {
 
             resp.header('Link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
             const col = {
+                '@context': 'http://www.w3.org/ns/anno.jsonld',
                 type: ['BasicContainer', 'AnnotationCollection'],
                 id: colUrl,
                 total: docs.length,
@@ -104,7 +119,8 @@ module.exports = ({store, guard, config}) => {
                     last: { id: colUrl },
                 })
             }
-            resp.send(col)
+            resp.jsonld = col
+            next()
         })
     }
 
@@ -209,9 +225,14 @@ module.exports = ({store, guard, config}) => {
         })
     })
 
+    //----------------------------------------------------------------
+    // Content-Negotiation
+    //----------------------------------------------------------------
+    router.use(contentNegotiation)
 
-
+    //----------------------------------------------------------------
     // Error Handler
+    //----------------------------------------------------------------
     router.use(errorHandler)
 
     return router

@@ -23,6 +23,7 @@
     "express": "^4.15.0",
     "express-jwt": "^5.1.0",
     "js-yaml": "^3.8.2",
+    "jsonld-rapper": "^0.2.4",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
     "mustache": "^2.3.0",
