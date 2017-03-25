@@ -234,7 +234,9 @@ definitions:
   Person:
     allOf:
       - {$ref: '#/definitions/Agent'}
-      - required: ['email', 'name']
+      - properties:
+          type: {enum: ['Person']}
+      - required: ['name']
 
 
 #}}}
