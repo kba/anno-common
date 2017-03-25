@@ -137,6 +137,12 @@ class Store {
         return err
     }
 
+    _readonlyValueError(id, field) {
+        const err = new Error(`Client must not change the '${field}' of annotation '${id}'`)
+        err.code = 409
+        return err
+    }
+
     _invalidAnnotationError(anno, errors) {
         const err = new Error(`Annotation is invalid: ` + JSON.stringify({anno, errors}, null, 2))
         err.validationErrors = errors
