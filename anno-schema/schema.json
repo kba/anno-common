@@ -14,7 +14,7 @@
     },
     "language": {
       "type": "string",
-      "pattern": "[a-z]{3}"
+      "pattern": "[a-z]{2,3}"
     },
     "textDirection": {
       "type": "string",
@@ -72,7 +72,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "oneOf": [
+                    "anyOf": [
                       {
                         "$ref": "#/definitions/Resource"
                       },
@@ -167,9 +167,6 @@
         },
         {
           "type": "object",
-          "required": [
-            "source"
-          ],
           "properties": {
             "renderedVia": {
               "oneOf": [
@@ -177,7 +174,7 @@
                   "$ref": "#/definitions/iri"
                 },
                 {
-                  "$ref": "#/definitions/Application"
+                  "$ref": "#/definitions/Software"
                 }
               ]
             },
@@ -198,7 +195,14 @@
               "$ref": "#/definitions/iri"
             },
             "selector": {
-              "$ref": "#/definitions/Selector"
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "$ref": "#/definitions/Selector"
+                }
+              ]
             }
           }
         }
@@ -232,7 +236,7 @@
               "$ref": "#/definitions/iri"
             },
             {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/Software"
             }
           ]
         }
@@ -241,12 +245,15 @@
     "ResourceClass": {
       "type": "string",
       "enum": [
-        "TextualBody",
         "Dataset",
         "Image",
         "Video",
         "Sound",
-        "Text"
+        "Text",
+        "Composite",
+        "TextualBody",
+        "Choice",
+        "SpecificResource"
       ]
     },
     "TextualBody": {
@@ -359,8 +366,16 @@
           "$ref": "#/definitions/Agent"
         },
         {
+          "properties": {
+            "type": {
+              "enum": [
+                "Person"
+              ]
+            }
+          }
+        },
+        {
           "required": [
-            "email",
             "name"
           ]
         }
@@ -369,12 +384,11 @@
     "Selector": {
       "type": "object",
       "oneOf": [
-        {},
         {
           "$ref": "#/definitions/FragmentSelector"
         },
         {
-          "$ref": "#/definitions/CSSSelector"
+          "$ref": "#/definitions/CssSelector"
         },
         {
           "$ref": "#/definitions/XPathSelector"
@@ -389,7 +403,7 @@
           "$ref": "#/definitions/DataPositionSelector"
         },
         {
-          "$ref": "#/definitions/SVGSelector"
+          "$ref": "#/definitions/SvgSelector"
         },
         {
           "$ref": "#/definitions/RangeSelector"
@@ -402,7 +416,6 @@
         "type",
         "value"
       ],
-      "additionalProperties": false,
       "properties": {
         "type": {
           "type": "string",
@@ -429,7 +442,7 @@
         }
       }
     },
-    "CSSSelector": {
+    "CssSelector": {
       "type": "object",
       "required": [
         "type",
@@ -439,7 +452,7 @@
         "type": {
           "type": "string",
           "enum": [
-            "CSSSelector"
+            "CssSelector"
           ]
         },
         "value": {
@@ -528,17 +541,30 @@
         }
       }
     },
-    "SVGSelector": {
+    "SvgSelector": {
       "type": "object",
-      "required": [
-        "type",
-        "value"
+      "oneOf": [
+        {
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "value",
+            "type"
+          ]
+        }
       ],
       "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
         "type": {
           "type": "string",
           "enum": [
-            "SVGSelector"
+            "SvgSelector"
           ]
         },
         "value": {
@@ -639,7 +665,7 @@
         }
       }
     },
-    "Application": {
+    "Software": {
       "allOf": [
         {
           "$ref": "#/definitions/Agent"
@@ -647,8 +673,7 @@
         {
           "required": [
             "id",
-            "type",
-            "schema:softwareVersion"
+            "type"
           ],
           "properties": {
             "id": {
