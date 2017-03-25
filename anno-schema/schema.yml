@@ -114,7 +114,7 @@ definitions:
       #     - required: ['id']
       - type: 'object'
         properties:
-          renderedVia: {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/Application'}]}
+          renderedVia: {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/Software'}]}
           styleClass: {type: 'string'}
           source: 
             allOf:
@@ -142,7 +142,7 @@ definitions:
       generator:
         oneOf:
           - {$ref: '#/definitions/iri'}
-          - {$ref: '#/definitions/Person'}
+          - {$ref: '#/definitions/Software'}
 
 #}}}
 #{{{ 3.2.2 Classes
@@ -423,13 +423,12 @@ definitions:
 #}}}
 #{{{ 4.5 Rendering Software
 
-  Application:
+  Software:
     allOf:
       - {$ref: '#/definitions/Agent'}
       - required:
           - 'id'
           - 'type'
-          - 'schema:softwareVersion'
         properties:
           id:   {$ref: '#/definitions/iri'}
           type: {type: 'string', enum: ['Software']}
