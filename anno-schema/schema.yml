@@ -61,7 +61,7 @@ definitions:
               - {$ref: '#/definitions/iri'}
               - type: 'array'
                 items:
-                  oneOf:
+                  anyOf:
                     - {$ref: '#/definitions/Resource'}
                     - {$ref: '#/definitions/TextualBody'}
                     - {$ref: '#/definitions/Choice'}
