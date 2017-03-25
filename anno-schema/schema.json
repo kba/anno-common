@@ -153,8 +153,13 @@
             {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ResourceClass"
-              }
+                "type": "string"
+              },
+              "contains": [
+                {
+                  "$ref": "#/definitions/ResourceClass"
+                }
+              ]
             }
           ]
         }

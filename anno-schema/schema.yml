@@ -97,7 +97,8 @@ definitions:
         oneOf:
           - {$ref: '#/definitions/ResourceClass'}
           - type: 'array'
-            items: {$ref: '#/definitions/ResourceClass'}
+            items: {type: 'string'}
+            contains: [{$ref: '#/definitions/ResourceClass'}]
 
 #}}}
 #{{{ 3.2 Bodies and Targets - TargetResource
