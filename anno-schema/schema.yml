@@ -150,12 +150,15 @@ definitions:
   ResourceClass:
     type: 'string'
     enum: 
-      - 'TextualBody'
       - 'Dataset'
       - 'Image'
       - 'Video'
       - 'Sound'
       - 'Text'
+      - 'Composite'
+      - 'TextualBody'
+      - 'Choice'
+      - 'SpecificResource'
 
 #}}}
 #{{{ 3.2.4 Embedded Textual Body
