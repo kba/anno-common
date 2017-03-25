@@ -108,9 +108,11 @@ definitions:
   TargetResource:
     allOf:
       - {$ref: '#/definitions/Resource'}
+      # XXX too strict to require either source or id
+      # - anyOf:
+      #     - required: ['source']
+      #     - required: ['id']
       - type: 'object'
-        required:
-          - 'source'
         properties:
           renderedVia: {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/Application'}]}
           styleClass: {type: 'string'}
