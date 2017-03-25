@@ -60,8 +60,9 @@ class MongolikeStore extends Store {
         const errors = []
         annosToCreate = annosToCreate.map(anno => {
             anno = this._deleteId(anno)
-            if (!schema.validate.AnnotationToPost(anno)) {
-                return errors.push(schema.validate.AnnotationToPost.errors)
+            const validFn = schema.validate.Annotation
+            if (!validFn(anno)) {
+                return errors.push(validFn.errors)
             }
             anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)
