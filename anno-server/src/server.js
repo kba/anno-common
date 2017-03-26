@@ -11,16 +11,10 @@ const config = require('@kba/anno-config').loadConfig({
 })
 
 function loadFixtures(store, cb) {
-    const fixtureDir = `${__dirname}/../../fixtures/`
-    const fixtures = []
-    fs.readdir(fixtureDir, (err, files) => {
-        files.filter(_ => _.match(/\.json$/)).forEach(file => {
-            const fixtureFile = `${fixtureDir}/${file}`
-            console.log(`Loading fixture '${fixtureFile}'`)
-            fixtures.push(JSON.parse(fs.readFileSync(fixtureFile)))
-        })
-        store.create(fixtures, cb)
-    })
+    const annos = []
+    const {ok} = require('@kba/anno-fixtures').Annotation
+    for (let k in ok) annos.push(ok[k])
+    store.create(annos, cb)
 }
 
 function errorHandler(err, req, res, next) {
