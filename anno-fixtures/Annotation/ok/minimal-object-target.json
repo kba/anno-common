@@ -1,4 +1,5 @@
 {
+    "id": "http://example.org",
     "body": {"type": ["TextualBody"], "value": "bla"},
     "target": {"source": "x://foo"}
 }
