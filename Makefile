@@ -1,4 +1,4 @@
-MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --no-print-directory --silent
 TEMPDIR = $(PWD)/temp
 
 PATH := ./node_modules/.bin:$(PATH)
@@ -34,6 +34,7 @@ bootstrap:
 start-all: bootstrap
 	$(MAKE) -sC anno-store-mongodb start
 	$(MAKE) -sC anno-server start
+	sleep 2
 
 stop-all:
 	$(MAKE) -sC anno-store-mongodb stop
@@ -41,16 +42,16 @@ stop-all:
 
 .PHONY: test
 test: $(TESTS)
-	$(MAKE) start-all && sleep 2
+	$(MAKE) start-all
 	-tap -R$(REPORTER) $^
 	$(MAKE) stop-all
 
 .PHONY: anno-%
 test\:%: anno-%
 	-$(MAKE) bootstrap
-	-$(MAKE) -sC $< start && sleep 2
+	-$(MAKE) -siC $< start 2>/dev/null && sleep 2
 	-tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
-	-$(MAKE) -sC $< stop
+	-$(MAKE) -siC $< stop 2>/dev/null
 
 .PHONY: clean
 clean:
