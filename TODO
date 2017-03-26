@@ -1,9 +1,10 @@
+DONE
+[X] creator
+[X] delete
+
+TODO
 [-] collections
     [ ] Container formats
-[ ] creator
-[ ] server
-    [ ] Authentication
-[X] delete
 [X] config must be loaded on new
 [X] Github pages
     [X] context.jsonld
@@ -14,19 +15,21 @@
     [-] search
     [X] revise
     [X] delete
-[X] mongo store
+    [ ] cache
+mongo store
     [X] create
     [X] get
     [X] search
     [X] revise
     [X] delete
 [ ] cli
-    [ ] create
+    [-] create
     [ ] get
     [ ] search
     [ ] revise
     [ ] delete
 [ ] server
+    [ ] auth
     [ ] reply/comment
     [-] handle id/via/canonical
     [ ] RDF conneg

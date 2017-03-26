@@ -41,7 +41,14 @@ class HttpStore extends Store {
         if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._httpClient.get('/' + '?' + querystring.stringify(query))
-            .then(resp => cb(null, resp.data))
+            .then(resp => {
+                const col = resp.data
+                if (col.total === 0) {
+                    return []
+                } else {
+                    cb(null, col.first.items)
+                }
+            })
             .catch(cb)
     }
 

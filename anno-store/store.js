@@ -23,7 +23,7 @@ class Store {
 
     constructor() {
         this.config = require('@kba/anno-config').loadConfig()
-        console.log(this.config)
+        // console.log(this.config)
         // console.error("Store.constructor called")
     }
 
