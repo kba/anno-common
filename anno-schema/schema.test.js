@@ -4,40 +4,35 @@ const fs = require('fs')
 
 tap.test('smoketest', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equals(Object.keys(schema.validate).length, 31, '31 classes in schema')
+    t.equals(Object.keys(schema.validate).length, 32, '32 classes in schema')
     t.end()
 })
 
-function loadFixtures(store, cb) {
-    const fixtureDir = `${__dirname}/../fixtures/`
-    const ret = {
-        Annotation: {
-            ok: {},
-            notOk: {},
-        }
+function testFixture(t, type, okOrNotOk, name) {
+    const obj = fixtures[type][okOrNotOk][name]
+    const validFn = schema.validate[type]
+    const valid = validFn(obj)
+    t[okOrNotOk](valid, `${okOrNotOk ? 'Valid' : 'Invalid'} ${type}: ${name}`)
+    if (okOrNotOk === 'ok' && !valid) {
+        console.log(JSON.stringify(validFn.errors, null, 2).replace(/^/mg, '\t# '))
     }
-    const files = fs.readdirSync(fixtureDir)
-    files.filter(_ => _.match(/\.json$/)).forEach(file => {
-        ret.Annotation.ok[file] = JSON.parse(fs.readFileSync(`${fixtureDir}/${file}`))
-    })
-    return ret
 }
 
-
-const fixtures = loadFixtures()
-Object.keys(fixtures).forEach(type => {
+const fixtures = require('@kba/anno-fixtures')
+if (process.env.FIXTURE) {
+    const fixture = fixtures
+    tap.test(process.env.FIXTURE, t => {
+        testFixture(t, ...process.env.FIXTURE.split('/'))
+        t.end()
+    })
+} else Object.keys(fixtures).forEach(type => {
     const cases = fixtures[type]
     const okKeys = Object.keys(cases.ok)
     const notOkKeys = Object.keys(cases.notOk)
     tap.test(type, t => {
         const valid = schema.validate[type]
         t.plan(okKeys.length + notOkKeys.length)
-        okKeys.forEach(k => {
-            t.ok(valid(cases.ok[k]), `Valid ${type}: ${k}`)
-            if (valid.errors) console.log(JSON.stringify(valid.errors, null, 2).replace(/^/m, '  # '))
-        })
-        notOkKeys.forEach(k => {
-            t.notOk(valid(cases.notOk[k]), `Not a valid ${type}: ${k}`)
-        })
+        okKeys.forEach(k => testFixture(t, type, 'ok', k))
+        notOkKeys.forEach(k => testFixture(t, type, 'notOk', k))
     })
 })
