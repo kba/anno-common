@@ -12,22 +12,21 @@ const config = require('@kba/anno-config').loadConfig({
     // // PROP_VERSION_OF: 'ns:versionOf',
 })
 
-const schemaDef = require('./schema.json')
+const dataModel = require('./data-model.json')
 const jsonldContext = require('./context.json')
 
 module.exports = {
-    definitions: schemaDef.definitions,
+    definitions: dataModel.definitions,
     jsonldContext: jsonldContext,
     contentType: {
         'anno':  'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',
         'annox': 'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',
     },
     validate: {},
-
 }
 
-Object.keys(schemaDef.definitions).forEach(k => {
-    const thisSchema = JSON.parse(JSON.stringify(schemaDef.definitions[k]))
-    thisSchema.definitions = JSON.parse(JSON.stringify(schemaDef.definitions))
+Object.keys(dataModel.definitions).forEach(k => {
+    const thisSchema = JSON.parse(JSON.stringify(dataModel.definitions[k]))
+    thisSchema.definitions = JSON.parse(JSON.stringify(dataModel.definitions))
     module.exports.validate[k] = ajv.compile(thisSchema)
 })

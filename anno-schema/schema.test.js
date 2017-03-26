@@ -4,7 +4,7 @@ const schema = require('.')
 
 tap.test('smoketest schema', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equals(Object.keys(schema.validate).length, 28, '28 classes in schema')
+    t.equals(Object.keys(schema.validate).length, 31, '31 classes in schema')
     t.end()
 })
 

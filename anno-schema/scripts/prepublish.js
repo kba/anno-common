@@ -7,5 +7,5 @@ function yaml2json(infile) {
     const obj = yaml.safeLoad(fs.readFileSync(infile, {encoding:'utf8'}))
     fs.writeFileSync(outfile, JSON.stringify(obj, null, 2), {encoding:'utf8'})
 }
-yaml2json('schema')
+yaml2json('data-model')
 yaml2json('context')
