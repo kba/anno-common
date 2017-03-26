@@ -28,10 +28,10 @@ help:
 	@echo "    REPORTER    TAP Reporter for node-tap (spec, classic, tap...). Default: $(REPORTER)"
 
 .PHONY: bootstrap
-bootstrap: fixtures
+bootstrap:
 	lerna bootstrap
 
-start-all: fixtures
+start-all: bootstrap
 	$(MAKE) -sC anno-store-mongodb start
 	$(MAKE) -sC anno-server start
 
@@ -47,6 +47,7 @@ test: $(TESTS)
 
 .PHONY: anno-%
 test\:%: anno-%
+	-$(MAKE) bootstrap
 	-$(MAKE) -sC $< start && sleep 2
 	-tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
 	-$(MAKE) -sC $< stop
