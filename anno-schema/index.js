@@ -1,8 +1,15 @@
+const mustache = require('mustache')
 const ajv = require('ajv')({
     allErrors: true
 });
 const config = require('@kba/anno-config').loadConfig({
     CONTEXT_URL: 'https://kba.github.io/anno/context.jsonld',
+
+    // Swagger / OpenAPI
+    OPENAPI_HOST: 'localhost:3000',
+    OPENAPI_BASEPATH: '/',
+    OPENAPI_PATH: 'anno',
+
     // PROP_HAS_REPLY: 'hasReply',
     // PROP_REPLY_TO: 'replyTo',
     // // PROP_HAS_COMMENT: 'ns:hasReview',
@@ -12,13 +19,13 @@ const config = require('@kba/anno-config').loadConfig({
     // // PROP_VERSION_OF: 'ns:versionOf',
 })
 
-const dataModel = require('./data-model.json')
-const jsonldContext = require('./context.json')
-// TODO mustache
-// const swaggerDef = yaml.safeLoad(mustache.render(
-//     fs.readFileSync(__dirname + '/../../swagger-schema.yml', {encoding: 'utf-8'}),
-//     {config}))
-const openapi = require('./openapi.json')
+function mustacheJSON(obj) {
+    return JSON.parse(mustache.render(JSON.stringify(obj), {config}))
+}
+
+const dataModel     = mustacheJSON(require('./data-model.json'))
+const jsonldContext = mustacheJSON(require('./context.json'))
+const openapi       = mustacheJSON(require('./openapi.json'))
 openapi.definitions = dataModel.definitions
 
 module.exports = {

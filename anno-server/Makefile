@@ -5,11 +5,12 @@ PIDFILE = $(TEMPDIR)/server.pid
 
 .PHONY: watch
 watch: swagger-ui
-	nodemon -e "yml js" -w '..' server.js
+	nodemon -e "yml js" -w '..' -x make serve
 
 .PHONY: serve
 serve: swagger-ui
-	node src/server.js
+	lerna bootstrap
+	node server.js
 
 .PHONY: start
 start:

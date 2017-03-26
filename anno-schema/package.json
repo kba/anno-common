@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
-    "ajv": "^4.11.4"
+    "ajv": "^4.11.4",
+    "mustache": "^2.3.0"
   }
 }

@@ -2,10 +2,14 @@
 # Definitions are kept in @kba/anno-schema
 #
 swagger: '2.0'
-basePath: '/'
+basePath: '{{{ config.OPENAPI_BASEPATH }}}'
+host: '{{ config.OPENAPI_HOST }}'
 info:
   title: 'Anno Server API'
   version: '0.0.1'
+  description: '
+  See [Web Annotation Protocol](https://www.w3.org/TR/annotation-protocol)
+  '
 consumes:
   - application/ld+json
 produces:
@@ -29,10 +33,10 @@ securityDefinitions:
 ##############################################################################
 paths:
 
-  '/anno':
+  '/{{ config.OPENAPI_PATH }}':
 
     #
-    # HEAD /anno
+    # HEAD /
     #
     head:
       tags: ['anno']
@@ -109,7 +113,7 @@ paths:
         200:
           description: all okay
 
-  '/anno/{annoId}':
+  '/{{ config.OPENAPI_PATH }}/{annoId}':
 
     #
     # GET /anno/{annoId}

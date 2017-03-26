@@ -9,7 +9,7 @@
   },
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/anno-store-http#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-server#readme",
   "author": "kba",
   "license": "MIT",
   "dependencies": {
@@ -26,7 +26,6 @@
     "jsonld-rapper": "^0.2.4",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
-    "mustache": "^2.3.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
