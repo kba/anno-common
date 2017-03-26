@@ -56,24 +56,28 @@ definitions:
           styledBy:  {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/CssStylesheet'}]}
           body:
             anyOf:
+              - {$ref: '#/definitions/iri'}
               - {$ref: '#/definitions/Resource'}
               - {$ref: '#/definitions/TextualBody'}
               - {$ref: '#/definitions/Choice'}
-              - {$ref: '#/definitions/iri'}
+              - {$ref: '#/definitions/SpecificResource'}
               - type: 'array'
                 items:
                   anyOf:
+                    - {$ref: '#/definitions/iri'}
                     - {$ref: '#/definitions/Resource'}
                     - {$ref: '#/definitions/TextualBody'}
                     - {$ref: '#/definitions/Choice'}
-                    - {$ref: '#/definitions/iri'}
+                    - {$ref: '#/definitions/SpecificResource'}
           target:
-            oneOf:
+            anyOf:
+              - {$ref: '#/definitions/SpecificResource'}
               - {$ref: '#/definitions/TargetResource'}
               - {$ref: '#/definitions/iri'}
               - type: 'array'
                 items:
-                  oneOf:
+                  anyOf:
+                    - {$ref: '#/definitions/SpecificResource'}
                     - {$ref: '#/definitions/TargetResource'}
                     - {$ref: '#/definitions/iri'}
 
@@ -157,10 +161,10 @@ definitions:
       - 'Video'
       - 'Sound'
       - 'Text'
-      - 'Composite'
-      - 'TextualBody'
-      - 'Choice'
-      - 'SpecificResource'
+      # - 'Composite'
+      # - 'TextualBody'
+      # - 'Choice'
+      # - 'SpecificResource'
 
 #}}}
 #{{{ 3.2.4 Embedded Textual Body
@@ -193,7 +197,11 @@ definitions:
       items:
         type: 'array'
         minItems: 1
-        items: {$ref: '#/definitions/Resource'}
+        items: 
+          anyOf:
+            - {$ref: '#/definitions/TextualBody'}
+            - {$ref: '#/definitions/Resource'}
+            - {$ref: '#/definitions/SpecificResource'}
 
 #}}}
 #{{{ 3.3.5 Motivation and Purpose
@@ -240,6 +248,19 @@ definitions:
           type: {enum: ['Person']}
       - required: ['name']
 
+
+#}}}
+#{{{
+
+  SpecificResource:
+    type: 'object'
+    properties:
+      type: {type: 'string', enum: ['SpecificResource']}
+      source:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Resource'}
+      purpose: {$ref: '#/definitions/Motivation'}
 
 #}}}
 #{{{ 4.2 Selectors
