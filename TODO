@@ -32,7 +32,10 @@ mongo store
     [ ] auth
     [ ] reply/comment
     [-] handle id/via/canonical
-    [ ] RDF conneg
+    [X] RDF conneg
     [ ] 410
+    [ ] 409 If replacing 'via' or changing 'canonical'
     [X] 415 for invalid: The Annotation Client sent an entity-body that is not able to be processed by the Server, such as non-Annotation or in a context that is unrecognized.
-    [ ] hasParent undefined?
+    [X] hasParent undefined?
+[ ] store.search should return a Collection not an array
+[ ] honor Prefer: return=representation / return=minimal to imply skipVersions/metadataOnly, Preference-Applied sent back

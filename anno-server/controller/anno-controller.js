@@ -1,7 +1,5 @@
 const querystring = require('querystring')
 const {Router} = require('express')
-const jsonldRapper = require('jsonld-rapper')
-const j2r = new jsonldRapper()
 
 function pruneEmptyStrings(obj) {
     Object.keys(obj).forEach(k => {
@@ -53,25 +51,10 @@ function optionsFromRequest(req) {
     return ret
 }
 
-function errorHandler(err, req, resp, next) {
-    if (err && err.code) {
-        resp.status(err.code)
-        resp.send(err.message) } else if (err) next(err)
-    else next()
-}
-
-function contentNegotiation(req, resp, next) {
-    if (req.header('Accept').match(/text\/(turtle|n3)/)) {
-        j2r.convert(resp.jsonld, 'jsonld', 'turtle', (err, turtle) => {
-            if (err) return next(err)
-            return resp.send(turtle)
-        })
-    } else {
-        return resp.send(resp.jsonld)
-    }
-}
-
 module.exports = ({store, guard, config}) => {
+
+    const contentNegotiation = require('../middleware/content-negotiation')({config})
+    const errorHandler = require('../middleware/error-handler')({config})
 
     function getAnnotation(req, resp, next) {
         const options = optionsFromRequest(req)

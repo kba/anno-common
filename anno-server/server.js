@@ -9,24 +9,15 @@ const config = require('@kba/anno-config').loadConfig({
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
 })
-
-function errorHandler(err, req, res, next) {
-    if (err.code !== undefined && err.code >= 400) {
-        res.status(err.status)
-        return res.send({error: err})
-    } else if (Array.isArray(err)) {
-        return res.send({error: err})
-    }
-    return next(err, req, res)
-}
+const errorHandler = require('./middleware/error-handler')({config})
 
 function start(app, cb) {
     const store = require('@kba/anno-store').load(module)
     const permDB = new nedb({filename: `./perm.nedb`})
 
-    const cors       = require('./middleware/cors-middleware')()
-    const jsonParser = require('./middleware/json-parser-middleware')()
-    const jwtGuard   = require('./middleware/jsonwebtoken-middleware')(permDB, config)
+    const cors       = require('./middleware/cors')({config})
+    const jsonParser = require('./middleware/json-parser')({config})
+    const jwtGuard   = require('./middleware/jsonwebtoken')(permDB, config)
 
     const routes = [ 'anno', 'swagger', 'token' ]
     store.init(err => {
@@ -53,9 +44,9 @@ const app = express()
 app.use(morgan())
 start(app, (err) => {
     if (err) throw err
-    app.use(errorHandler)
     // Static files
     app.use(express.static(`${__dirname}/public`))
+    app.use(errorHandler)
     app.listen(config.PORT,() => {
         console.log("Listening on port 3000")
     })
