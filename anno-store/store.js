@@ -179,4 +179,6 @@ class Store {
 
 }
 
-module.exports = {Store, load}
+const storeTest = require('./store-test')
+
+module.exports = {Store, load, storeTest}

@@ -4,6 +4,4 @@
 const HttpStore = require('./store-http')
 
 const store = new HttpStore()
-require(`${__dirname}/../testlib/store-test`)(store, (err) => {
-    console.log("# store-test finished")
-})
+require('@kba/anno-store').storeTest(store, () => {})
