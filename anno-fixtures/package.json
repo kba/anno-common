@@ -1,5 +1,5 @@
 {
-  "name": "@kba/anno-test-fixtures",
+  "name": "@kba/anno-fixtures",
   "version": "0.0.1",
   "description": "Test fixtures for anno",
   "main": "index.json",

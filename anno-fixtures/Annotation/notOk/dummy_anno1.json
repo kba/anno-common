@@ -1,0 +1,5 @@
+{
+    "body": {"type": ["TextualBody"]},
+    "target": "x://foo"
+}
+
