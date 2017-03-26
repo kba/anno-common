@@ -9,15 +9,15 @@ module.exports = {
         ],
         ok: [
             {
-                body: {type: ['TextualBody']},
+                body: {type: ['TextualBody'], value: 'bla'},
                 target: 'x://foo',
             },
             {
-                body: {type: ['TextualBody']},
+                body: {type: ['TextualBody'], value: 'bla'},
                 target: {source: 'x://foo'},
             },
             {
-                body: {type: ['TextualBody']},
+                body: {type: ['TextualBody'], value: 'bla'},
                 target: [{source: 'x://foo'}],
             },
         ],

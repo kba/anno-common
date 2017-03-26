@@ -2,11 +2,11 @@ const async = require('async')
 const tap = require('tap')
 const fixtures = require('./schema-cases')
 
-const input1 = fixtures.AnnotationToPost.ok[0]
+const input1 = fixtures.Annotation.ok[0]
 const oldTarget = input1.target
 const newTarget = 'https://foo.example.bar'
-const input2 = fixtures.AnnotationToPost.ok[1]
-const input3 = fixtures.AnnotationToPost.ok[2]
+const input2 = fixtures.Annotation.ok[1]
+const input3 = fixtures.Annotation.ok[2]
 const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
 var savedId;
 var savedRevId;
@@ -78,7 +78,7 @@ function testRevise(t, store, done) {
         (revised, cb) => {
             const revisedRevId = savedRevId.replace(/1$/, '2')
             t.equals(revised.id, revisedRevId, `revised revision-id: ${revisedRevId}`)
-            t.equals(revised.target.source, newTarget, 'target updated')
+            t.equals(revised.target, newTarget, 'target updated')
             cb()
         },
     ], (err) => {
