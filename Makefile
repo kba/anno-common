@@ -21,7 +21,6 @@ help:
 	@echo "    clean       Remove tempdir"
 	@echo "    test        Run all unit/integration tests"
 	@echo "    docs        Generate static website in $(DOCDIR)"
-	@echo "    fixtures    Download assets from web-platform-tests"
 	@echo
 	@echo "  Variables"
 	@echo
@@ -62,10 +61,3 @@ docs:
 	node -e 'console.log(JSON.stringify(require("./anno-schema/schema.js").jsonldContext, null, 2));' \
 		> docs/context.jsonld
 	git commit -m 'updated docs' docs && git push
-
-fixtures:
-	$(MKDIR) $(TEMPDIR)/fixtures
-	git clone --depth 1 'https://github.com/w3c/web-platform-tests/' $(TEMPDIR)/web-platform-tests
-	mv $(TEMPDIR)/web-platform-tests/annotation-protocol/files/annotations "$@"
-	# these are invalid for the current draft (composite/list)
-	rm "$@"/anno12.json "$@"/anno13.json
