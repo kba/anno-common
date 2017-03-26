@@ -1,12 +1,12 @@
 const async = require('async')
 const tap = require('tap')
-const fixtures = require('./schema-cases')
+const fixtures = require('../anno-fixtures')
 
-const input1 = fixtures.Annotation.ok[0]
+const input1 = fixtures.Annotation.ok['minimal-string-target.json']
 const oldTarget = input1.target
 const newTarget = 'https://foo.example.bar'
-const input2 = fixtures.Annotation.ok[1]
-const input3 = fixtures.Annotation.ok[2]
+const input2 = fixtures.Annotation.ok['minimal-object-target.json']
+const input3 = fixtures.Annotation.ok['minimal-array-target.json']
 const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
 var savedId;
 var savedRevId;
