@@ -7,7 +7,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-schema#readme",
   "scripts": {
-    "prepublish": "node scripts/prepublish.js",
+    "prepublish": "node ../scripts/yml2json.js *.yml",
     "test": "tap *.test.js"
   },
   "author": "kba",
