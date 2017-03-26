@@ -9,3 +9,4 @@ function yaml2json(infile) {
 }
 yaml2json('data-model')
 yaml2json('context')
+yaml2json('openapi')

@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const yaml = require('js-yaml')
 const fs = require('fs')
+const annoSchema = require('@kba/anno-schema')
 
 const mustache = require('mustache')
 
@@ -8,10 +9,7 @@ module.exports = ({config}) => {
 
     const router = Router()
 
-    const swaggerDef = yaml.safeLoad(mustache.render(
-        fs.readFileSync(__dirname + '/../../swagger-schema.yml', {encoding: 'utf-8'}),
-        {config}))
-    swaggerDef.definitions = require('@kba/anno-schema').definitions
+    const swaggerDef = annoSchema.openapi
 
     const swaggerDefAsJSON = JSON.stringify(swaggerDef, null, 2)
     function sendJSON(req, resp) {

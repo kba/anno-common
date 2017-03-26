@@ -1,0 +1,336 @@
+{
+  "swagger": "2.0",
+  "basePath": "/",
+  "info": {
+    "title": "Anno Server API",
+    "version": "0.0.1"
+  },
+  "consumes": [
+    "application/ld+json"
+  ],
+  "produces": [
+    "application/ld+json;profile=\"http://www.w3.org/ns/anno.jsonld\""
+  ],
+  "tags": [
+    {
+      "name": "anno",
+      "description": "Web Annotation Protocol"
+    },
+    {
+      "name": "extensions",
+      "description": "Extensions to Web Annotation Protocol"
+    }
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "description": "Format: 'Bearer HIER_DAS_TOKEN'",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/anno": {
+      "head": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get all annotations that adhere to query without body/target",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$target",
+            "required": true,
+            "type": "string",
+            "format": "url"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Annotation"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get all annotations that adhere to query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target.source",
+            "required": false,
+            "type": "string",
+            "format": "url"
+          },
+          {
+            "in": "header",
+            "name": "Prefer",
+            "description": "<a href=\"https://www.w3.org/TR/annotation-protocol/#container-representations\">Preferred Container Representation</a>",
+            "enum": [
+              "return=representation;include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"",
+              "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedIRIs",
+              "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Annotation"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "anno"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Post a new annotation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New annotation to post",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Slug",
+            "description": "Preferred annotation ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "extensions"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Wipe the store",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      }
+    },
+    "/anno/{annoId}": {
+      "get": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get a single annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get a single annotation without body/target",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Delete an annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Annotation deleted"
+          },
+          "404": {
+            "description": "Annotation not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Store a new revision of an annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated annotation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created a new revision",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          }
+        }
+      }
+    },
+    "/anno/{annoId}-rev-{revId}": {
+      "get": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Get a single revision of one annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "path",
+            "name": "revId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the revision"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Get a single revision of one annotation without body/target",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "path",
+            "name": "revId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the revision"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      }
+    },
+    "/anno/{annoId}/reply": {
+      "post": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Reply to an annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Reply to post",
+            "schema": {
+              "$ref": "#/definitions/AnnotationReply"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Reply created"
+          },
+          "404": {
+            "description": "Annotation not found"
+          }
+        }
+      }
+    }
+  }
+}

@@ -14,8 +14,15 @@ const config = require('@kba/anno-config').loadConfig({
 
 const dataModel = require('./data-model.json')
 const jsonldContext = require('./context.json')
+// TODO mustache
+// const swaggerDef = yaml.safeLoad(mustache.render(
+//     fs.readFileSync(__dirname + '/../../swagger-schema.yml', {encoding: 'utf-8'}),
+//     {config}))
+const openapi = require('./openapi.json')
+openapi.definitions = dataModel.definitions
 
 module.exports = {
+    openapi: openapi,
     definitions: dataModel.definitions,
     jsonldContext: jsonldContext,
     contentType: {

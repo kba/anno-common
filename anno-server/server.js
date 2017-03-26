@@ -10,13 +10,6 @@ const config = require('@kba/anno-config').loadConfig({
     BASE_URL: 'http://localhost:3000',
 })
 
-function loadFixtures(store, cb) {
-    const annos = []
-    const {ok} = require('@kba/anno-fixtures').Annotation
-    for (let k in ok) annos.push(ok[k])
-    store.create(annos, cb)
-}
-
 function errorHandler(err, req, res, next) {
     if (err.code !== undefined && err.code >= 400) {
         res.status(err.status)
@@ -50,7 +43,7 @@ function start(app, cb) {
                 done()
             }, (err) => {
                 if (err) return cb(err)
-                return loadFixtures(store, cb)
+                return cb()
             })
         })
     })
@@ -62,7 +55,7 @@ start(app, (err) => {
     if (err) throw err
     app.use(errorHandler)
     // Static files
-    app.use(express.static(__dirname + '/../public'))
+    app.use(express.static(`${__dirname}/public`))
     app.listen(config.PORT,() => {
         console.log("Listening on port 3000")
     })

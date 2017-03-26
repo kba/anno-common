@@ -55,7 +55,7 @@ definitions:
           via:       {$ref: '#/definitions/iri'}
           styledBy:  {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/CssStylesheet'}]}
           body:
-            anyOf:
+            oneOf:
               - {$ref: '#/definitions/iri'}
               - {$ref: '#/definitions/Resource'}
               - {$ref: '#/definitions/TextualBody'}
@@ -63,7 +63,7 @@ definitions:
               - {$ref: '#/definitions/SpecificResource'}
               - type: 'array'
                 items:
-                  anyOf:
+                  oneOf:
                     - {$ref: '#/definitions/iri'}
                     - {$ref: '#/definitions/Resource'}
                     - {$ref: '#/definitions/TextualBody'}
@@ -250,7 +250,7 @@ definitions:
 
 
 #}}}
-#{{{
+#{{{ 4 Specific Resources
 
   SpecificResource:
     type: 'object'

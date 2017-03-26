@@ -56,7 +56,7 @@
               ]
             },
             "body": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "$ref": "#/definitions/iri"
                 },
@@ -75,7 +75,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "$ref": "#/definitions/iri"
                       },

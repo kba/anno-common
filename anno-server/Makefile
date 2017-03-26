@@ -5,7 +5,7 @@ PIDFILE = $(TEMPDIR)/server.pid
 
 .PHONY: watch
 watch: swagger-ui
-	nodemon -e "yml js" -w '.' src/server.js
+	nodemon -e "yml js" -w '..' server.js
 
 .PHONY: serve
 serve: swagger-ui
