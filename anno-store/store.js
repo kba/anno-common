@@ -59,7 +59,11 @@ class Store {
      */
     wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        cb(new Error("wipe not implemented"))
+        if (!this._wipe) {
+            return cb(new Error("'_wipe' not implemented"))
+        } else {
+            this._wipe(options, cb)
+        }
     }
 
     /**
@@ -73,7 +77,11 @@ class Store {
      */
     disconnect(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        return cb()
+        if (!this._disconnect) {
+            return cb(new Error("'_disconnect' not implemented"))
+        } else {
+            this._disconnect(options, cb)
+        }
     }
 
     /**
@@ -87,7 +95,11 @@ class Store {
      */
     get(annoIds, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        cb(new Error("get not implemented"))
+        if (!this._get) {
+            return cb(new Error("'_get' not implemented"))
+        } else {
+            this._get(annoIds, options, cb)
+        }
     }
 
     /**

@@ -16,24 +16,19 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    wipe(options, cb) {
+    _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        throw(new Error("Must override 'wipe'"))
+        throw(new Error("Must override '_wipe'"))
     }
 
     /* @override */
-    connect(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
-        return cb(); }
-
-    /* @override */
-    disconnect(options, cb) {
+    _disconnect(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         return cb();
     }
 
     /* @override */
-    get(annoIds, options, cb) {
+    _get(annoIds, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const wasArray = Array.isArray(annoIds)
         if (!wasArray) annoIds = [annoIds]

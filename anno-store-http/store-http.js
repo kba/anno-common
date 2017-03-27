@@ -23,7 +23,7 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    get(annoId, options, cb) {
+    _get(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         this._httpClient.get(annoUrl)
@@ -81,13 +81,19 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    wipe(options, cb) {
+    _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         return this._httpClient.delete('/')
             .then(() => cb())
             .catch(err => {
                 return cb(err.statusCode)
             })
+    }
+
+    /* @override */
+    _disconnect(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb()
     }
 
 }

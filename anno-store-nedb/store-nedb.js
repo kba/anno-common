@@ -25,7 +25,7 @@ class NedbStore extends Store {
         })
     }
 
-    wipe(options, cb) {
+    _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         fs.unlink(this.dbfilename, err => {
             if (err && err.code !== 'ENOENT')

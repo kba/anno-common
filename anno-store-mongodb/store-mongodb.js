@@ -21,7 +21,7 @@ class MongodbStore extends Store {
         });
     }
 
-    wipe(options, cb) {
+    _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this.db.drop(err => {
             if (!err) return this.disconnect(cb)
@@ -30,7 +30,7 @@ class MongodbStore extends Store {
         })
     }
 
-    disconnect(options, cb) {
+    _disconnect(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         try {
             this._mongodb.close()
