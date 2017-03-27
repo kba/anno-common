@@ -14,7 +14,6 @@ var savedRevId;
 function testWipe(t, store, done) {
     t.comment("init/wipe/init")
     async.waterfall([
-        cb => store.init(cb),
         cb => store.wipe(cb),
         cb => store.init(cb),
     ], (err) => {
@@ -131,6 +130,7 @@ function testDelete(t, store, done) {
 module.exports = function testStore(store, testStoreCallback) {
     tap.test(`store-test / ${store.constructor.name}`, t => {
         async.waterfall([
+            cb => store.init(cb),
             cb => testWipe(t, store, cb),
             cb => testCreateGet(t, store, cb),
             cb => testRevise(t, store, cb),

@@ -152,7 +152,7 @@ class MongolikeStore extends Store {
 
         const projection = this._projectionFromOptions(options)
 
-        console.log(JSON.stringify({query, projection}, null, 2))
+        // console.log(JSON.stringify({query, projection}, null, 2))
         this.db.find(query, projection, (err, docs) => {
             if (err) return cb(err)
             if (docs === undefined) docs = []
