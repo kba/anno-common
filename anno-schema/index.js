@@ -1,6 +1,8 @@
 const mustache = require('mustache')
 const ajv = require('ajv')({
-    allErrors: true
+    allErrors: true,
+    // errorDataPath: true,
+    // verbose: true,
 });
 const config = require('@kba/anno-config').loadConfig({
     CONTEXT_URL: 'https://kba.github.io/anno/context.jsonld',

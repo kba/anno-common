@@ -4,7 +4,7 @@ const fs = require('fs')
 
 tap.test('smoketest', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equals(Object.keys(schema.validate).length, 32, '32 classes in schema')
+    t.equals(Object.keys(schema.validate).length, 33, '33 classes in schema')
     t.end()
 })
 
@@ -13,7 +13,7 @@ function testFixture(t, type, okOrNotOk, name) {
     const validFn = schema.validate[type]
     const valid = validFn(obj)
     t[okOrNotOk](valid, `${okOrNotOk ? 'Valid' : 'Invalid'} ${type}: ${name}`)
-    if (okOrNotOk === 'ok' && !valid) {
+    if (process.env.FIXTURE && okOrNotOk === 'ok' && !valid) {
         console.log(JSON.stringify(validFn.errors, null, 2).replace(/^/mg, '\t# '))
     }
 }

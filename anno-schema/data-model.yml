@@ -24,6 +24,13 @@ definitions:
     type: 'string'
     format: 'uri'
 
+  iri_object:
+    type: 'object'
+    required: ['id']
+    additionalProperties: false
+    properties:
+      id: {$ref: '#/definitions/iri'}
+
   # https://tools.ietf.org/html/rfc6838
   mediaType:
     type: 'string'
@@ -71,15 +78,15 @@ definitions:
                     - {$ref: '#/definitions/SpecificResource'}
           target:
             anyOf:
-              - {$ref: '#/definitions/SpecificResource'}
-              - {$ref: '#/definitions/TargetResource'}
               - {$ref: '#/definitions/iri'}
+              - {$ref: '#/definitions/Resource'}
+              - {$ref: '#/definitions/SpecificResource'}
               - type: 'array'
                 items:
                   anyOf:
-                    - {$ref: '#/definitions/SpecificResource'}
-                    - {$ref: '#/definitions/TargetResource'}
                     - {$ref: '#/definitions/iri'}
+                    - {$ref: '#/definitions/Resource'}
+                    - {$ref: '#/definitions/SpecificResource'}
 
 #}}}
 #{{{ 3.2 Bodies and Targets - Resource
@@ -89,6 +96,9 @@ definitions:
 
   Resource:
     type: 'object'
+    anyOf:
+      - required: ['id']
+      - required: ['type']
     properties:
       id:                 {$ref: '#/definitions/iri'}
       format:             {$ref: '#/definitions/mediaType'}
@@ -254,13 +264,38 @@ definitions:
 
   SpecificResource:
     type: 'object'
+    anyOf:
+      - required: ['source', 'purpose']
+      - required: ['source', 'selector']
+      - required: ['source', 'styleClass']
+      - required: ['source', 'state']
+      - required: ['source', 'scope']
+      - required: ['source']
     properties:
       type: {type: 'string', enum: ['SpecificResource']}
+      styleClass: {type: 'string'}
       source:
         oneOf:
           - {$ref: '#/definitions/iri'}
           - {$ref: '#/definitions/Resource'}
       purpose: {$ref: '#/definitions/Motivation'}
+      scope: {$ref: '#/definitions/iri'}
+      accessibility: {type: 'string'} # TODO
+      state:
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/iri_object'}
+          - {$ref: '#/definitions/State'}
+          - type: 'array'
+            items:
+              oneOf:
+                - {$ref: '#/definitions/iri'}
+                - {$ref: '#/definitions/iri_object'}
+                - {$ref: '#/definitions/State'}
+      selector: 
+        oneOf:
+          - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/Selector'}
 
 #}}}
 #{{{ 4.2 Selectors

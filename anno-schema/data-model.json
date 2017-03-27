@@ -8,6 +8,18 @@
       "type": "string",
       "format": "uri"
     },
+    "iri_object": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        }
+      }
+    },
     "mediaType": {
       "type": "string",
       "pattern": ".*/.*"
@@ -99,26 +111,26 @@
             "target": {
               "anyOf": [
                 {
-                  "$ref": "#/definitions/SpecificResource"
-                },
-                {
-                  "$ref": "#/definitions/TargetResource"
-                },
-                {
                   "$ref": "#/definitions/iri"
+                },
+                {
+                  "$ref": "#/definitions/Resource"
+                },
+                {
+                  "$ref": "#/definitions/SpecificResource"
                 },
                 {
                   "type": "array",
                   "items": {
                     "anyOf": [
                       {
-                        "$ref": "#/definitions/SpecificResource"
-                      },
-                      {
-                        "$ref": "#/definitions/TargetResource"
-                      },
-                      {
                         "$ref": "#/definitions/iri"
+                      },
+                      {
+                        "$ref": "#/definitions/Resource"
+                      },
+                      {
+                        "$ref": "#/definitions/SpecificResource"
                       }
                     ]
                   }
@@ -131,6 +143,18 @@
     },
     "Resource": {
       "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "required": [
+            "type"
+          ]
+        }
+      ],
       "properties": {
         "id": {
           "$ref": "#/definitions/iri"
@@ -406,12 +430,52 @@
     },
     "SpecificResource": {
       "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "source",
+            "purpose"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "selector"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "styleClass"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "state"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "scope"
+          ]
+        },
+        {
+          "required": [
+            "source"
+          ]
+        }
+      ],
       "properties": {
         "type": {
           "type": "string",
           "enum": [
             "SpecificResource"
           ]
+        },
+        "styleClass": {
+          "type": "string"
         },
         "source": {
           "oneOf": [
@@ -425,6 +489,51 @@
         },
         "purpose": {
           "$ref": "#/definitions/Motivation"
+        },
+        "scope": {
+          "$ref": "#/definitions/iri"
+        },
+        "accessibility": {
+          "type": "string"
+        },
+        "state": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/iri_object"
+            },
+            {
+              "$ref": "#/definitions/State"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/iri_object"
+                  },
+                  {
+                    "$ref": "#/definitions/State"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "selector": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Selector"
+            }
+          ]
         }
       }
     },
