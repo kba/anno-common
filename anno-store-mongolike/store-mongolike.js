@@ -10,12 +10,6 @@ class MongolikeStore extends Store {
     constructor(...args) { super(...args) }
 
     /* @override */
-    init(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
-        cb(new Error("Must override 'init'")) 
-    }
-
-    /* @override */
     _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         throw(new Error("Must override '_wipe'"))
@@ -58,7 +52,8 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    create(annosToCreate, cb) {
+    _create(annosToCreate, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
         annosToCreate = JSON.parse(JSON.stringify(annosToCreate))
         var wasArray = Array.isArray(annosToCreate)
         if (!wasArray) {
@@ -94,7 +89,7 @@ class MongolikeStore extends Store {
 
     // https://www.w3.org/TR/annotation-protocol/#update-an-existing-annotation
     /* @override */
-    revise(annoId, anno, options, cb) {
+    _revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         annoId = this._idFromURL(annoId)
         var [_id, _revid] = annoId.split(/-rev-/)
@@ -129,7 +124,7 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    delete(annoId, options, cb) {
+    _delete(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const _id = this._idFromURL(annoId)
         this.db.update({_id}, {$set: {deleted: new Date()}}, (err) => {

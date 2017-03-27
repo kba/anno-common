@@ -15,7 +15,13 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    create(annosToCreate, options, cb) {
+    _init(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb()
+    }
+
+    /* @override */
+    _create(annosToCreate, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._httpClient.post('/', annosToCreate)
             .then(resp => cb(null, resp.data))
@@ -53,7 +59,7 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    revise(annoId, anno, options, cb) {
+    _revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         this._httpClient.put(annoUrl, anno)
@@ -67,7 +73,7 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    delete(annoId, options, cb) {
+    _delete(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         this._httpClient.delete(annoUrl)

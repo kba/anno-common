@@ -46,7 +46,11 @@ class Store {
      */
     init(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        return cb()
+        if (!this._init) {
+            return cb(new Error("'_init' not implemented"))
+        } else {
+            this._init(options, cb)
+        }
     }
 
     /**
@@ -98,7 +102,7 @@ class Store {
         if (!this._get) {
             return cb(new Error("'_get' not implemented"))
         } else {
-            this._get(annoIds, options, cb)
+            return this._get(annoIds, options, cb)
         }
     }
 
@@ -113,7 +117,11 @@ class Store {
      */
     create(annos, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        cb(new Error("create not implemented"))
+        if (!this._create) {
+            return cb(new Error("'_create' not implemented"))
+        } else {
+            this._create(annos, options, cb)
+        }
     }
 
     /**
@@ -127,7 +135,11 @@ class Store {
      */
     revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        cb(new Error("revise not implemented"))
+        if (!this._revise) {
+            return cb(new Error("'_revise' not implemented"))
+        } else {
+            this._revise(annoId, anno, options, cb)
+        }
     }
 
     /**
@@ -140,7 +152,11 @@ class Store {
      */
     delete(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        return cb(new Error("delete not implemented"))
+        if (!this._delete) {
+            return cb(new Error("'_delete' not implemented"))
+        } else {
+            this._delete(annoId, options, cb)
+        }
     }
 
     /**
@@ -154,7 +170,11 @@ class Store {
     search(query, options, cb) {
         if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
         if (typeof options === 'function') [cb, options] = [options, {}]
-        cb(new Error("search not implemented"))
+        if (!this._search) {
+            return cb(new Error("'_search' not implemented"))
+        } else {
+            this._search(query, options, cb)
+        }
     }
 
 

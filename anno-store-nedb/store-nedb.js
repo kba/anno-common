@@ -17,7 +17,7 @@ class NedbStore extends Store {
         this.db = new nedb({filename: this.dbfilename})
     }
 
-    init(options, cb) {
+    _init(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this.db.loadDatabase(err => {
             if (err) return cb(err)
@@ -30,7 +30,7 @@ class NedbStore extends Store {
         fs.unlink(this.dbfilename, err => {
             if (err && err.code !== 'ENOENT')
                 return cb(err)
-            return this.init(cb)
+            return this.init(options, cb)
         })
     }
 

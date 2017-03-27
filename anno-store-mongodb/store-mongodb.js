@@ -11,7 +11,7 @@ class MongodbStore extends Store {
         })
     }
 
-    init(options, cb) {
+    _init(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         MongoClient.connect(this.config.MONGODB_URL, (err, db) => {
             if (err) return cb(err)
