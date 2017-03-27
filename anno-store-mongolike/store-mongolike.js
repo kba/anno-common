@@ -10,16 +10,27 @@ class MongolikeStore extends Store {
     constructor(...args) { super(...args) }
 
     /* @override */
-    init(cb) { throw(new Error("Must override 'init'")) }
+    init(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        cb(new Error("Must override 'init'")) 
+    }
 
     /* @override */
-    wipe(cb) { throw(new Error("Must override 'wipe'")) }
+    wipe(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        throw(new Error("Must override 'wipe'"))
+    }
 
     /* @override */
-    connect(cb) { return cb(); }
+    connect(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb(); }
 
     /* @override */
-    disconnect(cb) { return cb(); }
+    disconnect(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb();
+    }
 
     /* @override */
     get(annoIds, options, cb) {

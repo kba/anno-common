@@ -1,6 +1,7 @@
 MAKEFLAGS += --no-print-directory
 
-TEMPDIR = $(PWD)/../temp
+TEMPDIR = ../temp
+LOGFILE = $(TEMPDIR)/server.log
 PIDFILE = $(TEMPDIR)/server.pid
 
 .PHONY: watch
@@ -17,7 +18,7 @@ start:
 	if [ ! -e $(PIDFILE) ];then \
 		ANNO_STORE='@kba/anno-store-nedb' \
 		ANNO_NEDB_DIR='$(TEMPDIR)' \
-		node src/server.js > $(TEMPDIR)/server.log 2>&1 & echo $$! > $(PIDFILE) \
+		node server.js > $(LOGFILE) 2>&1 & echo $$! > $(PIDFILE) \
 		&& echo "Server started on localhost:3000"; \
 	fi
 

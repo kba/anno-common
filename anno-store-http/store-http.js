@@ -19,7 +19,7 @@ class HttpStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._httpClient.post('/', annosToCreate)
             .then(resp => cb(null, resp.data))
-            .catch(err => cb(err))
+            .catch(err => cb(err.statusCode))
     }
 
     /* @override */
@@ -49,7 +49,7 @@ class HttpStore extends Store {
                     cb(null, col.first.items)
                 }
             })
-            .catch(cb)
+            .catch(err => cb(err.statusCode))
     }
 
     /* @override */
@@ -81,10 +81,13 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    wipe(cb) {
+    wipe(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
         return this._httpClient.delete('/')
             .then(() => cb())
-            .catch(cb)
+            .catch(err => {
+                return cb(err.statusCode)
+            })
     }
 
 }

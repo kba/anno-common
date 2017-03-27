@@ -17,14 +17,16 @@ class NedbStore extends Store {
         this.db = new nedb({filename: this.dbfilename})
     }
 
-    init(cb) {
+    init(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
         this.db.loadDatabase(err => {
             if (err) return cb(err)
             return cb()
         })
     }
 
-    wipe(cb) {
+    wipe(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
         fs.unlink(this.dbfilename, err => {
             if (err && err.code !== 'ENOENT')
                 return cb(err)

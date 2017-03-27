@@ -16,7 +16,17 @@ function load(loadingModule) {
         console.error(`Please install '${config.STORE}' configured as store`)
         process.exit(1)
     }
-    return new(impl)()
+    const store = new(impl)()
+    if (config.ACL) {
+        try {
+            store.acl = loadingModule.require(config.ACL)
+        } catch (err) {
+            console.log(err)
+            console.error(`Please install '${config.ACL}' configured as ACL`)
+            process.exit(1)
+        }
+    }
+    return store
 }
 
 class Store {
@@ -30,26 +40,41 @@ class Store {
     /**
      * Initialize a connection to the store.
      *
+     * @param {Options} options
+     * @param {String} options.user
      * @param {function} callback
      */
-    init(cb) { return cb() }
+    init(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb()
+    }
 
     /**
      * Wipe the store, revisions and all.
      *
+     * @param {Options} options
+     * @param {String} options.user
      * @param {function} callback
      *
      */
-    wipe(cb) { cb(new Error("wipe not implemented")) }
+    wipe(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        cb(new Error("wipe not implemented"))
+    }
 
     /**
      * Disconnect a store.
      *
      * A disconnected store cannot be used until `init` is called again.
      *
+     * @param {Options} options
+     * @param {String} options.user
      * @param {function} callback
      */
-    disconnect(cb) { return cb() }
+    disconnect(options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        return cb()
+    }
 
     /**
      * Retrieve an annotation.
@@ -57,6 +82,7 @@ class Store {
      * @param {String|Array<String>} annoIds
      * @param {Options} options
      * @param {Options} options.latest Return the latest revision
+     * @param {String} options.user
      * @param {function} callback
      */
     get(annoIds, options, cb) {
@@ -70,6 +96,7 @@ class Store {
      * @param {Object|Array<Object>} annosToCreate
      * @param {Options} options
      * @param String options.slug Proposal for the ID to create
+     * @param {String} options.user
      * @param {function} callback
      */
     create(annos, options, cb) {
@@ -83,6 +110,7 @@ class Store {
      * @param {String} annoId
      * @param {Object} anno
      * @param {Options} options
+     * @param {String} options.user
      * @param {function} callback
      */
     revise(annoId, anno, options, cb) {
@@ -95,6 +123,7 @@ class Store {
      *
      * @param {String} annoId
      * @param {Options} options
+     * @param {String} options.user
      * @param {function} callback
      */
     delete(annoId, options, cb) {
@@ -107,6 +136,7 @@ class Store {
      *
      * @param {Object} query
      * @param {Options} options
+     * @param {String} options.user
      * @param {function} callback
      */
     search(query, options, cb) {

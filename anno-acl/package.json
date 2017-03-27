@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
-    "sift-rule": "^0.1.0",
-    "tap": "^10.3.0"
+    "sift-rule": "^0.1.0"
   }
 }
