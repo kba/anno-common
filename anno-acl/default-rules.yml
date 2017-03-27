@@ -1,0 +1,54 @@
+# See [sift-rule](https://github.com/kba/sift-rule) for rule mechanics
+#
+# Structure is
+# [ CONDITION, RESULT, DESCRIPTION ]
+#
+# CONDITION is a sift query on collection, annotation, user and method
+# RESULT is a tru-ish value to allow or false to deny request
+# DESCRIPTION is an optional description of the rule
+
+- - user.inactive: true
+  - false
+  - "Inactive users are not allowed to do anything"
+
+- - collection: 'test-collection'
+  - true
+  - "Allow everybody to do everything on 'test-collection'"
+
+- - method: {$or: ['get', 'search', 'searchRetrieve']}
+  - true
+  - "Allow get and search by default"
+
+- - user.role: 'admin'
+  - true
+  - "Allow users with 'admin' role to do everything"
+
+- - method: {$or: ['revise', 'delete']}
+    user.perm:
+      collection: {$ref: '/collection'}
+      role: 'moderator'
+  - true
+  - "Allow moderators of a collection to revise and delete any annotations"
+
+- - method: 'create'
+    user.perm: 
+      collection: {$ref: '/collection'}
+      role: 'create'
+  - true
+  - "Allow users with 'create' role in the collection to create new annotations"
+
+- - method: {$or: ['revise', 'delete']}
+    $or:
+      - anno.creator:       {$ref: '/user'}
+      - anno.creator.id:    {$ref: '/user'}
+      - anno.creator.email: {$ref: '/user'}
+      - anno.creator:       {$ref: '/user/id'}
+      - anno.creator.id:    {$ref: '/user/id'}
+      - anno.creator.email: {$ref: '/user/id'}
+  - true
+  - "Allow users to revise or delete their own annotations"
+
+# Default Rule. Must be last
+- - {}
+  - false
+  - "Forbid by default"

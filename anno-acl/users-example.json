@@ -1,0 +1,34 @@
+{
+  "admin-user": {
+    "role": "admin"
+  },
+  "john": {
+    "perm": [
+      {
+        "collection": "default",
+        "role": [
+          "create"
+        ]
+      }
+    ]
+  },
+  "mike": {
+    "perm": [
+      {
+        "collection": "default",
+        "role": [
+          "create"
+        ]
+      },
+      {
+        "collection": "test-collection",
+        "role": [
+          "moderator"
+        ]
+      }
+    ]
+  },
+  "spambot3000": {
+    "inactive": true
+  }
+}
