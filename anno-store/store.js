@@ -1,7 +1,10 @@
 const slugid = require('slugid')
+const async = require('async')
 
 function load(loadingModule) {
-    const config = require('@kba/anno-config').loadConfig()
+    const config = require('@kba/anno-config').loadConfig({
+        ACL: '@kba/anno-acl-none'
+    })
     if (!loadingModule)
         throw new Error("Must pass the loading module to Store.load")
     if (!config.STORE)
@@ -17,14 +20,13 @@ function load(loadingModule) {
         process.exit(1)
     }
     const store = new(impl)()
-    if (config.ACL) {
-        try {
-            store.acl = loadingModule.require(config.ACL)
-        } catch (err) {
-            console.log(err)
-            console.error(`Please install '${config.ACL}' configured as ACL`)
-            process.exit(1)
-        }
+    try {
+        const acl = new(loadingModule.require(config.ACL))()
+        store.use(acl.check.bind(acl))
+    } catch (err) {
+        console.log(err)
+        console.error(`Please install '${config.ACL}' configured as ACL`)
+        process.exit(1)
     }
     return store
 }
@@ -32,9 +34,33 @@ function load(loadingModule) {
 class Store {
 
     constructor() {
-        this.config = require('@kba/anno-config').loadConfig()
+        this.config = require('@kba/anno-config').loadConfig({
+            ACL: '@kba/anno-acl-none'
+        })
+        this.middlewares = []
         // console.log(this.config)
         // console.error("Store.constructor called")
+    }
+
+    _callMethod(ctx, cb) {
+        const impl = `_${ctx.method}`
+        if (!(impl in this)) {
+            return cb(new Error(`${impl} not implemented`))
+        }
+        async.eachSeries(this.middlewares, (middleware, next) => {
+            middleware(ctx, next)
+        }, (err, pass) => {
+            if (err) return cb(err)
+            this[impl](ctx, cb)
+        })
+    }
+
+    /**
+     * Use middleware for auth etc.
+     *
+     */
+    use(middleware) {
+        this.middlewares.push(middleware)
     }
 
     /**

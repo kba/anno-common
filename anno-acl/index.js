@@ -2,7 +2,7 @@ const {RuleSet} = require('sift-rule')
 const defaultRules = require('./default-rules.json')
 const usersExample = require('./users-example.json')
 
-class AnnoACL {
+class AnnoAclRules {
 
     constructor({rules, users}={}) {
         const config = require('@kba/anno-config').loadConfig({
@@ -19,7 +19,7 @@ class AnnoACL {
         this.users = users
     }
 
-    check(ctx={}) {
+    check(ctx, cb) {
         ctx.collection = (ctx.collection || 'default')
         if (typeof ctx.user === 'string' && ctx.user in this.users) {
             ctx.user = this.users[ctx.user]
@@ -32,9 +32,12 @@ class AnnoACL {
             console.log(`Rule '${matchingRule}' matched ${JSON.stringify(ctx)}`)
         }
         this.reason = matchingRule.name
-        return matchingRule.tail
+        if (matchingRule.tail)
+            return cb(null, matchingRule.name)
+        else
+            return cb(matchingRule.name)
     }
 
 }
 
-module.exports = {AnnoACL}
+module.exports = AnnoAclRules

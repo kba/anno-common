@@ -1,0 +1,22 @@
+{
+  "name": "@kba/anno-acl-none",
+  "version": "0.0.1",
+  "description": "Anno authorization rules",
+  "main": "index.js",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-server-acl-none#readme",
+  "scripts": {
+    "test": "tap server-acl-none.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1",
+    "tap": "^10.3.0"
+  },
+  "dependencies": {
+    "@kba/anno-config": "^0.0.1",
+    "sift-rule": "^0.1.0"
+  }
+}

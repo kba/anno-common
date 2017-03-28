@@ -1,0 +1,118 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/kb/.nvm/versions/node/v7.3.0/bin/node',
+1 verbose cli   '/home/kb/.nvm/versions/node/v7.3.0/bin/npm',
+1 verbose cli   'install' ]
+2 info using npm@3.10.10
+3 info using node@v7.3.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly install normalizeTree
+8 silly loadCurrentTree Finishing
+9 silly loadIdealTree Starting
+10 silly install loadIdealTree
+11 silly cloneCurrentTree Starting
+12 silly install cloneCurrentTreeToIdealTree
+13 silly cloneCurrentTree Finishing
+14 silly loadShrinkwrap Starting
+15 silly install loadShrinkwrap
+16 silly loadShrinkwrap Finishing
+17 silly loadAllDepsIntoIdealTree Starting
+18 silly install loadAllDepsIntoIdealTree
+19 silly fetchNamedPackageData @kba/anno-acl-none
+20 silly mapToRegistry name @kba/anno-acl-none
+21 silly mapToRegistry scope (from package name) @kba
+22 verbose mapToRegistry no registry URL found in name for scope @kba
+23 silly mapToRegistry using default registry
+24 silly mapToRegistry registry http://registry.npmjs.org/
+25 silly mapToRegistry data Result {
+25 silly mapToRegistry   raw: '@kba/anno-acl-none',
+25 silly mapToRegistry   scope: '@kba',
+25 silly mapToRegistry   escapedName: '@kba%2fanno-acl-none',
+25 silly mapToRegistry   name: '@kba/anno-acl-none',
+25 silly mapToRegistry   rawSpec: '',
+25 silly mapToRegistry   spec: 'latest',
+25 silly mapToRegistry   type: 'tag' }
+26 silly mapToRegistry uri http://registry.npmjs.org/@kba%2fanno-acl-none
+27 verbose request uri http://registry.npmjs.org/@kba%2fanno-acl-none
+28 verbose request no auth needed
+29 info attempt registry request try #1 at 7:20:14 AM
+30 verbose request using bearer token for auth
+31 verbose request id 9b02ba85f18e8525
+32 http request GET http://registry.npmjs.org/@kba%2fanno-acl-none
+33 http 404 http://registry.npmjs.org/@kba%2fanno-acl-none
+34 verbose headers { 'content-type': 'application/json',
+34 verbose headers   'cache-control': 'max-age=0',
+34 verbose headers   'content-length': '21',
+34 verbose headers   'accept-ranges': 'bytes',
+34 verbose headers   date: 'Tue, 28 Mar 2017 05:20:15 GMT',
+34 verbose headers   via: '1.1 varnish',
+34 verbose headers   connection: 'keep-alive',
+34 verbose headers   'x-served-by': 'cache-fra1221-FRA',
+34 verbose headers   'x-cache': 'MISS',
+34 verbose headers   'x-cache-hits': '0',
+34 verbose headers   'x-timer': 'S1490678414.910635,VS0,VE551' }
+35 silly get cb [ 404,
+35 silly get   { 'content-type': 'application/json',
+35 silly get     'cache-control': 'max-age=0',
+35 silly get     'content-length': '21',
+35 silly get     'accept-ranges': 'bytes',
+35 silly get     date: 'Tue, 28 Mar 2017 05:20:15 GMT',
+35 silly get     via: '1.1 varnish',
+35 silly get     connection: 'keep-alive',
+35 silly get     'x-served-by': 'cache-fra1221-FRA',
+35 silly get     'x-cache': 'MISS',
+35 silly get     'x-cache-hits': '0',
+35 silly get     'x-timer': 'S1490678414.910635,VS0,VE551' } ]
+36 silly fetchPackageMetaData Error: Not found : @kba/anno-acl-none
+36 silly fetchPackageMetaData     at makeError (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+36 silly fetchPackageMetaData     at CachingRegistryClient.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+36 silly fetchPackageMetaData     at Request._callback (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+36 silly fetchPackageMetaData     at Request.self.callback (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:187:22)
+36 silly fetchPackageMetaData     at emitTwo (events.js:106:13)
+36 silly fetchPackageMetaData     at Request.emit (events.js:191:7)
+36 silly fetchPackageMetaData     at Request.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+36 silly fetchPackageMetaData     at emitOne (events.js:96:13)
+36 silly fetchPackageMetaData     at Request.emit (events.js:188:7)
+36 silly fetchPackageMetaData     at IncomingMessage.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:969:12)
+36 silly fetchPackageMetaData  error for @kba/anno-acl-none@^0.0.1 { Error: Not found : @kba/anno-acl-none
+36 silly fetchPackageMetaData     at makeError (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+36 silly fetchPackageMetaData     at CachingRegistryClient.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+36 silly fetchPackageMetaData     at Request._callback (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+36 silly fetchPackageMetaData     at Request.self.callback (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:187:22)
+36 silly fetchPackageMetaData     at emitTwo (events.js:106:13)
+36 silly fetchPackageMetaData     at Request.emit (events.js:191:7)
+36 silly fetchPackageMetaData     at Request.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+36 silly fetchPackageMetaData     at emitOne (events.js:96:13)
+36 silly fetchPackageMetaData     at Request.emit (events.js:188:7)
+36 silly fetchPackageMetaData     at IncomingMessage.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:969:12) pkgid: '@kba/anno-acl-none', statusCode: 404, code: 'E404' }
+37 silly rollbackFailedOptional Starting
+38 silly rollbackFailedOptional Finishing
+39 silly runTopLevelLifecycles Finishing
+40 silly install printInstalled
+41 verbose stack Error: Not found : @kba/anno-acl-none
+41 verbose stack     at makeError (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+41 verbose stack     at CachingRegistryClient.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+41 verbose stack     at Request._callback (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+41 verbose stack     at Request.self.callback (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:187:22)
+41 verbose stack     at emitTwo (events.js:106:13)
+41 verbose stack     at Request.emit (events.js:191:7)
+41 verbose stack     at Request.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+41 verbose stack     at emitOne (events.js:96:13)
+41 verbose stack     at Request.emit (events.js:188:7)
+41 verbose stack     at IncomingMessage.<anonymous> (/home/kb/.nvm/versions/node/v7.3.0/lib/node_modules/npm/node_modules/request/request.js:969:12)
+42 verbose statusCode 404
+43 verbose pkgid @kba/anno-acl-none
+44 verbose cwd /home/kb/build/github.com/kba/anno/anno-store
+45 error Linux 4.6.0-1-amd64
+46 error argv "/home/kb/.nvm/versions/node/v7.3.0/bin/node" "/home/kb/.nvm/versions/node/v7.3.0/bin/npm" "install"
+47 error node v7.3.0
+48 error npm  v3.10.10
+49 error code E404
+50 error 404 Not found : @kba/anno-acl-none
+51 error 404
+52 error 404 '@kba/anno-acl-none' is not in the npm registry.
+53 error 404 You should bug the author to publish it (or use the name yourself!)
+54 error 404 Note that you can also install from a
+55 error 404 tarball, folder, http url, or git url.
+56 verbose exit [ 1, true ]
