@@ -16,7 +16,7 @@ serve: swagger-ui
 .PHONY: start
 start:
 	if [ ! -e $(PIDFILE) ];then \
-		ANNO_STORE='@kba/anno-store-nedb' \
+		ANNO_STORE='@kba/anno-store-file' \
 		ANNO_NEDB_DIR='$(TEMPDIR)' \
 		node server.js > $(LOGFILE) 2>&1 & echo $$! > $(PIDFILE) \
 		&& echo "Server started on localhost:3000"; \

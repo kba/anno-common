@@ -17,11 +17,11 @@ reuse of components.
 	* [anno-store](#anno-store)
 	* [anno-store-http](#anno-store-http)
 	* [anno-store-mongolike](#anno-store-mongolike)
-	* [anno-store-nedb](#anno-store-nedb)
+	* [anno-store-file](#anno-store-file)
 	* [anno-web-plugin](#anno-web-plugin)
 	* [Not implemented](#not-implemented)
 * [setup](#setup)
-	* [mongodb / nedb schema design](#mongodb--nedb-schema-design)
+	* [mongodb / nedb schema design](#mongodb--file-schema-design)
 * [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
 	* [Revisions](#revisions)
 	* [Comments](#comments)
@@ -59,7 +59,7 @@ Store that delegates its actions to a WAP server (such as anno-server)
 
 Base class for document database backends like MongoDB or NeDB.
 
-### anno-store-nedb
+### anno-store-file
 
 NeDB flat file backend
 

@@ -2,17 +2,17 @@ const nedb = require('nedb')
 const fs = require('fs')
 const Store = require('@kba/anno-store-mongolike')
 
-class NedbStore extends Store {
+class FileStore extends Store {
 
     constructor() {
         super()
         this.config = require('@kba/anno-config').loadConfig({
-            NEDB_DIR: `${process.env.HOME}/.anno/nedb`,
+            STORE_FILE: `${process.env.HOME}/.local/cache/anno.nedb`,
             COLLECTION: 'default'
         })
 
-        // this.dbfilename = `${config.NEDB_DIR}/anno-${config.COLLECTION}.nedb`
-        this.dbfilename = `${this.config.NEDB_DIR}/anno.nedb`
+        // this.dbfilename = `${config.STORE_FILE}/anno-${config.COLLECTION}.nedb`
+        this.dbfilename = this.config.STORE_FILE
         if (this.config.DEBUG) console.error(`nedb saved as ${this.dbfilename}`)
         this.db = new nedb({filename: this.dbfilename})
     }
@@ -36,4 +36,4 @@ class NedbStore extends Store {
 
 }
 
-module.exports = NedbStore
+module.exports = FileStore

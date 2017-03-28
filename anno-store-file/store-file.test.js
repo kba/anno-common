@@ -1,6 +1,6 @@
 process.env.ANNO_BASE_URL = `http://localhost:3000`
 process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
 
-const NedbStore = require('./store-nedb')
-const store = new NedbStore()
+const FileStore = require('./store-file')
+const store = new FileStore()
 require('@kba/anno-store').storeTest(store, () => {})

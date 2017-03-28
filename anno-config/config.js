@@ -9,7 +9,7 @@ const PREFIX_RE = new RegExp(`^${PREFIX}_`)
 const DEFAULTS = {
     DEBUG: 'false',
     // NEDB_DIR: __dirname + '/' + '../nedb',
-    STORE: '@kba/anno-store-nedb',
+    STORE: '@kba/anno-store-file',
 }
 
 function loadConfig(localDefaults={}) {
