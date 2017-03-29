@@ -1,0 +1,21 @@
+{
+  "name": "@kba/anno-store-memory",
+  "version": "0.0.1",
+  "description": "Open Annotation in-memory store",
+  "main": "store-memory.js",
+  "scripts": {
+    "test": "tap *.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-store-memory#readme",
+  "dependencies": {
+    "@kba/anno-store-mongolike": "^0.0.1",
+    "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "tap": "^10.3.0"
+  }
+}
