@@ -3,7 +3,7 @@ const async = require('async')
 
 function load(loadingModule) {
     const config = require('@kba/anno-config').loadConfig({
-        ACL: '@kba/anno-acl-none'
+        // STORE_MIDDLEWARES: ''
     })
     if (!loadingModule)
         throw new Error("Must pass the loading module to Store.load")
@@ -33,11 +33,11 @@ function load(loadingModule) {
 
 class Store {
 
-    constructor() {
+    constructor(middlewares=[]) {
         this.config = require('@kba/anno-config').loadConfig({
             ACL: '@kba/anno-acl-none'
         })
-        this.middlewares = []
+        this.middlewares = middlewares
         // console.log(this.config)
         // console.error("Store.constructor called")
     }

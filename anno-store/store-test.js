@@ -129,6 +129,7 @@ function testDelete(t, store, done) {
 
 module.exports = function testStore(store, testStoreCallback) {
     tap.test(`store-test / ${store.constructor.name}`, t => {
+        t.plan(17)
         async.waterfall([
             cb => store.init(cb),
             cb => testWipe(t, store, cb),

@@ -1,0 +1,23 @@
+{
+  "name": "@kba/anno-mw-user-static",
+  "version": "0.0.1",
+  "description": "Anno user hydrator (static data)",
+  "main": "./mw-user-static.js",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-server-mw-user-static#readme",
+  "scripts": {
+    "prepublish": "node ../scripts/yml2json.js *.yml",
+    "test": "tap server-mw-user-static.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1",
+    "tap": "^10.3.0"
+  },
+  "dependencies": {
+    "@kba/anno-config": "^0.0.1",
+    "sift-rule": "^0.1.0"
+  }
+}
