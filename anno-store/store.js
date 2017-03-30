@@ -3,7 +3,7 @@ const async = require('async')
 
 function load(loadingModule) {
     const config = require('@kba/anno-config').loadConfig({
-        // STORE_MIDDLEWARES: ''
+        STORE_MIDDLEWARES: ''
     })
     if (!loadingModule)
         throw new Error("Must pass the loading module to Store.load")
@@ -19,25 +19,28 @@ function load(loadingModule) {
         console.error(`Please install '${config.STORE}' configured as store`)
         process.exit(1)
     }
+
     const store = new(impl)()
-    try {
-        const acl = new(loadingModule.require(config.ACL))()
-        store.use(acl.check.bind(acl))
-    } catch (err) {
-        console.log(err)
-        console.error(`Please install '${config.ACL}' configured as ACL`)
-        process.exit(1)
-    }
+    const middlewareModules = config.STORE_MIDDLEWARES.split(',').map(s => s.trim())
+    async.eachSeries(middlewareModules, (middlewareModule, next) => {
+        var middlewareImpl;
+        try {
+            console.log(`Loading ${middlewareModule}`)
+            middlewareImpl = loadingModule.require(middlewareModule)
+        } catch (err) {
+            console.log(err)
+            console.error(`Please install '${middlewareModule}' configured as middleware`)
+            process.exit(1)
+        }
+        store.use(new (middlewareImpl)())
+    })
     return store
 }
 
 class Store {
 
-    constructor(middlewares=[]) {
-        this.config = require('@kba/anno-config').loadConfig({
-            ACL: '@kba/anno-acl-none'
-        })
-        this.middlewares = middlewares
+    constructor() {
+        this.config = require('@kba/anno-config').loadConfig()
         // console.log(this.config)
         // console.error("Store.constructor called")
     }
@@ -48,7 +51,7 @@ class Store {
             return cb(new Error(`${impl} not implemented`))
         }
         async.eachSeries(this.middlewares, (middleware, next) => {
-            middleware(ctx, next)
+            middleware.process(ctx, next)
         }, (err, pass) => {
             if (err) return cb(err)
             this[impl](ctx, cb)
