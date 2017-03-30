@@ -1,9 +1,10 @@
 const {Store} = require('@kba/anno-store')
+const schema = require('@kba/anno-schema')
+const async = require('async')
+const errors = require('@kba/anno-errors')
 const config = require('@kba/anno-config').loadConfig({
     COLLECTION: 'default'
 })
-const schema = require('@kba/anno-schema')
-const async = require('async')
 
 class MongolikeStore extends Store {
 
@@ -33,11 +34,11 @@ class MongolikeStore extends Store {
             const query = {_id, deleted: {$exists: false}}
             this.db.findOne(query, projection, (err, doc) => {
                 if (err) return done(err)
-                if (!doc) return done(this._annotationNotFoundError(annoId))
+                if (!doc) return done(errors.annotationNotFound(annoId))
                 const rev = (_revid) 
                     ? doc._revisions[_revid -1]
                     : doc._revisions[doc._revisions.length - 1]
-                if (!rev) return done(this._revisionNotFoundError(_id, _revid))
+                if (!rev) return done(errors.revisionNotFound(_id, _revid))
                 if (options.latest) {
                     annoId = `${_id}-rev-${doc._revisions.length}`
                     doc = rev
@@ -64,7 +65,7 @@ class MongolikeStore extends Store {
             anno = this._deleteId(anno)
             const validFn = schema.validate.Annotation
             if (!validFn(anno)) {
-                return errors.push(this._invalidAnnotationError(anno, validFn.errors))
+                return errors.push(errors.invalidAnnotation(anno, validFn.errors))
             }
             anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)
@@ -76,7 +77,7 @@ class MongolikeStore extends Store {
             anno._id = this._genid()
             return anno
         })
-        if (errors.length > 0) return cb(this._invalidAnnotationError({errors}))
+        if (errors.length > 0) return cb(errors.invalidAnnotation({errors}))
         this.db.insert(annosToCreate, (err, savedAnnos) => {
             // Mongodb returns an object describing the result, nedb returns just the results
             var {insertedIds} = savedAnnos
@@ -95,17 +96,17 @@ class MongolikeStore extends Store {
         var [_id, _revid] = annoId.split(/-rev-/)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
-            if (!existingAnno) return cb(this._annotationNotFoundError(_id))
+            if (!existingAnno) return cb(errors.annotationNotFound(_id))
             ;['canonical', 'via', 'hasVersion', 'versionOf'].forEach(prop => {
                 if (anno[prop] && anno[prop] !== existingAnno[prop]) {
-                    return cb(this._readonlyValueError(annoId, 'canonical'))
+                    return cb(errors.readonlyValue(annoId, 'canonical'))
                 }
             })
             // if (anno
             anno = this._deleteId(anno)
             const validFn = schema.validate.Annotation
             if (!validFn(anno)) {
-                return cb(this._invalidAnnotationError(anno, validFn.errors))
+                return cb(errors.invalidAnnotation(anno, validFn.errors))
             }
             // TODO no idempotency of targets with normalization -> disabled for now
             // anno = this._normalizeTarget(anno)

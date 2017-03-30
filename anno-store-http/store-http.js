@@ -1,5 +1,6 @@
 const axios = require('axios')
 const {Store} = require('@kba/anno-store')
+const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 
 class HttpStore extends Store {
@@ -36,7 +37,7 @@ class HttpStore extends Store {
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if(err.response.status === 404) {
-                    return cb(this._annotationNotFoundError(annoUrl))
+                    return cb(errors.annotationNotFound(annoUrl))
                 }
                 return cb(err.response.data)
             })
@@ -66,7 +67,7 @@ class HttpStore extends Store {
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if(err.response.status === 404) {
-                    return cb(this._annotationNotFoundError(annoUrl))
+                    return cb(errors.annotationNotFound(annoUrl))
                 }
                 return cb(err.response.data)
             })
@@ -80,7 +81,7 @@ class HttpStore extends Store {
             .then(() => cb())
             .catch(err => {
                 if(err.response.status === 404) {
-                    return cb(this._annotationNotFoundError(annoUrl))
+                    return cb(errors.annotationNotFound(annoUrl))
                 }
                 return cb(err.response.data)
             })

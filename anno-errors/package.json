@@ -1,0 +1,17 @@
+{
+  "name": "@kba/anno-errors",
+  "version": "0.0.1",
+  "description": "Error conditions for anno",
+  "main": "errors.js",
+  "scripts": {
+      "test": "tap *.test.js"
+  },
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-errors#readme",
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "tap": "^10.3.0"
+  }
+}
