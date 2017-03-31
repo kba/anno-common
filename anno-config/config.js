@@ -31,6 +31,39 @@ function loadConfig(localDefaults={}) {
     return CONFIG
 }
 
+function getLogger(category) {
+    var isNode; try { isNode = window !== undefined } catch (err) {isNode = true}
+    const config = loadConfig({
+        LOGFILE: '/tmp/anno.log',
+        LOGLEVEL: 'silly',
+    })
+    const format = function format(level, message) {
+        if (typeof message != 'string') message = JSON.stringify(message)
+        const timestamp = new Date().toISOString().substr(11).substr(0, 11)
+        return `# ${level} [${timestamp}] ${category} - ${message}`
+    }
+    const logEnabled = function logEnabled(level, cb) {
+        if (level.match(/debug/i) && config.LOGLEVEL.match(/(silly|debug)/i)) return cb()
+        if (level.match(/SILLY/i) && config.LOGLEVEL.match(/silly/i)) return cb()
+    }
+    if (isNode && config.LOGFILE !== '') {
+        const fs = require('fs')
+        return {
+            silly: (...msgs) => logEnabled('silly', () => msgs.forEach(msg =>
+                fs.appendFile(config.LOGFILE, format('SILLY', msg+'\n'), ()=>{}))),
+            debug: (...msgs) => logEnabled('debug', () => msgs.forEach(msg =>
+                fs.appendFile(config.LOGFILE, format('DEBUG', msg+'\n'), ()=>{}))),
+        }
+    }
+    return {
+        silly: (...msgs) => logEnabled('SILLY', () => msgs.forEach(msg =>
+            console[isNode ? 'log' : 'debug'](format('SILLY', msg)))),
+        debug: (...msgs) => logEnabled('DEBUG', () => msgs.forEach(msg =>
+            console.log(format('DEBUG', msg)))),
+    }
+}
+
 module.exports = {
-    loadConfig
+    loadConfig,
+    getLogger,
 }
