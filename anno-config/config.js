@@ -31,17 +31,6 @@ function loadConfig(localDefaults={}) {
     return CONFIG
 }
 
-// https://github.com/1602/jugglingdb/blob/master/lib/utils.js
-function safeRequire(require, module) {
-    try {
-        return require(module);
-    } catch (e) {
-        console.error(e)
-        console.error(`Run "npm install --global ${module}"  to use anno ${module}`);
-        process.exit(1);
-    }
-}
-
 module.exports = {
-    loadConfig, safeRequire
+    loadConfig
 }
