@@ -17,21 +17,20 @@ class HttpStore extends Store {
 
     /* @override */
     _init(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         return cb()
     }
 
     /* @override */
-    _create(annosToCreate, options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
-        this._httpClient.post('/', annosToCreate)
+    _create(options, cb) {
+        const {annos} = options
+        this._httpClient.post('/', annos)
             .then(resp => cb(null, resp.data))
             .catch(err => cb(err.statusCode))
     }
 
     /* @override */
-    _get(annoId, options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
+    _get(options, cb) {
+        const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         this._httpClient.get(annoUrl)
             .then(resp => cb(null, resp.data))
@@ -44,9 +43,8 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    search(query, options, cb) {
-        if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
-        if (typeof options === 'function') [cb, options] = [options, {}]
+    _search(options, cb) {
+        const {query} = options
         this._httpClient.get('/' + '?' + querystring.stringify(query))
             .then(resp => {
                 const col = resp.data
@@ -60,8 +58,8 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    _revise(annoId, anno, options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
+    _revise(options, cb) {
+        const {annoId, anno} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         this._httpClient.put(annoUrl, anno)
             .then(resp => cb(null, resp.data))
@@ -74,8 +72,8 @@ class HttpStore extends Store {
     }
 
     /* @override */
-    _delete(annoId, options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
+    _delete(options, cb) {
+        const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         this._httpClient.delete(annoUrl)
             .then(() => cb())
@@ -89,7 +87,6 @@ class HttpStore extends Store {
 
     /* @override */
     _wipe(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         return this._httpClient.delete('/')
             .then(() => cb())
             .catch(err => {
@@ -99,7 +96,6 @@ class HttpStore extends Store {
 
     /* @override */
     _disconnect(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         return cb()
     }
 

@@ -34,11 +34,12 @@ function loadConfig(localDefaults={}) {
 function getLogger(category) {
     var isNode; try { isNode = window !== undefined } catch (err) {isNode = true}
     const config = loadConfig({
-        LOGFILE: '/tmp/anno.log',
-        LOGLEVEL: 'silly',
+        LOGFILE: '',
+        LOGLEVEL: '',
     })
     const format = function format(level, message) {
-        if (typeof message != 'string') message = JSON.stringify(message)
+        // console.log(message)
+        if (typeof message !== 'string') message = JSON.stringify(message)
         const timestamp = new Date().toISOString().substr(11).substr(0, 11)
         return `# ${level} [${timestamp}] ${category} - ${message}`
     }

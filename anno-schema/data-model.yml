@@ -57,6 +57,7 @@ definitions:
           # - 'id'
           - 'target'
         properties:
+          # type:      {anyOf: [{type: 'string'}, {type: 'array', items: {type: 'string'}}]}
           id:        {$ref: '#/definitions/iri'}
           canonical: {type: 'string'}
           via:       {$ref: '#/definitions/iri'}

@@ -1,16 +1,20 @@
 const slugid = require('slugid')
 const async = require('async')
+const {loadConfig,getLogger} = require('@kba/anno-config')
 
 function load(loadingModule) {
-    const config = require('@kba/anno-config').loadConfig({
+    const config = loadConfig({
+        BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
         STORE_MIDDLEWARES: ''
     })
+    const log = require('@kba/anno-config').getLogger('store')
     if (!loadingModule)
         throw new Error("Must pass the loading module to Store.load")
     if (!config.STORE)
         throw new Error("No store configured. Set the ANNO_STORE env var or STORE config option.")
     if (config.DEBUG)
         console.log(`Loading store ${config.STORE} for ${loadingModule.filename}`)
+
     var impl;
     try {
         impl = loadingModule.require(config.STORE)
@@ -21,11 +25,15 @@ function load(loadingModule) {
     }
 
     const store = new(impl)()
-    const middlewareModules = config.STORE_MIDDLEWARES.split(',').map(s => s.trim())
+    const middlewareModules = config.STORE_MIDDLEWARES
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s !== '')
+    log.silly('middlewares', middlewareModules)
     async.eachSeries(middlewareModules, (middlewareModule, next) => {
         var middlewareImpl;
         try {
-            console.log(`Loading ${middlewareModule}`)
+            log.silly(`Loading ${middlewareModule}`)
             middlewareImpl = loadingModule.require(middlewareModule)
         } catch (err) {
             console.log(err)
@@ -33,6 +41,7 @@ function load(loadingModule) {
             process.exit(1)
         }
         store.use(new (middlewareImpl)())
+        next()
     })
     return store
 }
@@ -40,7 +49,8 @@ function load(loadingModule) {
 class Store {
 
     constructor() {
-        this.config = require('@kba/anno-config').loadConfig()
+        this.config = loadConfig()
+        this.middlewares = []
         // console.log(this.config)
         // console.error("Store.constructor called")
     }
@@ -50,8 +60,13 @@ class Store {
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
+        const log = getLogger('store')
+        log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
-            middleware.process(ctx, next)
+            middleware.process(ctx, (...args) => {
+                // console.log(`ctx after ${middleware.constructor.name}`, ctx)
+                next(...args)
+            })
         }, (err, pass) => {
             if (err) return cb(err)
             this[impl](ctx, cb)
@@ -75,11 +90,9 @@ class Store {
      */
     init(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._init) {
-            return cb(new Error("'_init' not implemented"))
-        } else {
-            this._init(options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'init'
+        }), cb)
     }
 
     /**
@@ -92,11 +105,9 @@ class Store {
      */
     wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._wipe) {
-            return cb(new Error("'_wipe' not implemented"))
-        } else {
-            this._wipe(options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'wipe'
+        }), cb)
     }
 
     /**
@@ -110,11 +121,9 @@ class Store {
      */
     disconnect(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._disconnect) {
-            return cb(new Error("'_disconnect' not implemented"))
-        } else {
-            this._disconnect(options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'disconnect'
+        }), cb)
     }
 
     /**
@@ -126,13 +135,12 @@ class Store {
      * @param {String} options.user
      * @param {function} callback
      */
-    get(annoIds, options, cb) {
+    get(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._get) {
-            return cb(new Error("'_get' not implemented"))
-        } else {
-            return this._get(annoIds, options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'get',
+            annoId,
+        }), cb)
     }
 
     /**
@@ -146,11 +154,10 @@ class Store {
      */
     create(annos, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._create) {
-            return cb(new Error("'_create' not implemented"))
-        } else {
-            this._create(annos, options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'create',
+            annos,
+        }), cb)
     }
 
     /**
@@ -164,11 +171,11 @@ class Store {
      */
     revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._revise) {
-            return cb(new Error("'_revise' not implemented"))
-        } else {
-            this._revise(annoId, anno, options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'revise',
+            annoId,
+            anno,
+        }), cb)
     }
 
     /**
@@ -181,11 +188,10 @@ class Store {
      */
     delete(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._delete) {
-            return cb(new Error("'_delete' not implemented"))
-        } else {
-            this._delete(annoId, options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'delete',
+            annoId,
+        }), cb)
     }
 
     /**
@@ -199,11 +205,10 @@ class Store {
     search(query, options, cb) {
         if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!this._search) {
-            return cb(new Error("'_search' not implemented"))
-        } else {
-            this._search(query, options, cb)
-        }
+        this._callMethod(Object.assign(options, {
+            method: 'search',
+            query,
+        }), cb)
     }
 
 
@@ -237,11 +242,11 @@ class Store {
     }
 
     _deleteId(anno) {
-        delete anno._id
-        // if (anno.id) {
-            // anno.via = anno.id
+        // delete anno._id
+        if (anno.id) {
+            anno.via = anno.id
             delete anno.id
-        // }
+        }
         return anno
     }
 

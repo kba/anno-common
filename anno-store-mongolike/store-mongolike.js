@@ -23,76 +23,70 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    _get(annoIds, options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
-        const wasArray = Array.isArray(annoIds)
-        if (!wasArray) annoIds = [annoIds]
+    _get(options, cb) {
+        var annoId = options.annoId
         const projection = this._projectionFromOptions(options)
-        async.map(annoIds, (annoId, done) => {
-            annoId = this._idFromURL(annoId)
-            var [_id, _revid] = annoId.split(/-rev-/)
-            const query = {_id, deleted: {$exists: false}}
-            this.db.findOne(query, projection, (err, doc) => {
-                if (err) return done(err)
-                if (!doc) return done(errors.annotationNotFound(annoId))
-                const rev = (_revid) 
-                    ? doc._revisions[_revid -1]
-                    : doc._revisions[doc._revisions.length - 1]
-                if (!rev) return done(errors.revisionNotFound(_id, _revid))
-                if (options.latest) {
-                    annoId = `${_id}-rev-${doc._revisions.length}`
-                    doc = rev
-                }
-                return done(null, this._toJSONLD(annoId, doc, options))
-            })
-        }, (err, annos) => {
+        annoId = this._idFromURL(annoId)
+        var [_id, _revid] = annoId.split(/-rev-/)
+        const query = {_id, deleted: {$exists: false}}
+        this.db.findOne(query, projection, (err, doc) => {
             if (err) return cb(err)
-            if (wasArray) return cb(null, annos)
-            return cb(null, annos[0])
+            if (!doc) return cb(errors.annotationNotFound(annoId))
+            const rev = (_revid) 
+                ? doc._revisions[_revid -1]
+                : doc._revisions[doc._revisions.length - 1]
+            if (!rev) return cb(errors.revisionNotFound(_id, _revid))
+            if (options.latest) {
+                annoId = `${_id}-rev-${doc._revisions.length}`
+                doc = rev
+            }
+            return cb(null, this._toJSONLD(annoId, doc, options))
         })
     }
 
     /* @override */
-    _create(annosToCreate, options, cb) {
+    _create(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        annosToCreate = JSON.parse(JSON.stringify(annosToCreate))
-        var wasArray = Array.isArray(annosToCreate)
+        var annos = JSON.parse(JSON.stringify(options.annos))
+        var wasArray = Array.isArray(annos)
         if (!wasArray) {
-            annosToCreate = [annosToCreate]
+            annos = [annos]
         }
-        const errors = []
-        annosToCreate = annosToCreate.map(anno => {
+        const validationErrors = []
+        annos = annos.map(anno => {
             anno = this._deleteId(anno)
             const validFn = schema.validate.Annotation
+            // console.log(anno)
             if (!validFn(anno)) {
-                return errors.push(errors.invalidAnnotation(anno, validFn.errors))
+                return validationErrors.push(errors.invalidAnnotation(anno, validFn.errors))
             }
             anno = this._normalizeTarget(anno)
             anno = this._normalizeType(anno)
             anno._revisions = [JSON.parse(JSON.stringify(anno))]
-            const created = new Date()
+            const created = new Date().toISOString()
             anno.modified = created
             anno.created = created
             anno._revisions[0].created = created
             anno._id = this._genid()
             return anno
         })
-        if (errors.length > 0) return cb(errors.invalidAnnotation({errors}))
-        this.db.insert(annosToCreate, (err, savedAnnos) => {
+        if (validationErrors.length > 0) return cb(errors.invalidAnnotation({validationErrors}))
+        this.db.insert(annos, (err, savedAnnos) => {
             // Mongodb returns an object describing the result, nedb returns just the results
             var {insertedIds} = savedAnnos
             if (!insertedIds) insertedIds = savedAnnos.map(savedAnno => savedAnno._id)
             if (err) return cb(err)
-            if (!wasArray) return this.get(insertedIds[0], cb)
-            return this.get(insertedIds, cb)
+            if (!wasArray) return this.get(insertedIds[0], options, cb)
+            return this.get(insertedIds, options, cb)
         })
     }
 
     // https://www.w3.org/TR/annotation-protocol/#update-an-existing-annotation
     /* @override */
-    _revise(annoId, anno, options, cb) {
+    _revise(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        annoId = this._idFromURL(annoId)
+        const annoId = this._idFromURL(options.annoId)
+        var anno = options.anno
         var [_id, _revid] = annoId.split(/-rev-/)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
@@ -102,32 +96,32 @@ class MongolikeStore extends Store {
                     return cb(errors.readonlyValue(annoId, 'canonical'))
                 }
             })
-            // if (anno
-            anno = this._deleteId(anno)
+            var newData = JSON.parse(JSON.stringify(anno))
+            newData.created = new Date().toISOString()
+            this._deleteId(newData)
+            this._normalizeType(newData)
             const validFn = schema.validate.Annotation
-            if (!validFn(anno)) {
+            if (!validFn(newData)) {
                 return cb(errors.invalidAnnotation(anno, validFn.errors))
             }
             // TODO no idempotency of targets with normalization -> disabled for now
             // anno = this._normalizeTarget(anno)
-            anno = this._normalizeType(anno)
-            const newData = JSON.parse(JSON.stringify(anno))
-            anno.created = new Date()
             this.db.update({_id}, {
-                $push: {_revisions: anno},
+                $push: {_revisions: newData},
                 $set: newData,
             }, {}, (err, arg) => {
                 if (err) return cb(err)
                 options.latest = true
+                delete options.anno
                 return this.get(_id, options, cb)
             })
         })
     }
 
     /* @override */
-    _delete(annoId, options, cb) {
+    _delete(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        const _id = this._idFromURL(annoId)
+        const _id = this._idFromURL(options.annoId)
         this.db.update({_id}, {$set: {deleted: new Date()}}, (err) => {
             if (err) return cb(err)
             return cb()
@@ -135,9 +129,8 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    search(query, options, cb) {
-        if (typeof query   === 'function') [cb, query, options] = [query, {}, {}]
-        if (typeof options === 'function') [cb, options] = [options, {}]
+    _search(options, cb) {
+        var {query} = options 
 
         if ('$target' in query) {
             query.$or = [

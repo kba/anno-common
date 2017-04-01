@@ -12,7 +12,6 @@ class MongodbStore extends Store {
     }
 
     _init(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         MongoClient.connect(this.config.MONGODB_URL, (err, db) => {
             if (err) return cb(err)
             this._mongodb = db
@@ -22,7 +21,6 @@ class MongodbStore extends Store {
     }
 
     _wipe(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         this.db.drop(err => {
             if (!err) return this.disconnect(cb)
             if (err.message.match('ns not found'))  return this.disconnect(cb)
@@ -31,7 +29,6 @@ class MongodbStore extends Store {
     }
 
     _disconnect(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         try {
             this._mongodb.close()
             return cb()

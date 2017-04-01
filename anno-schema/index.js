@@ -1,7 +1,7 @@
 const mustache = require('mustache')
 const ajv = require('ajv')({
     allErrors: true,
-    // errorDataPath: true,
+    errorDataPath: true,
     // verbose: true,
 });
 const config = require('@kba/anno-config').loadConfig({

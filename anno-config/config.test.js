@@ -1,6 +1,6 @@
 const tap = require('tap')
 
-const {loadConfig} = require('./config')
+const {loadConfig,getLogger} = require('./config')
 
 tap.test('loadConfig', t => {
     var config = loadConfig()
@@ -30,3 +30,15 @@ tap.test('loadConfig', t => {
 
     t.end()
 })
+
+// tap.test('getLogger', t => {
+//     // process.env.ANNO_LOGFILE = '/tmp/anno.log'
+//     process.env.ANNO_LOGFILE = ''
+//     process.env.ANNO_DEBUG = true
+//     process.env.ANNO_SILLY = true
+//     const log = getLogger('test')
+//     log.debug("bar")
+//     log.silly("foo")
+//     log.silly('blo', {foo:'bar'})
+//     t.end()
+// })
