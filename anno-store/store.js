@@ -67,7 +67,7 @@ class Store {
                 log.silly(`ctx after ${middleware.constructor.name}`, ctx)
                 next(...args)
             })
-        }, function(err, pass) {
+        }, (err, pass) => {
             if (err) return cb(err)
             this[impl](ctx, cb)
         })
