@@ -62,7 +62,7 @@ docs: webpack webpack-min
 	$(MKDIR) docs
 	cp anno-schema/context.json docs/context.jsonld
 	$(MKDIR) docs/dist
-	cp -r dist/* docs/dist
+	cp -r dist/*.min.js docs/dist
 	git commit --edit -m 'updated docs' docs && git push
 
 .PHONY: webpack
