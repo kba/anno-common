@@ -1,11 +1,12 @@
 const Store = require('@kba/anno-store-mongolike')
+const {loadConfig} = require('@kba/anno-config')
 const {MongoClient} = require('mongodb')
 
 class MongodbStore extends Store {
 
     constructor() {
         super()
-        this.config = require('@kba/anno-config').loadConfig({
+        this.config = loadConfig({
             MONGODB_URL: 'mongodb://localhost:27017/anno',
             MONGODB_COLLECTION: 'anno'
         })
