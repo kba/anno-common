@@ -13,9 +13,7 @@
   "scripts": {
     "test": "echo no test"
   },
-  "devDependencies": {
-    "tap": "^10.3.0"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",

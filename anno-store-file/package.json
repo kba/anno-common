@@ -16,7 +16,5 @@
     "@kba/anno-store-mongolike": "^0.0.1",
     "nedb": "^1.8.0"
   },
-  "devDependencies": {
-    "tap": "^10.3.0"
-  }
+  "devDependencies": { }
 }

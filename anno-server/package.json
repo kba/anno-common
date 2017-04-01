@@ -30,7 +30,6 @@
     "nedb": "^1.8.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0",
-    "tap": "^10.3.0"
+    "nodemon": "^1.11.0"
   }
 }

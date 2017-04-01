@@ -13,8 +13,7 @@
   "author": "kba",
   "license": "MIT",
   "devDependencies": {
-    "@kba/anno-fixtures": "^0.0.1",
-    "tap": "^10.3.0"
+    "@kba/anno-fixtures": "^0.0.1"
   },
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
