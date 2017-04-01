@@ -15,13 +15,14 @@
   "homepage": "https://github.com/kba/anno/tree/master/anno-webpack#readme",
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
-    "@kba/anno-schema": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
+    "@kba/anno-mw-basicauth": "^0.0.1",
+    "@kba/anno-mw-httpheaders": "^0.0.1",
+    "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-store-http": "^0.0.1",
     "@kba/anno-store-memory": "^0.0.1",
-    "@kba/anno-mw-basicauth": "^0.0.1",
-    "@kba/anno-mw-httpheaders": "^0.0.1"
+    "yargs": "^7.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -30,4 +31,3 @@
     "webpack": "^2.3.2"
   }
 }
-
