@@ -2,12 +2,13 @@ const axios = require('axios')
 const Store = require('@kba/anno-store')
 const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
+const {loadConfig, getLogger} = require('@kba/anno-config')
 
 class HttpStore extends Store {
 
     constructor() {
         super()
-        this.config = require('@kba/anno-config').loadConfig({
+        this.config = loadConfig({
             BASE_URL: 'http://localhost:3000/anno'
         })
         const options = {
@@ -111,6 +112,13 @@ class HttpStore extends Store {
             ret.auth.username = options.auth.username
             ret.auth.password = options.auth.password
         }
+        // Custom Headers
+        if (options.httpHeaders) {
+            ret.headers = ret.headers || {}
+            Object.assign(ret.headers, options.httpHeaders)
+        }
+        const log = getLogger('store-http')
+        log.silly("axios config from options", ret)
         return ret
     }
 
