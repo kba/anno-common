@@ -1,0 +1,39 @@
+const tap = require('tap')
+const async = require('async')
+process.env.ANNO_LOGFILE = ''
+process.env.ANNO_LOGLEVEL = 'silly'
+
+function envClean(cb) {
+    Object.keys(process.env).filter(k => k.match(/^ANNO_/)).forEach(k => {
+        console.log(k, process.env[k])
+        if (k.match(/ANNO_LOG.*/)) return
+        delete process.env[k]
+    })
+    cb()
+}
+
+tap.test('testing all stores', t => {
+    async.waterfall([
+        next => envClean(next),
+        (next) => {
+            const store = require('@kba/anno-store')
+            process.env.ANNO_STORE = '@kba/anno-store-memory'
+            store.storeTest(store.load(module), next)
+        },
+        next => envClean(next),
+        (next) => {
+            const store = require('@kba/anno-store')
+            process.env.ANNO_STORE = '@kba/anno-store-file'
+            process.env.ANNO_STORE_FILE = `${__dirname}/../temp/anno.nedb`
+            store.storeTest(store.load(module), next)
+        },
+        next => envClean(next),
+    ], (err) => {
+        if (err) {
+            t.fail(err)
+            throw err
+        }
+        t.ok('All tests passed')
+        return t.end()
+    })
+})
