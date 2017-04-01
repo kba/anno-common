@@ -1,5 +1,5 @@
 const axios = require('axios')
-const {Store} = require('@kba/anno-store')
+const Store = require('@kba/anno-store')
 const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 

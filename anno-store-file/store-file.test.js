@@ -3,4 +3,4 @@ process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
 
 const FileStore = require('./store-file')
 const store = new FileStore()
-require('@kba/anno-store').storeTest(store, () => {})
+require('../anno-store/store-test')(store, () => {})

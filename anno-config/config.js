@@ -48,7 +48,9 @@ function getLogger(category) {
         if (level.match(/SILLY/i) && config.LOGLEVEL.match(/silly/i)) return cb()
     }
     if (isNode && config.LOGFILE !== '') {
-        const fs = require('fs')
+        // HACK XXX webpack
+        const fn = require
+        const fs = fn('fs')
         return {
             silly: (...msgs) => logEnabled('silly', () => msgs.forEach(msg =>
                 fs.appendFile(config.LOGFILE, format('SILLY', msg+'\n'), ()=>{}))),

@@ -2,51 +2,51 @@ const slugid = require('slugid')
 const async = require('async')
 const {loadConfig,getLogger} = require('@kba/anno-config')
 
-function load(loadingModule) {
-    const config = loadConfig({
-        BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
-        STORE_MIDDLEWARES: ''
-    })
-    const log = require('@kba/anno-config').getLogger('store')
-    if (!loadingModule)
-        throw new Error("Must pass the loading module to Store.load")
-    if (!config.STORE)
-        throw new Error("No store configured. Set the ANNO_STORE env var or STORE config option.")
-    if (config.DEBUG)
-        console.log(`Loading store ${config.STORE} for ${loadingModule.filename}`)
+class Store {
 
-    var impl;
-    try {
-        impl = loadingModule.require(config.STORE)
-    } catch (err) {
-        console.log(err)
-        console.error(`Please install '${config.STORE}' configured as store`)
-        process.exit(1)
-    }
+    static load(loadingModule) {
+        const config = loadConfig({
+            BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
+            STORE_MIDDLEWARES: ''
+        })
+        const log = require('@kba/anno-config').getLogger('store')
+        if (!loadingModule)
+            throw new Error("Must pass the loading module to Store.load")
+        if (!config.STORE)
+            throw new Error("No store configured. Set the ANNO_STORE env var or STORE config option.")
+        if (config.DEBUG)
+            console.log(`Loading store ${config.STORE} for ${loadingModule.filename}`)
 
-    const store = new(impl)()
-    const middlewareModules = config.STORE_MIDDLEWARES
-        .split(',')
-        .map(s => s.trim())
-        .filter(s => s !== '')
-    log.silly('middlewares', middlewareModules)
-    async.eachSeries(middlewareModules, (middlewareModule, next) => {
-        var middlewareImpl;
+        var impl;
         try {
-            log.silly(`Loading ${middlewareModule}`)
-            middlewareImpl = loadingModule.require(middlewareModule)
+            impl = loadingModule.require(config.STORE)
         } catch (err) {
             console.log(err)
-            console.error(`Please install '${middlewareModule}' configured as middleware`)
+            console.error(`Please install '${config.STORE}' configured as store`)
             process.exit(1)
         }
-        store.use(new (middlewareImpl)())
-        next()
-    })
-    return store
-}
 
-class Store {
+        const store = new(impl)()
+        const middlewareModules = config.STORE_MIDDLEWARES
+            .split(',')
+            .map(s => s.trim())
+            .filter(s => s !== '')
+        log.silly('middlewares', middlewareModules)
+        async.eachSeries(middlewareModules, (middlewareModule, next) => {
+            var middlewareImpl;
+            try {
+                log.silly(`Loading ${middlewareModule}`)
+                middlewareImpl = loadingModule.require(middlewareModule)
+            } catch (err) {
+                console.log(err)
+                console.error(`Please install '${middlewareModule}' configured as middleware`)
+                process.exit(1)
+            }
+            store.use(middlewareImpl())
+            next()
+        })
+        return store
+    }
 
     constructor() {
         this.config = loadConfig()
@@ -63,11 +63,11 @@ class Store {
         const log = getLogger('store')
         log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
-            middleware.process(ctx, (...args) => {
-                // console.log(`ctx after ${middleware.constructor.name}`, ctx)
+            middleware(ctx, function process(...args) {
+                log.silly(`ctx after ${middleware.constructor.name}`, ctx)
                 next(...args)
             })
-        }, (err, pass) => {
+        }, function(err, pass) {
             if (err) return cb(err)
             this[impl](ctx, cb)
         })
@@ -256,6 +256,4 @@ class Store {
 
 }
 
-const storeTest = require('./store-test')
-
-module.exports = {Store, load, storeTest}
+module.exports = Store

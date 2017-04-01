@@ -1,35 +1,29 @@
-DROP TABLE IF EXISTS "users";
-CREATE TABLE users (
-  user_id int,
-  email varchar(255),
-  primary key(user_id)
-);
-
 DROP TABLE IF EXISTS "anno";
 CREATE TABLE anno (
-  anno_id int,
-  creator varchar(255),
-  primary key(anno_id),
-  foreign key (creator) references users(user_id)
+    anno_id varchar(40),
+    creator varchar(255),
+    created datetime,
+    modified datetime,
+
+    primary key(anno_id)
 );
 
 DROP TABLE IF EXISTS "anno_rev";
 CREATE TABLE anno_rev (
-  rev_id int,
-  rev_of int,
-  email varchar(255),
-  primary key(rev_id),
-  foreign key (rev_of) references anno(anno_id)
+    rev_id int,
+    anno_id int,
+    created datetime,
+
+    primary key(rev_id),
+    foreign key (anno_id) references anno(anno_id)
 );
 
-DROP TABLE IF EXISTS 'targets';
+DROP TABLE IF EXISTS 'target';
 CREATE TABLE targets (
-  target_id varchar(255),
-  target_type varchar(255),
-  target_body blob,
-  target_of int,
-  foreign key(target_of) references anno_rev(rev_id)
-);
+    target_id varchar(255),
+    target_type varchar(255),
+    target_body blob,
+    rev_id int,
 
-INSERT INTO users (email) VALUES ('john@doe');
-SELECT * FROM users;
+    foreign key(rev_id) references anno_rev(rev_id)
+);

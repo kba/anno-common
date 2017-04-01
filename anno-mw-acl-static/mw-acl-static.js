@@ -13,4 +13,9 @@ class AclStatic extends acl {
 
 }
 
-module.exports = AclStatic
+module.exports = function () {
+    const instance = new AclStatic()
+    return function AclStaticMiddleware(...args) {
+        return instance.process(...args)
+    }
+}

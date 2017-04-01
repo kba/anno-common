@@ -1,4 +1,4 @@
-const {Store} = require('@kba/anno-store')
+const Store = require('@kba/anno-store')
 const schema = require('@kba/anno-schema')
 const async = require('async')
 const errors = require('@kba/anno-errors')

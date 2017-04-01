@@ -3,4 +3,4 @@ process.env.ANNO_MONGODB_URL = `mongodb://localhost:32123/anno`
 
 const MongodbStore = require('./store-mongodb')
 const store = new MongodbStore()
-require('@kba/anno-store').storeTest(store, () => {})
+require('../anno-store/store-test')(store, () => {})

@@ -26,6 +26,7 @@
     "jsonld-rapper": "^0.2.4",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
+    "mustache": "^2.3.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
