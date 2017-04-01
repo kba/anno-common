@@ -15,6 +15,7 @@ serve: swagger-ui
 
 .PHONY: start
 start:
+	mkdir -p $(TEMPDIR)
 	if [ ! -e $(PIDFILE) ];then \
 		ANNO_STORE='@kba/anno-store-file' \
 		ANNO_NEDB_DIR='$(TEMPDIR)' \
