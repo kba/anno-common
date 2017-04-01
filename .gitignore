@@ -5,3 +5,4 @@ node_modules
 fixtures
 **/npm-debug.log
 **/npm-debug.log.*
+/dist

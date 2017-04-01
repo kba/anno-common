@@ -60,6 +60,5 @@ clean:
 .PHONY: docs
 docs:
 	$(MKDIR) docs
-	node -e 'console.log(JSON.stringify(require("./anno-schema/schema.js").jsonldContext, null, 2));' \
-		> docs/context.jsonld
-	git commit -m 'updated docs' docs && git push
+	cp anno-schema/context.json docs/context.jsonld
+	git commit --edit -m 'updated docs' docs && git push
