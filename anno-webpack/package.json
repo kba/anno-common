@@ -1,0 +1,33 @@
+{
+  "name": "@kba/anno-webpack",
+  "version": "0.0.1",
+  "description": "Browser version",
+  "main": "entry.js",
+  "scripts": {
+    "min": "webpack -p --output-filename=anno.min.js",
+    "dev": "webpack -d --output-filename=anno.js",
+    "watch": "webpack -w -d"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-webpack#readme",
+  "dependencies": {
+    "@kba/anno-config": "^0.0.1",
+    "@kba/anno-schema": "^0.0.1",
+    "@kba/anno-errors": "^0.0.1",
+    "@kba/anno-store": "^0.0.1",
+    "@kba/anno-store-http": "^0.0.1",
+    "@kba/anno-store-memory": "^0.0.1",
+    "@kba/anno-mw-basicauth": "^0.0.1",
+    "@kba/anno-mw-httpheaders": "^0.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "json-loader": "^0.5.4",
+    "webpack": "^2.3.2"
+  }
+}
+

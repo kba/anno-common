@@ -58,7 +58,22 @@ clean:
 	$(RM) $(TEMPDIR)
 
 .PHONY: docs
-docs:
+docs: webpack webpack-min
 	$(MKDIR) docs
 	cp anno-schema/context.json docs/context.jsonld
+	$(MKDIR) docs/dist
+	cp -r dist/* docs/dist
 	git commit --edit -m 'updated docs' docs && git push
+
+.PHONY: webpack
+webpack:
+	cd anno-webpack && \
+		webpack -d && \
+		webpack -p --config  webpack.config.fixtures.js
+
+.PHONY: webpack-min
+webpack-min:
+	cd anno-webpack && webpack -p --output-filename anno.min.js
+
+foo:
+	echo $(TERM)
