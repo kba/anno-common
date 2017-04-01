@@ -1,1 +1,1 @@
-web: make -C anno-server serve
+web: lerna bootstrap --loglevel silly && make -C anno-server serve
