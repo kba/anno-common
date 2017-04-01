@@ -10,9 +10,10 @@ class HttpStore extends Store {
         this.config = require('@kba/anno-config').loadConfig({
             BASE_URL: 'http://localhost:3000/anno'
         })
-        this._httpClient = axios.create({
+        const options = {
             baseURL: this.config.BASE_URL
-        })
+        }
+        this._httpClient = axios.create(options)
     }
 
     /* @override */
@@ -23,7 +24,7 @@ class HttpStore extends Store {
     /* @override */
     _create(options, cb) {
         const {annos} = options
-        this._httpClient.post('/', annos)
+        this._httpClient.post('/', annos, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => cb(err.statusCode))
     }
@@ -32,7 +33,7 @@ class HttpStore extends Store {
     _get(options, cb) {
         const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.get(annoUrl)
+        this._httpClient.get(annoUrl, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if(err.response.status === 404) {
@@ -45,7 +46,7 @@ class HttpStore extends Store {
     /* @override */
     _search(options, cb) {
         const {query} = options
-        this._httpClient.get('/' + '?' + querystring.stringify(query))
+        this._httpClient.get('/' + '?' + querystring.stringify(query), this._configFromOptions(options))
             .then(resp => {
                 const col = resp.data
                 if (col.total === 0) {
@@ -61,7 +62,7 @@ class HttpStore extends Store {
     _revise(options, cb) {
         const {annoId, anno} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.put(annoUrl, anno)
+        this._httpClient.put(annoUrl, anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if(err.response.status === 404) {
@@ -75,7 +76,7 @@ class HttpStore extends Store {
     _delete(options, cb) {
         const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.delete(annoUrl)
+        this._httpClient.delete(annoUrl, this._configFromOptions(options))
             .then(() => cb())
             .catch(err => {
                 if(err.response.status === 404) {
@@ -87,7 +88,7 @@ class HttpStore extends Store {
 
     /* @override */
     _wipe(options, cb) {
-        return this._httpClient.delete('/')
+        return this._httpClient.delete('/', this._configFromOptions(options))
             .then(() => cb())
             .catch(err => {
                 return cb(err.statusCode)
@@ -97,6 +98,20 @@ class HttpStore extends Store {
     /* @override */
     _disconnect(options, cb) {
         return cb()
+    }
+
+    // ----------------------------------------
+    // PRIVATE
+    // ----------------------------------------
+    _configFromOptions(options) {
+        const ret = {}
+        // BasicAuth
+        if (options.auth && options.auth.username) {
+            ret.auth = ret.auth || {}
+            ret.auth.username = options.auth.username
+            ret.auth.password = options.auth.password
+        }
+        return ret
     }
 
 }
