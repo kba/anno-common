@@ -211,6 +211,17 @@ class Store {
         }), cb)
     }
 
+    /**
+     * Reply to an annotation
+     */
+    reply(annoId, anno, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        this._callMethod(Object.assign(options, {
+            method: 'reply',
+            annoId,
+            anno,
+        }), cb)
+    }
 
 
     /*

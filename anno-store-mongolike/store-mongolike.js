@@ -66,6 +66,7 @@ class MongolikeStore extends Store {
             const created = new Date().toISOString()
             anno.modified = created
             anno.created = created
+            anno._replies = []
             anno._revisions[0].created = created
             anno._id = this._genid()
             return anno
@@ -87,11 +88,13 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
+        // TODO replies
         var [_id, _revid] = annoId.split(/-rev-/)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
             if (!existingAnno) return cb(errors.annotationNotFound(_id))
             ;['canonical', 'via', 'hasVersion', 'versionOf'].forEach(prop => {
+                // TODO should be deepEqual not ===
                 if (anno[prop] && anno[prop] !== existingAnno[prop]) {
                     return cb(errors.readonlyValue(annoId, 'canonical'))
                 }
@@ -159,6 +162,20 @@ class MongolikeStore extends Store {
                     if (err) return cb(err)
                     return cb(null, docs.map(doc => this._toJSONLD(doc, {skipContext: true})))
                 })
+        })
+    }
+
+    /* @override */
+    _reply(options, cb) {
+        const {anno, annoId} = options
+        // TODO take fragment identifier from target URL if any
+        // TODO handle selectors in pre-existing target
+        this.get(annoId, options, (err, existingAnno) => {
+            if (err)
+                return cb(errors.annotationNotFound(annoId))
+            // TODO handle _replies being null
+            const nrReplies = existingAnno._replies.length
+            const replyId = nrReplies
         })
     }
 
