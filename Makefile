@@ -101,7 +101,9 @@ site: $(SITEDIR)
 	cp anno-schema/context.json $(SITEDIR)/context.jsonld
 	$(MKDIR) $(SITEDIR)/dist/
 	cp anno-webpack/dist/* $(SITEDIR)/dist/
+	$(MAKE) -C $(SITEDIR) clean
+	cd $(SITEDIR) && $(MAKE) -j4 STAGE=prod all
 
 .PHONY: site-deploy
-site-deploy: site webpack
-	cd $(SITEDIR) && git commit --edit -m 'updated docs' docs && git push
+site-deploy: site
+	cd $(SITEDIR) && git add . && git commit --edit -m 'updated docs' && git push
