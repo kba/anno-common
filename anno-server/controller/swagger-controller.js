@@ -9,6 +9,7 @@ module.exports = ({config}) => {
 
     const router = Router()
 
+    // TODO HACK
     const swaggerDef = JSON.parse(JSON.stringify(annoSchema.openapi)
         .replace('localhost:3000', config.BASE_URL.replace(/^https?:\/\//, '')))
 
