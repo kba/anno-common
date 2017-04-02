@@ -1,7 +1,11 @@
-PATH := $(PWD)/node_modules/.bin:$(PATH)
+WORKDIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+PATH := $(WORKDIR)node_modules/.bin:$(PATH)
 STAGE = dev
-PUG = pug -P -O src/$(STAGE).json -o $(PWD)
-HTML = index.html validator.html context.html
+PUG = pug -P -O src/$(STAGE).json -o $(WORKDIR)
+HTML = \
+	$(WORKDIR)index.html \
+	$(WORKDIR)validator.html \
+	$(WORKDIR)context.html
 
 all: $(HTML)
 
@@ -12,6 +16,6 @@ clean:
 watch:
 	$(PUG) -w src/*.pug
 
-%.html: src/%.pug
+$(WORKDIR)%.html: $(WORKDIR)src/%.pug
 	mkdir -p "$(dir $@)"
-	$(PUG) $<
+	cd $(WORKDIR) && $(PUG) $<

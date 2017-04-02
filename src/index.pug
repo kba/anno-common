@@ -1,11 +1,12 @@
 doctype html
 html
 	head
-		each s in scripts
-			script(src=`./dist/${s}`)
-		script(src="x./tests.js")
+		include include/head.pug
 	body
-		h1 anno
-		ul
-			li
-				a(href="./validator.html") Validate stuff
+		include include/nav.pug
+
+		h1 Not much yet
+
+		include include/foot.pug
+
+		script(src="x./tests.js")
