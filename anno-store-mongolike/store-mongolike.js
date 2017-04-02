@@ -47,37 +47,31 @@ class MongolikeStore extends Store {
     /* @override */
     _create(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        var annos = JSON.parse(JSON.stringify(options.annos))
-        var wasArray = Array.isArray(annos)
-        if (!wasArray) {
-            annos = [annos]
-        }
+        var anno = JSON.parse(JSON.stringify(options.anno))
         const validationErrors = []
-        annos = annos.map(anno => {
-            anno = this._deleteId(anno)
-            const validFn = schema.validate.Annotation
-            // console.log(anno)
-            if (!validFn(anno)) {
-                return validationErrors.push(errors.invalidAnnotation(anno, validFn.errors))
-            }
-            anno = this._normalizeTarget(anno)
-            anno = this._normalizeType(anno)
-            anno._revisions = [JSON.parse(JSON.stringify(anno))]
-            const created = new Date().toISOString()
-            anno.modified = created
-            anno.created = created
-            anno._revisions[0].created = created
-            anno._id = this._genid()
-            return anno
-        })
+        anno = this._deleteId(anno)
+        const validFn = schema.validate.Annotation
+        // console.log(anno)
+        if (!validFn(anno)) {
+            return validationErrors.push(errors.invalidAnnotation(anno, validFn.errors))
+        }
+        anno = this._normalizeTarget(anno)
+        anno = this._normalizeType(anno)
+        anno._revisions = [JSON.parse(JSON.stringify(anno))]
+        const created = new Date().toISOString()
+        anno.modified = created
+        anno.created = created
+        anno._revisions[0].created = created
+        anno._id = this._genid()
         if (validationErrors.length > 0) return cb(errors.invalidAnnotation({validationErrors}))
-        this.db.insert(annos, (err, savedAnnos) => {
-            // Mongodb returns an object describing the result, nedb returns just the results
-            var {insertedIds} = savedAnnos
-            if (!insertedIds) insertedIds = savedAnnos.map(savedAnno => savedAnno._id)
+        this.db.insert(anno, (err, savedAnno) => {
+            // TODO differentiate, use errors from anno-errors
             if (err) return cb(err)
-            if (!wasArray) return this.get(insertedIds[0], options, cb)
-            return this.get(insertedIds, options, cb)
+            // Mongodb returns an object describing the result, nedb returns just the results
+            if ('insertedIds' in savedAnno)
+                return this.get(savedAnno.insertedIds[0], options, cb)
+            else
+                return this.get(savedAnno._id, options, cb)
         })
     }
 

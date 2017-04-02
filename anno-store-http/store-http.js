@@ -24,8 +24,8 @@ class HttpStore extends Store {
 
     /* @override */
     _create(options, cb) {
-        const {annos} = options
-        this._httpClient.post('/', annos, this._configFromOptions(options))
+        const {anno} = options
+        this._httpClient.post('/', anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => cb(err.statusCode))
     }

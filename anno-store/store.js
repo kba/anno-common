@@ -146,17 +146,17 @@ class Store {
     /**
      * Create an annotation.
      *
-     * @param {Object|Array<Object>} annosToCreate
+     * @param {Object} anno
      * @param {Options} options
      * @param String options.slug Proposal for the ID to create
      * @param {String} options.user
      * @param {function} callback
      */
-    create(annos, options, cb) {
+    create(anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'create',
-            annos,
+            anno,
         }), cb)
     }
 
