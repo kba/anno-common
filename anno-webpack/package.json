@@ -2,10 +2,11 @@
   "name": "@kba/anno-webpack",
   "version": "0.0.1",
   "description": "Browser version",
-  "main": "entry.js",
+  "main": "dist/anno.min.js",
   "scripts": {
-    "min": "webpack -p --output-filename=anno.min.js",
-    "dev": "webpack -d --output-filename=anno.js",
+    "fixtures": "webpack -p --config webpack.config.fixtures.js",
+    "dev": "webpack -d",
+    "min": "webpack -p",
     "watch": "webpack -w -d"
   },
   "author": "kba",

@@ -6,3 +6,5 @@ fixtures
 **/npm-debug.log
 **/npm-debug.log.*
 /dist
+anno-webpack/dist
+gh-pages

@@ -6,11 +6,11 @@ let prodBuild = require('yargs').argv.p || false;
 
 const config = {
     entry: {
-        core: './core.js',
+        core: './entry.js',
     },
     node: { fs: "empty" },
     output: {
-        path: path.resolve(__dirname, '..', 'docs', 'dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: `anno${prodBuild ? '.min' : ''}.js`,
         library: 'Anno',
         libraryTarget: 'umd'
