@@ -1,6 +1,7 @@
 const tap = require('tap')
 const schema = require('.')
 const fs = require('fs')
+const fixtures = require('@kba/anno-fixtures')
 
 tap.test('smoketest', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
@@ -18,7 +19,6 @@ function testFixture(t, type, okOrNotOk, name) {
     }
 }
 
-const fixtures = require('@kba/anno-fixtures')
 if (process.env.FIXTURE) {
     const fixture = fixtures
     tap.test(process.env.FIXTURE, t => {
@@ -35,4 +35,11 @@ if (process.env.FIXTURE) {
         okKeys.forEach(k => testFixture(t, type, 'ok', k))
         notOkKeys.forEach(k => testFixture(t, type, 'notOk', k))
     })
+})
+
+tap.test('openapi respects config', t => {
+    process.env.ANNO_OPENAPI_HOST = 'example.org'
+    t.equals(schema.openapi.host, process.env.ANNO_OPENAPI_HOST, 'OPENAPI_HOST')
+    t.equals(schema.openapi.basePath, process.env.ANNO_OPENAPI_BASEPATH, 'OPENAPI_BASEPATH')
+    t.end()
 })

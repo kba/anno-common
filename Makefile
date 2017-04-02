@@ -106,4 +106,4 @@ site: $(SITEDIR)
 
 .PHONY: site-deploy
 site-deploy: site
-	cd $(SITEDIR) && git add . && git commit --edit -m 'updated docs' && git push
+	cd $(SITEDIR) && git add . && git commit --edit -m "updated docs `date`" && git push

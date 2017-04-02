@@ -1,10 +1,12 @@
 const mustache = require('mustache')
+const {loadConfig} = require('@kba/anno-config')
 const ajv = require('ajv')({
     allErrors: true,
     errorDataPath: true,
     // verbose: true,
 });
-const config = require('@kba/anno-config').loadConfig({
+
+const defaults = {
     CONTEXT_URL: 'https://kba.github.io/anno/context.jsonld',
 
     // Swagger / OpenAPI
@@ -19,21 +21,25 @@ const config = require('@kba/anno-config').loadConfig({
     // // PROP_HAS_VERSION: 'ns:hasVersion',
     // PROP_VERSION_OF: 'http://purl.org/dcterms/versionOf',
     // // PROP_VERSION_OF: 'ns:versionOf',
-})
-
-function mustacheJSON(obj) {
-    return JSON.parse(mustache.render(JSON.stringify(obj), {config}))
 }
 
-const dataModel     = mustacheJSON(require('./data-model.json'))
-const jsonldContext = mustacheJSON(require('./context.json'))
-const openapi       = mustacheJSON(require('./openapi.json'))
+function mustacheJSON(obj, ctx) {
+    return JSON.parse(mustache.render(JSON.stringify(obj), ctx))
+}
+
+const dataModel     = require('./data-model.json')
+const jsonldContext = require('./context.json')
+const openapi       = require('./openapi.json')
 openapi.definitions = dataModel.definitions
 
 module.exports = {
-    openapi: openapi,
+    get openapi() {
+        return mustacheJSON(openapi, loadConfig(defaults))
+    },
     definitions: dataModel.definitions,
-    jsonldContext: jsonldContext,
+    get jsonldContext() {
+        return mustacheJSON(jsonldContext, loadConfig(defaults))
+    },
     contentType: {
         'anno':  'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',
         'annox': 'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',

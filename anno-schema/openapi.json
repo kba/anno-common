@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
-  "basePath": "{{{ config.OPENAPI_BASEPATH }}}",
-  "host": "{{ config.OPENAPI_HOST }}",
+  "basePath": "{{{ OPENAPI_BASEPATH }}}",
+  "host": "{{ OPENAPI_HOST }}",
   "info": {
     "title": "Anno Server API",
     "version": "0.0.1",

@@ -10,6 +10,5 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-config#readme",
   "author": "kba",
-  "license": "MIT",
-  "devDependencies": { }
+  "license": "MIT"
 }
