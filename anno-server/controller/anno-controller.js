@@ -165,7 +165,8 @@ module.exports = ({store, guard, config}) => {
     // PUT /anno/{annoId}
     //
     router.put('/:annoId', (req, resp, next) => {
-        store.revise(req.params.annoId, req.body, (err, doc) => {
+        const anno = prune(req.body)
+        store.revise(req.params.annoId, anno, (err, doc) => {
             if (err) return next(err)
             resp.status(201)
             req.params.annoId = doc.id

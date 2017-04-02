@@ -10,7 +10,7 @@ module.exports = ({config}) => {
     const router = Router()
 
     const swaggerDef = JSON.parse(JSON.stringify(annoSchema.openapi)
-        .replace('localhost:3000', config.BASE_URL))
+        .replace('localhost:3000', config.BASE_URL.replace(/^https?:\/\//, '')))
 
     const swaggerDefAsJSON = JSON.stringify(swaggerDef, null, 2)
     function sendJSON(req, resp) {
