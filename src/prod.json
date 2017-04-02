@@ -1,0 +1,6 @@
+{
+  "scripts": [
+    "./dist/anno.min.js",
+    "./dist/anno-fixtures.js",
+  ]
+}

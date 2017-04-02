@@ -1,0 +1,11 @@
+doctype html
+html
+	head
+		each s in scripts
+			script(src=`./dist/${s}`)
+		script(src="x./tests.js")
+	body
+		h1 anno
+		ul
+			li
+				a(href="./validator.html") Validate stuff

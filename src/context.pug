@@ -1,0 +1,16 @@
+doctype html
+html
+	head
+		include include/head.pug
+	body
+		include include/nav.pug
+
+		.container
+			.row
+				.col.sm-12
+					pre
+						include ../context.jsonld
+
+		include include/foot.pug
+
+		script(src="./validator.js")
