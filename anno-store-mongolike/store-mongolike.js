@@ -27,7 +27,7 @@ class MongolikeStore extends Store {
         var annoId = options.annoId
         const projection = this._projectionFromOptions(options)
         annoId = this._idFromURL(annoId)
-        var [_id, _revid] = annoId.split(/-rev-/)
+        var [_0, _id, _revid] = annoId.match(/(.*?)(?:-rev-(\d+))?$/)
         const query = {_id, deleted: {$exists: false}}
         this.db.findOne(query, projection, (err, doc) => {
             if (err) return cb(err)
@@ -66,7 +66,6 @@ class MongolikeStore extends Store {
             const created = new Date().toISOString()
             anno.modified = created
             anno.created = created
-            anno._replies = []
             anno._revisions[0].created = created
             anno._id = this._genid()
             return anno
@@ -88,7 +87,6 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
-        // TODO replies
         var [_id, _revid] = annoId.split(/-rev-/)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
