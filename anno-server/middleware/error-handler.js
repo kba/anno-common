@@ -1,4 +1,4 @@
-module.exports = ({config}) => {
+module.exports = () => {
     return (err, req, resp, next) => {
         if (err && err.code) {
             resp.status(err.code)

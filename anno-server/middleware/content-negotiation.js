@@ -1,6 +1,6 @@
 const jsonldRapper = require('jsonld-rapper')
 
-module.exports = ({config}) => {
+module.exports = () => {
     const j2r = new jsonldRapper()
     return (req, resp, next) => {
         if (req.header('Accept').match(/text\/(turtle|n3)/)) {

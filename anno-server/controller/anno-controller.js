@@ -1,6 +1,7 @@
-const querystring = require('querystring')
-const {Router} = require('express')
-const {prune} = require('@kba/anno-util')
+const querystring  = require('querystring')
+const {Router}     = require('express')
+const {prune}      = require('@kba/anno-util')
+const {loadConfig} = require('@kba/anno-config')
 
 function optionsFromRequest(req) {
     const ret = {}
@@ -13,10 +14,10 @@ function optionsFromRequest(req) {
     return ret
 }
 
-module.exports = ({store, guard, config}) => {
+module.exports = ({store}) => {
 
-    const contentNegotiation = require('../middleware/content-negotiation')({config})
-    const errorHandler = require('../middleware/error-handler')({config})
+    const contentNegotiation = require('../middleware/content-negotiation')()
+    const errorHandler = require('../middleware/error-handler')()
 
     function getAnnotation(req, resp, next) {
         const options = optionsFromRequest(req)
@@ -33,7 +34,7 @@ module.exports = ({store, guard, config}) => {
 
     // TODO
     function getCollection(req, resp, next) {
-        var colUrl = config.BASE_URL + '/anno/'
+        var colUrl = loadConfig().BASE_URL + '/anno/'
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         const options = optionsFromRequest(req)

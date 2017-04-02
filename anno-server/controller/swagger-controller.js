@@ -1,17 +1,12 @@
 const {Router} = require('express')
 const yaml = require('js-yaml')
-const fs = require('fs')
 const annoSchema = require('@kba/anno-schema')
-
-const mustache = require('mustache')
 
 module.exports = ({config}) => {
 
     const router = Router()
 
-    // TODO HACK
-    const swaggerDef = JSON.parse(JSON.stringify(annoSchema.openapi)
-        .replace('localhost:3000', config.BASE_URL.replace(/^https?:\/\//, '')))
+    const swaggerDef = annoSchema.openapi
 
     const swaggerDefAsJSON = JSON.stringify(swaggerDef, null, 2)
     function sendJSON(req, resp) {
