@@ -233,7 +233,13 @@ class Store {
      */
 
     _idFromURL(url) {
+        // TODO don't hardcode anno
         return url.replace(this.config.BASE_URL + '/anno/', '')
+    }
+
+    _splitIdRev(str) {
+        var [_0, _id, _revid] = str.match(/(.*?)(?:-rev-(\d+))?$/)
+        return {_id, _revid}
     }
 
     // TODO no idempotency of targets with normalization -> disabled for now

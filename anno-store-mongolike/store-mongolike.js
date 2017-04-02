@@ -2,9 +2,7 @@ const Store = require('@kba/anno-store')
 const schema = require('@kba/anno-schema')
 const async = require('async')
 const errors = require('@kba/anno-errors')
-const config = require('@kba/anno-config').loadConfig({
-    COLLECTION: 'default'
-})
+const {loadConfig} = require('@kba/anno-config')
 
 class MongolikeStore extends Store {
 
@@ -27,7 +25,7 @@ class MongolikeStore extends Store {
         var annoId = options.annoId
         const projection = this._projectionFromOptions(options)
         annoId = this._idFromURL(annoId)
-        var [_0, _id, _revid] = annoId.match(/(.*?)(?:-rev-(\d+))?$/)
+        var {_id, _revid} = this._splitIdRev(annoId)
         const query = {_id, deleted: {$exists: false}}
         this.db.findOne(query, projection, (err, doc) => {
             if (err) return cb(err)
@@ -57,6 +55,20 @@ class MongolikeStore extends Store {
         }
         anno = this._normalizeTarget(anno)
         anno = this._normalizeType(anno)
+
+        // TODO Handle replies
+        // TODO move to util
+        // const targetUrl = (typeof anno.target === 'string')
+        //     ? anno.target : anno.target.id
+        //     ? anno.target.id : anno.target.source
+        //     ? anno.target.source : anno.target.scope
+        //     ? anno.target.scope : ''
+        // if (targetUrl.match(loadConfig().BASE_URL)) {
+        //     const replyToId = this._idFromURL(targetUrl)
+        //     anno._replyTo = 
+        // }
+
+        // Handle revisions
         anno._revisions = [JSON.parse(JSON.stringify(anno))]
         const created = new Date().toISOString()
         anno.modified = created
@@ -81,7 +93,7 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
-        var [_id, _revid] = annoId.split(/-rev-/)
+        var {_id, _revid} = this._splitIdRev(annoId)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
             if (!existingAnno) return cb(errors.annotationNotFound(_id))

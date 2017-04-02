@@ -29,7 +29,6 @@ module.exports = function testStore(store, testStoreCallback) {
         async.waterfall([
             cb => store.create(input1, cb),
             (saved, cb) => {
-                console.log(saved)
                 t.equals(saved.target.source, input1.target, 'target kept (string)')
                 savedId = saved.id
                 savedRevId = `${savedId}-rev-1`
