@@ -1,7 +1,7 @@
 PATH := $(PWD)/node_modules/.bin:$(PATH)
 STAGE = dev
 PUG = pug -P -O src/$(STAGE).json -o $(PWD)
-HTML = index.html validator.html
+HTML = index.html validator.html context.html
 
 all: $(HTML)
 
