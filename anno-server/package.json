@@ -17,6 +17,7 @@
     "@kba/anno-fixtures": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
+    "@kba/anno-util": "^0.0.1",
     "@kba/anno-store-file": "^0.0.1",
     "async": "^2.1.5",
     "body-parser": "^1.17.0",

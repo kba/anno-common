@@ -1,0 +1,14 @@
+{
+  "name": "@kba/anno-util",
+  "version": "0.0.1",
+  "description": "Utility functions",
+  "main": "util.js",
+  "scripts": {
+    "test": "tap *.test.js"
+  },
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-util#readme",
+  "author": "kba",
+  "license": "MIT"
+}
