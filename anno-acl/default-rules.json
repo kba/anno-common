@@ -109,8 +109,15 @@
     "Allow users to revise or delete their own annotations"
   ],
   [
+    {
+      "method": "init"
+    },
+    true,
+    "Allow store initialization"
+  ],
+  [
     {},
     false,
-    "Forbid by default"
+    "Not authorized by acl rules"
   ]
 ]
