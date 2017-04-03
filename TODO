@@ -40,4 +40,5 @@ mongo store
 [ ] store.search should return a Collection not an array
 [ ] honor Prefer: return=representation / return=minimal to imply skipVersions/metadataOnly, Preference-Applied sent back
 [X] schema: use getters and load config
-[ ] fix perm.nedb / acl
+[X] fix perm.nedb / acl
+[ ] ACL rules should emit status/message instead of true/false

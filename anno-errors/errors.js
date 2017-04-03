@@ -25,4 +25,11 @@ module.exports = {
         return err
     },
 
+    forbidden(reason, ctx) {
+        const err = new Error(`ACL forbids it: ${reason}`)
+        err.code = 403
+        err.ctx = ctx
+        return err
+    }
+
 }
