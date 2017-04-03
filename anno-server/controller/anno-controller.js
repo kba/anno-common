@@ -11,6 +11,9 @@ function optionsFromRequest(req) {
             delete req.query[option]
         }
     })
+    ;['user'].forEach(option => {
+        if (req[option]) ret[option] = req[option]
+    })
     return ret
 }
 
@@ -103,7 +106,7 @@ module.exports = ({store}) => {
     //
     router.post('/', (req, resp, next) => {
         const anno = prune(req.body)
-        store.create(anno, (err, anno) => {
+        store.create(anno, optionsFromRequest(req), (err, anno) => {
             if (err) return next(err)
             resp.status(201)
             req.params.annoId = anno.id
@@ -129,7 +132,7 @@ module.exports = ({store}) => {
     //
     router.put('/:annoId', (req, resp, next) => {
         const anno = prune(req.body)
-        store.revise(req.params.annoId, anno, (err, doc) => {
+        store.revise(req.params.annoId, anno, optionsFromRequest(req), (err, doc) => {
             if (err) return next(err)
             resp.status(201)
             req.params.annoId = doc.id
@@ -141,7 +144,7 @@ module.exports = ({store}) => {
     // DELETE /anno/{annoId}
     //
     router.delete('/:annoId', (req, resp, next) => {
-        store.delete(req.params.annoId, (err, doc) => {
+        store.delete(req.params.annoId, optionsFromRequest(req), (err, doc) => {
             if (err) return next(err)
             resp.status(204)
             return resp.send(doc)
@@ -156,7 +159,7 @@ module.exports = ({store}) => {
     // POST /anno/{annoId}/reply
     //
     router.post(':annoId/reply', (req, resp, next) => {
-        store.reply(req.params.annoId, req.body, (err, doc) => {
+        store.reply(req.params.annoId, req.body, optionsFromRequest(req), (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
         })
@@ -166,7 +169,7 @@ module.exports = ({store}) => {
     // DELETE /anno
     //
     router.delete('/', (req, resp, next) => {
-        store.wipe((err) => {
+        store.wipe(optionsFromRequest(req), (err) => {
             if (err) return next(err)
             resp.end()
         })
