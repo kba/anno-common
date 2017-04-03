@@ -1,10 +1,12 @@
 const {Router} = require('express')
 const yaml = require('js-yaml')
 const annoSchema = require('@kba/anno-schema')
+const {loadConfig} = require('@kba/anno-config')
 
-module.exports = ({config}) => {
+module.exports = () => {
 
     const router = Router()
+    const config = loadConfig()
 
     const swaggerDef = annoSchema.openapi
 

@@ -16,7 +16,9 @@ function UserMemoryMiddleware() {
 
     return function(ctx, cb) {
         if (!( 'user' in ctx )) return cb()
-        const userId = typeof ctx.user === 'string' ? ctx.user : ctx.user.id
+        const userId = typeof ctx.user === 'string' ? ctx.user 
+            : ctx.user.user ? ctx.user.user 
+            : ctx.user.id
         if (userId in this.users) {
             // console.log(`Found user ${userId}`, this.users[userId])
             if (typeof ctx.user === 'string') ctx.user = {id: userId}
