@@ -1,11 +1,10 @@
 const express = require('express')
 const async = require('async')
-const nedb = require('nedb')
 const morgan = require('morgan')
 const {loadConfig} = require('@kba/anno-config')
+process.env.ANNO_LOGLEVEL = 'silly'
 
 loadConfig({
-    JWT_SECRET: 'S3cr3t!',
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
 })
@@ -13,30 +12,28 @@ const errorHandler = require('./middleware/error-handler')()
 
 function start(app, cb) {
     const store = require('@kba/anno-store').load(module)
-    const permDB = new nedb({filename: `./perm.nedb`})
+    store.use(require('@kba/anno-mw-user-static')())
+    store.use(require('@kba/anno-mw-acl-static')())
 
     const cors       = require('./middleware/cors')()
     const jsonParser = require('./middleware/json-parser')()
-    // const jwtGuard   = require('./middleware/jsonwebtoken')(permDB, config)
+    const jsonwebtoken   = require('./middleware/jsonwebtoken')()
 
     const routes = [ 'anno', 'swagger', 'token' ]
     store.init(err => {
         if (err) return cb(err)
-        permDB.loadDatabase(err => {
-            if (err) return cb(err)
-            async.each(routes, (routerPath, done) => {
-                const routerFn = require(`./controller/${routerPath}-controller`)
-                console.log(`Binding localhost:${loadConfig().PORT}/${routerPath}`)
-                app.use(`/${routerPath}`,
-                    cors,
-                    jsonParser,
-                    routerFn({store}))
-                done()
-            }, (err) => {
-                if (err) return cb(err)
-                return cb()
-            })
-        })
+        app.use('/anno',
+            cors,
+            jsonwebtoken,
+            jsonParser,
+            require('./controller/anno-controller')({store}))
+        app.use('/swagger',
+            cors,
+            require('./controller/swagger-controller')())
+        app.use('/token',
+            cors,
+            require('./controller/token-controller')({store}))
+        return cb()
     })
 }
 
