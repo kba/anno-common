@@ -1,19 +1,20 @@
 const nedb = require('nedb')
 const fs = require('fs')
 const Store = require('@kba/anno-store-mongolike')
+const {loadConfig,getLogger} = require('@kba/anno-config')
 
 class FileStore extends Store {
 
     constructor() {
         super()
-        this.config = require('@kba/anno-config').loadConfig({
+        const config = loadConfig({
             STORE_FILE: `${process.env.HOME}/.local/cache/anno.nedb`,
             COLLECTION: 'default'
         })
 
         // this.dbfilename = `${config.STORE_FILE}/anno-${config.COLLECTION}.nedb`
-        this.dbfilename = this.config.STORE_FILE
-        if (this.config.DEBUG) console.error(`nedb saved as ${this.dbfilename}`)
+        this.dbfilename = config.STORE_FILE
+        getLogger('store-file').debug(`nedb saved as ${this.dbfilename}`)
         this.db = new nedb({filename: this.dbfilename})
     }
 
