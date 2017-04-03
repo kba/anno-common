@@ -33,7 +33,7 @@ securityDefinitions:
 ##############################################################################
 paths:
 
-  '/{{ config.OPENAPI_PATH }}':
+  '/{{ OPENAPI_PATH }}':
 
     #
     # HEAD /
@@ -113,7 +113,7 @@ paths:
         200:
           description: all okay
 
-  '/{{ config.OPENAPI_PATH }}/{annoId}':
+  '/{{ OPENAPI_PATH }}/{annoId}':
 
     #
     # GET /anno/{annoId}
