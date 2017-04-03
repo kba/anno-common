@@ -1,19 +1,15 @@
 const expressJWT = require('express-jwt')
+const {loadConfig} = require('@kba/anno-config')
 
-module.exports = (permDB, config) => {
-    const jwtMiddleware = expressJWT({secret: config.JWT_SECRET})
-    return (perm) => {
-        return (req, res, next) => {
-            return jwtMiddleware(req, res, () => {
-                if (!req.user || req.user.perm !== perm) {
-                    return next({
-                        status: 401,
-                        code: "no_permission",
-                        message: `You need the '${perm}' permission to access this resource`
-                    })
-                }
-                return next()
-            })
-        }
+module.exports = () => {
+    const secret = loadConfig({
+        JWT_SECRET: 'S3cr3t!',
+    }).JWT_SECRET
+    const jwt = expressJWT({secret})
+    return (req, resp, next) => {
+        jwt(req, resp, (err) => {
+            if (err) console.log("JWT Error", err)
+            next()
+        })
     }
 }
