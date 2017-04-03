@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@kba/anno-config": "^0.0.1",
+    "@kba/anno-errors": "^0.0.1",
     "sift-rule": "^0.1.0"
   }
 }
