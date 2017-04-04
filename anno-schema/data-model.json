@@ -38,108 +38,130 @@
       ]
     },
     "Annotation": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/AnnotationMetadata"
+      "type": "object",
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
         },
-        {
-          "type": "object",
-          "required": [
-            "target"
-          ],
-          "properties": {
-            "id": {
+        "created": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "modified": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "generated": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "creator": {
+          "oneOf": [
+            {
               "$ref": "#/definitions/iri"
             },
-            "canonical": {
-              "type": "string"
-            },
-            "via": {
-              "$ref": "#/definitions/iri"
-            },
-            "styledBy": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/iri"
-                },
-                {
-                  "$ref": "#/definitions/CssStylesheet"
-                }
-              ]
-            },
-            "body": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/iri"
-                },
-                {
-                  "$ref": "#/definitions/Resource"
-                },
-                {
-                  "$ref": "#/definitions/TextualBody"
-                },
-                {
-                  "$ref": "#/definitions/Choice"
-                },
-                {
-                  "$ref": "#/definitions/SpecificResource"
-                },
-                {
-                  "type": "array",
-                  "items": {
-                    "oneOf": [
-                      {
-                        "$ref": "#/definitions/iri"
-                      },
-                      {
-                        "$ref": "#/definitions/Resource"
-                      },
-                      {
-                        "$ref": "#/definitions/TextualBody"
-                      },
-                      {
-                        "$ref": "#/definitions/Choice"
-                      },
-                      {
-                        "$ref": "#/definitions/SpecificResource"
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            "target": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/iri"
-                },
-                {
-                  "$ref": "#/definitions/Resource"
-                },
-                {
-                  "$ref": "#/definitions/SpecificResource"
-                },
-                {
-                  "type": "array",
-                  "items": {
-                    "anyOf": [
-                      {
-                        "$ref": "#/definitions/iri"
-                      },
-                      {
-                        "$ref": "#/definitions/Resource"
-                      },
-                      {
-                        "$ref": "#/definitions/SpecificResource"
-                      }
-                    ]
-                  }
-                }
-              ]
+            {
+              "$ref": "#/definitions/Person"
             }
-          }
+          ]
+        },
+        "generator": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Software"
+            }
+          ]
+        },
+        "canonical": {
+          "type": "string"
+        },
+        "via": {
+          "$ref": "#/definitions/iri"
+        },
+        "styledBy": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/CssStylesheet"
+            }
+          ]
+        },
+        "body": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Resource"
+            },
+            {
+              "$ref": "#/definitions/TextualBody"
+            },
+            {
+              "$ref": "#/definitions/Choice"
+            },
+            {
+              "$ref": "#/definitions/SpecificResource"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/Resource"
+                  },
+                  {
+                    "$ref": "#/definitions/TextualBody"
+                  },
+                  {
+                    "$ref": "#/definitions/Choice"
+                  },
+                  {
+                    "$ref": "#/definitions/SpecificResource"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Resource"
+            },
+            {
+              "$ref": "#/definitions/SpecificResource"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/Resource"
+                  },
+                  {
+                    "$ref": "#/definitions/SpecificResource"
+                  }
+                ]
+              }
+            }
+          ]
         }
-      ]
+      }
     },
     "Resource": {
       "type": "object",
@@ -242,6 +264,19 @@
                 },
                 {
                   "$ref": "#/definitions/Selector"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/iri"
+                      },
+                      {
+                        "$ref": "#/definitions/Selector"
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -301,9 +336,22 @@
       ],
       "properties": {
         "type": {
-          "type": "string",
-          "enum": [
-            "TextualBody"
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "TextualBody"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": [
+                "TextualBody"
+              ]
+            }
           ]
         },
         "value": {
