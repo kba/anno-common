@@ -279,7 +279,7 @@ class Store {
     }
 
     _genid(slug='') {
-        return slug + slugid.v4()
+        return slug + slugid.nice()
     }
 
 }
