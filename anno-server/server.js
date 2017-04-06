@@ -12,12 +12,17 @@ const errorHandler = require('./middleware/error-handler')()
 
 function start(app, cb) {
     const store = require('@kba/anno-store').load(module)
-    // store.use(require('@kba/anno-mw-user-static')())
-    // store.use(require('@kba/anno-mw-acl-static')())
 
     const cors       = require('./middleware/cors')()
     const jsonParser = require('./middleware/json-parser')()
     const jsonwebtoken   = require('./middleware/jsonwebtoken')()
+
+    app.get('/acl',
+        jsonwebtoken,
+        jsonParser,
+        (req, res, next) => {
+            return res.send('OK')
+        })
 
     const routes = [ 'anno', 'swagger', 'token' ]
     store.init(err => {

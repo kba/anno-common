@@ -6,8 +6,8 @@ const {loadConfig, getLogger} = require('@kba/anno-config')
 
 class HttpStore extends Store {
 
-    constructor() {
-        super()
+    constructor(...args) {
+        super(...args)
         this.config = loadConfig({
             BASE_URL: 'http://localhost:3000/anno'
         })
@@ -24,10 +24,15 @@ class HttpStore extends Store {
 
     /* @override */
     _create(options, cb) {
+        console.log(options)
         const {anno} = options
         this._httpClient.post('/', anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
-            .catch(err => cb(err.statusCode))
+            .catch(axiosErr => {
+                const err = new Error(axiosErr.response.data)
+                err.code = axiosErr.response.status
+                cb(err)
+            })
     }
 
     /* @override */
@@ -51,7 +56,7 @@ class HttpStore extends Store {
             .then(resp => {
                 const col = resp.data
                 if (col.total === 0) {
-                    return []
+                    return cb(null, [])
                 } else {
                     cb(null, col.first.items)
                 }

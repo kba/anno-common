@@ -10,5 +10,8 @@
     "prepublish": "make index.json"
   },
   "author": "kba",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "async": "^2.3.0"
+  }
 }

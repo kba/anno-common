@@ -1,6 +1,6 @@
 function pruneEmptyStrings(obj) {
     Object.keys(obj).forEach(k => {
-        if (obj[k] === null)
+        if (obj[k] === '' || obj[k] === null)
             delete obj[k]
         else if (obj[k] === '')
             delete obj[k]
