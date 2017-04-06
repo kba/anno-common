@@ -58,7 +58,7 @@
         "creator": {
           "oneOf": [
             {
-              "$ref": "#/definitions/iri"
+              "type": "string"
             },
             {
               "$ref": "#/definitions/Person"

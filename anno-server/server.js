@@ -12,8 +12,8 @@ const errorHandler = require('./middleware/error-handler')()
 
 function start(app, cb) {
     const store = require('@kba/anno-store').load(module)
-    store.use(require('@kba/anno-mw-user-static')())
-    store.use(require('@kba/anno-mw-acl-static')())
+    // store.use(require('@kba/anno-mw-user-static')())
+    // store.use(require('@kba/anno-mw-acl-static')())
 
     const cors       = require('./middleware/cors')()
     const jsonParser = require('./middleware/json-parser')()
@@ -24,7 +24,7 @@ function start(app, cb) {
         if (err) return cb(err)
         app.use('/anno',
             cors,
-            jsonwebtoken,
+            // jsonwebtoken,
             jsonParser,
             require('./controller/anno-controller')({store}))
         app.use('/swagger',

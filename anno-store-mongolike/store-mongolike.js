@@ -46,12 +46,11 @@ class MongolikeStore extends Store {
     _create(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         var anno = JSON.parse(JSON.stringify(options.anno))
-        const validationErrors = []
         anno = this._deleteId(anno)
         const validFn = schema.validate.Annotation
         // console.log(anno)
         if (!validFn(anno)) {
-            return validationErrors.push(errors.invalidAnnotation(anno, validFn.errors))
+            return cb(errors.invalidAnnotation(anno, validFn.errors))
         }
         anno = this._normalizeTarget(anno)
         anno = this._normalizeType(anno)
@@ -75,7 +74,6 @@ class MongolikeStore extends Store {
         anno.created = created
         anno._revisions[0].created = created
         anno._id = this._genid()
-        if (validationErrors.length > 0) return cb(errors.invalidAnnotation({validationErrors}))
         this.db.insert(anno, (err, savedAnno) => {
             // TODO differentiate, use errors from anno-errors
             if (err) return cb(err)

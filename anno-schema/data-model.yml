@@ -62,7 +62,7 @@ definitions:
       generated: {$ref: '#/definitions/xsd_dateTime'}
       creator:
         oneOf:
-          - {$ref: '#/definitions/iri'}
+          - {type: 'string'}
           - {$ref: '#/definitions/Person'}
       generator:
         oneOf:
