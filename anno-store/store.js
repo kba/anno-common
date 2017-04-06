@@ -68,6 +68,7 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
+            log.silly('finished all middlewares')
             if (err) return cb(err)
             this[impl](ctx, cb)
         })
