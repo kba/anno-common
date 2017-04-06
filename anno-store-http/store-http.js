@@ -6,8 +6,8 @@ const {loadConfig, getLogger} = require('@kba/anno-config')
 
 class HttpStore extends Store {
 
-    constructor() {
-        super()
+    constructor(...args) {
+        super(...args)
         this.config = loadConfig({
             BASE_URL: 'http://localhost:3000/anno'
         })
