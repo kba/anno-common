@@ -24,6 +24,7 @@ class HttpStore extends Store {
 
     /* @override */
     _create(options, cb) {
+        console.log(options)
         const {anno} = options
         this._httpClient.post('/', anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
@@ -55,7 +56,7 @@ class HttpStore extends Store {
             .then(resp => {
                 const col = resp.data
                 if (col.total === 0) {
-                    return []
+                    return cb(null, [])
                 } else {
                     cb(null, col.first.items)
                 }

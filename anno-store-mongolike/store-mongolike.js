@@ -66,6 +66,7 @@ class MongolikeStore extends Store {
         //     const replyToId = this._idFromURL(targetUrl)
         //     anno._replyTo = 
         // }
+        anno._replies = []
 
         // Handle revisions
         anno._revisions = [JSON.parse(JSON.stringify(anno))]
@@ -73,16 +74,34 @@ class MongolikeStore extends Store {
         anno.modified = created
         anno.created = created
         anno._revisions[0].created = created
-        anno._id = this._genid()
-        this.db.insert(anno, (err, savedAnno) => {
-            // TODO differentiate, use errors from anno-errors
-            if (err) return cb(err)
-            // Mongodb returns an object describing the result, nedb returns just the results
-            if ('insertedIds' in savedAnno)
-                return this.get(savedAnno.insertedIds[0], options, cb)
-            else
-                return this.get(savedAnno._id, options, cb)
-        })
+
+        if (anno.replyTo) {
+            const _id = this._idFromURL(anno.replyTo)
+            this.db.findOne({_id}, (err, existingAnno) => {
+                if (err) return cb(err)
+                if (!existingAnno) return cb(errors.annotationNotFound(anno.replyTo))
+                anno.id = anno.replyTo + '-reply-' + (existingAnno._replies).length
+                this.db.update({_id}, {$push: {_replies: anno}}, (err, arg) => {
+                    // TODO differentiate, use errors from anno-errors
+                    if (err) return cb(err)
+                    options.latest = true
+                    delete options.annoId
+                    delete options.anno
+                    return this.get(anno.id, options, cb)
+                })
+            })
+        } else {
+            anno._id = this._genid()
+            this.db.insert(anno, (err, savedAnno) => {
+                // TODO differentiate, use errors from anno-errors
+                if (err) return cb(err)
+                // Mongodb returns an object describing the result, nedb returns just the results
+                if ('insertedIds' in savedAnno)
+                    return this.get(savedAnno.insertedIds[0], options, cb)
+                else
+                    return this.get(savedAnno._id, options, cb)
+            })
+        }
     }
 
     // https://www.w3.org/TR/annotation-protocol/#update-an-existing-annotation
@@ -167,20 +186,6 @@ class MongolikeStore extends Store {
         })
     }
 
-    /* @override */
-    _reply(options, cb) {
-        const {anno, annoId} = options
-        // TODO take fragment identifier from target URL if any
-        // TODO handle selectors in pre-existing target
-        this.get(annoId, options, (err, existingAnno) => {
-            if (err)
-                return cb(errors.annotationNotFound(annoId))
-            // TODO handle _replies being null
-            const nrReplies = existingAnno._replies.length
-            const replyId = nrReplies
-        })
-    }
-
     /* ******************************************
      * Protected API
      * ******************************************
@@ -202,6 +207,16 @@ class MongolikeStore extends Store {
                             {skipContext: true})
                         revisionLD.versionOf = ret.id
                         return revisionLD
+                    })
+                }
+            } else if (prop === '_replies') {
+                if (anno._replies.length > 0 && !options.skipReplies) {
+                    var replyId = 0
+                    ret.hasReply = anno._replies.map(reply => {
+                        const replyLD = this._toJSONLD(`${annoId}-rev-${++replyId}`, reply,
+                            {skipContext: true})
+                        replyLD.replyTo = ret.id
+                        return replyLD
                     })
                 }
             } else if (!prop.match(/^_/)) {

@@ -216,12 +216,22 @@ class Store {
      * Reply to an annotation
      */
     reply(annoId, anno, options, cb) {
+        console.log(annoId, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'reply',
             annoId,
             anno,
         }), cb)
+    }
+
+    /* @override */
+    _reply(options, cb) {
+        const {anno, annoId} = options
+        // TODO take fragment identifier from target URL if any
+        // TODO handle selectors in pre-existing target
+        anno.replyTo = annoId
+        this.create(anno, cb)
     }
 
 
