@@ -48,8 +48,8 @@ class Store {
         return store
     }
 
-    constructor() {
-        this.config = loadConfig()
+    constructor(config={}) {
+        this.config = loadConfig(config)
         this.middlewares = []
         // console.log(this.config)
         // console.error("Store.constructor called")
