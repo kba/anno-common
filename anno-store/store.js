@@ -216,7 +216,9 @@ class Store {
      * Reply to an annotation
      */
     reply(annoId, anno, options, cb) {
+        const log = getLogger('store')
         console.log(annoId, anno)
+        log.debug(`Replying to ${annoId}`, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'reply',
@@ -230,7 +232,9 @@ class Store {
         const {anno, annoId} = options
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
-        anno.replyTo = annoId
+        const log = getLogger('store')
+        log.debug(`Replying to ${annoId}`, anno)
+        anno.replyTo = `${loadConfig().BASE_URL}/anno/${annoId}`
         this.create(anno, cb)
     }
 
@@ -246,11 +250,6 @@ class Store {
     _idFromURL(url) {
         // TODO don't hardcode anno
         return url.replace(this.config.BASE_URL + '/anno/', '')
-    }
-
-    _splitIdRev(str) {
-        var [_0, _id, _revid] = str.match(/(.*?)(?:-rev-(\d+))?$/)
-        return {_id, _revid}
     }
 
     // TODO no idempotency of targets with normalization -> disabled for now

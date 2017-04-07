@@ -109,6 +109,19 @@ store call/`HEAD` HTTP call.
 
 ### Comments
 
+### URL schema
+
+ID is a nice slugid, based on uuid v4 without leading dash
+
+```
+<BASE_URL>/<ID>[.r<REPLY_ID>]*[~<REVISION_ID>]
+```
+
+E.g.
+
+* `http://localhost:3000/ewnfkjewnfew~2` Second revision
+* `http://localhost:3000/ewnfkjewnfew.r2.r1~5` Fifth revision of first answer to second answer
+
 ## Misc Links
 
 http://knexjs.org/

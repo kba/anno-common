@@ -158,7 +158,7 @@ module.exports = ({store}) => {
     //
     // POST /anno/{annoId}/reply
     //
-    router.post(':annoId/reply', (req, resp, next) => {
+    router.post('/:annoId/reply', (req, resp, next) => {
         store.reply(req.params.annoId, req.body, optionsFromRequest(req), (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)

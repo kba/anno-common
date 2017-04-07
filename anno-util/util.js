@@ -38,9 +38,31 @@ function prune(obj) {
     return obj
 }
 
+function splitIdRepliesRev(str) {
+    const origStr = str
+    const ret = {
+        _replyids: []
+    }
+    str = str.replace(/^([^\.~]+)/, (_, _id) => {
+        ret._id = _id
+        return ''
+    })
+    str = str.replace(/\.r(\d+)/g, (_, _replyid) => {
+        ret._replyids.push(parseInt(_replyid))
+        return ''
+    })
+    str = str.replace(/~(\d+)/, (_, _revid) => {
+        ret._revid = _revid
+        return ''
+    })
+    if (str) throw new Error(`Could not parse ${origStr} into id/replyid/revid`)
+    return ret
+}
+
 module.exports = {
     pruneEmptyStrings,
     pruneEmptyArrays,
     pruneEmptyObjects,
     prune,
+    splitIdRepliesRev,
 }

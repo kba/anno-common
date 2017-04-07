@@ -6,6 +6,12 @@ module.exports = {
         return err
     },
 
+    replyNotFound(id) {
+        const err = new Error(`Reply not found in store: ${JSON.stringify(id)}`)
+        err.code = 404
+        return err
+    },
+
     revisionNotFound(id, rev) {
         const err = new Error(`No revision '${rev}' for annotation '${id}'`)
         err.code = 404
