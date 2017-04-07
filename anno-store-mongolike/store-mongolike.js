@@ -108,14 +108,24 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
-        var {_id, _revid} = splitIdRepliesRev(annoId)
+        var {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err) return cb(err)
             if (!existingAnno) return cb(errors.annotationNotFound(_id))
-            ;['canonical', 'via', 'hasVersion', 'versionOf'].forEach(prop => {
+            var revisionSelector = '_revisions'
+            for (let _replyid of _replyids) {
+                existingAnno = existingAnno._replies[_replyid - 1]
+                if (!existingAnno) return cb(errors.replyNotFound(annoId))
+                revisionSelector += [_replyid, '_revisions'].join('.')
+            }
+            ;[
+                'canonical', 'via',
+                'hasReply', 'replyTo',
+                'hasVersion', 'versionOf',
+            ].forEach(prop => {
                 // TODO should be deepEqual not ===
                 if (anno[prop] && anno[prop] !== existingAnno[prop]) {
-                    return cb(errors.readonlyValue(annoId, 'canonical'))
+                    return cb(errors.readonlyValue(annoId, prop))
                 }
             })
             var newData = JSON.parse(JSON.stringify(anno))
@@ -129,7 +139,7 @@ class MongolikeStore extends Store {
             // TODO no idempotency of targets with normalization -> disabled for now
             // anno = this._normalizeTarget(anno)
             this.db.update({_id}, {
-                $push: {_revisions: newData},
+                $push: {[revisionSelector]: newData},
                 $set: newData,
             }, {}, (err, arg) => {
                 if (err) return cb(err)
