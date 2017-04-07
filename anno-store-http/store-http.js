@@ -24,7 +24,7 @@ class HttpStore extends Store {
 
     /* @override */
     _create(options, cb) {
-        console.log(options)
+        // console.log(options)
         const {anno} = options
         this._httpClient.post('/', anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
@@ -42,10 +42,10 @@ class HttpStore extends Store {
         this._httpClient.get(annoUrl, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
-                if(err.response.status === 404) {
-                    return cb(errors.annotationNotFound(annoUrl))
-                }
-                return cb(err.response.data)
+                if (err.response) return (err.response.status === 404)
+                    ? cb(errors.annotationNotFound(annoUrl))
+                    : cb(err.response.data)
+                else return cb(err)
             })
     }
 
@@ -58,10 +58,14 @@ class HttpStore extends Store {
                 if (col.total === 0) {
                     return cb(null, [])
                 } else {
+                    console.log(col.first.items)
                     cb(null, col.first.items)
                 }
             })
-            .catch(err => cb(err.statusCode))
+            .catch(err => {
+                if (err.response) return cb(err.response.data)
+                else return cb(err)
+            })
     }
 
     /* @override */
@@ -71,10 +75,10 @@ class HttpStore extends Store {
         this._httpClient.put(annoUrl, anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
-                if(err.response.status === 404) {
-                    return cb(errors.annotationNotFound(annoUrl))
-                }
-                return cb(err.response.data)
+                if (err.response) return (err.response.status === 404)
+                    ? cb(errors.annotationNotFound(annoUrl))
+                    : cb(err.response.data)
+                else return cb(err)
             })
     }
 
@@ -85,10 +89,10 @@ class HttpStore extends Store {
         this._httpClient.delete(annoUrl, this._configFromOptions(options))
             .then(() => cb())
             .catch(err => {
-                if(err.response.status === 404) {
-                    return cb(errors.annotationNotFound(annoUrl))
-                }
-                return cb(err.response.data)
+                if (err.response) return (err.response.status === 404)
+                    ? cb(errors.annotationNotFound(annoUrl))
+                    : cb(err.response.data)
+                else return cb(err)
             })
     }
 
@@ -97,7 +101,8 @@ class HttpStore extends Store {
         return this._httpClient.delete('/', this._configFromOptions(options))
             .then(() => cb())
             .catch(err => {
-                return cb(err.statusCode)
+                if (err.response) return cb(err.response.data)
+                else return cb(err)
             })
     }
 
