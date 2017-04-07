@@ -47,7 +47,7 @@ function splitIdRepliesRev(str) {
         ret._id = _id
         return ''
     })
-    str = str.replace(/\.r(\d+)/g, (_, _replyid) => {
+    str = str.replace(/\.(\d+)/g, (_, _replyid) => {
         ret._replyids.push(parseInt(_replyid))
         return ''
     })
