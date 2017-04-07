@@ -233,8 +233,7 @@ class Store {
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
         const log = getLogger('store')
-        log.debug(`Replying to ${annoId}`, anno)
-        anno.replyTo = `${loadConfig().BASE_URL}/anno/${annoId}`
+        anno.replyTo = annoId.match(/\/\//) ? annoId : `${loadConfig().BASE_URL}/anno/${annoId}`
         this.create(anno, cb)
     }
 
