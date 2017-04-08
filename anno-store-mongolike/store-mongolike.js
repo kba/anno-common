@@ -150,9 +150,9 @@ class MongolikeStore extends Store {
             var modQuery;
             // walk replies and add revision
             if (_replyids.length > 0) {
-                const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}.`).join('')
+                const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
                 modQuery = {
-                    $push: {[selector + '_revisions']: newData},
+                    $push: {[selector + '._revisions']: newData},
                     $set: {[selector]: newData},
                 }
             } else {
@@ -251,7 +251,7 @@ class MongolikeStore extends Store {
                     let replyId = 0
                     ret.hasReply = anno._replies
                         .map(reply => {
-                            const replyLD = this._toJSONLD(`${annoId}.r${++replyId}`, reply, {skipContext: true})
+                            const replyLD = this._toJSONLD(`${annoId}.${++replyId}`, reply, {skipContext: true})
                             replyLD.replyTo = ret.id
                             return replyLD
                         })
