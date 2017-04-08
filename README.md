@@ -111,16 +111,19 @@ store call/`HEAD` HTTP call.
 
 ### URL schema
 
-ID is a nice slugid, based on uuid v4 without leading dash
+ID is a [nice slugid](https://www.npmjs.com/package/slugid), based on uuid v4
+without leading dash
 
 ```
-<BASE_URL>/<ID>[.r<REPLY_ID>]*[~<REVISION_ID>]
+<BASE_URL>/<ID>[.<REPLY_ID>]*[~<REVISION_ID>]
 ```
 
 E.g.
 
 * `http://localhost:3000/ewnfkjewnfew~2` Second revision
-* `http://localhost:3000/ewnfkjewnfew.r2.r1~5` Fifth revision of first answer to second answer
+* `http://localhost:3000/ewnfkjewnfew.2.1~5` Fifth revision of first answer to second answer
+
+Replies reply to the generic not versioned annotation (for sanity)
 
 ## Misc Links
 

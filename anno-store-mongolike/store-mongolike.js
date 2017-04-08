@@ -32,8 +32,11 @@ class MongolikeStore extends Store {
         this.db.findOne(query, projection, (err, doc) => {
             if (!doc) return cb(errors.annotationNotFound(annoId))
             for (let _replyid of _replyids) {
+                // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]
-                if (!doc) return cb(errors.replyNotFound(annoId))
+                if (!doc) {
+                    return cb(errors.replyNotFound(annoId))
+                }
             }
             const rev = (_revid) 
                 ? doc._revisions[_revid -1]
@@ -70,12 +73,22 @@ class MongolikeStore extends Store {
             if (!validFn(anno)) {
                 return cb(errors.invalidAnnotation(anno, validFn.errors))
             }
-            const _id = this._idFromURL(anno.replyTo)
+            const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(anno.replyTo))
             this.db.findOne({_id}, (err, existingAnno) => {
-                if (err) return cb(err)
-                if (!existingAnno) return cb(errors.annotationNotFound(anno.replyTo))
-                anno.id = anno.replyTo + '.r' + (existingAnno._replies).length
-                this.db.update({_id}, {$push: {_replies: anno}}, (err, arg) => {
+                if (err)
+                    return cb(err)
+                if (!existingAnno) 
+                    return cb(errors.annotationNotFound(anno.replyTo))
+                var selector = '';
+                let parent = existingAnno
+                if (_replyids.length > 0) {
+                    _replyids.forEach(_replyid => {
+                        selector += `_replies.${_replyid - 1}.`
+                        parent = parent._replies[_replyid - 1]
+                    })
+                }
+                anno.id = anno.replyTo + '.' + ((parent._replies).length + 1)
+                this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                     // TODO differentiate, use errors from anno-errors
                     if (err) return cb(err)
                     options.latest = true
@@ -108,16 +121,13 @@ class MongolikeStore extends Store {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
-        var {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
+        const {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
         this.db.findOne({_id}, (err, existingAnno) => {
-            if (err) return cb(err)
-            if (!existingAnno) return cb(errors.annotationNotFound(_id))
-            var revisionSelector = '_revisions'
-            for (let _replyid of _replyids) {
-                existingAnno = existingAnno._replies[_replyid - 1]
-                if (!existingAnno) return cb(errors.replyNotFound(annoId))
-                revisionSelector += [_replyid, '_revisions'].join('.')
-            }
+            if (err)
+                return cb(err)
+            if (!existingAnno)
+                return cb(errors.annotationNotFound(_id))
+
             ;[
                 'canonical', 'via',
                 'hasReply', 'replyTo',
@@ -136,12 +146,23 @@ class MongolikeStore extends Store {
             if (!validFn(newData)) {
                 return cb(errors.invalidAnnotation(anno, validFn.errors))
             }
-            // TODO no idempotency of targets with normalization -> disabled for now
-            // anno = this._normalizeTarget(anno)
-            this.db.update({_id}, {
-                $push: {[revisionSelector]: newData},
-                $set: newData,
-            }, {}, (err, arg) => {
+
+            var modQuery;
+            // walk replies and add revision
+            if (_replyids.length > 0) {
+                const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}.`).join('')
+                modQuery = {
+                    $push: {[selector + '_revisions']: newData},
+                    $set: {[selector]: newData},
+                }
+            } else {
+                modQuery = {
+                    $push: {_revisions: newData},
+                    $set: newData,
+                }
+            }
+            console.log({_id}, modQuery)
+            this.db.update({_id}, modQuery, {}, (err, arg) => {
                 if (err) return cb(err)
                 options.latest = true
                 delete options.anno
@@ -153,8 +174,14 @@ class MongolikeStore extends Store {
     /* @override */
     _delete(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        const _id = this._idFromURL(options.annoId)
-        this.db.update({_id}, {$set: {deleted: new Date()}}, (err) => {
+        const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(options.annoId))
+        var selector = ''
+        for (let _replyid of _replyids) {
+            selector += `_replies.${_replyid - 1}.`
+        }
+        selector += 'deleted'
+        console.log(selector)
+        this.db.update({_id}, {$set: {[selector]: new Date()}}, (err, nrModified) => {
             if (err) return cb(err)
             return cb()
         })
@@ -208,7 +235,7 @@ class MongolikeStore extends Store {
         ret.id = `${this.config.BASE_URL}/anno/${annoId}`
         ret.type = "Annotation"
         Object.keys(anno).forEach(prop => {
-            if (prop === '_revisions') {
+            if (prop === '_revisions' && !(annoId.match(/~\d$/))) {
                 if (anno._revisions.length > 0 && !options.skipVersions) {
                     var revId = 0
                     ret.hasVersion = anno._revisions.map(revision => {
@@ -221,13 +248,14 @@ class MongolikeStore extends Store {
             // TODO sort before _revisions
             } else if (prop === '_replies') {
                 if (anno._replies.length > 0 && !options.skipReplies) {
-                    var replyId = 0
-                    ret.hasReply = anno._replies.map(reply => {
-                        const replyLD = this._toJSONLD(`${annoId}.r${++replyId}`, reply,
-                            {skipContext: true})
-                        replyLD.replyTo = ret.id
-                        return replyLD
-                    })
+                    let replyId = 0
+                    ret.hasReply = anno._replies
+                        .map(reply => {
+                            const replyLD = this._toJSONLD(`${annoId}.r${++replyId}`, reply, {skipContext: true})
+                            replyLD.replyTo = ret.id
+                            return replyLD
+                        })
+                        .filter(reply => ! reply.deleted)
                 }
             } else if (!prop.match(/^_/)) {
                 ret[prop] = anno[prop]
