@@ -1,12 +1,24 @@
+SHELL = bash
 MAKEFLAGS += --no-print-directory
 
 TEMPDIR = ../temp
 LOGFILE = $(TEMPDIR)/server.log
 PIDFILE = $(TEMPDIR)/server.pid
 
+RESTART_TIMEOUT = 10
+
+WARN = echo -ne "\x1b[31;1m"
+
 .PHONY: watch
 watch: swagger-ui
-	nodemon -e "yml js" -w '..' -x make serve
+	pm2 start \
+		--restart-delay 1000 \
+		--no-autorestart \
+		--no-daemon \
+		--watch \
+		--ignore-watch "node_modules" \
+		server.js
+
 
 .PHONY: serve
 serve: swagger-ui
