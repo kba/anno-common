@@ -241,6 +241,29 @@ class Store {
         this.create(anno, cb)
     }
 
+    aclCheck(urls, cb) {
+        const ret = {}
+        async.forEach(urls, (url, urlDone) => {
+            ret[url] = {}
+            const anno = {target: url}
+            this.get(url, {dryRun: true}, (err, ctx) => {
+                ret[url].read = !err
+                this.create(anno, {dryRun: true}, (err, ctx) => {
+                    ret[url].create = !err
+                    this.revise(url, anno, {dryRun: true}, (err, ctx) => {
+                        ret[url].revise = !err
+                        this.delete(url, {dryRun: true}, (err, ctx) => {
+                            ret[url].remove = !err
+                            urlDone()
+                        })
+                    })
+                })
+            })
+        }, (err) => {
+            cb(err, ret)
+        })
+    }
+
 
     /*
      * *********************************************************************
