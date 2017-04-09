@@ -70,7 +70,11 @@ class Store {
         }, (err, pass) => {
             log.silly('finished all middlewares')
             if (err) return cb(err)
-            this[impl](ctx, cb)
+            if (ctx.dryRun) {
+                return cb(null, ctx)
+            } else {
+                this[impl](ctx, cb)
+            }
         })
     }
 
