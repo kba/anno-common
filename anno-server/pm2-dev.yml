@@ -1,6 +1,6 @@
 name:   "server-dev"
 script: "dev-server.sh"
-watch:  ['../anno-*/*.js', '../anno-*/*.yml']
+watch:  ['../anno-*/*.js', '*/*.js', '../anno-*/*.yml']
 ignore_watch: ["node_modules"]
 autorestart: false
 no_daemon: true
