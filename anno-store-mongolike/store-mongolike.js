@@ -115,7 +115,6 @@ class MongolikeStore extends Store {
         }
     }
 
-    // https://www.w3.org/TR/annotation-protocol/#update-an-existing-annotation
     /* @override */
     _revise(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
@@ -210,13 +209,14 @@ class MongolikeStore extends Store {
         this.db.find(query, projection, (err, docs) => {
             if (err) return cb(err)
             if (docs === undefined) docs = []
+            options.skipContext = true
             // mongodb returns a cursor, nedb a list of documents
             if (Array.isArray(docs))
-                return cb(null, docs.map(doc => this._toJSONLD(doc, {skipContext: true})))
+                return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
             else
                 docs.toArray((err, docs) => {
                     if (err) return cb(err)
-                    return cb(null, docs.map(doc => this._toJSONLD(doc, {skipContext: true})))
+                    return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
                 })
         })
     }
@@ -227,6 +227,7 @@ class MongolikeStore extends Store {
      */
     // TODO make recursive
     _toJSONLD(annoId, anno, options={}) {
+        // console.log(annoId, options)
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
         const ret = {}
         if (!options.skipContext) {
@@ -234,13 +235,13 @@ class MongolikeStore extends Store {
         }
         ret.id = `${this.config.BASE_URL}/anno/${annoId}`
         ret.type = "Annotation"
+        options.skipContext = true
         Object.keys(anno).forEach(prop => {
             if (prop === '_revisions' && !(annoId.match(/~\d$/))) {
                 if (anno._revisions.length > 0 && !options.skipVersions) {
                     var revId = 0
                     ret.hasVersion = anno._revisions.map(revision => {
-                        const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision,
-                            {skipContext: true})
+                        const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision, options)
                         revisionLD.versionOf = ret.id
                         return revisionLD
                     })
@@ -251,7 +252,7 @@ class MongolikeStore extends Store {
                     let replyId = 0
                     ret.hasReply = anno._replies
                         .map(reply => {
-                            const replyLD = this._toJSONLD(`${annoId}.${++replyId}`, reply, {skipContext: true})
+                            const replyLD = this._toJSONLD(`${annoId}.${++replyId}`, reply, options)
                             replyLD.replyTo = ret.id
                             return replyLD
                         })
@@ -274,8 +275,10 @@ class MongolikeStore extends Store {
             })
             // HACK
             for (let i = 0; i < 20; i++) {
-                ret[`_revisions.${i}.body`] = false
+                ret[`_revisions.${i}.body`]   = false
                 ret[`_revisions.${i}.target`] = false
+                ret[`_replies.${i}.body`]     = false
+                ret[`_replies.${i}.target`]   = false
             }
         }
         return ret
