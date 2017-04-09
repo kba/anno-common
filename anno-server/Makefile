@@ -11,14 +11,7 @@ WARN = echo -ne "\x1b[31;1m"
 
 .PHONY: watch
 watch: swagger-ui
-	pm2 start \
-		--restart-delay 1000 \
-		--no-autorestart \
-		--no-daemon \
-		--watch \
-		--ignore-watch "node_modules" \
-		server.js
-
+	pm2 startOrRestart --no-daemon pm2.yml
 
 .PHONY: serve
 serve: swagger-ui
