@@ -7,48 +7,49 @@ process.env.ANNO_LOGLEVEL = 'silly'
 loadConfig({
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
+    SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK'
 })
-const errorHandler = require('./middleware/error-handler')()
-
 function start(app, cb) {
+    app.use(morgan('combined'))
+    app.set('views', `${__dirname}/views`)
+    app.set('view engine', 'pug')
+
+    app.use(require('body-parser').urlencoded({ extended: true }));
+    app.use(require('body-parser').json({type: '*/*'}))
+
+    app.use(require('cookie-parser')());
+    app.use(require('express-session')({
+        secret: loadConfig().SERVER_SESSION_KEY,
+        resave: false,
+        saveUninitialized: false
+    }))
+    app.use(require('./middleware/cors')())
+
     const store = require('@kba/anno-store').load(module)
-
-    const cors       = require('./middleware/cors')()
-    const jsonParser = require('./middleware/json-parser')()
-    const jsonwebtoken   = require('./middleware/jsonwebtoken')()
-
-    app.get('/acl',
-        jsonwebtoken,
-        jsonParser,
-        (req, res, next) => {
-            return res.send('OK')
-        })
 
     const routes = [ 'anno', 'swagger', 'token' ]
     store.init(err => {
         if (err) return cb(err)
         app.use('/anno',
-            cors,
-            // jsonwebtoken,
-            jsonParser,
-            require('./controller/anno-controller')({store}))
+            require('./middleware/jsonwebtoken')(),
+            require('./routes/anno')({store}))
         app.use('/swagger',
-            cors,
-            require('./controller/swagger-controller')())
-        app.use('/token',
-            cors,
-            require('./controller/token-controller')({store}))
+            require('./routes/swagger')())
+        app.use('/auth',
+            require('./routes/auth')({store}))
+
+        // Static files
+        app.use(express.static(`${__dirname}/public`))
+
+        // Error handler
+        app.use(require('./middleware/error-handler')())
         return cb()
     })
 }
 
 const app = express()
-app.use(morgan())
 start(app, (err) => {
     if (err) throw err
-    // Static files
-    app.use(express.static(`${__dirname}/public`))
-    app.use(errorHandler)
     app.listen(loadConfig().PORT, () => {
         console.log("Config", JSON.stringify(loadConfig(), null, 2))
         console.log(`Listening on port ${loadConfig().PORT}`)
