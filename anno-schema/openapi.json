@@ -73,6 +73,30 @@
             "format": "url"
           },
           {
+            "in": "query",
+            "name": "metadataOnly",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Send only metadata"
+          },
+          {
+            "in": "query",
+            "name": "skipVersions",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off versions"
+          },
+          {
+            "in": "query",
+            "name": "skipReplies",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off replies"
+          },
+          {
             "in": "header",
             "name": "Prefer",
             "description": "<a href=\"https://www.w3.org/TR/annotation-protocol/#container-representations\">Preferred Container Representation</a>",
@@ -118,6 +142,30 @@
             "in": "header",
             "name": "Slug",
             "description": "Preferred annotation ID"
+          },
+          {
+            "in": "query",
+            "name": "metadataOnly",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Send only metadata"
+          },
+          {
+            "in": "query",
+            "name": "skipVersions",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off versions"
+          },
+          {
+            "in": "query",
+            "name": "skipReplies",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off replies"
           }
         ],
         "responses": {
@@ -157,6 +205,30 @@
             "type": "string",
             "required": true,
             "description": "ID of the annotation"
+          },
+          {
+            "in": "query",
+            "name": "metadataOnly",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Send only metadata"
+          },
+          {
+            "in": "query",
+            "name": "skipVersions",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off versions"
+          },
+          {
+            "in": "query",
+            "name": "skipReplies",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off replies"
           }
         ],
         "responses": {
