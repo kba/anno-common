@@ -316,7 +316,7 @@
         }
       }
     },
-    "/anno/{annoId}-rev-{revId}": {
+    "/anno/{annoId}~{revId}": {
       "get": {
         "tags": [
           "extensions"
@@ -402,6 +402,70 @@
           },
           "404": {
             "description": "Annotation not found"
+          }
+        }
+      }
+    },
+    "/acl": {
+      "post": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Get authorization information for a list of targets",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "List of target urls",
+            "schema": {
+              "type": "object",
+              "required": [
+                "targets"
+              ],
+              "properties": {
+                "targets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "url"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "create/revise/read/remove information",
+            "schema": {
+              "type": "object",
+              "patternProperties": {
+                "*": {
+                  "type": "object",
+                  "required": [
+                    "read",
+                    "create",
+                    "revise",
+                    "remove"
+                  ],
+                  "properties": {
+                    "read": {
+                      "type": "boolean"
+                    },
+                    "create": {
+                      "type": "boolean"
+                    },
+                    "revise": {
+                      "type": "boolean"
+                    },
+                    "remove": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

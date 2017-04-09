@@ -200,10 +200,10 @@ paths:
           schema:
             $ref: '#/definitions/Annotation'
 
-  '/anno/{annoId}-rev-{revId}':
+  '/anno/{annoId}~{revId}':
 
     #
-    # GET /anno/{annoId}-rev-{revId}
+    # GET /anno/{annoId}~{revId}
     #
     get:
       tags: ['extensions']
@@ -224,7 +224,7 @@ paths:
           description: all okay
 
     #
-    # GET /anno/{annoId}-rev-{revId}
+    # HEAD /anno/{annoId}~{revId}
     #
     head:
       tags: ['extensions']
@@ -268,3 +268,39 @@ paths:
           description: 'Reply created'
         404:
           description: 'Annotation not found'
+
+  '/acl':
+    #
+    # POST /acl
+    #
+    post:
+      tags: ['extensions']
+      summary: 'Get authorization information for a list of targets'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          description: 'List of target urls'
+          schema:
+            type: 'object'
+            required: ['targets']
+            properties:
+              targets:
+                type: 'array'
+                items:
+                  type: string
+                  format: 'url'
+      responses:
+        200:
+          description: 'create/revise/read/remove information'
+          schema:
+            type: 'object'
+            patternProperties:
+              '*':
+                type: 'object'
+                required: ['read', 'create', 'revise', 'remove']
+                properties:
+                  read: {type: 'boolean'}
+                  create: {type: 'boolean'}
+                  revise: {type: 'boolean'}
+                  remove: {type: 'boolean'}

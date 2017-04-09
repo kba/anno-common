@@ -33,6 +33,10 @@ function start(app, cb) {
             require('./middleware/jsonwebtoken')(),
             require('./middleware/anno-options')(),
             require('./routes/anno')({store}))
+        app.use('/acl',
+            require('./middleware/jsonwebtoken')(),
+            require('./middleware/anno-options')(),
+            require('./routes/acl')({store}))
         app.use('/swagger',
             require('./routes/swagger')())
         app.use('/auth',
