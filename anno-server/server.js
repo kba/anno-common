@@ -1,6 +1,5 @@
 const express = require('express')
 const async = require('async')
-const morgan = require('morgan')
 const {loadConfig} = require('@kba/anno-config')
 process.env.ANNO_LOGLEVEL = 'silly'
 
@@ -10,7 +9,7 @@ loadConfig({
     SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK'
 })
 function start(app, cb) {
-    app.use(morgan('combined'))
+    app.use(require('morgan')('dev'))
     app.set('views', `${__dirname}/views`)
     app.set('view engine', 'pug')
 
@@ -32,6 +31,7 @@ function start(app, cb) {
         if (err) return cb(err)
         app.use('/anno',
             require('./middleware/jsonwebtoken')(),
+            require('./middleware/anno-options')(),
             require('./routes/anno')({store}))
         app.use('/swagger',
             require('./routes/swagger')())
