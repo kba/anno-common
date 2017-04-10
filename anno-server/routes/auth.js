@@ -80,7 +80,9 @@ module.exports = () => {
             return resp.redirect(req.query.from
                 ? `login?from=${req.query.from}`
                 : `login`)
-        resp.send(jsonwebtoken.sign(req.user, SERVER_JWT_SECRET))
+        const token = jsonwebtoken.sign(req.user, SERVER_JWT_SECRET)
+        if (req.xhr) resp.header('X-Token', token)
+        resp.send(token)
     })
 
     return router
