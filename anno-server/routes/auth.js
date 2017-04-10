@@ -47,7 +47,7 @@ module.exports = () => {
     router.post('/login', (req, resp, next) => {
         console.log(req.query)
         passport.authenticate('local', {
-            successRedirect: req.query.from || 'user',
+            successRedirect: req.query.from || 'login',
             failureFlash: true
         })(req, resp, next)
     })
