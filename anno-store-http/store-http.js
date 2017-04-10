@@ -25,7 +25,11 @@ class HttpStore extends Store {
     /* @override */
     _create(options, cb) {
         // console.log(options)
-        const {anno} = options
+        var {anno} = options
+        anno = JSON.parse(JSON.stringify(anno))
+        delete anno.hasVersion
+        delete anno.versionOf
+        delete anno.hasReply
         this._httpClient.post('/', anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(axiosErr => {
@@ -58,7 +62,7 @@ class HttpStore extends Store {
                 if (col.total === 0) {
                     return cb(null, [])
                 } else {
-                    console.log(col.first.items)
+                    // console.log(col.first.items)
                     cb(null, col.first.items)
                 }
             })
@@ -70,8 +74,11 @@ class HttpStore extends Store {
 
     /* @override */
     _revise(options, cb) {
-        const {annoId, anno} = options
+        var {annoId, anno} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
+        anno = JSON.parse(JSON.stringify(anno))
+        // delete anno.via
+        // delete anno.replyTo
         this._httpClient.put(annoUrl, anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
