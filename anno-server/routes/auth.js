@@ -37,7 +37,7 @@ module.exports = () => {
 
     const router = Router()
 
-    router.use(require('express-flash')())
+    router.use(require('connect-flash')())
     router.use(passport.initialize());
     router.use(passport.session());
 
