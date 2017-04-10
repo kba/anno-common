@@ -18,8 +18,8 @@ module.exports = {
         return err
     },
 
-    readonlyValue(id, field) {
-        const err = new Error(`Client must not change the '${field}' of annotation '${id}'`)
+    readonlyValue(id, field, valueBefore, value) {
+        const err = new Error(`Client must not change the '${field}' of annotation '${id}' from \n${JSON.stringify(valueBefore)} to ${JSON.stringify(value)}`)
         err.code = 409
         return err
     },
