@@ -127,16 +127,14 @@ class MongolikeStore extends Store {
             if (!existingAnno)
                 return cb(errors.annotationNotFound(_id))
 
-            ;[
-                'canonical', 'via',
-                'hasReply', 'replyTo',
-                'hasVersion', 'versionOf',
-            ].forEach(prop => {
+            for (let prop of ['canonical', 'via', 'hasReply', 'replyTo', 'hasVersion', 'versionOf']) {
                 // TODO should be deepEqual not ===
                 if (anno[prop] && anno[prop] !== existingAnno[prop]) {
-                    return cb(errors.readonlyValue(annoId, prop))
+                    // TODO
+                    // console.log(errors.readonlyValue(annoId, prop, existingAnno[prop], anno[prop]))
+                    // delete anno[prop]
                 }
-            })
+            }
             var newData = JSON.parse(JSON.stringify(anno))
             newData.created = new Date().toISOString()
             this._deleteId(newData)

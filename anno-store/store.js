@@ -238,6 +238,7 @@ class Store {
         // TODO handle selectors in pre-existing target
         const log = getLogger('store')
         anno.replyTo = annoId.match(/\/\//) ? annoId : `${loadConfig().BASE_URL}/anno/${annoId}`
+        log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }
 
@@ -308,5 +309,8 @@ class Store {
     }
 
 }
+
+Store.prototype.remove = Store.prototype.delete
+Store.prototype.comment = Store.prototype.reply
 
 module.exports = Store
