@@ -68,8 +68,13 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
+            log.silly('finished all middlewares')
             if (err) return cb(err)
-            this[impl](ctx, cb)
+            if (ctx.dryRun) {
+                return cb(null, ctx)
+            } else {
+                this[impl](ctx, cb)
+            }
         })
     }
 
@@ -215,12 +220,49 @@ class Store {
      * Reply to an annotation
      */
     reply(annoId, anno, options, cb) {
+        const log = getLogger('store')
+        console.log(annoId, anno)
+        log.debug(`Replying to ${annoId}`, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'reply',
             annoId,
             anno,
         }), cb)
+    }
+
+    /* @override */
+    _reply(options, cb) {
+        const {anno, annoId} = options
+        // TODO take fragment identifier from target URL if any
+        // TODO handle selectors in pre-existing target
+        const log = getLogger('store')
+        anno.replyTo = annoId.match(/\/\//) ? annoId : `${loadConfig().BASE_URL}/anno/${annoId}`
+        log.debug(`Replying to ${annoId}`, anno)
+        this.create(anno, cb)
+    }
+
+    aclCheck(urls, cb) {
+        const ret = {}
+        async.forEach(urls, (url, urlDone) => {
+            ret[url] = {}
+            const anno = {target: url}
+            this.get(url, {dryRun: true}, (err, ctx) => {
+                ret[url].read = !err
+                this.create(anno, {dryRun: true}, (err, ctx) => {
+                    ret[url].create = !err
+                    this.revise(url, anno, {dryRun: true}, (err, ctx) => {
+                        ret[url].revise = !err
+                        this.delete(url, {dryRun: true}, (err, ctx) => {
+                            ret[url].remove = !err
+                            urlDone()
+                        })
+                    })
+                })
+            })
+        }, (err) => {
+            cb(err, ret)
+        })
     }
 
 
@@ -235,11 +277,6 @@ class Store {
     _idFromURL(url) {
         // TODO don't hardcode anno
         return url.replace(this.config.BASE_URL + '/anno/', '')
-    }
-
-    _splitIdRev(str) {
-        var [_0, _id, _revid] = str.match(/(.*?)(?:-rev-(\d+))?$/)
-        return {_id, _revid}
     }
 
     // TODO no idempotency of targets with normalization -> disabled for now
@@ -268,9 +305,12 @@ class Store {
     }
 
     _genid(slug='') {
-        return slug + slugid.v4()
+        return slug + slugid.nice()
     }
 
 }
+
+Store.prototype.remove = Store.prototype.delete
+Store.prototype.comment = Store.prototype.reply
 
 module.exports = Store

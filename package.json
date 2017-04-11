@@ -2,7 +2,9 @@
   "private": true,
   "name": "anno",
   "scripts": {
-    "postinstall": "./node_modules/.bin/lerna bootstrap"
+    "bootstrap": "./node_modules/.bin/lerna bootstrap",
+    "postinstall": "npm run bootstrap ; npm run link-all",
+    "link-all": "for i in anno-*;do sh -c \"cd $i; npm link\";done"
   },
   "cacheDirectories": [
     "node_modules",

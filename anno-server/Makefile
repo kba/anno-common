@@ -1,12 +1,18 @@
+SHELL = bash
 MAKEFLAGS += --no-print-directory
+ROOT_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-TEMPDIR = ../temp
+TEMPDIR = $(ROOT_DIR)../temp
 LOGFILE = $(TEMPDIR)/server.log
 PIDFILE = $(TEMPDIR)/server.pid
 
+RESTART_TIMEOUT = 10
+
+WARN = echo -ne "\x1b[31;1m"
+
 .PHONY: watch
 watch: swagger-ui
-	nodemon -e "yml js" -w '..' -x make serve
+	cd $(ROOT_DIR) ; pm2 startOrRestart --no-daemon pm2-dev.yml
 
 .PHONY: serve
 serve: swagger-ui

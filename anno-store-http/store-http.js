@@ -24,10 +24,19 @@ class HttpStore extends Store {
 
     /* @override */
     _create(options, cb) {
-        const {anno} = options
+        // console.log(options)
+        var {anno} = options
+        anno = JSON.parse(JSON.stringify(anno))
+        delete anno.hasVersion
+        delete anno.versionOf
+        delete anno.hasReply
         this._httpClient.post('/', anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
-            .catch(err => cb(err.statusCode))
+            .catch(axiosErr => {
+                const err = new Error(axiosErr.response.data)
+                err.code = axiosErr.response.status
+                cb(err)
+            })
     }
 
     /* @override */
@@ -37,10 +46,10 @@ class HttpStore extends Store {
         this._httpClient.get(annoUrl, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
-                if(err.response.status === 404) {
-                    return cb(errors.annotationNotFound(annoUrl))
-                }
-                return cb(err.response.data)
+                if (err.response) return (err.response.status === 404)
+                    ? cb(errors.annotationNotFound(annoUrl))
+                    : cb(err.response.data)
+                else return cb(err)
             })
     }
 
@@ -51,25 +60,32 @@ class HttpStore extends Store {
             .then(resp => {
                 const col = resp.data
                 if (col.total === 0) {
-                    return []
+                    return cb(null, [])
                 } else {
+                    // console.log(col.first.items)
                     cb(null, col.first.items)
                 }
             })
-            .catch(err => cb(err.statusCode))
+            .catch(err => {
+                if (err.response) return cb(err.response.data)
+                else return cb(err)
+            })
     }
 
     /* @override */
     _revise(options, cb) {
-        const {annoId, anno} = options
+        var {annoId, anno} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
+        anno = JSON.parse(JSON.stringify(anno))
+        // delete anno.via
+        // delete anno.replyTo
         this._httpClient.put(annoUrl, anno, this._configFromOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
-                if(err.response.status === 404) {
-                    return cb(errors.annotationNotFound(annoUrl))
-                }
-                return cb(err.response.data)
+                if (err.response) return (err.response.status === 404)
+                    ? cb(errors.annotationNotFound(annoUrl))
+                    : cb(err.response.data)
+                else return cb(err)
             })
     }
 
@@ -80,10 +96,10 @@ class HttpStore extends Store {
         this._httpClient.delete(annoUrl, this._configFromOptions(options))
             .then(() => cb())
             .catch(err => {
-                if(err.response.status === 404) {
-                    return cb(errors.annotationNotFound(annoUrl))
-                }
-                return cb(err.response.data)
+                if (err.response) return (err.response.status === 404)
+                    ? cb(errors.annotationNotFound(annoUrl))
+                    : cb(err.response.data)
+                else return cb(err)
             })
     }
 
@@ -92,7 +108,8 @@ class HttpStore extends Store {
         return this._httpClient.delete('/', this._configFromOptions(options))
             .then(() => cb())
             .catch(err => {
-                return cb(err.statusCode)
+                if (err.response) return cb(err.response.data)
+                else return cb(err)
             })
     }
 

@@ -1,0 +1,10 @@
+name:   "server-dev"
+script: "dev-server.sh"
+watch:  ['../anno-*/*.js', '*/*.js', '../anno-*/*.yml']
+ignore_watch: ["node_modules"]
+autorestart: false
+no_daemon: true
+restart_delay: 1000
+interpreter: bash
+env:
+  ANNO_BASE_URL: "http://localhost:3000"

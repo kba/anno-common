@@ -3,28 +3,10 @@ const {Router}     = require('express')
 const {prune}      = require('@kba/anno-util')
 const {loadConfig} = require('@kba/anno-config')
 
-function optionsFromRequest(req) {
-    const ret = {}
-    ;['skipVersions', 'metadataOnly'].forEach(option => {
-        if (req.query[option]) {
-            ret[option] = req.query[option]
-            delete req.query[option]
-        }
-    })
-    ;['user'].forEach(option => {
-        if (req[option]) ret[option] = req[option]
-    })
-    return ret
-}
-
 module.exports = ({store}) => {
 
-    const contentNegotiation = require('../middleware/content-negotiation')()
-    const errorHandler = require('../middleware/error-handler')()
-
     function getAnnotation(req, resp, next) {
-        const options = optionsFromRequest(req)
-        store.get(req.params.annoId, options, (err, doc) => {
+        store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             resp.header('Location', doc.id)
             resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
@@ -40,8 +22,7 @@ module.exports = ({store}) => {
         var colUrl = loadConfig().BASE_URL + '/anno/'
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
-        const options = optionsFromRequest(req)
-        store.search(req.query, options, (err, docs) => {
+        store.search(req.query, req.annoOptions, (err, docs) => {
             if (err) return next(err)
             resp.header('Content-Location', colUrl)
             resp.header('Vary', 'Accept, Prefer')
@@ -106,7 +87,7 @@ module.exports = ({store}) => {
     //
     router.post('/', (req, resp, next) => {
         const anno = prune(req.body)
-        store.create(anno, optionsFromRequest(req), (err, anno) => {
+        store.create(anno, req.annoOptions, (err, anno) => {
             if (err) return next(err)
             resp.status(201)
             req.params.annoId = anno.id
@@ -132,7 +113,7 @@ module.exports = ({store}) => {
     //
     router.put('/:annoId', (req, resp, next) => {
         const anno = prune(req.body)
-        store.revise(req.params.annoId, anno, optionsFromRequest(req), (err, doc) => {
+        store.revise(req.params.annoId, anno, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             resp.status(201)
             req.params.annoId = doc.id
@@ -144,7 +125,7 @@ module.exports = ({store}) => {
     // DELETE /anno/{annoId}
     //
     router.delete('/:annoId', (req, resp, next) => {
-        store.delete(req.params.annoId, optionsFromRequest(req), (err, doc) => {
+        store.delete(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             resp.status(204)
             return resp.send(doc)
@@ -158,8 +139,8 @@ module.exports = ({store}) => {
     //
     // POST /anno/{annoId}/reply
     //
-    router.post(':annoId/reply', (req, resp, next) => {
-        store.reply(req.params.annoId, req.body, optionsFromRequest(req), (err, doc) => {
+    router.post('/:annoId/reply', (req, resp, next) => {
+        store.reply(req.params.annoId, req.body, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             return resp.send(doc)
         })
@@ -169,7 +150,7 @@ module.exports = ({store}) => {
     // DELETE /anno
     //
     router.delete('/', (req, resp, next) => {
-        store.wipe(optionsFromRequest(req), (err) => {
+        store.wipe(req.annoOptions, (err) => {
             if (err) return next(err)
             resp.end()
         })
@@ -178,12 +159,12 @@ module.exports = ({store}) => {
     //----------------------------------------------------------------
     // Content-Negotiation
     //----------------------------------------------------------------
-    router.use(contentNegotiation)
+    router.use(require('../middleware/content-negotiation')())
 
     //----------------------------------------------------------------
     // Error Handler
     //----------------------------------------------------------------
-    router.use(errorHandler)
+    router.use(require('../middleware/error-handler')())
 
     return router
 }

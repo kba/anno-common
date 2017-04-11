@@ -6,14 +6,20 @@ module.exports = {
         return err
     },
 
+    replyNotFound(id) {
+        const err = new Error(`Reply not found in store: ${JSON.stringify(id)}`)
+        err.code = 404
+        return err
+    },
+
     revisionNotFound(id, rev) {
         const err = new Error(`No revision '${rev}' for annotation '${id}'`)
         err.code = 404
         return err
     },
 
-    readonlyValue(id, field) {
-        const err = new Error(`Client must not change the '${field}' of annotation '${id}'`)
+    readonlyValue(id, field, valueBefore, value) {
+        const err = new Error(`Client must not change the '${field}' of annotation '${id}' from \n${JSON.stringify(valueBefore)} to ${JSON.stringify(value)}`)
         err.code = 409
         return err
     },
