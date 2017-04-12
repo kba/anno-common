@@ -6,5 +6,3 @@ autorestart: false
 no_daemon: true
 restart_delay: 1000
 interpreter: bash
-env:
-  ANNO_BASE_URL: "http://localhost:3000"
