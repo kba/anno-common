@@ -19,6 +19,7 @@ const config = {
         unsafeCache: true,
         alias: {
             'ajv': 'ajv/dist/ajv.min.js',
+            'async': 'async/dist/async.min.js'
             // 'nedb': 'nedb/browser-version/out/nedb.min.js',
         }
     },
