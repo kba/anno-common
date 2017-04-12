@@ -242,12 +242,22 @@ class Store {
         this.create(anno, cb)
     }
 
-    aclCheck(urls, options, cb) {
+    aclCheck(targets, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        this._callMethod(Object.assign(options, {
+            method: 'aclCheck',
+            targets,
+        }), cb)
+    }
+
+    _aclCheck(options, cb) {
         const ret = {}
         options.dryRun = true
-        async.forEach(urls, (url, urlDone) => {
+        const {targets} = options
+        async.forEach(targets, (url, urlDone) => {
             ret[url] = {}
             const anno = {target: url}
+            // TODO reduce callback clutter  here
             this.get(url, options, (err, ctx) => {
                 ret[url].read = !err
                 this.create(anno, options, (err, ctx) => {
@@ -261,9 +271,7 @@ class Store {
                     })
                 })
             })
-        }, (err) => {
-            cb(err, ret)
-        })
+        }, (err) => cb(err, ret))
     }
 
 

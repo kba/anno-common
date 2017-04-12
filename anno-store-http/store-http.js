@@ -118,11 +118,11 @@ class HttpStore extends Store {
         return cb()
     }
 
-    aclCheck(urls, options, cb) {
+    _aclCheck(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        console.log("YYYY")
-        return this._httpClient.post('/acl', {targets: urls}, this._configFromOptions(options))
-            .then((resp) => cb(resp))
+        const {targets} = options
+        return this._httpClient.post('/acl', {targets}, this._configFromOptions(options))
+            .then((resp) => cb(null, resp.data))
             .catch(err => {
                 if (err.response) return cb(err.response.data)
                 else return cb(err)
