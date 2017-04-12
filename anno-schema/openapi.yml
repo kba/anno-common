@@ -269,9 +269,9 @@ paths:
         404:
           description: 'Annotation not found'
 
-  '/acl':
+  '/anno/acl':
     #
-    # POST /acl
+    # POST /anno/acl
     #
     post:
       tags: ['extensions']
