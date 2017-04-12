@@ -406,7 +406,7 @@
         }
       }
     },
-    "/acl": {
+    "/anno/acl": {
       "post": {
         "tags": [
           "extensions"
