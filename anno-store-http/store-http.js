@@ -118,6 +118,17 @@ class HttpStore extends Store {
         return cb()
     }
 
+    aclCheck(urls, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        console.log("YYYY")
+        return this._httpClient.post('/acl', {targets: urls}, this._configFromOptions(options))
+            .then((resp) => cb(resp))
+            .catch(err => {
+                if (err.response) return cb(err.response.data)
+                else return cb(err)
+            })
+    }
+
     // ----------------------------------------
     // PRIVATE
     // ----------------------------------------
