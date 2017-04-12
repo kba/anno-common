@@ -156,6 +156,17 @@ module.exports = ({store}) => {
         })
     })
 
+    //
+    // POST /anno/acl
+    //
+    router.post('/acl', (req, resp, next) => {
+        const urls = req.body.targets
+        store.aclCheck(urls, req.annoOptions, (err, perms) => {
+            if (err) return next(err)
+            return resp.send(perms)
+        })
+    })
+
     //----------------------------------------------------------------
     // Content-Negotiation
     //----------------------------------------------------------------
