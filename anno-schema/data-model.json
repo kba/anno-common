@@ -6,7 +6,14 @@
     },
     "iri": {
       "type": "string",
-      "format": "uri"
+      "anyOf": [
+        {
+          "format": "uri"
+        },
+        {
+          "pattern": "^urn:"
+        }
+      ]
     },
     "iri_object": {
       "type": "object",
@@ -92,9 +99,12 @@
           ]
         },
         "body": {
-          "oneOf": [
+          "anyOf": [
             {
               "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/iri_object"
             },
             {
               "$ref": "#/definitions/Resource"
@@ -111,9 +121,12 @@
             {
               "type": "array",
               "items": {
-                "oneOf": [
+                "anyOf": [
                   {
                     "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/iri_object"
                   },
                   {
                     "$ref": "#/definitions/Resource"
@@ -138,6 +151,9 @@
               "$ref": "#/definitions/iri"
             },
             {
+              "$ref": "#/definitions/iri_object"
+            },
+            {
               "$ref": "#/definitions/Resource"
             },
             {
@@ -149,6 +165,9 @@
                 "anyOf": [
                   {
                     "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/iri_object"
                   },
                   {
                     "$ref": "#/definitions/Resource"
@@ -165,18 +184,6 @@
     },
     "Resource": {
       "type": "object",
-      "anyOf": [
-        {
-          "required": [
-            "id"
-          ]
-        },
-        {
-          "required": [
-            "type"
-          ]
-        }
-      ],
       "properties": {
         "id": {
           "$ref": "#/definitions/iri"
@@ -202,24 +209,6 @@
         },
         "textDirection": {
           "$ref": "#/definitions/textDirection"
-        },
-        "type": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/ResourceClass"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "contains": [
-                {
-                  "$ref": "#/definitions/ResourceClass"
-                }
-              ]
-            }
-          ]
         }
       }
     },
@@ -327,6 +316,9 @@
         "Sound",
         "Text"
       ]
+    },
+    "resourceClassType": {
+      "type": "string"
     },
     "TextualBody": {
       "type": "object",
