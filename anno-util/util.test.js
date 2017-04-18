@@ -1,11 +1,5 @@
 const tap = require('tap')
-const {prune, splitIdRepliesRev} = require('./util')
-
-tap.test('prune', t => {
-    t.deepEquals(prune({a:'', b:[], c:{}, bar:42}), {bar:42}, 'prune')
-    t.deepEquals(prune({a:null, b:[], c:{}, bar:42}), {bar:42}, 'prune /null')
-    t.end()
-})
+const {splitIdRepliesRev} = require('./util')
 
 tap.test('splitIdRepliesRev', t => {
     const tests = {

@@ -1,0 +1,19 @@
+{
+  "name": "@kba/anno-queries",
+  "version": "0.0.1",
+  "description": "High-level annotation query classes ",
+  "main": "queries.js",
+  "repository": {
+    "url": "https://github.com/kba/anno",
+    "type": "git"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "dependencies": {
+    "@kba/anno-util": "0.0.1",
+    "object-prune": "0.0.2"
+  },
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1"
+  }
+}

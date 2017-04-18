@@ -25,6 +25,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.0",
     "express-jwt": "^5.1.0",
+    "object-prune": "^0.0.2",
     "express-session": "^1.15.2",
     "js-yaml": "^3.8.2",
     "jsonld-rapper": "^0.2.4",

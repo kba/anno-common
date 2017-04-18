@@ -22,7 +22,9 @@ definitions:
   # https://tools.ietf.org/html/rfc3987
   iri:
     type: 'string'
-    format: 'uri'
+    anyOf:
+        - format: 'uri'
+        - pattern: '^urn:'
 
   iri_object:
     type: 'object'
@@ -72,16 +74,18 @@ definitions:
       via:       {$ref: '#/definitions/iri'}
       styledBy:  {oneOf: [{$ref: '#/definitions/iri'}, {$ref: '#/definitions/CssStylesheet'}]}
       body:
-        oneOf:
+        anyOf:
           - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/iri_object'}
           - {$ref: '#/definitions/Resource'}
           - {$ref: '#/definitions/TextualBody'}
           - {$ref: '#/definitions/Choice'}
           - {$ref: '#/definitions/SpecificResource'}
           - type: 'array'
             items:
-              oneOf:
+              anyOf:
                 - {$ref: '#/definitions/iri'}
+                - {$ref: '#/definitions/iri_object'}
                 - {$ref: '#/definitions/Resource'}
                 - {$ref: '#/definitions/TextualBody'}
                 - {$ref: '#/definitions/Choice'}
@@ -89,12 +93,14 @@ definitions:
       target:
         anyOf:
           - {$ref: '#/definitions/iri'}
+          - {$ref: '#/definitions/iri_object'}
           - {$ref: '#/definitions/Resource'}
           - {$ref: '#/definitions/SpecificResource'}
           - type: 'array'
             items:
               anyOf:
                 - {$ref: '#/definitions/iri'}
+                - {$ref: '#/definitions/iri_object'}
                 - {$ref: '#/definitions/Resource'}
                 - {$ref: '#/definitions/SpecificResource'}
 
@@ -106,9 +112,9 @@ definitions:
 
   Resource:
     type: 'object'
-    anyOf:
-      - required: ['id']
-      - required: ['type']
+    # anyOf:
+      # - required: ['id']
+      # - required: ['type']
     properties:
       id:                 {$ref: '#/definitions/iri'}
       format:             {$ref: '#/definitions/mediaType'}
@@ -118,15 +124,11 @@ definitions:
           - {type: 'array', items: {$ref: '#/definitions/language'}}
       processingLanguage: {$ref: '#/definitions/language'}
       textDirection:      {$ref: '#/definitions/textDirection'}
-      type:
-        oneOf:
-          - {$ref: '#/definitions/ResourceClass'}
-          - type: 'array'
-            items: {type: 'string'}
-            contains: [{$ref: '#/definitions/ResourceClass'}]
+      # properties.type
+      # type: {$ref: '#/definitions/resourceClassType'}
 
 #}}}
-#{{{ 3.2 Bodies and Targets - TargetResource
+#{{{ 3.2 Bodies and Targets - TargetResource XXX Unused
 #
 # https://www.w3.org/TR/annotation-model/#bodies-and-targets
 #
@@ -190,6 +192,15 @@ definitions:
       # - 'TextualBody'
       # - 'Choice'
       # - 'SpecificResource'
+
+  resourceClassType: 
+    type: 'string'
+    # anyOf:
+    #   - {$ref: '#/definitions/ResourceClass'}
+    #   - type: 'array'
+    #     items: {type: 'string'}
+    #     contains: [{$ref: '#/definitions/ResourceClass'}]
+    #   - {type: 'string'}
 
 #}}}
 #{{{ 3.2.4 Embedded Textual Body

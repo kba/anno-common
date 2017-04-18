@@ -1,6 +1,6 @@
 const querystring  = require('querystring')
 const {Router}     = require('express')
-const {prune}      = require('@kba/anno-util')
+const prune        = require('object-prune')
 const {loadConfig} = require('@kba/anno-config')
 
 module.exports = ({store}) => {
