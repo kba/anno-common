@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@kba/anno-util": "0.0.1",
-    "object-prune": "0.0.2"
+    "object-prune": "0.0.4"
   },
   "devDependencies": {
     "@kba/anno-fixtures": "^0.0.1"

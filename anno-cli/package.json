@@ -23,7 +23,7 @@
     "@kba/anno-util": "^0.0.1",
     "get-stdin": "^5.0.1",
     "mustache": "^2.3.0",
-    "object-prune": "*",
+    "object-prune": "0.0.4",
     "yargs": "^7.0.2"
   }
 }
