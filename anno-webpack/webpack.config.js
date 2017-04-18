@@ -9,6 +9,9 @@ const config = {
         core: './entry.js',
     },
     node: { fs: "empty" },
+    // externals: {
+    //     'ajv': 'ajv',
+    // },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: `anno${prodBuild ? '.min' : ''}.js`,
