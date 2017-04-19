@@ -14,8 +14,6 @@
     "anno-errors/node_modules",
     "anno-fixtures/node_modules",
     "anno-mw-acl-static/node_modules",
-    "anno-mw-basicauth/node_modules",
-    "anno-mw-httpheaders/node_modules",
     "anno-mw-user-static/node_modules",
     "anno-schema/node_modules",
     "anno-server/node_modules",
