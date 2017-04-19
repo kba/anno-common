@@ -29,7 +29,7 @@ class textualHtmlBody extends AnnoQuery {
             body.format === 'text/html'
         )
     }
-    create() {
+    create({value=''}={}) {
         return {
             type: 'TextualBody',
             format: 'text/html',
@@ -44,7 +44,7 @@ class simpleTagBody extends AnnoQuery {
             body.motivation === 'tagging' || body.purpose === 'tagging'
         )
     }
-    create({value=''}) {
+    create({value=''}={}) {
         return {
             type: 'TextualBody',
             purpose: 'tagging',
@@ -63,7 +63,7 @@ class semanticTagBody extends AnnoQuery {
             )
         )
     }
-    create({id=''}) {
+    create({id=''}={}) {
         return {
             purpose: 'linking',
             id,
@@ -79,7 +79,7 @@ class svgSelectorResource extends AnnoQuery {
             target.selector.type === 'SvgSelector'
         )
     }
-    create({value=''}) {
+    create({value=''}={}) {
         return {
             selector: {
                 type: 'SvgSelector',
