@@ -49,10 +49,11 @@ class Store {
     }
 
     constructor(config={}) {
-        this.config = loadConfig(config)
+        // Override env config with config passed explicitly to constructor
+        this.config = Object.assign(loadConfig({}), config)
         this.middlewares = []
         // console.log(this.config)
-        // console.error("Store.constructor called")
+        // console.error("Store.constructor called", config)
     }
 
     _callMethod(ctx, cb) {
@@ -237,7 +238,7 @@ class Store {
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
         const log = getLogger('store')
-        anno.replyTo = annoId.match(/\/\//) ? annoId : `${loadConfig().BASE_URL}/anno/${annoId}`
+        anno.replyTo = annoId.match(/\/\//) ? annoId : `${this.config.BASE_URL}/anno/${annoId}`
         log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }

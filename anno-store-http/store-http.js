@@ -4,17 +4,18 @@ const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 const {loadConfig, getLogger} = require('@kba/anno-config')
 
+loadConfig({
+    BASE_URL: 'http://localhost:3000/anno'
+})
+
 class HttpStore extends Store {
 
     constructor(...args) {
         super(...args)
-        this.config = loadConfig({
-            BASE_URL: 'http://localhost:3000/anno'
-        })
-        const options = {
+        const axiosOptions = {
             baseURL: this.config.BASE_URL
         }
-        this._httpClient = axios.create(options)
+        this._httpClient = axios.create(axiosOptions)
     }
 
     /* @override */
