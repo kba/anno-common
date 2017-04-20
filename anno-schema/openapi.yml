@@ -3,7 +3,7 @@
 #
 swagger: '2.0'
 basePath: '{{{ OPENAPI_BASEPATH }}}'
-host: '{{ OPENAPI_HOST }}'
+host: '{{{ OPENAPI_HOST }}}'
 info:
   title: 'Anno Server API'
   version: '0.0.1'
@@ -23,7 +23,7 @@ securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
-    description: "Format: 'Bearer HIER_DAS_TOKEN'"
+    description: "Format: 'Bearer TOKEN_HERE'"
     in: header
 
 ##############################################################################
