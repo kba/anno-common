@@ -9,3 +9,4 @@ fixtures
 anno-webpack/dist
 gh-pages
 *.ignore
+*~
