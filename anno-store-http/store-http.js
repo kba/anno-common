@@ -5,7 +5,9 @@ const querystring = require('querystring')
 const {loadConfig, getLogger} = require('@kba/anno-config')
 
 loadConfig({
-    BASE_URL: 'http://localhost:3000/anno'
+    BASE_URL: 'http://localhost:3000/anno',
+    HTTP_HEADERS: '{}',
+    HTTP_AUTH: '',
 })
 
 class HttpStore extends Store {
@@ -13,7 +15,12 @@ class HttpStore extends Store {
     constructor(...args) {
         super(...args)
         const axiosOptions = {
-            baseURL: this.config.BASE_URL
+            baseURL: this.config.BASE_URL,
+            headers: JSON.parse(this.config.HTTP_HEADERS),
+        }
+        if (this.config.HTTP_BASIC_AUTH) {
+            const {username, password} = this.config.HTTP_BASIC_AUTH.split(':').map(x => x.trim())
+            axiosOptions.auth = {username, password}
         }
         this._httpClient = axios.create(axiosOptions)
     }

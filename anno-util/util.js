@@ -50,7 +50,7 @@ function collectIds(list) {
     }
     const ret = []
     _collectIds(list, ret)
-    console.log(ret)
+    // console.log(ret)
     return ret
 }
 
