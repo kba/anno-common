@@ -44,7 +44,7 @@ class simpleTagBody extends AnnoQuery {
             body.motivation === 'tagging' || body.purpose === 'tagging'
         )
     }
-    create({value=''}={}) {
+    create({value={'@value': '', "@language": 'de'}}={}) {
         return {
             type: 'TextualBody',
             purpose: 'tagging',
