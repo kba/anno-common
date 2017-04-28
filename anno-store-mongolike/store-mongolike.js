@@ -56,7 +56,6 @@ class MongolikeStore extends Store {
 
     /* @override */
     _create(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         var anno = JSON.parse(JSON.stringify(options.anno))
         anno = this._deleteId(anno)
         anno = this._normalizeTarget(anno)
@@ -68,7 +67,7 @@ class MongolikeStore extends Store {
 
         // Handle revisions
         anno._revisions = [JSON.parse(JSON.stringify(anno))]
-        const created = new Date().toISOString()
+        const created = anno.created || new Date().toISOString()
         anno.modified = created
         anno.created = created
         anno._revisions[0].created = created
@@ -80,7 +79,7 @@ class MongolikeStore extends Store {
             this.db.count({_id: anno._id}, (err, count) => {
                 if (count > 0) {
                     console.log(cb(errors.badSlug(options.slug)))
-                    anno._id += `_${this.genid()}`
+                    anno._id += `_${this._genid()}`
                 }
                 this._createInsert(anno, options, cb)
             })
@@ -88,6 +87,23 @@ class MongolikeStore extends Store {
             anno._id = this._genid()
             this._createInsert(anno, options, cb)
         }
+    }
+
+    _createInsert(anno, options, cb) {
+        const validFn = schema.validate.Annotation
+        console.log('_createInsert', typeof anno, anno)
+        if (!validFn(anno)) {
+            return cb(errors.invalidAnnotation(anno, validFn.errors))
+        }
+        this.db.insert(anno, (err, savedAnno) => {
+            // TODO differentiate, use errors from anno-errors
+            if (err) return cb(err)
+            // Mongodb returns an object describing the result, nedb returns just the results
+            if ('insertedIds' in savedAnno)
+                return this.get(savedAnno.insertedIds[0], options, cb)
+            else
+                return this.get(savedAnno._id, options, cb)
+        })
     }
 
     _createReply(anno, options, cb) {
@@ -119,22 +135,6 @@ class MongolikeStore extends Store {
                 delete options.anno
                 return this.get(anno.id, options, cb)
             })
-        })
-    }
-
-    _createInsert(anno, options, cb) {
-        const validFn = schema.validate.Annotation
-        if (!validFn(anno)) {
-            return cb(errors.invalidAnnotation(anno, validFn.errors))
-        }
-        this.db.insert(anno, (err, savedAnno) => {
-            // TODO differentiate, use errors from anno-errors
-            if (err) return cb(err)
-            // Mongodb returns an object describing the result, nedb returns just the results
-            if ('insertedIds' in savedAnno)
-                return this.get(savedAnno.insertedIds[0], options, cb)
-            else
-                return this.get(savedAnno._id, options, cb)
         })
     }
 
@@ -193,8 +193,14 @@ class MongolikeStore extends Store {
 
     /* @override */
     _delete(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(options.annoId))
+        if (options.forceDelete) {
+            console.log("FORCE DELETE", options)
+            this.db.remove({_id}, (err, numRemoved) => {
+                if (err) return cb(err)
+                return cb()
+            })
+        }
         var selector = ''
         for (let _replyid of _replyids) {
             selector += `_replies.${_replyid - 1}.`

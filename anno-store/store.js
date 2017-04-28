@@ -189,6 +189,8 @@ class Store {
      *
      * @param {String} annoId
      * @param {Options} options
+     * @param {Boolean} options.forceDelete Set to `true` to hint the store to
+     *                                      actually delete, not just mark deleted
      * @param {String} options.user
      * @param {function} callback
      */

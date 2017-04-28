@@ -144,10 +144,10 @@ module.exports = ({store}) => {
     //
     router.delete('/:annoId/!', (req, resp, next) => {
         req.annoOptions.forceDelete = true
-        store.delete(req.params.annoId, req.annoOptions, (err, doc) => {
+        store.delete(req.params.annoId, req.annoOptions, (err) => {
             if (err) return next(err)
             resp.status(204)
-            return resp.send(doc)
+            return resp.end()
         })
     })
 
