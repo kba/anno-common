@@ -74,51 +74,68 @@ class MongolikeStore extends Store {
         anno._revisions[0].created = created
 
         if (anno.replyTo) {
-            anno.target = anno.replyTo
-            const validFn = schema.validate.Annotation
-            if (!validFn(anno)) {
-                return cb(errors.invalidAnnotation(anno, validFn.errors))
-            }
-            const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(anno.replyTo))
-            this.db.findOne({_id}, (err, existingAnno) => {
-                if (err)
-                    return cb(err)
-                if (!existingAnno) 
-                    return cb(errors.annotationNotFound(anno.replyTo))
-                var selector = '';
-                let parent = existingAnno
-                if (_replyids.length > 0) {
-                    _replyids.forEach(_replyid => {
-                        selector += `_replies.${_replyid - 1}.`
-                        parent = parent._replies[_replyid - 1]
-                    })
+            this._createReply(anno, options, cb)
+        } else if (options.slug) {
+            anno._id = options.slug
+            this.db.count({_id: anno._id}, (err, count) => {
+                if (count > 0) {
+                    console.log(cb(errors.badSlug(options.slug)))
+                    anno._id += `_${this.genid()}`
                 }
-                anno.id = anno.replyTo + '.' + ((parent._replies).length + 1)
-                this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
-                    // TODO differentiate, use errors from anno-errors
-                    if (err) return cb(err)
-                    options.latest = true
-                    delete options.annoId
-                    delete options.anno
-                    return this.get(anno.id, options, cb)
-                })
+                this._createInsert(anno, options, cb)
             })
         } else {
             anno._id = this._genid()
-            const validFn = schema.validate.Annotation
-            if (!validFn(anno)) {
-                return cb(errors.invalidAnnotation(anno, validFn.errors))
+            this._createInsert(anno, options, cb)
+        }
+    }
+
+    _createReply(anno, options, cb) {
+        anno.target = anno.replyTo
+        const validFn = schema.validate.Annotation
+        if (!validFn(anno)) {
+            return cb(errors.invalidAnnotation(anno, validFn.errors))
+        }
+        const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(anno.replyTo))
+        this.db.findOne({_id}, (err, existingAnno) => {
+            if (err)
+                return cb(err)
+            if (!existingAnno) 
+                return cb(errors.annotationNotFound(anno.replyTo))
+            var selector = '';
+            let parent = existingAnno
+            if (_replyids.length > 0) {
+                _replyids.forEach(_replyid => {
+                    selector += `_replies.${_replyid - 1}.`
+                    parent = parent._replies[_replyid - 1]
+                })
             }
-            this.db.insert(anno, (err, savedAnno) => {
+            anno.id = anno.replyTo + '.' + ((parent._replies).length + 1)
+            this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
-                // Mongodb returns an object describing the result, nedb returns just the results
-                if ('insertedIds' in savedAnno)
-                    return this.get(savedAnno.insertedIds[0], options, cb)
-                else
-                    return this.get(savedAnno._id, options, cb)
+                options.latest = true
+                delete options.annoId
+                delete options.anno
+                return this.get(anno.id, options, cb)
             })
+        })
+    }
+
+    _createInsert(anno, options, cb) {
+        const validFn = schema.validate.Annotation
+        if (!validFn(anno)) {
+            return cb(errors.invalidAnnotation(anno, validFn.errors))
         }
+        this.db.insert(anno, (err, savedAnno) => {
+            // TODO differentiate, use errors from anno-errors
+            if (err) return cb(err)
+            // Mongodb returns an object describing the result, nedb returns just the results
+            if ('insertedIds' in savedAnno)
+                return this.get(savedAnno.insertedIds[0], options, cb)
+            else
+                return this.get(savedAnno._id, options, cb)
+        })
     }
 
     /* @override */

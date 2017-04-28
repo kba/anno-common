@@ -1,5 +1,11 @@
 module.exports = {
 
+    badSlug(slug) {
+        const err = new Error(`Slug Bad: ${JSON.stringify(slug)}`)
+        err.code = 400
+        return err
+    },
+
     annotationNotFound(id) {
         const err = new Error(`Annotation not found in store: ${JSON.stringify(id)}`)
         err.code = 404
