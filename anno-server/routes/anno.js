@@ -19,7 +19,7 @@ module.exports = ({store}) => {
 
     function getCollection(req, resp, next) {
         // TODO see _urlFromId in store.js
-        var colUrl = `${loadConfig().BASE_URL}/${loadConfig().BASE_PATH}/anno/`
+        var colUrl = `${loadConfig().BASE_URL}${loadConfig().BASE_PATH}/anno/`
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         store.search(req.query, req.annoOptions, (err, docs) => {

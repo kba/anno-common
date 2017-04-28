@@ -31,7 +31,6 @@ class MongolikeStore extends Store {
         const query = {_id, deleted: {$exists: false}}
         this.db.findOne(query, projection, (err, doc) => {
             if (!doc) return cb(errors.annotationNotFound(annoId))
-            doc.replyTo = []
             for (let _replyid of _replyids) {
                 // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]

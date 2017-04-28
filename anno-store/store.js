@@ -240,7 +240,7 @@ class Store {
         const log = getLogger('store')
         anno.replyTo = annoId.match(/\/\//) 
             ? annoId
-            : `${this.config.BASE_URL}/${this.config.BASE_PATH}/anno/${annoId}`
+            : this._urlFromId(annoId)
         log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }
