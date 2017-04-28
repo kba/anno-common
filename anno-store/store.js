@@ -238,7 +238,9 @@ class Store {
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
         const log = getLogger('store')
-        anno.replyTo = annoId.match(/\/\//) ? annoId : `${this.config.BASE_URL}/anno/${annoId}`
+        anno.replyTo = annoId.match(/\/\//) 
+            ? annoId
+            : `${this.config.BASE_URL}/${this.config.BASE_PATH}/anno/${annoId}`
         log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }
@@ -285,8 +287,11 @@ class Store {
      */
 
     _idFromURL(url) {
-        // TODO don't hardcode anno
-        return url.replace(this.config.BASE_URL + '/anno/', '')
+        return url.replace(`${this.config.BASE_URL}${this.config.BASE_PATH}/anno`, '')
+    }
+
+    _urlFromId(annoId) {
+        return `${this.config.BASE_URL}${this.config.BASE_PATH}/anno/${annoId}`
     }
 
     // TODO no idempotency of targets with normalization -> disabled for now

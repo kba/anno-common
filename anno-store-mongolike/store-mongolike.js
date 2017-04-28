@@ -31,6 +31,7 @@ class MongolikeStore extends Store {
         const query = {_id, deleted: {$exists: false}}
         this.db.findOne(query, projection, (err, doc) => {
             if (!doc) return cb(errors.annotationNotFound(annoId))
+            doc.replyTo = []
             for (let _replyid of _replyids) {
                 // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]
@@ -38,14 +39,18 @@ class MongolikeStore extends Store {
                     return cb(errors.replyNotFound(annoId))
                 }
             }
-            const rev = (_revid) 
+            const rev = (_revid)
                 ? doc._revisions[_revid -1]
                 : doc._revisions[doc._revisions.length - 1]
             if (!rev) return cb(errors.revisionNotFound(_id, _revid))
+
             if (options.latest) {
                 annoId = `${_id}~${doc._revisions.length}`
                 doc = rev
             }
+
+            if (_replyids.length) doc.replyTo = this._urlFromId(`${_id}${_replyids.map(x=>`.${x}`).join('')}`)
+            if (_revid) doc.versionOf = this._urlFromId(_id)
             return cb(null, this._toJSONLD(annoId, doc, options))
         })
     }
@@ -226,14 +231,14 @@ class MongolikeStore extends Store {
      * ******************************************
      */
     // TODO make recursive
-    _toJSONLD(annoId, anno, options={}) {
+    _toJSONLD(annoId, anno, options={}, mergeProps={}) {
         // console.log(annoId, options)
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
-        const ret = {}
+        const ret = Object.assign({}, mergeProps)
         if (!options.skipContext) {
             ret['@context'] = 'http://www.w3.org/ns/anno.jsonld'
         }
-        ret.id = `${this.config.BASE_URL}/anno/${annoId}`
+        ret.id = this._urlFromId(annoId)
         ret.type = "Annotation"
         options.skipContext = true
         Object.keys(anno).forEach(prop => {
@@ -241,8 +246,9 @@ class MongolikeStore extends Store {
                 if (anno._revisions.length > 0 && !options.skipVersions) {
                     var revId = 0
                     ret.hasVersion = anno._revisions.map(revision => {
-                        const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision, options)
-                        revisionLD.versionOf = ret.id
+                        const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision, options, {
+                            versionOf: ret.id
+                        })
                         return revisionLD
                     })
                 }

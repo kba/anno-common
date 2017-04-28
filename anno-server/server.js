@@ -6,7 +6,7 @@ process.env.ANNO_LOGLEVEL = 'silly'
 loadConfig({
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
-    BASE_PATH: '',
+    BASE_PATH: '/',
     SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK'
 })
 function start(app, cb) {

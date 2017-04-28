@@ -17,9 +17,9 @@ module.exports = ({store}) => {
         })
     }
 
-    // TODO
     function getCollection(req, resp, next) {
-        var colUrl = loadConfig().BASE_URL + '/anno/'
+        // TODO see _urlFromId in store.js
+        var colUrl = `${loadConfig().BASE_URL}/${loadConfig().BASE_PATH}/anno/`
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         store.search(req.query, req.annoOptions, (err, docs) => {
@@ -39,6 +39,7 @@ module.exports = ({store}) => {
                 id: colUrl,
                 total: docs.length,
             }
+            // TODO paging
             if (col.total > 0) {
                 Object.assign(col, {
                     first: {
@@ -97,6 +98,8 @@ module.exports = ({store}) => {
 
     //
     // HEAD /anno/{annoId}
+    //
+    // NOTE: HEAD must be defined before GET because express
     //
     router.head('/:annoId', (req, resp, next) => {
         req.query.metadataOnly = true
