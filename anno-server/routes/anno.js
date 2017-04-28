@@ -140,6 +140,18 @@ module.exports = ({store}) => {
     //----------------------------------------------------------------
 
     //
+    // DELETE /anno/{annoId}/!
+    //
+    router.delete('/:annoId/!', (req, resp, next) => {
+        req.annoOptions.forceDelete = true
+        store.delete(req.params.annoId, req.annoOptions, (err, doc) => {
+            if (err) return next(err)
+            resp.status(204)
+            return resp.send(doc)
+        })
+    })
+
+    //
     // POST /anno/{annoId}/reply
     //
     router.post('/:annoId/reply', (req, resp, next) => {
