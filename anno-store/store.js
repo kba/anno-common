@@ -287,7 +287,7 @@ class Store {
      */
 
     _idFromURL(url) {
-        return url.replace(`${this.config.BASE_URL}${this.config.BASE_PATH}/anno`, '')
+        return url.replace(`${this.config.BASE_URL}${this.config.BASE_PATH}/anno/`, '')
     }
 
     _urlFromId(annoId) {
