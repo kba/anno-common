@@ -237,6 +237,12 @@
             "schema": {
               "$ref": "#/definitions/Annotation"
             }
+          },
+          "404": {
+            "description": "No such annotation exists in the store"
+          },
+          "410": {
+            "description": "This annotation has been deleted"
           }
         }
       },
@@ -257,6 +263,12 @@
         "responses": {
           "200": {
             "description": "all okay"
+          },
+          "404": {
+            "description": "No such annotation exists in the store"
+          },
+          "410": {
+            "description": "This annotation has been deleted"
           }
         }
       },
@@ -265,6 +277,7 @@
           "anno"
         ],
         "summary": "Delete an annotation",
+        "description": " Will mark the annotation as deleted.\nSubsequent GET requests will return 410. ",
         "parameters": [
           {
             "in": "path",
@@ -312,6 +325,26 @@
             "schema": {
               "$ref": "#/definitions/Annotation"
             }
+          }
+        }
+      }
+    },
+    "/anno/{annoId}/!": {
+      "delete": {
+        "tags": [
+          "extensions"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Completely delete the annotation",
+        "description": " Will remove the annotation and all replies and versions from the store. Subsequent GET requests will return 404 ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all okay"
           }
         }
       }
