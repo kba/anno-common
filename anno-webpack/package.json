@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-webpack",
-  "version": "0.0.1",
+  "version": "0.0.1-pre1",
   "description": "Browser version",
   "main": "dist/anno.min.js",
   "scripts": {
