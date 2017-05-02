@@ -14,7 +14,7 @@
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-webpack#readme",
-  "dependencies": {
+  "devDependencies": {
     "@kba/anno-config": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
     "@kba/anno-queries": "^0.0.1",
@@ -22,9 +22,7 @@
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-store-http": "^0.0.1",
     "@kba/anno-store-memory": "^0.0.1",
-    "yargs": "^7.0.2"
-  },
-  "devDependencies": {
+    "yargs": "^7.0.2",
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "json-loader": "^0.5.4",
