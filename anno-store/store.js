@@ -1,16 +1,15 @@
 const slugid = require('slugid')
 const async = require('async')
 const {envyConf, envyLog} = require('envyconf')
-envyConf('ANNO', {
-    BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
-    BASE_PATH: '',
-    STORE_MIDDLEWARES: ''
-})
 
 class Store {
 
     static load(loadingModule) {
-        const config = envyConf('ANNO')
+        const config = envyConf('ANNO', {
+            BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
+            BASE_PATH: '',
+            STORE_MIDDLEWARES: ''
+        })
         const log = envyLog('ANNO', 'store')
         if (!loadingModule)
             throw new Error("Must pass the loading module to Store.load")

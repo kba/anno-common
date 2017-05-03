@@ -3,7 +3,7 @@
   "name": "anno",
   "scripts": {
     "bootstrap": "./node_modules/.bin/lerna bootstrap",
-    "postinstall": "npm run bootstrap ; npm run link-all",
+    "X postinstall": "npm run bootstrap ; npm run link-all",
     "link-all": "for i in anno-*;do sh -c \"cd $i; npm link\";done",
     "docker": "docker build -t kbai/anno -f Dockerfile ."
   },
@@ -28,7 +28,8 @@
     "anno-web-plugin/node_modules"
   ],
   "dependencies": {
-    "lerna": "2.0.0-rc.4"
+    "js-yaml": "^3.8.3",
+    "lerna": "2.0.0-beta.38"
   },
   "devDependencies": {
     "async": "^2.3.0",

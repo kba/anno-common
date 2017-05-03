@@ -19,6 +19,6 @@
   "dependencies": {
     "@kba/anno-errors": "^0.0.1",
     "sift-rule": "^0.1.0",
-    "envyconf": "^0.0.3"
+    "envyconf": "^0.0.4"
   }
 }

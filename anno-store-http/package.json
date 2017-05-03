@@ -12,7 +12,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-http#readme",
   "dependencies": {
-    "envyconf": "^0.0.3",
+    "envyconf": "^0.0.4",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
     "@kba/anno-store": "^0.0.1",

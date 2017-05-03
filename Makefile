@@ -38,7 +38,7 @@ help:
 
 .PHONY: bootstrap
 bootstrap:
-	lerna bootstrap --hoist --concurrency 8
+	lerna bootstrap
 
 start-all: bootstrap
 	$(MAKE) -sC anno-store-mongodb start
