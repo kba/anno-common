@@ -23,12 +23,15 @@ class MongodbStore extends Store {
 
     _wipe(options, cb) {
         this.db.drop(err => {
-            if (err) {
-                // if (err.message.match('ns not found'))  return this.disconnect(cb)
-                return cb(err)
-            }
-            this._disconnect({}, err => this._init({}, cb))
-            // return cb(err)
+            if (!err) return this.disconnect(cb)
+            if (err.message.match('ns not found'))  return this.disconnect(cb)
+            return cb(err)
+            // if (err) {
+            //     // if (err.message.match('ns not found'))  return this.disconnect(cb)
+            //     return cb(err)
+            // }
+            // this._disconnect({}, err => this._init({}, cb))
+            // // return cb(err)
         })
     }
 
