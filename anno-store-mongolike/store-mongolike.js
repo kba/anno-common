@@ -3,7 +3,6 @@ const schema = require('@kba/anno-schema')
 const async = require('async')
 const errors = require('@kba/anno-errors')
 const {splitIdRepliesRev} = require('@kba/anno-util')
-const {loadConfig} = require('@kba/anno-config')
 
 class MongolikeStore extends Store {
 

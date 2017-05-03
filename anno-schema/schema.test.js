@@ -5,7 +5,7 @@ const fixtures = require('@kba/anno-fixtures')
 
 tap.test('smoketest', t => {
     t.equals(Object.keys(schema.validate).length, Object.keys(schema.definitions).length, 'validate 1:1 definitions')
-    t.equals(Object.keys(schema.validate).length, 33, '33 classes in schema')
+    t.equals(Object.keys(schema.validate).length, 34, '34 classes in schema')
     t.end()
 })
 

@@ -1,20 +1,20 @@
 const nedb = require('nedb')
 const fs = require('fs')
 const Store = require('@kba/anno-store-mongolike')
-const {loadConfig,getLogger} = require('@kba/anno-config')
+const {envyConf,envyLog} = require('envyconf')
 
 class FileStore extends Store {
 
     constructor() {
         super()
-        const config = loadConfig({
+        const config = envyConf('ANNO', {
             STORE_FILE: `${process.env.HOME}/.local/cache/anno.nedb`,
             COLLECTION: 'default'
         })
 
         // this.dbfilename = `${config.STORE_FILE}/anno-${config.COLLECTION}.nedb`
         this.dbfilename = config.STORE_FILE
-        getLogger('store-file').debug(`nedb saved as ${this.dbfilename}`)
+        envyLog('ANNO', 'store-file').debug(`nedb saved as ${this.dbfilename}`)
         this.db = new nedb({filename: this.dbfilename})
     }
 

@@ -12,7 +12,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno",
   "dependencies": {
-    "@kba/anno-config": "^0.0.1",
+    "envyconf": "^0.0.3",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
@@ -20,7 +20,7 @@
     "@kba/anno-store-file": "^0.0.1",
     "@kba/anno-mw-user-static": "^0.0.1",
     "@kba/anno-mw-acl-static": "^0.0.1",
-    "async": "^2.1.5",
+    "async": "^2.3.0",
     "tap": "^10.3.0"
   }
 }

@@ -11,7 +11,6 @@ reuse of components.
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Packages](#packages)
 	* [anno-cli](#anno-cli)
-	* [anno-config](#anno-config)
 	* [anno-schema](#anno-schema)
 	* [anno-server](#anno-server)
 	* [anno-store](#anno-store)
@@ -34,10 +33,6 @@ reuse of components.
 ### anno-cli
 
 Command line client
-
-### anno-config
-
-All configuration of all components happens via this.
 
 ### anno-schema
 

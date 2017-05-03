@@ -12,9 +12,9 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store#readme",
   "dependencies": {
-    "@kba/anno-config": "^0.0.1",
+    "envyconf": "^0.0.3",
     "@kba/anno-schema": "^0.0.1",
-    "async": "^2.2.0",
+    "async": "^2.3.0",
     "slugid": "^1.1.0"
   },
   "devDependencies": { }

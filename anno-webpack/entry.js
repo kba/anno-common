@@ -1,6 +1,6 @@
 module.exports = {
     Schema:      require('@kba/anno-schema'),
-    Config:      require('@kba/anno-config'),
+    Config:      require('envyconf'),
     Errors:      require('@kba/anno-errors'),
     Store:       require('@kba/anno-store'),
     HttpStore:   require('@kba/anno-store-http'),

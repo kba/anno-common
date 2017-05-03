@@ -1,8 +1,9 @@
 const usersExample = require('./users-example.json')
+const {envyConf} = require('envyconf')
 
 function UserMemoryMiddleware() {
 
-    const config = require('@kba/anno-config').loadConfig({
+    const config = envyConf('ANNO', {
         MW_USER_DATA: JSON.stringify(usersExample)
     })
     const users = JSON.parse(config.MW_USER_DATA)

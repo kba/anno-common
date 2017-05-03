@@ -1,15 +1,17 @@
 const slugid = require('slugid')
 const async = require('async')
-const {loadConfig,getLogger} = require('@kba/anno-config')
+const {envyConf, envyLog} = require('envyconf')
+envyConf('ANNO', {
+    BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
+    BASE_PATH: '',
+    STORE_MIDDLEWARES: ''
+})
 
 class Store {
 
     static load(loadingModule) {
-        const config = loadConfig({
-            BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
-            STORE_MIDDLEWARES: ''
-        })
-        const log = require('@kba/anno-config').getLogger('store')
+        const config = envyConf('ANNO')
+        const log = envyLog('ANNO', 'store')
         if (!loadingModule)
             throw new Error("Must pass the loading module to Store.load")
         if (!config.STORE)
@@ -50,7 +52,7 @@ class Store {
 
     constructor(config={}) {
         // Override env config with config passed explicitly to constructor
-        this.config = Object.assign(loadConfig({}), config)
+        this.config = Object.assign(envyConf('ANNO', {}), config)
         this.middlewares = []
         // console.log(this.config)
         // console.error("Store.constructor called", config)
@@ -61,7 +63,7 @@ class Store {
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
-        const log = getLogger('store')
+        const log = envyLog('ANNO', 'store')
         log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
             middleware(ctx, function process(...args) {
@@ -223,7 +225,7 @@ class Store {
      * Reply to an annotation
      */
     reply(annoId, anno, options, cb) {
-        const log = getLogger('store')
+        const log = envyLog('ANNO', 'store')
         console.log(annoId, anno)
         log.debug(`Replying to ${annoId}`, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
@@ -239,7 +241,7 @@ class Store {
         const {anno, annoId} = options
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
-        const log = getLogger('store')
+        const log = envyLog('ANNO', 'store')
         anno.replyTo = annoId.match(/\/\//) 
             ? annoId
             : this._urlFromId(annoId)
