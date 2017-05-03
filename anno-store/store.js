@@ -263,19 +263,14 @@ class Store {
         async.forEach(targets, (url, urlDone) => {
             ret[url] = {}
             const anno = {target: url}
-            // TODO reduce callback clutter  here
-            this.get(url, options, (err, ctx) => {
-                ret[url].read = !err
-                this.create(anno, options, (err, ctx) => {
-                    ret[url].create = !err
-                    this.revise(url, anno, options, (err, ctx) => {
-                        ret[url].revise = !err
-                        this.delete(url, options, (err, ctx) => {
-                            ret[url].remove = !err
-                            urlDone()
-                        })
-                    })
-                })
+            async.parallel({
+                read:   (cb) => this.get(url, options, (err)          => cb(null, !err)),
+                create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
+                revise: (cb) => this.revise(url, anno, options, (err) => cb(null, !err)),
+                remove: (cb) => this.delete(url, options, (err)       => cb(null, !err)),
+            }, (err, perms) => {
+                ret[url] = perms
+                urlDone()
             })
         }, (err) => cb(err, ret))
     }
