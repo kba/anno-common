@@ -51,6 +51,7 @@ class Store {
 
     constructor(config={}) {
         // Override env config with config passed explicitly to constructor
+        this.log = envyLog('ANNO', 'store')
         this.config = Object.assign(envyConf('ANNO', {}), config)
         this.middlewares = []
         // console.log(this.config)
@@ -62,15 +63,14 @@ class Store {
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
-        const log = envyLog('ANNO', 'store')
-        log.silly(`Calling method '${ctx.method}'`, ctx)
+        this.log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
             middleware(ctx, function process(...args) {
-                log.silly(`ctx after ${middleware.constructor.name}`, ctx)
+                this.log.silly(`ctx after ${middleware.constructor.name}`, ctx)
                 next(...args)
             })
         }, (err, pass) => {
-            log.silly('finished all middlewares')
+            this.log.silly('finished all middlewares')
             if (err) return cb(err)
             if (ctx.dryRun) {
                 return cb(null, ctx)
@@ -224,9 +224,8 @@ class Store {
      * Reply to an annotation
      */
     reply(annoId, anno, options, cb) {
-        const log = envyLog('ANNO', 'store')
         console.log(annoId, anno)
-        log.debug(`Replying to ${annoId}`, anno)
+        this.log.debug(`Replying to ${annoId}`, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'reply',
@@ -240,11 +239,10 @@ class Store {
         const {anno, annoId} = options
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
-        const log = envyLog('ANNO', 'store')
         anno.replyTo = annoId.match(/\/\//) 
             ? annoId
             : this._urlFromId(annoId)
-        log.debug(`Replying to ${annoId}`, anno)
+        this.log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }
 
