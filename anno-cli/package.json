@@ -15,7 +15,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@kba/anno-config": "^0.0.1",
+    "envyconf": "^0.0.4",
     "@kba/anno-queries": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
@@ -23,7 +23,7 @@
     "@kba/anno-util": "^0.0.1",
     "get-stdin": "^5.0.1",
     "mustache": "^2.3.0",
-    "object-prune": "0.0.4",
+    "object-prune": "^0.0.4",
     "yargs": "^7.0.2"
   }
 }

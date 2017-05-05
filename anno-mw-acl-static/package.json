@@ -16,8 +16,8 @@
     "@kba/anno-mw-user-static": "^0.0.1"
   },
   "dependencies": {
-    "@kba/anno-config": "^0.0.1",
     "@kba/anno-acl": "^0.0.1",
-    "sift-rule": "^0.1.0"
+    "sift-rule": "^0.1.0",
+    "envyconf": "^0.0.4"
   }
 }

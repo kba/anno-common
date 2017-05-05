@@ -1,15 +1,16 @@
 const slugid = require('slugid')
 const async = require('async')
-const {loadConfig,getLogger} = require('@kba/anno-config')
+const {envyConf, envyLog} = require('envyconf')
 
 class Store {
 
     static load(loadingModule) {
-        const config = loadConfig({
+        const config = envyConf('ANNO', {
             BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
+            BASE_PATH: '',
             STORE_MIDDLEWARES: ''
         })
-        const log = require('@kba/anno-config').getLogger('store')
+        const log = envyLog('ANNO', 'store')
         if (!loadingModule)
             throw new Error("Must pass the loading module to Store.load")
         if (!config.STORE)
@@ -50,7 +51,8 @@ class Store {
 
     constructor(config={}) {
         // Override env config with config passed explicitly to constructor
-        this.config = Object.assign(loadConfig({}), config)
+        this.log = envyLog('ANNO', 'store')
+        this.config = Object.assign(envyConf('ANNO', {}), config)
         this.middlewares = []
         // console.log(this.config)
         // console.error("Store.constructor called", config)
@@ -61,15 +63,14 @@ class Store {
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
-        const log = getLogger('store')
-        log.silly(`Calling method '${ctx.method}'`, ctx)
+        this.log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
             middleware(ctx, function process(...args) {
-                log.silly(`ctx after ${middleware.constructor.name}`, ctx)
+                this.log.silly(`ctx after ${middleware.constructor.name}`, ctx)
                 next(...args)
             })
         }, (err, pass) => {
-            log.silly('finished all middlewares')
+            this.log.silly('finished all middlewares')
             if (err) return cb(err)
             if (ctx.dryRun) {
                 return cb(null, ctx)
@@ -223,9 +224,8 @@ class Store {
      * Reply to an annotation
      */
     reply(annoId, anno, options, cb) {
-        const log = getLogger('store')
         console.log(annoId, anno)
-        log.debug(`Replying to ${annoId}`, anno)
+        this.log.debug(`Replying to ${annoId}`, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'reply',
@@ -239,11 +239,10 @@ class Store {
         const {anno, annoId} = options
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
-        const log = getLogger('store')
         anno.replyTo = annoId.match(/\/\//) 
             ? annoId
             : this._urlFromId(annoId)
-        log.debug(`Replying to ${annoId}`, anno)
+        this.log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }
 
@@ -262,19 +261,14 @@ class Store {
         async.forEach(targets, (url, urlDone) => {
             ret[url] = {}
             const anno = {target: url}
-            // TODO reduce callback clutter  here
-            this.get(url, options, (err, ctx) => {
-                ret[url].read = !err
-                this.create(anno, options, (err, ctx) => {
-                    ret[url].create = !err
-                    this.revise(url, anno, options, (err, ctx) => {
-                        ret[url].revise = !err
-                        this.delete(url, options, (err, ctx) => {
-                            ret[url].remove = !err
-                            urlDone()
-                        })
-                    })
-                })
+            async.parallel({
+                read:   (cb) => this.get(url, options, (err)          => cb(null, !err)),
+                create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
+                revise: (cb) => this.revise(url, anno, options, (err) => cb(null, !err)),
+                remove: (cb) => this.delete(url, options, (err)       => cb(null, !err)),
+            }, (err, perms) => {
+                ret[url] = perms
+                urlDone()
             })
         }, (err) => cb(err, ret))
     }

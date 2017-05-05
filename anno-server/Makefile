@@ -16,7 +16,7 @@ watch: swagger-ui
 
 .PHONY: serve
 serve: swagger-ui
-	lerna bootstrap
+	lerna bootstrap --hoist
 	node server.js
 
 .PHONY: start

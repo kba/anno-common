@@ -1,12 +1,12 @@
 const {Router} = require('express')
 const yaml = require('js-yaml')
 const annoSchema = require('@kba/anno-schema')
-const {loadConfig} = require('@kba/anno-config')
+const {envyConf} = require('envyconf')
 
 module.exports = () => {
 
     const router = Router()
-    const config = loadConfig()
+    const config = envyConf('ANNO')
 
     const swaggerDef = annoSchema.openapi
 

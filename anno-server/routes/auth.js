@@ -1,6 +1,6 @@
 const jsonwebtoken = require('jsonwebtoken')
 const {Router} = require('express')
-const {loadConfig} = require('@kba/anno-config')
+const {envyConf} = require('envyconf')
 const passport = require('passport');
 
 function noSuchUser(username) {
@@ -11,7 +11,7 @@ function noSuchUser(username) {
 
 module.exports = () => {
 
-    const {SERVER_JWT_SECRET} = loadConfig({
+    const {SERVER_JWT_SECRET} = envyConf('ANNO', {
         SERVER_JWT_SECRET: 'S3cr3t!'
     })
 

@@ -14,13 +14,13 @@
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "@kba/anno-config": "^0.0.1",
+    "envyconf": "^0.0.4",
     "@kba/anno-fixtures": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-store-file": "^0.0.1",
     "@kba/anno-util": "^0.0.1",
-    "async": "^2.1.5",
+    "async": "^2.3.0",
     "body-parser": "^1.17.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
@@ -28,14 +28,14 @@
     "express-jwt": "^5.1.0",
     "object-prune": "^0.0.4",
     "express-session": "^1.15.2",
-    "js-yaml": "^3.8.2",
+    "js-yaml": "^3.8.3",
     "jsonld-rapper": "^0.2.4",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
     "mustache": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.0-beta11"
+    "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
     "pm2": "^2.4.6"

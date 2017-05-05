@@ -2,9 +2,9 @@ const axios = require('axios')
 const Store = require('@kba/anno-store')
 const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
-const {loadConfig, getLogger} = require('@kba/anno-config')
+const {envyConf, envyLog} = require('envyconf')
 
-loadConfig({
+envyConf('ANNO',{
     BASE_URL: 'http://localhost:3000/anno',
     HTTP_HEADERS: '{}',
     HTTP_AUTH: '',
@@ -153,7 +153,7 @@ class HttpStore extends Store {
             ret.headers = ret.headers || {}
             Object.assign(ret.headers, options.httpHeaders)
         }
-        const log = getLogger('store-http')
+        const log = envyLog('ANNO', 'store-http')
         log.silly("axios config from options", ret)
         return ret
     }

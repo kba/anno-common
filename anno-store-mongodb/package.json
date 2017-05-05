@@ -12,7 +12,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-mongodb#readme",
   "dependencies": {
-    "@kba/anno-config": "^0.0.1",
+    "envyconf": "^0.0.4",
     "@kba/anno-store-mongolike": "^0.0.1",
     "mongodb": "^2.2.25"
   },

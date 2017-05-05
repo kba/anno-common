@@ -1,8 +1,8 @@
 const expressJWT = require('express-jwt')
-const {loadConfig} = require('@kba/anno-config')
+const {envyConf} = require('envyconf')
 
 module.exports = () => {
-    const secret = loadConfig({
+    const secret = envyConf('ANNO', {
         SERVER_JWT_SECRET: 'S3cr3t!'
     }).SERVER_JWT_SECRET
     const jwt = expressJWT({secret: secret})

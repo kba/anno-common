@@ -1,5 +1,5 @@
 const mustache = require('mustache')
-const {loadConfig} = require('@kba/anno-config')
+const {envyConf} = require('envyconf')
 const ajv = require('ajv')({
     allErrors: true,
     errorDataPath: true,
@@ -34,11 +34,11 @@ openapi.definitions = dataModel.definitions
 
 module.exports = {
     get openapi() {
-        return mustacheJSON(openapi, loadConfig(defaults))
+        return mustacheJSON(openapi, envyConf('ANNO', defaults))
     },
     definitions: dataModel.definitions,
     get jsonldContext() {
-        return mustacheJSON(jsonldContext, loadConfig(defaults))
+        return mustacheJSON(jsonldContext, envyConf('ANNO', defaults))
     },
     contentType: {
         'anno':  'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',

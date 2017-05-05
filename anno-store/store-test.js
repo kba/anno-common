@@ -31,7 +31,7 @@ module.exports = function testStore(store, testStoreCallback) {
             (saved, cb) => {
                 t.equals(saved.target.source, input1.target, 'target kept (string)')
                 savedId = saved.id
-                savedRevId = `${savedId}-rev-1`
+                savedRevId = `${savedId}~1`
                 cb()
             },
             cb => store.get(savedId, cb),

@@ -1,7 +1,7 @@
-const querystring  = require('querystring')
-const {Router}     = require('express')
-const prune        = require('object-prune')
-const {loadConfig} = require('@kba/anno-config')
+const querystring = require('querystring')
+const {Router}    = require('express')
+const prune       = require('object-prune')
+const {envyConf}  = require('envyconf')
 
 module.exports = ({store}) => {
 
@@ -19,7 +19,8 @@ module.exports = ({store}) => {
 
     function getCollection(req, resp, next) {
         // TODO see _urlFromId in store.js
-        var colUrl = `${loadConfig().BASE_URL}${loadConfig().BASE_PATH}/anno/`
+        const {BASE_URL, BASE_PATH} = envyConf('ANNO')
+        var colUrl = `${BASE_URL}${BASE_PATH}/anno/`
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         store.search(req.query, req.annoOptions, (err, docs) => {

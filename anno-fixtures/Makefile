@@ -7,8 +7,8 @@ help:
 	@echo
 	@echo "  Targets"
 	@echo
-	@echo "    fixtures       Download assets from web-platform-tests"
-	@echo "    fixtures.json  Create one big JSON file"
+	@echo "    fixtures     Download assets from web-platform-tests"
+	@echo "    index.json  Create one big JSON file"
 	@echo
 	@echo "  Variables"
 	@echo
@@ -18,7 +18,7 @@ fixtures: $(WPT_REPO)
 	@$(MKDIR) $(TEMPDIR)
 	@cp -n $(WPT_REPO)/annotation-protocol/files/annotations/*.json "Annotation/ok"
 	@# these are invalid for the current draft (composite/list)
-	@mv Annotation/ok/anno11.json Annotation/ok/anno12.json Annotation/ok/anno13.json Annotation/notOk
+	# @mv Annotation/ok/anno11.json Annotation/ok/anno12.json Annotation/ok/anno13.json Annotation/notOk
 
 index.json: fixtures
 	node make-json.js > "$@"

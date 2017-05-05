@@ -3,7 +3,7 @@
   "name": "anno",
   "scripts": {
     "bootstrap": "./node_modules/.bin/lerna bootstrap",
-    "postinstall": "npm run bootstrap ; npm run link-all",
+    "X postinstall": "npm run bootstrap ; npm run link-all",
     "link-all": "for i in anno-*;do sh -c \"cd $i; npm link\";done",
     "docker": "docker build -t kbai/anno -f Dockerfile ."
   },
@@ -11,7 +11,6 @@
     "node_modules",
     "anno-acl/node_modules",
     "anno-cli/node_modules",
-    "anno-config/node_modules",
     "anno-errors/node_modules",
     "anno-fixtures/node_modules",
     "anno-mw-acl-static/node_modules",
@@ -29,20 +28,18 @@
     "anno-web-plugin/node_modules"
   ],
   "dependencies": {
+    "js-yaml": "^3.8.3",
     "lerna": "2.0.0-beta.38"
   },
   "devDependencies": {
-    "async": "^2.2.0",
-    "babel-preset-env": "^1.3.2",
-    "async": "^2.2.0",
-    "js-yaml": "^3.8.2",
+    "async": "^2.3.0",
+    "babel-preset-env": "^1.3.3",
+    "js-yaml": "^3.8.3",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.3.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "jsdoc": "^3.4.3",
     "lerna": "2.0.0-beta.38",
     "tap": "^10.3.0"
   }

@@ -1,13 +1,14 @@
 const {RuleSet} = require('sift-rule')
-const {loadConfig,getLogger} = require('@kba/anno-config')
+const {envyConf, envyLog} = require('envyconf')
 const errors = require('@kba/anno-errors')
 
 class AnnoAcl {
 
     process(ctx, cb) {
-        const config = loadConfig()
+        const config = envyConf('ANNO')
+        const log = envyLog('ANNO', 'acl')
         ctx.collection = (ctx.collection || 'default')
-        getLogger('acl').silly("Matching against rules:", ctx)
+        log.silly("Matching against rules:", ctx)
         const matchingRule = this.rules.first(ctx)
         if (config.LOGLEVEL !== '') {
             console.log(`Rule '${matchingRule}' matched ${JSON.stringify(ctx)}`)
