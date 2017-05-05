@@ -220,6 +220,8 @@ class MongolikeStore extends Store {
         if ('$target' in query) {
             query.$or = [
                 { target: query.$target },
+                { 'target.id': query.$target },
+                { 'target.scope': query.$target },
                 { 'target.source': query.$target },
             ]
             delete query.$target
