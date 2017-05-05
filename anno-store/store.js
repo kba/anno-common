@@ -65,7 +65,7 @@ class Store {
         }
         this.log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
-            middleware(ctx, function process(...args) {
+            middleware(ctx, (...args) => {
                 this.log.silly(`ctx after ${middleware.constructor.name}`, ctx)
                 next(...args)
             })
