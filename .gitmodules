@@ -1,3 +1,6 @@
 [submodule "packages/anno-server/public/swagger-ui"]
 	path = anno-server/public/swagger-ui
 	url = https://github.com/swagger-api/swagger-ui
+[submodule "envyconf"]
+	path = envyconf
+	url = https://github.com/kba/envyconf
