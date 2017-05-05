@@ -29,14 +29,9 @@ const config = {
     module: {
         rules: [
             {
-                test: /anno-.*\.js$/,
+                test: /.*\.js$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader?cacheDirectory',
-                    options: {
-                        presets: ['env']
-                    }
-                }
+                loader: 'babel-loader',
             }
         ]
     },
