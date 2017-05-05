@@ -14,7 +14,7 @@
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "envyconf": "^0.0.4",
+    "envyconf": "^0.0.5",
     "@kba/anno-fixtures": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",

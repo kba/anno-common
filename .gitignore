@@ -11,3 +11,4 @@ gh-pages
 *.ignore
 ignore.*
 *~
+anno-docker

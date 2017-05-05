@@ -18,6 +18,6 @@
   "dependencies": {
     "@kba/anno-acl": "^0.0.1",
     "sift-rule": "^0.1.0",
-    "envyconf": "^0.0.4"
+    "envyconf": "^0.0.5"
   }
 }
