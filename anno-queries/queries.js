@@ -1,18 +1,43 @@
 const {find, filter, numberOf} = require('@kba/anno-util')
 const prune = require('object-prune')
 
+/**
+ * ### AnnoQuery
+ *
+ * Common base class of all resource classes.
+ */
 class AnnoQuery {
 
+    /**
+     * #### `new AnnoQuery(_defaultkeys=[])`
+     *
+     * - `@param Array _defaultkeys` Default path to the sub-object in question.
+     *   Normally shoul d be either `['body']` or [`target`].
+     */
     constructor(_defaultkeys=[]) {
         this._defaultkeys = _defaultkeys
     }
 
+    /**
+     * #### `first(anno, ...keys)`
+     *
+     * Find the first resource in `anno` which matches this query.
+     *
+     * Descend by `keys` or fall back to `this._defaultkeys`.
+     */
     first(obj, ...keys) {
         if (keys.length === 0) keys = this._defaultkeys
         for (let k of keys) obj = obj[k]
         return find(obj, this.match)
     }
 
+    /**
+     * #### `all(anno, ...keys)`
+     *
+     * Find the first resource in `anno` which matches this query.
+     *
+     * Descend by `keys` or fall back to `this._defaultkeys`.
+     */
     all(obj, ...keys) {
         if (keys.length === 0) keys = this._defaultkeys
         for (let k of keys) obj = obj[k]
@@ -21,6 +46,22 @@ class AnnoQuery {
 
 }
 
+/**
+ * ### textualHtmlBody
+ * 
+ * Find/Create bodies with included HTML content, as used in a standard text
+ * annotation.
+ *
+ * #### Example
+ *
+ * ```js
+ * {
+ *   "type": "TextualBody",
+ *   "format": "text/html",
+ *   "value": "<p>Some text</p>"
+ * }
+ * ```
+ */
 class textualHtmlBody extends AnnoQuery {
     match(body) {
         return (
@@ -38,6 +79,29 @@ class textualHtmlBody extends AnnoQuery {
     }
 }
 
+/**
+ * ### simpleTagBody
+ *
+ * Find/Create simple tag bodies. 
+ *
+ * A simple tag body is a `TextualBody` with a `purpose` of `tagging` and a value.
+ *
+ * #### Example
+ *
+ * ```js
+ * {
+ *   "type": "TextualBody",
+ *   "purpose": "tagging",
+ *   {
+ *      "@context": {
+ *          "i10nValue": { "@id": "value", "@container": "@language" }
+ *      },
+ *      "en": "pineapple",
+ *      "de": "ananas"
+ *   }
+ * }
+ * ```
+ */
 class simpleTagBody extends AnnoQuery {
     match(body) {
         return body && (
@@ -56,6 +120,24 @@ class simpleTagBody extends AnnoQuery {
     }
 }
 
+
+/**
+ * ### semanticTagBody
+ *
+ * Find/Create semantic tag bodies. 
+ *
+ * A semantic tag body is a web resource (must have an `id`) with a `purpose`/`motivation`
+ * of either `linking`, `identifying` or `classifying`.
+ *
+ * #### Example
+ *
+ * ```js
+ * {
+ *   "id": "http://vocab/fruit17",
+ *   "motivation": "classifying"
+ * }
+ * ```
+ */
 class semanticTagBody extends AnnoQuery {
     match(body) {
         return (
@@ -74,6 +156,23 @@ class semanticTagBody extends AnnoQuery {
     }
 }
 
+/**
+ * ### svgSelectorResource
+ *
+ * Find/create SVG selector resources.
+ *
+ * An SVG selector is a `selector` of type `SvgSelector` with a `value` that
+ * holds the SVG inline.
+ *
+ * #### Example
+ * 
+ * ```js
+ * {
+ *   "type": "SvgSelector",
+ *   "value": "<svg>...</svg>"
+ * }
+ * ```
+ */
 class svgSelectorResource extends AnnoQuery {
     match(target) {
         return (
@@ -92,6 +191,13 @@ class svgSelectorResource extends AnnoQuery {
     }
 }
 
+/**
+ * ### mediaFragmentResource
+ *
+ * A `mediaFragmentResource` is a resource with a `selector` of type
+ * `FragmentSelector` that `conformsTo` the [Media Fragment
+ * Specs](http://www.w3.org/TR/media-frags/).
+ */
 class mediaFragmentResource extends AnnoQuery {
 
     match(target) {
@@ -114,6 +220,11 @@ class mediaFragmentResource extends AnnoQuery {
     }
 }
 
+/**
+ * ### emptyAnnotation
+ *
+ * An empty annotation is an object that has either no `body` or no `target`.
+ */
 class emptyAnnotation extends AnnoQuery {
 
     match(anno) {
