@@ -5,6 +5,8 @@
 This module exposes classes for resources used as target or body
 of a [Web Annotation](https://www.w3.org/TR/annotation-model).
 
+[**DEMO**](https://kba.github.io/anno/queries.html)
+
 <!-- BEGIN-MARKDOWN-TOC -->
 * [API](#api)
 	* [AnnoQuery](#annoquery)

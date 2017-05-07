@@ -1,5 +1,7 @@
 # anno-schema
 
+[**DEMO**](https://kba.github.io/anno/validator.html)
+
 ## Development
 
 The sources are kept as YAML and transformed to JSON before publishing/linking.
