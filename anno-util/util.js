@@ -7,6 +7,12 @@ const {
     filter
 } = require('./array-like')
 
+/**
+ * ### `splitIdRepliesRev(str)`
+ *
+ * Split a slug (last URI segment) into annotation ID, reply ID and revision ID.
+ *
+ */
 function splitIdRepliesRev(str) {
     const origStr = str
     const ret = {
@@ -29,11 +35,17 @@ function splitIdRepliesRev(str) {
 }
 
 
-//
-// collectIds from a list
-//
-
-// TODO recursively for replies
+/*
+ * ### `collectIds(listOfAnnotations)`
+ *
+ * Get a list of IDs of all annotations in a tree.
+ *
+ * ```js
+ * collectIds([{id: 123}, {id: 'xyz', hasReply: [{id: 'foo'}]}])
+ * // [123, 'xyz', 'foo']
+ * ```
+ *
+ */
 function collectIds(list) {
     function _collectIds(list, _ret) {
         list.forEach(obj => {
