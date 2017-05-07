@@ -44,7 +44,15 @@
       	$(`a[href$="${location.pathname.replace(/.*\//, '')}"]`).closest('li').addClass('active')
       })
     </script>
-    <h1>Not much yet</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12"><h1>Annotation Demos</h1>
+<p>These pages provide demos for some of the functionality of
+<a href="https://github.com/kba/anno">anno</a></p>
+
+        </div>
+      </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
@@ -57,6 +65,5 @@
       	//- editor.on('change', () => el.value = editor.getDoc().getValue())
       }
     </script>
-    <script src="x./tests.js"></script>
   </body>
 </html>

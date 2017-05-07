@@ -1,12 +1,9 @@
-doctype html
-html
-	head
-		include include/head.pug
-	body
-		include include/nav.pug
+extends include/layout.pug
+block body
+	.row
+		.col-xs-12
+			:markdown-it
+				# Annotation Demos
 
-		h1 Not much yet
-
-		include include/foot.pug
-
-		script(src="x./tests.js")
+				These pages provide demos for some of the functionality of
+				[anno](https://github.com/kba/anno)

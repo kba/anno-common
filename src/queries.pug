@@ -2,25 +2,24 @@ extends ./include/layout.pug
 block after-body
 	script(src="./queries.js")
 block body
-	.container
-		.row
-			.col.sm-6
-				select.custom-select#fixture
-			.col.sm-6
-				button.btn.btn-default#load-fixture(onclick='loadFixture()') Load Fixture
-		.row
-			.col.sm-12
-				textarea.codemirror#input(rows=10, cols=40)
-		.row
-			.col.sm-6
-				select.custom-select#type
-			.col.sm-6
-				select.custom-select#method
-					option first
-					option all
-					option numberOf
-			.col.sm-6
-				button.btn.btn-default#validate(onclick='query()') Query
-		.row
-			.col.sm-12
-				pre#result
+	.row
+		.col.sm-6
+			select.custom-select#fixture
+		.col.sm-6
+			button.btn.btn-default#load-fixture(onclick='loadFixture()') Load Fixture
+	.row
+		.col.sm-12
+			textarea.codemirror#input(rows=10, cols=40)
+	.row
+		.col.sm-6
+			select.custom-select#type
+		.col.sm-6
+			select.custom-select#method
+				option first
+				option all
+				option numberOf
+		.col.sm-6
+			button.btn.btn-default#validate(onclick='query()') Query
+	.row
+		.col.sm-12
+			pre#result
