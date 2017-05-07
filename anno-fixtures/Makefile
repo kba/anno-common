@@ -7,7 +7,7 @@ help:
 	@echo
 	@echo "  Targets"
 	@echo
-	@echo "    fixtures     Download assets from web-platform-tests"
+	@echo "    fixtures    Download assets from web-platform-tests"
 	@echo "    index.json  Create one big JSON file"
 	@echo
 	@echo "  Variables"
