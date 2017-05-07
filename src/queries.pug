@@ -1,6 +1,6 @@
 extends ./include/layout.pug
 block after-body
-	script(src="./validator.js")
+	script(src="./queries.js")
 block body
 	.container
 		.row
@@ -15,7 +15,12 @@ block body
 			.col.sm-6
 				select.custom-select#type
 			.col.sm-6
-				button.btn.btn-default#validate(onclick='validate()') Validate
+				select.custom-select#method
+					option first
+					option all
+					option numberOf
+			.col.sm-6
+				button.btn.btn-default#validate(onclick='query()') Query
 		.row
 			.col.sm-12
 				pre#result

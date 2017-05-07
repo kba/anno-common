@@ -4,6 +4,7 @@ STAGE = dev
 PUG = pug -P -O src/$(STAGE).json -o $(WORKDIR)
 HTML = \
 	$(WORKDIR)index.html \
+	$(WORKDIR)queries.html \
 	$(WORKDIR)validator.html \
 	$(WORKDIR)context.html
 

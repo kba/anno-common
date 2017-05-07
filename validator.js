@@ -7,14 +7,13 @@ const result = document.getElementById('result')
 function validate() {
     const validFn = Anno.Schema.validate[typeList.value]
     try {
-        if (!validFn(JSON.parse(input.editor.getDoc().getValue()))) {
+        const valid = validFn(JSON.parse(input.editor.getDoc().getValue()))
+        result.classList[valid ? 'add' : 'remove']('success')
+        result.classList[valid ? 'remove' : 'add']('error')
+        if (!valid) {
             result.innerHTML = JSON.stringify(validFn.errors, null, 2)
-            result.classList.remove('valid')
-            result.classList.add('invalid')
         } else {
             result.innerHTML = "Valid"
-            result.classList.remove('invalid')
-            result.classList.add('valid')
         }
     } catch (err) {
         result.innerHTML = err
