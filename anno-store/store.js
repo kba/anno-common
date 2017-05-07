@@ -3,6 +3,24 @@ const async = require('async')
 const {envyConf, envyLog} = require('envyconf')
 
 class Store {
+    /**
+     * ## Public API
+     */
+
+
+    /**
+     * ### <code><strong>static</strong> load(loadingModule)</code>
+     *
+     * Modules may call this static method to instantiate a store from the
+     * environment and using the packages installed in the calling package.
+     *
+     * ```js
+     * // my-package/index.js
+     * const store = require('@kba/anno-store').load(module)
+     * store.init(...)
+     * ```
+     *
+     */
 
     static load(loadingModule) {
         const config = envyConf('ANNO', {
@@ -146,8 +164,11 @@ class Store {
      * Retrieve an annotation.
      *
      * - `@param {String|Array<String>} annoIds`
-     * - `@param {Options} options`
-     * - `@param {Options} options.latest` Return the latest revision
+     * - `@param {Object} options`
+     *     - `@param {Boolean} options.latest` Return the latest revision only
+     *     - `@param {Boolean} options.metadataOnly` Return only metadata
+     *     - `@param {Boolean} options.skipVersions` Omit versions
+     *     - `@param {Boolean} options.skipReplies` Omit replies
      * - `@param {String} options.user`
      * - `@param {function} callback`
      */
@@ -309,14 +330,6 @@ class Store {
     }
 
 
-    //
-    // ---------------------------------------------------------------------
-    //
-    // Protected API
-    //
-    // ---------------------------------------------------------------------
-    //
-
     /**
      * ## Protected API
      *
@@ -366,6 +379,13 @@ class Store {
         return annoDoc
     }
 
+    /**
+     * ### `deleteId(anno)`
+     *
+     * Delete the `id` and store it in `via`.
+     *
+     * - `@param Object anno`
+     */
     _deleteId(anno) {
         // delete anno._id
         if (anno.id) {
@@ -375,6 +395,12 @@ class Store {
         return anno
     }
 
+    /**
+     * ### `_genid(slug='')`
+     *
+     * Generate an ID for the annotation from `slug` and a ["nice"
+     * slugid](https://www.npmjs.com/package/slugid)
+     */
     _genid(slug='') {
         return slug + slugid.nice()
     }

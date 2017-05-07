@@ -1,9 +1,11 @@
 # anno-store
 
-> Interface and proxy for stores
+> Interface for stores
 
 <!-- BEGIN-MARKDOWN-TOC -->
-* [Proxy](#proxy)
+* [Implementing a store](#implementing-a-store)
+* [Public API](#public-api)
+	* [<code><strong>static</strong> load(loadingModule)</code>](#static-loadloadingmodule)
 	* [`use(middleware)`](#usemiddleware)
 	* [`init(options, cb)`](#initoptions-cb)
 	* [`wipe(options, callback)`](#wipeoptions-callback)
@@ -22,18 +24,43 @@
 	* [`_urlFromId(annoId)`](#_urlfromidannoid)
 	* [`_normalizeTarget(annoDoc)`](#_normalizetargetannodoc)
 	* [`_normalizeType(anno)`](#_normalizetypeanno)
-* [API](#api)
-	* [get](#get)
-	* [create](#create)
-	* [revise](#revise)
-	* [delete](#delete)
-	* [search](#search)
+	* [`deleteId(anno)`](#deleteidanno)
+	* [`_genid(slug='')`](#_genidslug---)
 
 <!-- END-MARKDOWN-TOC -->
 
-## Proxy
+## Implementing a store
+
+To implement a store, override the [Public API](#public-api) with this convention:
+
+* Prepend and underscore to the method name
+* Method takes exactly two parameters: `context` and `callback`
+* All positional parameters become keys in the `context` object
+
+For example to override the `create(anno, options, callback)` method:
+
+```js
+// my-store/index.js
+class MyStore extends require('@kba/anno-store') {
+  
+  _create(options, callback) {
+    const anno = options.anno
+    // ...
+    return callback(...)
+  }
+}
+```
 
 <!-- BEGIN-RENDER ./store.js -->
+## Public API
+### <code><strong>static</strong> load(loadingModule)</code>
+Modules may call this static method to instantiate a store from the
+environment and using the packages installed in the calling package.
+```js
+// my-package/index.js
+const store = require('@kba/anno-store').load(module)
+store.init(...)
+```
 ### `use(middleware)`
 Use middleware for auth etc.
 ### `init(options, cb)`
@@ -55,8 +82,11 @@ A disconnected store cannot be used until `init` is called again.
 ### `get(annoId, options, cb)`
 Retrieve an annotation.
 - `@param {String|Array<String>} annoIds`
-- `@param {Options} options`
-- `@param {Options} options.latest` Return the latest revision
+- `@param {Object} options`
+    - `@param {Boolean} options.latest` Return the latest revision only
+    - `@param {Boolean} options.metadataOnly` Return only metadata
+    - `@param {Boolean} options.skipVersions` Omit versions
+    - `@param {Boolean} options.skipReplies` Omit replies
 - `@param {String} options.user`
 - `@param {function} callback`
 ### `create(anno, options, callback)`
@@ -111,29 +141,11 @@ Generate a full URL to an annotation by its id.
  TODO no idempotency of targets with normalization -> disabled for now
 ### `_normalizeType(anno)`
 Make sure `anno.type` exists, is an Array and contains `Annotation`
+### `deleteId(anno)`
+Delete the `id` and store it in `via`.
+- `@param Object anno`
+### `_genid(slug='')`
+Generate an ID for the annotation from `slug` and a ["nice"
+slugid](https://www.npmjs.com/package/slugid)
 
 <!-- END-RENDER -->
-
-## API
-
-### get
-
-```js
-get(annoIds, [options={}], cb)
-```
-
-* `annoIds`: String ID of a single annotations or an array of strings of annotations IDs
-* `options`:
-  * `latest`: Return the ID of the latest revision
-  * `metadataOnly`: Don't return `body` and `target` of an Annotation
-* `cb(err, annos)`:
-  * `err`: Error if any. May contain `err.code` representing HTTP code
-  * `annos`: Single Annotation of single ID was passed, array of annotations otherwise
-
-### create
-
-### revise
-
-### delete
-
-### search
