@@ -13,15 +13,6 @@ reuse of components.
 	* [Store](#store)
 	* [Middleware](#middleware)
 * [Packages](#packages)
-	* [anno-cli](#anno-cli)
-	* [anno-schema](#anno-schema)
-	* [anno-server](#anno-server)
-	* [anno-store](#anno-store)
-	* [anno-store-http](#anno-store-http)
-	* [anno-store-mongolike](#anno-store-mongolike)
-	* [anno-store-file](#anno-store-file)
-	* [anno-web-plugin](#anno-web-plugin)
-	* [Not implemented](#not-implemented)
 * [setup](#setup)
 	* [mongodb / nedb schema design](#mongodb--nedb-schema-design)
 * [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
@@ -41,13 +32,15 @@ that reflect the [Web Annotation
 Protocol](http://www.w3.org/TR/annotation-protocol/)and the [extensions
 implemented of this framework](#extensions-to-web-annotation-data-model).
 
-The [`store`](./anno-store) module is a [façade](https://en.wikipedia.org/wiki/Facade_pattern)
-to the actual implemetnation. It handles method dispatch and middleware and allows
-instantiation from the environemnt. Actual stores must implement [its interface](./store/README.md#interface).
+The [`store`](./anno-store) module is a
+[proxy](https://en.wikipedia.org/wiki/Proxy_pattern) to the actual
+implementation. It handles method dispatch and middleware and allows
+instantiation from the environemnt. Actual stores must implement [its
+interface](./store/README.md#interface).
 
 The [`store-mongolike`](./anno-store-mongolike) module implements most of the
-[`store` interface ](./anno-store/README.md#interface) for document databases, such as
-[mongodb](https://mongodb.com) or
+[`store` interface ](./anno-store/README.md#interface) for document databases,
+such as [mongodb](https://mongodb.com) or
 [NeDB](https://github.com/louischatriot/nedb).
 
 <img src="./doc/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
@@ -71,43 +64,28 @@ middleware include:
 
 ## Packages
 
-### anno-cli
+<!-- BEGIN-EVAL ls -d anno-* | sed -e 's,\(.*\)$,- [\1](./\1),' -->
+- [anno-acl](./anno-acl)
+- [anno-cli](./anno-cli)
+- [anno-errors](./anno-errors)
+- [anno-fixtures](./anno-fixtures)
+- [anno-mw-acl-static](./anno-mw-acl-static)
+- [anno-mw-user-static](./anno-mw-user-static)
+- [anno-queries](./anno-queries)
+- [anno-schema](./anno-schema)
+- [anno-server](./anno-server)
+- [anno-store](./anno-store)
+- [anno-store-file](./anno-store-file)
+- [anno-store-http](./anno-store-http)
+- [anno-store-memory](./anno-store-memory)
+- [anno-store-mongodb](./anno-store-mongodb)
+- [anno-store-mongolike](./anno-store-mongolike)
+- [anno-test](./anno-test)
+- [anno-util](./anno-util)
+- [anno-vue](./anno-vue)
+- [anno-webpack](./anno-webpack)
 
-Command line client
-
-### anno-schema
-
-Schema for the different encodings and serializations
-
-### anno-server
-
-Express-based server implementing the Web Annotation Protocol
-
-### anno-store
-
-Base class for all storage.
-
-### anno-store-http
-
-Store that delegates its actions to a WAP server (such as anno-server)
-
-### anno-store-mongolike
-
-Base class for document database backends like MongoDB or NeDB.
-
-### anno-store-file
-
-NeDB flat file backend
-
-### anno-web-plugin
-
-Script for browser usage
-
-### Not implemented
-
-* anno-chrome-extension: Chrome extension to use browser-wide
-* anno-vfs: vfs extension to allow for tag-based file systems etc.
-* anno-store-sql: 
+<!-- END-EVAL -->
 
 ## setup
 
