@@ -9,6 +9,9 @@ Each repository is designed to provide a single feature to allow for broad
 reuse of components.
 
 <!-- BEGIN-MARKDOWN-TOC -->
+* [Concepts](#concepts)
+	* [Store](#store)
+	* [Middleware](#middleware)
 * [Packages](#packages)
 	* [anno-cli](#anno-cli)
 	* [anno-schema](#anno-schema)
@@ -20,13 +23,51 @@ reuse of components.
 	* [anno-web-plugin](#anno-web-plugin)
 	* [Not implemented](#not-implemented)
 * [setup](#setup)
-	* [mongodb / nedb schema design](#mongodb--file-schema-design)
+	* [mongodb / nedb schema design](#mongodb--nedb-schema-design)
 * [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
 	* [Revisions](#revisions)
 	* [Comments](#comments)
+	* [URL schema](#url-schema)
 * [Misc Links](#misc-links)
 
 <!-- END-MARKDOWN-TOC -->
+
+## Concepts
+
+### Store
+
+A store provides persistent storage of annotations. A store exposes methods
+that reflect the [Web Annotation
+Protocol](http://www.w3.org/TR/annotation-protocol/)and the [extensions
+implemented of this framework](#extensions-to-web-annotation-data-model).
+
+The [`store`](./anno-store) module is a [façade](https://en.wikipedia.org/wiki/Facade_pattern)
+to the actual implemetnation. It handles method dispatch and middleware and allows
+instantiation from the environemnt. Actual stores must implement [its interface](./store/README.md#interface).
+
+The [`store-mongolike`](./anno-store-mongolike) module implements most of the
+[`store` interface ](./anno-store/README.md#interface) for document databases, such as
+[mongodb](https://mongodb.com) or
+[NeDB](https://github.com/louischatriot/nedb).
+
+<img src="./doc/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
+
+### Middleware
+
+When the method of a store is invoked, a **context** is created. The context is
+just an object with the method parameters, such as the new annotation in the
+case of `create` or the lookup ID in the case of `get`.
+
+Before the method is actually dispatched, middleware can be injected to act
+upon the context, modify it or cancel the operation. The mechanism is similar
+to middleware in HTTP frameworks such as Express or Plack. Use cases for
+middleware include:
+
+* Validation: Detect invalid arguments for an operation
+* Authentication: Inject a user id from a session into the context
+* User lookup: Provide user details from an external data source, such as the
+  display name.
+* Authorization: Determine whether the calling user is allowed this operation.
 
 ## Packages
 
