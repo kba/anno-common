@@ -19,6 +19,7 @@
 	* [`reply(annoId, anno, options, callback)`](#replyannoid-anno-options-callback)
 	* [`comment(annoId, anno, options, callback)`](#commentannoid-anno-options-callback)
 	* [`aclcheck(targets, options, callback)`](#aclchecktargets-options-callback)
+	* [`import(anno, options, callback)`](#importanno-options-callback)
 * [Protected API](#protected-api)
 	* [`_idFromURL(url)`](#_idfromurlurl)
 	* [`_urlFromId(annoId)`](#_urlfromidannoid)
@@ -101,7 +102,7 @@ Revise an annotation.
 - `@param {String} annoId`
 - `@param {Object} anno`
 - `@param {Options} options`
-- `@param {String} options.user`
+  - `@param {String} options.user`
 - `@param {function} callback`
 ### `delete(annoId, options, callback)`
 ### `remove(annoId, options, callback)`
@@ -129,6 +130,13 @@ Reply to an annotation
 ### `aclcheck(targets, options, callback)`
 - `@param {Array} targets`
 - `@param {Options} options`
+- `@param {function} callback`
+### `import(anno, options, callback)`
+Replaces the complete annotation with the passed annotation, not just revise it.
+- `@param {Object} anno`
+- `@param {Options} options`
+  - `@param String options.slug Proposal for the ID to create`
+  - `@param {String} options.user`
 - `@param {function} callback`
 ## Protected API
 These methods are available for store implementations but should not be
