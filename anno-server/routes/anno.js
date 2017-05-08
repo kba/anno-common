@@ -126,6 +126,20 @@ module.exports = ({store}) => {
     })
 
     //
+    // PUT /anno/{annoId}/!
+    //
+    router.put('/:annoId/!', (req, resp, next) => {
+        const anno = prune(req.body)
+        req.annoOptions.replaceNotRevise = true
+        store.revise(req.params.annoId, anno, req.annoOptions, (err, doc) => {
+            if (err) return next(err)
+            resp.status(201)
+            req.params.annoId = doc.id
+            return getAnnotation(req, resp, next)
+        })
+    })
+
+    //
     // DELETE /anno/{annoId}
     //
     router.delete('/:annoId', (req, resp, next) => {

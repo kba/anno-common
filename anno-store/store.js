@@ -207,7 +207,9 @@ class Store {
      * - `@param {String} annoId`
      * - `@param {Object} anno`
      * - `@param {Options} options`
-     * - `@param {String} options.user`
+     *   - `@param {String} options.user`
+     *   - `@param {String} options.replaceNotRevise` Replaces the complete
+     *     annotation with the passed annotation, not just revise it.
      * - `@param {function} callback`
      */
     revise(annoId, anno, options, cb) {

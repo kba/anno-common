@@ -143,50 +143,57 @@ class MongolikeStore extends Store {
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
         const {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
-        this.db.findOne({_id}, (err, existingAnno) => {
-            if (err)
-                return cb(err)
-            if (!existingAnno)
-                return cb(errors.annotationNotFound(_id))
-
-            for (let prop of ['canonical', 'via', 'hasReply', 'replyTo', 'hasVersion', 'versionOf']) {
-                // TODO should be deepEqual not ===
-                if (anno[prop] && anno[prop] !== existingAnno[prop]) {
-                    // TODO
-                    // console.log(errors.readonlyValue(annoId, prop, existingAnno[prop], anno[prop]))
-                    // delete anno[prop]
-                }
-            }
-            var newData = JSON.parse(JSON.stringify(anno))
-            newData.created = new Date().toISOString()
-            this._deleteId(newData)
-            this._normalizeType(newData)
-            const validFn = schema.validate.Annotation
-            if (!validFn(newData)) {
-                return cb(errors.invalidAnnotation(anno, validFn.errors))
-            }
-
-            var modQuery;
-            // walk replies and add revision
-            if (_replyids.length > 0) {
-                const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
-                modQuery = {
-                    $push: {[selector + '._revisions']: newData},
-                    $set: {[selector]: newData},
-                }
-            } else {
-                modQuery = {
-                    $push: {_revisions: newData},
-                    $set: newData,
-                }
-            }
-            console.log({_id}, modQuery)
-            this.db.update({_id}, modQuery, {}, (err, arg) => {
-                if (err) return cb(err)
-                options.latest = true
-                delete options.anno
-                return this.get(_id, options, cb)
+        if (options.replaceNotRevise)
+            this.db.remove({_id}, () => {
+                delete anno.id
+                anno._id = _id
+                this.db.insert(anno, cb)
             })
+        else
+            this.db.findOne({_id}, (err, existingAnno) => {
+                if (err)
+                    return cb(err)
+                if (!existingAnno)
+                    return cb(errors.annotationNotFound(_id))
+
+                for (let prop of ['canonical', 'via', 'hasReply', 'replyTo', 'hasVersion', 'versionOf']) {
+                    // TODO should be deepEqual not ===
+                    if (anno[prop] && anno[prop] !== existingAnno[prop]) {
+                        // TODO
+                        // console.log(errors.readonlyValue(annoId, prop, existingAnno[prop], anno[prop]))
+                        // delete anno[prop]
+                    }
+                }
+                var newData = JSON.parse(JSON.stringify(anno))
+                newData.created = new Date().toISOString()
+                this._deleteId(newData)
+                this._normalizeType(newData)
+                const validFn = schema.validate.Annotation
+                if (!validFn(newData)) {
+                    return cb(errors.invalidAnnotation(anno, validFn.errors))
+                }
+
+                var modQuery;
+                // walk replies and add revision
+                if (_replyids.length > 0) {
+                    const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
+                    modQuery = {
+                        $push: {[selector + '._revisions']: newData},
+                        $set: {[selector]: newData},
+                    }
+                } else {
+                    modQuery = {
+                        $push: {_revisions: newData},
+                        $set: newData,
+                    }
+                }
+                console.log({_id}, modQuery)
+                this.db.update({_id}, modQuery, {}, (err, arg) => {
+                    if (err) return cb(err)
+                    options.latest = true
+                    delete options.anno
+                    return this.get(_id, options, cb)
+                })
         })
     }
 
