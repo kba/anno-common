@@ -1,5 +1,7 @@
 # anno-schema
 
+> JSON schema, OpenAPI and JSON-LD context
+
 [**DEMO**](https://kba.github.io/anno/validator.html)
 
 ## Development

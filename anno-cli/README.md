@@ -1,5 +1,7 @@
 # anno-cli
 
+> Command line interface for anno-*
+
 ```
 anno <cmd> <cmd-args>
 

@@ -1,6 +1,7 @@
 admin-user:
   role: 'admin'
 john:
+  displayName: 'John Doe'
   perm:
     - {collection: 'default', role: ['create']}
 mike:

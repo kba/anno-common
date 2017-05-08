@@ -13,7 +13,7 @@ reuse of components.
 	* [Store](#store)
 	* [Middleware](#middleware)
 	* [Authentication](#authentication)
-* [Packages](#packages)
+* [Modules](#modules)
 * [setup](#setup)
 	* [mongodb / nedb schema design](#mongodb--nedb-schema-design)
 * [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
@@ -67,28 +67,27 @@ middleware include:
 
 <img src="./doc/authentication.png" height="400" title="Authentication flow"/>
 
-## Packages
+## Modules
 
-<!-- BEGIN-EVAL ls -d anno-* | sed -e 's,\(.*\)$,- [\1](./\1),' -->
-- [anno-acl](./anno-acl)
-- [anno-cli](./anno-cli)
-- [anno-errors](./anno-errors)
-- [anno-fixtures](./anno-fixtures)
-- [anno-mw-acl-static](./anno-mw-acl-static)
-- [anno-mw-user-static](./anno-mw-user-static)
-- [anno-queries](./anno-queries)
-- [anno-schema](./anno-schema)
-- [anno-server](./anno-server)
-- [anno-store](./anno-store)
-- [anno-store-file](./anno-store-file)
-- [anno-store-http](./anno-store-http)
-- [anno-store-memory](./anno-store-memory)
-- [anno-store-mongodb](./anno-store-mongodb)
-- [anno-store-mongolike](./anno-store-mongolike)
-- [anno-test](./anno-test)
-- [anno-util](./anno-util)
-- [anno-vue](./anno-vue)
-- [anno-webpack](./anno-webpack)
+<!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
+- [anno-acl](./anno-acl): Authorization for anno-stores
+- [anno-cli](./anno-cli): Command line interface for anno-*
+- [anno-errors](./anno-errors): Shared errors for anno-*
+- [anno-fixtures](./anno-fixtures): Sample data for testing and experimentation
+- [anno-mw-acl-static](./anno-mw-acl-static): Authorization for anno-stores
+- [anno-mw-user-static](./anno-mw-user-static): Hydrating a context with user information from fixed data
+- [anno-queries](./anno-queries): Search and create fragments of Web Annotations
+- [anno-schema](./anno-schema): JSON schema, OpenAPI and JSON-LD context
+- [anno-server](./anno-server): Web Annotation Protocol server with extensions
+- [anno-store](./anno-store): Interface for stores
+- [anno-store-file](./anno-store-file): Flat file store based on NeDB
+- [anno-store-http](./anno-store-http): HTTP Client to Web Annotation Protocol servers
+- [anno-store-memory](./anno-store-memory): In-Memory store backed by NeDB
+- [anno-store-mongodb](./anno-store-mongodb): MongoDB store
+- [anno-store-mongolike](./anno-store-mongolike): Store base class for Mongo-like NoSQL databases
+- [anno-test](./anno-test): 
+- [anno-util](./anno-util): Utility functions
+- [anno-webpack](./anno-webpack): Bundling the anno-* tools for browser use
 
 <!-- END-EVAL -->
 

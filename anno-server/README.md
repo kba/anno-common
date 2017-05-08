@@ -1,5 +1,7 @@
 # anno-server
 
+> Web Annotation Protocol server with extensions
+
 https://www.w3.org/TR/annotation-protocol/
 
 ## Build with docker
