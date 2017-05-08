@@ -210,8 +210,6 @@ class Store {
      * - `@param {Object} anno`
      * - `@param {Options} options`
      *   - `@param {String} options.user`
-     *   - `@param {String} options.replaceNotRevise` Replaces the complete
-     *     annotation with the passed annotation, not just revise it.
      * - `@param {function} callback`
      */
     revise(annoId, anno, options, cb) {
@@ -331,6 +329,26 @@ class Store {
                 urlDone()
             })
         }, (err) => cb(err, ret))
+    }
+
+    /**
+     * ### `import(anno, options, callback)`
+     *
+     * Replaces the complete annotation with the passed annotation, not just revise it.
+     *
+     * - `@param {Object} anno`
+     * - `@param {Options} options`
+     *   - `@param String options.slug Proposal for the ID to create`
+     *   - `@param {String} options.user`
+     * - `@param {function} callback`
+     *
+     */
+    import(anno, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        this._callMethod(Object.assign(options, {
+            method: 'create',
+            anno,
+        }), cb)
     }
 
 

@@ -98,6 +98,20 @@ module.exports = ({store}) => {
     })
 
     //
+    // POST /anno/import
+    //
+    router.post('/import', (req, resp, next) => {
+        const anno = prune(req.body)
+        store.revise(anno, req.annoOptions, (err, doc) => {
+            if (err) return next(err)
+            resp.status(201)
+            req.params.annoId = doc.id
+            return getAnnotation(req, resp, next)
+        })
+    })
+
+
+    //
     // HEAD /anno/{annoId}
     //
     // NOTE: HEAD must be defined before GET because express
@@ -117,20 +131,6 @@ module.exports = ({store}) => {
     //
     router.put('/:annoId', (req, resp, next) => {
         const anno = prune(req.body)
-        store.revise(req.params.annoId, anno, req.annoOptions, (err, doc) => {
-            if (err) return next(err)
-            resp.status(201)
-            req.params.annoId = doc.id
-            return getAnnotation(req, resp, next)
-        })
-    })
-
-    //
-    // PUT /anno/{annoId}/!
-    //
-    router.put('/:annoId/!', (req, resp, next) => {
-        const anno = prune(req.body)
-        req.annoOptions.replaceNotRevise = true
         store.revise(req.params.annoId, anno, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             resp.status(201)

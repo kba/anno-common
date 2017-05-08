@@ -502,6 +502,40 @@
           }
         }
       }
+    },
+    "/anno/import": {
+      "post": {
+        "description": "' Import an annotation, including replies and versions. Honor `Slug` and replace as necessary '",
+        "tags": [
+          "extensions"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Import an annotation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New annotation to post",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Slug",
+            "description": "Preferred annotation ID"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Imported the annotation"
+          }
+        }
+      }
     }
   }
 }
