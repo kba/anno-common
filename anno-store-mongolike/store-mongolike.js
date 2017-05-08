@@ -90,7 +90,6 @@ class MongolikeStore extends Store {
 
     _createInsert(anno, options, cb) {
         const validFn = schema.validate.Annotation
-        console.log('_createInsert', typeof anno, anno)
         if (!validFn(anno)) {
             return cb(errors.invalidAnnotation(anno, validFn.errors))
         }
@@ -138,6 +137,43 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
+    _import(options, cb) {
+        var anno = options.anno
+        const fromJSONLD = (anno) => {
+            anno = this._normalizeType(anno)
+            const ret = {}
+            Object.keys(anno).forEach(prop => {
+                if (prop == 'hasVersion') {
+                    ret._revisions = anno[prop].map(fromJSONLD)
+                    delete anno[prop]
+                } else if (prop == 'hasReply') {
+                    ret._replies = anno[prop].map(fromJSONLD)
+                    delete anno[prop]
+                } else {
+                    ret[prop] = anno[prop]
+                }
+            })
+            if (!ret._revisions) {
+                const woReplies = JSON.parse(JSON.stringify(ret))
+                delete woReplies._replies
+                ret._revisions = [woReplies]
+            }
+            ret._replies = ret._replies || []
+            return ret
+        }
+        anno = fromJSONLD(anno)
+        if (options.slug) {
+            this.db.remove({_id: options.slug}, options, (err) => {
+                anno._id = options.slug
+                this._createInsert(anno, options, cb)
+            })
+        } else {
+            anno._id = this._genid()
+            this._createInsert(anno, options, cb)
+        }
+    }
+
+    /* @override */
     _revise(options, cb) {
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
@@ -179,7 +215,7 @@ class MongolikeStore extends Store {
                     {$set: newData},
                 ]
             }
-            console.log(_id, ...modQueries)
+            // console.log(_id, ...modQueries)
             this.db.update({_id}, modQueries[0], {}, (err, arg) => {
                 if (err) return cb(err)
                 this.db.update({_id}, modQueries[1], {}, (err, arg) => {
@@ -190,39 +226,6 @@ class MongolikeStore extends Store {
                 })
             })
         })
-    }
-
-    /* @override */
-    _import(options, cb) {
-        var anno = options.anno
-        const fromJSONLD = (anno) => {
-            anno = this._normalizeTarget(anno)
-            anno = this._normalizeType(anno)
-            const ret = {}
-            Object.keys(anno).forEach(prop => {
-                if (prop == 'hasVersion') {
-                    ret._revisions = anno[prop].map(fromJSONLD)
-                } else if (prop == 'hasReply') {
-                    ret._replies = anno[prop].map(fromJSONLD)
-                } else {
-                    ret[prop] = anno[prop]
-                }
-            })
-            if (!ret._revisions) {
-                const woReplies = JSON.stringify(JSON.parse(ret))
-                delete woReplies._replies
-                ret._revisions = [woReplies]
-            }
-            ret._replies = ret._replies || []
-        }
-        if (options.slug) {
-            this.remove(options.slug, options, (err) => {
-                this._createInsert(anno, options, cb)
-            })
-        } else {
-            anno._id = this._genid()
-            this._createInsert(anno, options, cb)
-        }
     }
 
     /* @override */
@@ -240,7 +243,7 @@ class MongolikeStore extends Store {
             selector += `_replies.${_replyid - 1}.`
         }
         selector += 'deleted'
-        console.log(selector)
+        // console.log(selector)
         this.db.update({_id}, {$set: {[selector]: new Date()}}, (err, nrModified) => {
             if (err) return cb(err)
             return cb()

@@ -346,7 +346,7 @@ class Store {
     import(anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
-            method: 'create',
+            method: 'import',
             anno,
         }), cb)
     }

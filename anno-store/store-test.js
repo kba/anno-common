@@ -2,6 +2,8 @@ const async = require('async')
 const tap = require('tap')
 const fixtures = require('../anno-fixtures')
 
+const NUMBER_OF_TESTS = 25
+
 module.exports = function testStore(store, testStoreCallback) {
 
     const input1 = fixtures.Annotation.ok['minimal-string-target.json']
@@ -10,8 +12,37 @@ module.exports = function testStore(store, testStoreCallback) {
     const input2 = fixtures.Annotation.ok['minimal-object-target.json']
     const input3 = fixtures.Annotation.ok['minimal-array-target.json']
     const input4 = {target: 'x://y', body: {type: ['oa:Tag']}}
+    const toImport = {
+        type: ['Annotation'],
+        body: 'http://body',
+        target: 'http://target',
+        hasReply: [
+            {type: ['Annotation'], body: {value: "Bullshit!"}, creator: "foo@bar.com"}
+        ],
+        hasVersion: [
+            {type: ['Annotation'], body: 'http://bdoy', target: 'http://target'},
+            {type: ['Annotation'], body: 'http://body', target: 'http://target'}
+        ]
+    }
     var savedId;
     var savedRevId;
+
+    function testImport(t, store, done) {
+        t.comment('import')
+        store.import(JSON.parse(JSON.stringify(toImport)), {slug: 'foobar3000'}, (err, got) => {
+            t.equals(got.id, 'http://localhost:3000/anno/foobar3000', 'id okay')
+            t.equals(got.hasVersion.length, 2, '2 versions')
+            t.equals(got.hasReply.length, 1, '1 reply')
+            t.equals(got.hasReply[0].hasVersion.length, 1, 'first reply has one version')
+            store.import(toImport, {slug: 'foobar3000'}, (err, got) => {
+                t.equals(got.id, 'http://localhost:3000/anno/foobar3000', 'id STILL okay')
+                t.equals(got.hasVersion.length, 2, 'STILL 2 versions')
+                t.equals(got.hasReply.length, 1, 'STILL 1 reply')
+                t.equals(got.hasReply[0].hasVersion.length, 1, 'first reply has STILL one version')
+                t.end()
+            })
+        })
+    }
 
     function testWipe(t, store, done) {
         t.comment("wipe-init")
@@ -130,7 +161,7 @@ module.exports = function testStore(store, testStoreCallback) {
     }
 
     tap.test(`store-test / ${store.constructor.name}`, t => {
-        t.plan(17)
+        t.plan(NUMBER_OF_TESTS)
         async.waterfall([
             cb => store.init(cb),
             cb => testWipe(t, store, cb),
@@ -138,6 +169,7 @@ module.exports = function testStore(store, testStoreCallback) {
             cb => testRevise(t, store, cb),
             cb => testSearch(t, store, cb),
             cb => testDelete(t, store, cb),
+            cb => testImport(t, store, cb),
             cb => store.disconnect(cb),
         ], (err) => {
             if (err) t.fail(err);
