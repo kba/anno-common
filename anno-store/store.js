@@ -84,7 +84,9 @@ class Store {
         this.log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
             middleware(ctx, (...args) => {
-                this.log.silly(`ctx after ${middleware.name}`, ctx)
+                const ctxCopy = Object.assign({}, ctx)
+                if ('anno' in ctxCopy) ctxCopy.anno = '[...]'
+                this.log.silly(`ctx after ${middleware.name}: ${JSON.stringify(ctxCopy)}`)
                 next(...args)
             })
         }, (err, pass) => {

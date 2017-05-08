@@ -139,17 +139,20 @@ class MongolikeStore extends Store {
 
     /* @override */
     _revise(options, cb) {
-        if (typeof options === 'function') [cb, options] = [options, {}]
         const annoId = this._idFromURL(options.annoId)
         var anno = options.anno
         const {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
-        if (options.replaceNotRevise)
-            this.db.remove({_id}, () => {
+        if (options.replaceNotRevise) {
+            this.db.remove({_id}, (err) => {
+                console.log("REMOVERINO", err)
                 delete anno.id
                 anno._id = _id
-                this.db.insert(anno, cb)
+                this.db.insert(anno, (err, newAnno) => {
+                    console.log("INSERTERINO", JSON.stringify(newAnno, null, 2))
+                    return this.get(_id, options, cb)
+                })
             })
-        else
+        } else {
             this.db.findOne({_id}, (err, existingAnno) => {
                 if (err)
                     return cb(err)
@@ -173,28 +176,32 @@ class MongolikeStore extends Store {
                     return cb(errors.invalidAnnotation(anno, validFn.errors))
                 }
 
-                var modQuery;
+                var modQueries;
                 // walk replies and add revision
                 if (_replyids.length > 0) {
                     const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
-                    modQuery = {
-                        $push: {[selector + '._revisions']: newData},
-                        $set: {[selector]: newData},
-                    }
+                    modQueries = [
+                        {$push: {[selector + '._revisions']: newData}},
+                        {$set: {[selector]: newData}},
+                    ]
                 } else {
-                    modQuery = {
-                        $push: {_revisions: newData},
-                        $set: newData,
-                    }
+                    modQueries = [
+                        {$push: {_revisions: newData}},
+                        {$set: newData},
+                    ]
                 }
-                console.log({_id}, modQuery)
-                this.db.update({_id}, modQuery, {}, (err, arg) => {
+                console.log(_id, ...modQueries)
+                this.db.update({_id}, modQueries[0], {}, (err, arg) => {
                     if (err) return cb(err)
-                    options.latest = true
-                    delete options.anno
-                    return this.get(_id, options, cb)
+                    this.db.update({_id}, modQueries[1], {}, (err, arg) => {
+                        if (err) return cb(err)
+                        options.latest = true
+                        delete options.anno
+                        return this.get(_id, options, cb)
+                    })
                 })
-        })
+            })
+        }
     }
 
     /* @override */
