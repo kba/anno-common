@@ -13,14 +13,12 @@ reuse of components.
 	* [Store](#store)
 	* [Middleware](#middleware)
 	* [Authentication](#authentication)
-* [Modules](#modules)
-* [setup](#setup)
-	* [mongodb / nedb schema design](#mongodb--nedb-schema-design)
-* [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
 	* [Revisions](#revisions)
-	* [Comments](#comments)
+	* [Comments / Replies / Nesting](#comments--replies--nesting)
 	* [URL schema](#url-schema)
-* [Misc Links](#misc-links)
+	* [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
+* [Modules](#modules)
+* [Hacking](#hacking)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -67,6 +65,49 @@ middleware include:
 
 <img src="./doc/authentication.png" height="400" title="Authentication flow"/>
 
+### Revisions
+
+An `oa:Annotation` has `1..n` `annox:hasVersion` `annox:AnnotationRevision`.
+
+`annox:hasVersion` is an ordered List.
+
+The top-level `oa:Annotation` has the data from the latest revision as
+
+* `body`
+* `target`
+* `creator`
+
+The `modified` of the top-level `oa:Annotation` is the `created` of the latest
+revision.
+
+`hasVersion` is part of the
+[`getMetadata`](https://github.com/kba/anno/tree/master/anno-store/#getmetadata)
+store call/`HEAD` HTTP call.
+
+### Comments / Replies / Nesting
+
+### URL schema
+
+ID is a [nice slugid](https://www.npmjs.com/package/slugid), based on uuid v4
+without leading dash
+
+```
+<BASE_URL>/<ID>[.<REPLY_ID>]*[~<REVISION_ID>]
+```
+
+E.g.
+
+* `http://localhost:3000/ewnfkjewnfew~2` Second revision
+* `http://localhost:3000/ewnfkjewnfew.2.1~5` Fifth revision of first answer to second answer
+
+Replies reply to the generic not versioned annotation (for sanity)
+
+### Extensions to Web Annotation Data Model
+
+Namespace for extensions is `https://kba.github.io/anno/#`, short `annox`.
+
+Context is at `https://anno.github.io/anno/context.jsonld`
+
 ## Modules
 
 <!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
@@ -91,59 +132,12 @@ middleware include:
 
 <!-- END-EVAL -->
 
-## setup
+## Hacking
+
+Modules are managed by [lerna](https://github.com/lerna/lerna)
 
 ```
 npm install -g lerna
 lerna bootstrap
 ```
-
-### mongodb / nedb schema design
-
-## Extensions to Web Annotation Data Model
-
-Namespace for extensions is `https://kba.github.io/anno/#`, short `annox`.
-
-Context is at `https://anno.github.io/anno/context.jsonld`
-
-### Revisions
-
-An `oa:Annotation` has `1..n` `annox:hasVersion` `annox:AnnotationRevision`.
-
-`annox:hasVersion` is an ordered List.
-
-The top-level `oa:Annotation` has the data from the latest revision as
-
-* `body`
-* `target`
-* `creator`
-
-The `modified` of the top-level `oa:Annotation` is the `created` of the latest
-revision.
-
-`hasVersion` is part of the
-[`getMetadata`](https://github.com/kba/anno/tree/master/anno-store/#getmetadata)
-store call/`HEAD` HTTP call.
-
-### Comments
-
-### URL schema
-
-ID is a [nice slugid](https://www.npmjs.com/package/slugid), based on uuid v4
-without leading dash
-
-```
-<BASE_URL>/<ID>[.<REPLY_ID>]*[~<REVISION_ID>]
-```
-
-E.g.
-
-* `http://localhost:3000/ewnfkjewnfew~2` Second revision
-* `http://localhost:3000/ewnfkjewnfew.2.1~5` Fifth revision of first answer to second answer
-
-Replies reply to the generic not versioned annotation (for sanity)
-
-## Misc Links
-
-http://knexjs.org/
 
