@@ -84,7 +84,7 @@ class Store {
         this.log.silly(`Calling method '${ctx.method}'`, ctx)
         async.eachSeries(this.middlewares, (middleware, next) => {
             middleware(ctx, (...args) => {
-                this.log.silly(`ctx after ${middleware.constructor.name}`, ctx)
+                this.log.silly(`ctx after ${middleware.name}`, ctx)
                 next(...args)
             })
         }, (err, pass) => {

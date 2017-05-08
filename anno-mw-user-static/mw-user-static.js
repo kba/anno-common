@@ -1,7 +1,7 @@
 const usersExample = require('./users-example.json')
 const {envyConf} = require('envyconf')
 
-function UserMemoryMiddleware() {
+function UserMemoryMiddlewareFactory() {
 
     const config = envyConf('ANNO', {
         MW_USER_DATA: JSON.stringify(usersExample)
@@ -15,7 +15,7 @@ function UserMemoryMiddleware() {
     })
     this.users = users
 
-    return function(ctx, cb) {
+    return function UserMemoryMiddleware(ctx, cb) {
         if (!( 'user' in ctx )) return cb()
         const userId = typeof ctx.user === 'string' ? ctx.user 
             : ctx.user.user ? ctx.user.user 
@@ -32,4 +32,4 @@ function UserMemoryMiddleware() {
 
 }
 
-module.exports = UserMemoryMiddleware
+module.exports = UserMemoryMiddlewareFactory
