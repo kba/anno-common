@@ -12,6 +12,7 @@ reuse of components.
 * [Concepts](#concepts)
 	* [Store](#store)
 	* [Middleware](#middleware)
+	* [Authentication](#authentication)
 * [Packages](#packages)
 * [setup](#setup)
 	* [mongodb / nedb schema design](#mongodb--nedb-schema-design)
@@ -61,6 +62,10 @@ middleware include:
 * User lookup: Provide user details from an external data source, such as the
   display name.
 * Authorization: Determine whether the calling user is allowed this operation.
+
+### Authentication
+
+<img src="./doc/authentication.png" height="400" title="Authentication flow"/>
 
 ## Packages
 
