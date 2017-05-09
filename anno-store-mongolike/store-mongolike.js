@@ -23,9 +23,8 @@ class MongolikeStore extends Store {
     /* @override */
     // TODO replies!
     _get(options, cb) {
-        var annoId = options.annoId
+        var annoId = this._idFromURL(options.annoId)
         const projection = this._projectionFromOptions(options)
-        annoId = this._idFromURL(annoId)
         var {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
         const query = {_id, deleted: {$exists: false}}
         this.db.findOne(query, projection, (err, doc) => {

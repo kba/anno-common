@@ -102,7 +102,7 @@ module.exports = ({store}) => {
     //
     router.post('/import', (req, resp, next) => {
         const anno = prune(req.body)
-        store.revise(anno, req.annoOptions, (err, doc) => {
+        store.import(anno, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             resp.status(201)
             req.params.annoId = doc.id
