@@ -63,6 +63,12 @@ middleware include:
 
 ### Authentication
 
+Authentication is based on [JSON Web Tokens](https://jwt.io/).
+
+To inspect your tokens, try [jwtinspector browser
+extension](https://www.jwtinspector.io/#) which will detect JWT in HTTP traffic
+and localStorage.
+
 <img src="./doc/authentication.png" height="400" title="Authentication flow"/>
 
 ### Revisions
