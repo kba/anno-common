@@ -14,3 +14,9 @@ For implementations, see:
 * [anno-store-mongodb](https://github.com/kba/anno-store-mongodb)
 * [anno-store-file](https://github.com/kba/anno-store-file)
 * [anno-store-memory](https://github.com/kba/anno-store-memory)
+
+## Subclassing
+
+Subclasses must override
+
+* `_wipe`
