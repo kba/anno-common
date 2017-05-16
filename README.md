@@ -116,6 +116,10 @@ Context is at `https://anno.github.io/anno/context.jsonld`
 
 ## Modules
 
+Click on the image for links
+
+<img src="./doc/repo-structure.svg"/>
+
 <!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
 - [anno-acl](./anno-acl): Authorization for anno-stores
 - [anno-cli](./anno-cli): Command line interface for anno-*
