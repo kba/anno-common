@@ -93,7 +93,7 @@
        <path fill="none" stroke="rgb(52,101,164)" d="M 18020,14326 L 18020,13189 18399,12811 18399,13947 18020,14326 Z"/>
        <path fill="none" stroke="rgb(52,101,164)" d="M 13699,12811 L 13699,12811 Z"/>
        <path fill="none" stroke="rgb(52,101,164)" d="M 18399,14326 L 18399,14326 Z"/>
-       <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="564px" font-weight="400"><tspan class="TextPosition" x="14107" y="13952"><tspan id="id33" fill="rgb(0,0,128)" stroke="none" class="UrlField" xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-vue"><a xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-vue">anno-frontend</a></tspan></tspan></tspan></text>
+       <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="564px" font-weight="400"><tspan class="TextPosition" x="14107" y="13952"><tspan id="id33" fill="rgb(0,0,128)" stroke="none" class="UrlField" xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-frontend"><a xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-frontend">anno-frontend</a></tspan></tspan></tspan></text>
        <desc class="HyperlinkIdList">id33</desc>
       </g>
      </g>
@@ -118,20 +118,20 @@
      </g>
      <g class="com.sun.star.drawing.CustomShape">
       <g id="id5">
-       <rect class="BoundingBox" stroke="none" fill="none" x="13807" y="2904" width="4468" height="1794"/>
-       <path fill="rgb(238,238,238)" stroke="none" d="M 13808,4696 L 13808,3352 14255,2905 18273,2905 18273,4248 17825,4696 13808,4696 Z M 13808,2905 L 13808,2905 Z M 18273,4696 L 18273,4696 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 13808,4696 L 13808,3352 14255,2905 18273,2905 18273,4248 17825,4696 13808,4696 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 13808,2905 L 13808,2905 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 18273,4696 L 18273,4696 Z"/>
-       <path fill="rgb(241,241,241)" stroke="none" d="M 13808,3352 L 14255,2905 18273,2905 17825,3352 13808,3352 Z M 13808,2905 L 13808,2905 Z M 18273,4696 L 18273,4696 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 13808,3352 L 14255,2905 18273,2905 17825,3352 13808,3352 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 13808,2905 L 13808,2905 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 18273,4696 L 18273,4696 Z"/>
-       <path fill="rgb(190,190,190)" stroke="none" d="M 17825,4696 L 17825,3352 18273,2905 18273,4248 17825,4696 Z M 13808,2905 L 13808,2905 Z M 18273,4696 L 18273,4696 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 17825,4696 L 17825,3352 18273,2905 18273,4248 17825,4696 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 13808,2905 L 13808,2905 Z"/>
-       <path fill="none" stroke="rgb(52,101,164)" d="M 18273,4696 L 18273,4696 Z"/>
-       <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="564px" font-weight="400"><tspan class="TextPosition" x="14030" y="4219"><tspan id="id35" fill="rgb(0,0,128)" stroke="none" class="UrlField" xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-vue"><a xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-vue">anno-backend</a></tspan></tspan></tspan></text>
+       <rect class="BoundingBox" stroke="none" fill="none" x="12936" y="2904" width="5719" height="1794"/>
+       <path fill="rgb(238,238,238)" stroke="none" d="M 12937,4696 L 12937,3352 13384,2905 18653,2905 18653,4248 18205,4696 12937,4696 Z M 12937,2905 L 12937,2905 Z M 18653,4696 L 18653,4696 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 12937,4696 L 12937,3352 13384,2905 18653,2905 18653,4248 18205,4696 12937,4696 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 12937,2905 L 12937,2905 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 18653,4696 L 18653,4696 Z"/>
+       <path fill="rgb(241,241,241)" stroke="none" d="M 12937,3352 L 13384,2905 18653,2905 18205,3352 12937,3352 Z M 12937,2905 L 12937,2905 Z M 18653,4696 L 18653,4696 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 12937,3352 L 13384,2905 18653,2905 18205,3352 12937,3352 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 12937,2905 L 12937,2905 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 18653,4696 L 18653,4696 Z"/>
+       <path fill="rgb(190,190,190)" stroke="none" d="M 18205,4696 L 18205,3352 18653,2905 18653,4248 18205,4696 Z M 12937,2905 L 12937,2905 Z M 18653,4696 L 18653,4696 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 18205,4696 L 18205,3352 18653,2905 18653,4248 18205,4696 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 12937,2905 L 12937,2905 Z"/>
+       <path fill="none" stroke="rgb(52,101,164)" d="M 18653,4696 L 18653,4696 Z"/>
+       <text class="TextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="564px" font-weight="400"><tspan class="TextPosition" x="13065" y="4219"><tspan id="id35" fill="rgb(0,0,128)" stroke="none" class="UrlField" xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-backend-ubhd"><a xlink:href="https://gitlab.ub.uni-heidelberg.de/Webservices/anno-backend-ubhd">anno-backend-ubhd</a></tspan></tspan></tspan></text>
        <desc class="HyperlinkIdList">id35</desc>
       </g>
      </g>
@@ -320,264 +320,264 @@
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id21">
-       <rect class="BoundingBox" stroke="none" fill="none" x="18196" y="3657" width="4101" height="510"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="18577" y="3656" width="3720" height="510"/>
        <defs>
         <mask id="mask1">
          <g>
           <defs>
-           <linearGradient id="gradient1" x1="20246" y1="3658" x2="20246" y2="4166" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient1" x1="20436" y1="3657" x2="20436" y2="4165" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient1)" d="M 18196,3658 L 22296,3658 22296,4166 18196,4166 18196,3658 Z"/>
+          <path style="fill:url(#gradient1)" d="M 18577,3657 L 22296,3657 22296,4165 18577,4165 18577,3657 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask1)">
-        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 18272,3800 C 21291,3800 19617,3894 21562,3912"/>
-        <path fill="rgb(197,0,11)" stroke="none" d="M 22296,3915 L 21535,3658 21533,4166 22296,3915 Z"/>
+        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 18653,3800 C 21386,3800 19904,3892 21562,3911"/>
+        <path fill="rgb(197,0,11)" stroke="none" d="M 22296,3915 L 21535,3657 21533,4165 22296,3915 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id22">
-       <rect class="BoundingBox" stroke="none" fill="none" x="18196" y="3724" width="4736" height="4439"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="18577" y="3724" width="4355" height="4423"/>
        <defs>
         <mask id="mask2">
          <g>
           <defs>
-           <linearGradient id="gradient2" x1="20563" y1="3724" x2="20563" y2="8162" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient2" x1="20754" y1="3724" x2="20754" y2="8146" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient2)" d="M 18196,3724 L 22931,3724 22931,8162 18196,8162 18196,3724 Z"/>
+          <path style="fill:url(#gradient2)" d="M 18577,3724 L 22931,3724 22931,8146 18577,8146 18577,3724 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask2)">
-        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 18272,3800 C 21767,3800 19769,7356 22208,7917"/>
-        <path fill="rgb(197,0,11)" stroke="none" d="M 22931,7991 L 22201,7657 22146,8162 22931,7991 Z"/>
+        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 18653,3800 C 21861,3800 20050,7303 22217,7904"/>
+        <path fill="rgb(197,0,11)" stroke="none" d="M 22931,7991 L 22208,7642 22143,8146 22931,7991 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id23">
-       <rect class="BoundingBox" stroke="none" fill="none" x="7751" y="3724" width="6134" height="3758"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="7751" y="3724" width="5264" height="3743"/>
        <defs>
         <mask id="mask3">
          <g>
           <defs>
-           <linearGradient id="gradient3" x1="10817" y1="3724" x2="10817" y2="7481" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient3" x1="10382" y1="3724" x2="10382" y2="7466" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient3)" d="M 7751,3724 L 13884,3724 13884,7481 7751,7481 7751,3724 Z"/>
+          <path style="fill:url(#gradient3)" d="M 7751,3724 L 13014,3724 13014,7466 7751,7466 7751,3724 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask3)">
-        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 13808,3800 C 9266,3800 11951,6854 8506,7229"/>
-        <path fill="rgb(197,0,11)" stroke="none" d="M 7751,7267 L 8525,7481 8499,6974 7751,7267 Z"/>
+        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 12938,3800 C 9047,3800 11302,6788 8491,7216"/>
+        <path fill="rgb(197,0,11)" stroke="none" d="M 7751,7267 L 8529,7466 8493,6959 7751,7267 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id24">
-       <rect class="BoundingBox" stroke="none" fill="none" x="7751" y="3724" width="6134" height="9113"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="7751" y="3724" width="5264" height="9077"/>
        <defs>
         <mask id="mask4">
          <g>
           <defs>
-           <linearGradient id="gradient4" x1="10817" y1="3724" x2="10817" y2="12835" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient4" x1="10382" y1="3724" x2="10382" y2="12800" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient4)" d="M 7751,3724 L 13884,3724 13884,12835 7751,12835 7751,3724 Z"/>
+          <path style="fill:url(#gradient4)" d="M 7751,3724 L 13014,3724 13014,12800 7751,12800 7751,3724 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask4)">
-        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 13808,3800 C 9266,3800 11971,11686 8462,12593"/>
-        <path fill="rgb(197,0,11)" stroke="none" d="M 7751,12678 L 8539,12835 8475,12331 7751,12678 Z"/>
+        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 12938,3800 C 9047,3800 11323,11534 8446,12565"/>
+        <path fill="rgb(197,0,11)" stroke="none" d="M 7751,12678 L 8545,12800 8459,12299 7751,12678 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id25">
-       <rect class="BoundingBox" stroke="none" fill="none" x="7751" y="3724" width="6134" height="6435"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="7751" y="3724" width="5264" height="6409"/>
        <defs>
         <mask id="mask5">
          <g>
           <defs>
-           <linearGradient id="gradient5" x1="10817" y1="3724" x2="10817" y2="10157" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient5" x1="10382" y1="3724" x2="10382" y2="10131" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient5)" d="M 7751,3724 L 13884,3724 13884,10157 7751,10157 7751,3724 Z"/>
+          <path style="fill:url(#gradient5)" d="M 7751,3724 L 13014,3724 13014,10131 7751,10131 7751,3724 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask5)">
-        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 13808,3800 C 9266,3800 11961,9260 8485,9910"/>
-        <path fill="rgb(197,0,11)" stroke="none" d="M 7751,9973 L 8533,10157 8487,9652 7751,9973 Z"/>
+        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 12938,3800 C 9047,3800 11312,9148 8470,9888"/>
+        <path fill="rgb(197,0,11)" stroke="none" d="M 7751,9973 L 8538,10131 8476,9627 7751,9973 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id26">
-       <rect class="BoundingBox" stroke="none" fill="none" x="7529" y="3724" width="6356" height="1085"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="7529" y="3724" width="5486" height="1082"/>
        <defs>
         <mask id="mask6">
          <g>
           <defs>
-           <linearGradient id="gradient6" x1="10706" y1="3724" x2="10706" y2="4808" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient6" x1="10271" y1="3724" x2="10271" y2="4805" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient6)" d="M 7529,3724 L 13884,3724 13884,4808 7529,4808 7529,3724 Z"/>
+          <path style="fill:url(#gradient6)" d="M 7529,3724 L 13014,3724 13014,4805 7529,4805 7529,3724 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask6)">
-        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 13808,3800 C 9100,3800 11886,4472 8305,4554"/>
-        <path fill="rgb(197,0,11)" stroke="none" d="M 7529,4562 L 8294,4808 8288,4300 7529,4562 Z"/>
+        <path fill="none" stroke="rgb(197,0,11)" stroke-width="152" stroke-linejoin="round" d="M 12938,3800 C 8882,3800 11238,4458 8292,4551"/>
+        <path fill="rgb(197,0,11)" stroke="none" d="M 7529,4562 L 8295,4805 8287,4297 7529,4562 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id27">
-       <rect class="BoundingBox" stroke="none" fill="none" x="18323" y="8071" width="4609" height="5574"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="18297" y="8071" width="4635" height="5600"/>
        <defs>
         <mask id="mask7">
          <g>
           <defs>
-           <linearGradient id="gradient7" x1="20627" y1="8072" x2="20627" y2="13644" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient7" x1="20614" y1="8072" x2="20614" y2="13670" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient7)" d="M 18323,8072 L 22931,8072 22931,13644 18323,13644 18323,8072 Z"/>
+          <path style="fill:url(#gradient7)" d="M 18298,8072 L 22931,8072 22931,13670 18298,13670 18298,8072 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask7)">
-        <path fill="none" stroke="rgb(0,102,51)" stroke-width="152" stroke-linejoin="round" d="M 18399,13568 C 21798,13568 19857,9035 22220,8312"/>
+        <path fill="none" stroke="rgb(0,102,51)" stroke-width="203" stroke-linejoin="round" d="M 18399,13568 C 21798,13568 19857,9035 22220,8312"/>
         <path fill="rgb(0,102,51)" stroke="none" d="M 22931,8215 L 22141,8072 22213,8574 22931,8215 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id28">
-       <rect class="BoundingBox" stroke="none" fill="none" x="18323" y="11592" width="4737" height="2053"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="18297" y="11592" width="4763" height="2079"/>
        <defs>
         <mask id="mask8">
          <g>
           <defs>
-           <linearGradient id="gradient8" x1="20691" y1="11593" x2="20691" y2="13644" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient8" x1="20678" y1="11593" x2="20678" y2="13670" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient8)" d="M 18323,11593 L 23059,11593 23059,13644 18323,13644 18323,11593 Z"/>
+          <path style="fill:url(#gradient8)" d="M 18298,11593 L 23059,11593 23059,13670 18298,13670 18298,11593 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask8)">
-        <path fill="none" stroke="rgb(0,102,51)" stroke-width="152" stroke-linejoin="round" d="M 18399,13568 C 21894,13568 19904,12085 22317,11844"/>
+        <path fill="none" stroke="rgb(0,102,51)" stroke-width="203" stroke-linejoin="round" d="M 18399,13568 C 21894,13568 19904,12085 22317,11844"/>
         <path fill="rgb(0,102,51)" stroke="none" d="M 23059,11811 L 22286,11593 22310,12100 23059,11811 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id29">
-       <rect class="BoundingBox" stroke="none" fill="none" x="18323" y="3904" width="3974" height="9552"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="18297" y="3904" width="4000" height="9578"/>
        <defs>
         <mask id="mask9">
          <g>
           <defs>
-           <linearGradient id="gradient9" x1="20309" y1="3905" x2="20309" y2="13455" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient9" x1="20297" y1="3905" x2="20297" y2="13481" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient9)" d="M 18323,3905 L 22296,3905 22296,13455 18323,13455 18323,3905 Z"/>
+          <path style="fill:url(#gradient9)" d="M 18298,3905 L 22296,3905 22296,13481 18298,13481 18298,3905 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask9)">
-        <path fill="none" stroke="rgb(0,102,51)" stroke-width="152" stroke-linejoin="round" d="M 18399,13379 C 21322,13379 19672,5469 21645,4112"/>
+        <path fill="none" stroke="rgb(0,102,51)" stroke-width="203" stroke-linejoin="round" d="M 18399,13379 C 21322,13379 19672,5469 21645,4112"/>
         <path fill="rgb(0,102,51)" stroke="none" d="M 22296,3915 L 21493,3905 21647,4389 22296,3915 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id30">
-       <rect class="BoundingBox" stroke="none" fill="none" x="11819" y="14249" width="4307" height="3389"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="11819" y="14223" width="4333" height="3415"/>
        <defs>
         <mask id="mask10">
          <g>
           <defs>
-           <linearGradient id="gradient10" x1="13972" y1="14249" x2="13972" y2="17637" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient10" x1="13985" y1="14224" x2="13985" y2="17637" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient10)" d="M 11820,14249 L 16125,14249 16125,17637 11820,17637 11820,14249 Z"/>
+          <path style="fill:url(#gradient10)" d="M 11820,14224 L 16151,14224 16151,17637 11820,17637 11820,14224 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask10)">
-        <path fill="none" stroke="rgb(0,102,51)" stroke-width="152" stroke-linejoin="round" d="M 16049,14325 C 16049,16810 12780,15474 12047,16946"/>
+        <path fill="none" stroke="rgb(0,102,51)" stroke-width="203" stroke-linejoin="round" d="M 16049,14325 C 16049,16810 12780,15474 12047,16946"/>
         <path fill="rgb(0,102,51)" stroke="none" d="M 11902,17637 L 12316,16949 11820,16838 11902,17637 Z"/>
        </g>
       </g>
      </g>
      <g class="com.sun.star.drawing.ConnectorShape">
       <g id="id31">
-       <rect class="BoundingBox" stroke="none" fill="none" x="15973" y="14249" width="3297" height="3262"/>
+       <rect class="BoundingBox" stroke="none" fill="none" x="15947" y="14223" width="3323" height="3288"/>
        <defs>
         <mask id="mask11">
          <g>
           <defs>
-           <linearGradient id="gradient11" x1="17621" y1="14249" x2="17621" y2="17510" gradientUnits="userSpaceOnUse">
+           <linearGradient id="gradient11" x1="17608" y1="14224" x2="17608" y2="17510" gradientUnits="userSpaceOnUse">
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="0.5" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
             <stop offset="1" style="stop-color:rgb(128,128,128)"/>
            </linearGradient>
           </defs>
-          <path style="fill:url(#gradient11)" d="M 15973,14249 L 19269,14249 19269,17510 15973,17510 15973,14249 Z"/>
+          <path style="fill:url(#gradient11)" d="M 15948,14224 L 19269,14224 19269,17510 15948,17510 15948,14224 Z"/>
          </g>
         </mask>
        </defs>
        <g style="mask:url(#mask11)">
-        <path fill="none" stroke="rgb(0,102,51)" stroke-width="152" stroke-linejoin="round" d="M 16049,14325 C 16049,16714 18455,15448 19036,16805"/>
+        <path fill="none" stroke="rgb(0,102,51)" stroke-width="203" stroke-linejoin="round" d="M 16049,14325 C 16049,16714 18455,15448 19036,16805"/>
         <path fill="rgb(0,102,51)" stroke="none" d="M 19161,17510 L 19269,16714 18770,16809 19161,17510 Z"/>
        </g>
       </g>
