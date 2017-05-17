@@ -118,7 +118,7 @@ Context is at `https://anno.github.io/anno/context.jsonld`
 
 Click on the image for links
 
-<img src="./doc/repo-structure.svg"/>
+<a href="./doc/repo-structure.svg"><img src="./doc/repo-structure.png"/></a>
 
 <!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
 - [anno-acl](./anno-acl): Authorization for anno-stores
