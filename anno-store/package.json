@@ -17,5 +17,5 @@
     "async": "^2.3.0",
     "slugid": "^1.1.0"
   },
-  "devDependencies": { }
+  "devDependencies": {}
 }
