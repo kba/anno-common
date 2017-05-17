@@ -8,8 +8,8 @@ module.exports = function() {
     const users = JSON.parse(config.MW_USER_DATA)
 
     function replaceIfPossible(val) {
-        if (val.creator in users) {
-            val.creator = users[val.creator]
+        if (val.creator in users && users[val.creator].public) {
+            val.creator = users[val.creator].public
         }
     }
 

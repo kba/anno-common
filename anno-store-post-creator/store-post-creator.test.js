@@ -4,7 +4,9 @@ const tap = require('tap')
 tap.test('sanity check', t => {
     process.env.ANNO_MW_USER_DATA = JSON.stringify({
         'jane': {
-            displayName: 'Jane Doe-Mustermann'
+            public: {
+                displayName: 'Jane Doe-Mustermann'
+            }
         }
     })
     const retvals = [{creator: 'jane'}]
