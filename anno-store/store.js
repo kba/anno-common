@@ -26,7 +26,8 @@ class Store {
         const config = envyConf('ANNO', {
             BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
             BASE_PATH: '',
-            STORE_MIDDLEWARES: ''
+            STORE_HOOKS_PRE: '',
+            STORE_HOOKS_POST: '',
         })
         const log = envyLog('ANNO', 'store')
         if (!loadingModule)
@@ -46,23 +47,25 @@ class Store {
         }
 
         const store = new(impl)()
-        const middlewareModules = config.STORE_MIDDLEWARES
-            .split(',')
-            .map(s => s.trim())
-            .filter(s => s !== '')
-        log.silly('middlewares', middlewareModules)
-        async.eachSeries(middlewareModules, (middlewareModule, next) => {
-            var middlewareImpl;
-            try {
-                log.silly(`Loading ${middlewareModule}`)
-                middlewareImpl = loadingModule.require(middlewareModule)
-            } catch (err) {
-                console.log(err)
-                console.error(`Please install '${middlewareModule}' configured as middleware`)
-                process.exit(1)
-            }
-            store.use(middlewareImpl())
-            next()
+        async.eachSeries(['pre', 'post'], (hookName, nextHook) => {
+            const modNames = config[`STORE_HOOKS_${hookName.toUpperCase()}`]
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s !== '')
+            log.silly(`${hookName} hook: `, modNames)
+            async.eachSeries(modNames, (modName, next) => {
+                var mod;
+                try {
+                    log.silly(`Loading module ${modName}`)
+                    mod = loadingModule.require(modName)
+                } catch (err) {
+                    console.log(err)
+                    console.error(`Please install '${modName}' configured as middleware`)
+                    process.exit(1)
+                }
+                store.use(mod(), hookName)
+                next()
+            }, nextHook)
         })
         return store
     }
@@ -71,7 +74,10 @@ class Store {
         // Override env config with config passed explicitly to constructor
         this.log = envyLog('ANNO', 'store')
         this.config = Object.assign(envyConf('ANNO', {}), config)
-        this.middlewares = []
+        this.hooks = {
+            pre: [],
+            post: [],
+        }
         // console.log(this.config)
         // console.error("Store.constructor called", config)
     }
@@ -82,32 +88,47 @@ class Store {
             return cb(new Error(`${impl} not implemented`))
         }
         this.log.silly(`Calling method '${ctx.method}'`, ctx)
-        async.eachSeries(this.middlewares, (middleware, next) => {
-            middleware(ctx, (...args) => {
+        async.eachSeries(this.hooks.pre, (preproc, next) => {
+            preproc(ctx, (...args) => {
                 const ctxCopy = Object.assign({}, ctx)
                 if ('anno' in ctxCopy) ctxCopy.anno = '[...]'
-                this.log.silly(`ctx after ${middleware.name}: ${JSON.stringify(ctxCopy)}`)
+                this.log.silly(`ctx after ${preproc.name}: ${JSON.stringify(ctxCopy)}`)
                 next(...args)
             })
         }, (err, pass) => {
-            this.log.silly('finished all middlewares')
+            this.log.silly('finished all preprocessing')
             if (err) return cb(err)
-            if (ctx.dryRun) {
+            if (ctx.dryRun)
                 return cb(null, ctx)
-            } else {
-                this[impl](ctx, cb)
-            }
+            this.log.silly(`Calling method '${ctx.method}'`, ctx)
+            this[impl](ctx, (err, ...retvals) => {
+                if (err) return cb(err)
+                // console.log("FOO")
+                async.eachSeries(this.hooks.post, (proc, next) => {
+                    this.log.silly(`Running proc ${proc.name}`)
+                    proc({ctx, retvals}, next)
+                    //     (err) => {
+                    //     // const ctxCopy = Object.assign({}, ctx)
+                    //     // if ('anno' in ctxCopy) ctxCopy.anno = '[...]'
+                    //     // this.log.silly(`ctx after ${proc.name}: ${JSON.stringify(ctxCopy)}`)
+                    //     next(err)
+                    // })
+                }, (err) => {
+                    if (err) return cb(err)
+                    return cb(null, ...retvals)
+                })
+            })
         })
     }
 
     /**
-     * ### `use(middleware)`
+     * ### `use(proc, hook='pre')`
      *
-     * Use middleware for auth etc.
+     * Use processor before (`hook=pre`) or after (`hook=post`) store method.
      *
      */
-    use(middleware) {
-        this.middlewares.push(middleware)
+    use(middleware, hook='pre') {
+        this.hooks[hook].push(middleware)
     }
 
     /**
