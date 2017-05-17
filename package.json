@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "./node_modules/.bin/lerna bootstrap",
     "X postinstall": "npm run bootstrap ; npm run link-all",
-    "link-all": "for i in anno-*;do sh -c \"cd $i; npm link\";done",
+    "link-all": "lerna exec npm link",
     "docker": "docker build -t kbai/anno -f Dockerfile ."
   },
   "cacheDirectories": [
