@@ -1,0 +1,20 @@
+{
+  "name": "@kba/anno-store-post-creator",
+  "version": "0.0.1",
+  "description": "Replace 'creator' string with user object if defined",
+  "main": "store-post-creator.js",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-store-post-creator#readme",
+  "scripts": {
+    "test": "tap *.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1"
+  },
+  "dependencies": {
+    "envyconf": "^0.0.5"
+  }
+}
