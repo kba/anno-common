@@ -12,7 +12,9 @@
   },
   "author": "kba",
   "license": "MIT",
-  "devDependencies": { "@kba/anno-fixtures": "^0.0.1" },
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1"
+  },
   "dependencies": {
     "sift-rule": "^0.1.0",
     "envyconf": "^0.0.5"

@@ -19,5 +19,5 @@
     "@kba/anno-util": "^0.0.1",
     "async": "^2.3.0"
   },
-  "devDependencies": { }
+  "devDependencies": {}
 }
