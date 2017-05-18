@@ -1,11 +1,11 @@
 {
-  "name": "@kba/anno-mw-acl-static",
+  "name": "@kba/anno-pre-acl-static",
   "version": "0.0.1",
-  "description": "Anno ACL middleware (static data)",
-  "main": "mw-acl-static.js",
+  "description": "Anno ACL preprocessor",
+  "main": "pre-acl-static.js",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/anno-mw-acl-static#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-pre-acl-static#readme",
   "scripts": {
     "test": "tap *.test.js"
   },
@@ -13,7 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "@kba/anno-fixtures": "^0.0.1",
-    "@kba/anno-mw-user-static": "^0.0.1"
+    "@kba/anno-pre-user-static": "^0.0.1"
   },
   "dependencies": {
     "@kba/anno-acl": "^0.0.1",

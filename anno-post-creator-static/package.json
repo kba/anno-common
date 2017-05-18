@@ -1,11 +1,11 @@
 {
-  "name": "@kba/anno-store-post-creator",
+  "name": "@kba/anno-post-creator-static",
   "version": "0.0.1",
   "description": "Replace 'creator' string with user object if defined",
-  "main": "store-post-creator.js",
+  "main": "post-creator-static.js",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/anno-store-post-creator#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-post-creator-static#readme",
   "scripts": {
     "test": "tap *.test.js"
   },

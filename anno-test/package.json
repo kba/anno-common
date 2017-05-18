@@ -18,8 +18,8 @@
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-store-memory": "^0.0.1",
     "@kba/anno-store-file": "^0.0.1",
-    "@kba/anno-mw-user-static": "^0.0.1",
-    "@kba/anno-mw-acl-static": "^0.0.1",
+    "@kba/anno-pre-acl-static": "^0.0.1",
+    "@kba/anno-pre-user-static": "^0.0.1",
     "async": "^2.3.0",
     "tap": "^10.3.0"
   }

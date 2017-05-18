@@ -1,4 +1,4 @@
-# anno-mw-user-memory
+# anno-pre-user-static
 
 > Hydrating a context with user information from fixed data
 

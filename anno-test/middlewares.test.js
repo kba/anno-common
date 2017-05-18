@@ -1,8 +1,8 @@
 const tap = require('tap')
 process.env.ANNO_STORE = '@kba/anno-store-memory'
 process.env.ANNO_STORE_MIDDLEWARES = [
-    '@kba/anno-mw-user-static',
-    '@kba/anno-mw-acl-static',
+    '@kba/anno-pre-user-static',
+    '@kba/anno-pre-acl-static',
 ].join(',')
 tap.test('stuff', t => {
     const store = require('@kba/anno-store').load(module)

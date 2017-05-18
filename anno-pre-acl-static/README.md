@@ -1,4 +1,4 @@
-# anno-mw-acl-static
+# anno-pre-acl-static
 
 > Authorization for anno-stores
 
