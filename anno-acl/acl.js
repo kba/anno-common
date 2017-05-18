@@ -4,6 +4,11 @@ const errors = require('@kba/anno-errors')
 
 class AnnoAcl {
 
+    constructor(rules) {
+        // TODO validate
+        this.rules = new RuleSet(rules)
+    }
+
     process(ctx, cb) {
         const config = envyConf('ANNO')
         const log = envyLog('ANNO', 'acl')

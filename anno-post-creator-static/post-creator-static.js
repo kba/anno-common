@@ -1,5 +1,6 @@
 const {envyConf} = require('envyconf')
 
+// TODO
 module.exports = function() {
 
     const config = envyConf('ANNO', {
@@ -14,6 +15,8 @@ module.exports = function() {
     }
 
     return function CreatorExpander({ctx, retvals}, cb) {
+        if (!retvals)
+            return cb()
         retvals.forEach((val) => {
             if (Array.isArray(val)) {
                 val.forEach(replaceIfPossible)

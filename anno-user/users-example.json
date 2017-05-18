@@ -1,0 +1,69 @@
+{
+  "admin-user": {
+    "role": "admin",
+    "rules": [
+      [
+        {
+          "collection": "l33tsp34k"
+        },
+        {
+          "public": {
+            "displayName": "4dm33n"
+          }
+        }
+      ],
+      [
+        {
+          "collection": "l33tsp34k"
+        },
+        {
+          "public": {
+            "icon": "ICON1"
+          }
+        }
+      ]
+    ],
+    "public": {
+      "displayName": "THE MIGHTY ADMIN"
+    }
+  },
+  "john": {
+    "role": "read",
+    "rules": [
+      [
+        {
+          "collection": "default"
+        },
+        {
+          "role": "admin"
+        }
+      ]
+    ],
+    "public": {
+      "displayName": "John Doe"
+    }
+  },
+  "mike": {
+    "rules": [
+      [
+        {
+          "collection": "default"
+        },
+        {
+          "role": "create"
+        }
+      ],
+      [
+        {
+          "collection": "test-collection"
+        },
+        {
+          "role": "moderator"
+        }
+      ]
+    ]
+  },
+  "spambot3000": {
+    "inactive": true
+  }
+}

@@ -7,7 +7,6 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-pre-user-static#readme",
   "scripts": {
-    "prepublish": "node ../scripts/yml2json.js *.yml",
     "test": "tap *.test.js"
   },
   "author": "kba",
@@ -16,6 +15,7 @@
     "@kba/anno-fixtures": "^0.0.1"
   },
   "dependencies": {
+    "@kba/anno-user": "^0.0.1",
     "sift-rule": "^0.1.0",
     "envyconf": "^0.0.5"
   }
