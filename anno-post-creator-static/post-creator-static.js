@@ -1,29 +1,52 @@
+const UserProcessor = require('@kba/anno-user')
+const async = require('async')
 const {envyConf} = require('envyconf')
 
 // TODO
 module.exports = function() {
 
     const config = envyConf('ANNO', {
-        MW_USER_DATA: JSON.stringify({john: {displayName: 'john Doe'}})
+        USER_DATA: JSON.stringify(UserProcessor.usersExample)
     })
-    const users = JSON.parse(config.MW_USER_DATA)
+    const userProcessor = new UserProcessor(JSON.parse(config.USER_DATA))
 
-    function replaceIfPossible(val) {
-        if (val.creator in users && users[val.creator].public) {
-            val.creator = users[val.creator].public
-        }
+    function mapReduceCreators(retvals, cb) {
+        const ret = {}
+        // Map
+        retvals.forEach((val) => {
+            if (!Array.isArray(val)) val = [val];
+            val.forEach(v => {
+                if (v.creator) ret[creator] = null
+            })
+        })
+
+        // Lookup
+        async.each(Object.keys(ret), (user, done) => {
+            const ctx = {user}
+            userProcessor(ctx, err => {
+                if (err) return done(err)
+                ret[user] = ctx[user]
+                return done()
+            })
+        },
+
+            // Reduce
+            (err) => {
+                console.log("XXX", ret)
+                if (err) return cb(err)
+                retvals.forEach((val) => {
+                    if (!Array.isArray(val)) val = [val];
+                    val.forEach(v => {
+                        if (v.creator && ret[v.creator] && ret[v.creator].public) v.creator = ret[v.creator].public
+                    })
+                    return cb()
+                })
+            })
     }
 
     return function CreatorExpander({ctx, retvals}, cb) {
         if (!retvals)
             return cb()
-        retvals.forEach((val) => {
-            if (Array.isArray(val)) {
-                val.forEach(replaceIfPossible)
-            } else {
-                replaceIfPossible(val)
-            }
-        })
-        return cb()
+        mapReduceCreators(retvals, cb)
     }
 }
