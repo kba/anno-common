@@ -23,7 +23,13 @@ module.exports = ({store}) => {
         var colUrl = `${BASE_URL}${BASE_PATH}/anno/`
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
-        store.search(req.query, req.annoOptions, (err, docs) => {
+        const searchParams = {}
+        Object.keys(req.query).forEach(k => {
+            if (!(k.startsWith('metadata.'))) {
+                searchParams[k] = req.query[k]
+            }
+        })
+        store.search(searchParams, req.annoOptions, (err, docs) => {
             if (err) return next(err)
             resp.header('Content-Location', colUrl)
             resp.header('Vary', 'Accept, Prefer')

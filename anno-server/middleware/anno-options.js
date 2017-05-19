@@ -2,6 +2,7 @@ module.exports = () => optionsFromRequest
 
 function optionsFromRequest(req, resp, next) {
     const ret = {}
+
     // boolean
     ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {
         if (option in req.query) {
@@ -10,16 +11,25 @@ function optionsFromRequest(req, resp, next) {
         }
     })
 
+    // collection
+    ;['collection'].forEach(option => {
+        if (option in req.query) {
+            ret[option] = req.query[option]
+            delete req.query[option]
+        }
+    })
+
+
     // context metadata
+    const metadata = {}
     for (let option in req.query) {
-        const metadata = {}
         if (option.indexOf('metadata.') === 0) {
             metadata[option.replace('metadata.', '')] = req.query[option]
             delete req.query[option]
         }
-        if (Object.keys(metadata).length)
-            ret.metadata = {}
     }
+    if (Object.keys(metadata).length)
+        ret.metadata = metadata
 
     // Header
     ;['slug'].forEach(hdrName => {
