@@ -26,6 +26,7 @@ class Store {
         const config = envyConf('ANNO', {
             BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
             BASE_PATH: '',
+            METADATA: '{}',
             STORE_MIDDLEWARES: ''
         })
         const log = envyLog('ANNO', 'store')
@@ -78,6 +79,7 @@ class Store {
 
     _callMethod(ctx, cb) {
         const impl = `_${ctx.method}`
+        Object.assign(ctx, this.config.METADATA)
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
