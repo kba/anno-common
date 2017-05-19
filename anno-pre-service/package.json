@@ -1,0 +1,22 @@
+{
+  "name": "@kba/anno-pre-service",
+  "version": "0.0.1",
+  "description": "Anno service hydrator",
+  "main": "./pre-service.js",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-pre-service#readme",
+  "scripts": {
+    "test": "tap *.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1"
+  },
+  "dependencies": {
+    "@kba/anno-user": "^0.0.1",
+    "sift-rule": "^0.1.0",
+    "envyconf": "^0.0.5"
+  }
+}

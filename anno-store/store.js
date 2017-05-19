@@ -96,7 +96,6 @@ class Store {
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
-        this.log.debug('METADATA', ctx.metadata)
         this.__logContext(`BEFORE Method: ${ctx.method}`, ctx)
         async.eachSeries(this.hooks.pre, (proc, next) => {
             proc(ctx, (...args) => {
