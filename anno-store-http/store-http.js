@@ -23,7 +23,6 @@ class HttpStore extends Store {
             axiosOptions.auth = {username, password}
         }
         this._httpClient = axios.create(axiosOptions)
-        this.metadata = JSON.parse(this.config.METADATA)
     }
 
     /* @override */
@@ -142,9 +141,7 @@ class HttpStore extends Store {
     // PRIVATE
     // ----------------------------------------
     _configFromOptions(options) {
-        const ret = {
-            params: {}
-        }
+        const ret = {}
         // BasicAuth
         if (options.auth && options.auth.username) {
             ret.auth = ret.auth || {}
@@ -156,10 +153,6 @@ class HttpStore extends Store {
             ret.headers = ret.headers || {}
             Object.assign(ret.headers, options.httpHeaders)
         }
-        // Metadata
-        Object.keys(this.metadata).forEach(k => {
-            ret.params[`metadata.${k}`] = this.metadata[k]
-        })
         const log = envyLog('ANNO', 'store-http')
         log.silly("axios config from options", ret)
         return ret
