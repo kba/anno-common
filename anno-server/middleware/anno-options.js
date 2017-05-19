@@ -10,6 +10,17 @@ function optionsFromRequest(req, resp, next) {
         }
     })
 
+    // context metadata
+    for (let option in req.query) {
+        const metadata = {}
+        if (option.indexOf('metadata.') === 0) {
+            metadata[option.replace('metadata.', '')] = req.query[option]
+            delete req.query[option]
+        }
+        if (Object.keys(metadata).length)
+            ret.metadata = {}
+    }
+
     // Header
     ;['slug'].forEach(hdrName => {
         if (req.header(hdrName)) ret[hdrName] = req.header(hdrName)
