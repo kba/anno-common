@@ -1,0 +1,16 @@
+image: node:7
+
+stages:
+  - test
+
+before_script:
+  - npm install
+  - npm run link-all
+
+test:
+  stage: test
+  script:
+    - make test
+  cache:
+    paths:
+    - node_modules/

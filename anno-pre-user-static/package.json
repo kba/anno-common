@@ -1,14 +1,14 @@
 {
-  "name": "@kba/anno-mw-user-static",
+  "name": "@kba/anno-pre-user-static",
   "version": "0.0.1",
   "description": "Anno user hydrator (static data)",
-  "main": "./mw-user-static.js",
+  "main": "./pre-user-static.js",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/anno-server-mw-user-static#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-pre-user-static#readme",
   "scripts": {
     "prepublish": "node ../scripts/yml2json.js *.yml",
-    "test": "tap server-mw-user-static.test.js"
+    "test": "tap *.test.js"
   },
   "author": "kba",
   "license": "MIT",

@@ -1,6 +1,6 @@
 const tap = require('tap')
-const AclStatic = require('./mw-acl-static')
-const UserStatic = require('@kba/anno-mw-user-static')
+const AclStatic = require('.')
+const UserStatic = require('@kba/anno-pre-user-static')
 process.ANNO_DEBUG = false
 const {testAllow, testForbid} = require('../anno-acl/acl-test')
 
