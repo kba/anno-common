@@ -61,7 +61,7 @@ class Store {
                     mod = loadingModule.require(modName)
                 } catch (err) {
                     console.log(err)
-                    console.error(`Please install '${modName}' configured as middleware`)
+                    console.error(`Please install '${modName}' configured as ${hookName} processor`)
                     process.exit(1)
                 }
                 store.use(mod(), hookName)
@@ -83,18 +83,24 @@ class Store {
         // console.error("Store.constructor called", config)
     }
 
+    __logContext(msg, ctx) {
+        // XXX this is just to keep logs small
+        const ctxCopy = Object.assign({}, ctx)
+        ;['anno', 'targets'].forEach(k => ctxCopy[k] = '[...]')
+        this.log.silly(`${msg}: ${JSON.stringify(ctxCopy)}`)
+    }
+
     _callMethod(ctx, cb) {
         const impl = `_${ctx.method}`
-        Object.assign(ctx, this.config.METADATA)
+        // Object.assign(ctx, this.config.METADATA)
         if (!(impl in this)) {
             return cb(new Error(`${impl} not implemented`))
         }
-        this.log.silly(`Calling method '${ctx.method}'`, ctx)
-        async.eachSeries(this.hooks.pre, (preproc, next) => {
-            preproc(ctx, (...args) => {
-                const ctxCopy = Object.assign({}, ctx)
-                if ('anno' in ctxCopy) ctxCopy.anno = '[...]'
-                this.log.silly(`ctx after ${preproc.name}: ${JSON.stringify(ctxCopy)}`)
+        this.log.debug('METADATA', ctx.metadata)
+        this.__logContext(`BEFORE Method: ${ctx.method}`, ctx)
+        async.eachSeries(this.hooks.pre, (proc, next) => {
+            proc(ctx, (...args) => {
+                this.__logContext(`After preproc ${proc.name}`, ctx)
                 next(...args)
             })
         }, (err, pass) => {
@@ -102,19 +108,15 @@ class Store {
             if (err) return cb(err)
             if (ctx.dryRun)
                 return cb(null, ctx)
-            this.log.silly(`Calling method '${ctx.method}'`, ctx)
+            this.__logContext(`NOW Method: ${ctx.method}`, ctx)
             this[impl](ctx, (err, ...retvals) => {
                 if (err) return cb(err)
-                // console.log("FOO")
                 async.eachSeries(this.hooks.post, (proc, next) => {
-                    this.log.silly(`Running proc ${proc.name}`)
-                    proc({ctx, retvals}, next)
-                    //     (err) => {
-                    //     // const ctxCopy = Object.assign({}, ctx)
-                    //     // if ('anno' in ctxCopy) ctxCopy.anno = '[...]'
-                    //     // this.log.silly(`ctx after ${proc.name}: ${JSON.stringify(ctxCopy)}`)
-                    //     next(err)
-                    // })
+                    this.log.silly(`Running postproc ${proc.name}`)
+                    proc(ctx, (...args) => {
+                        this.__logContext(proc.name, ctx)
+                        next(...args)
+                    })
                 }, (err) => {
                     if (err) return cb(err)
                     return cb(null, ...retvals)

@@ -13,10 +13,11 @@ class AnnoAcl {
         const config = envyConf('ANNO')
         const log = envyLog('ANNO', 'acl')
         ctx.collection = (ctx.collection || 'default')
-        log.silly("Matching against rules:", ctx)
+        // log.silly("Matching against rules:", ctx)
         const matchingRule = this.rules.first(ctx)
         if (config.LOGLEVEL !== '') {
-            console.log(`Rule '${matchingRule}' matched ${JSON.stringify(ctx)}`)
+            // console.log(`Rule '${matchingRule}' matched ${JSON.stringify(ctx).substring(0,100)}`)
+            console.log(`Rule '${matchingRule}' matched`)
         }
         this.reason = matchingRule.name
         if (matchingRule.tail)
