@@ -11,7 +11,7 @@ module.exports = () => {
             if (err && err.code !== 'credentials_required')
                 console.log("JWT Error", err)
             // XXX Note we don't pass any errors on so ACL can be handled by
-            // anno-acl
+            // anno-store / anno-acl
             next()
         })
     }

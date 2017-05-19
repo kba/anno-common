@@ -17,9 +17,10 @@ function optionsFromRequest(req, resp, next) {
     })
 
     // user set from jwt
-    ;['user', 'service'].forEach(option => {
-        if (option in req) ret[option] = req[option]
-    })
+    if ('user' in req) {
+        if ('id' in req.user) ret.user = req.user.id
+        if ('service' in req.user) ret.service = req.user.service
+    }
     console.log("Options scraped", ret)
     req.annoOptions = ret
     next()
