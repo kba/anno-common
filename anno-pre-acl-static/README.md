@@ -14,7 +14,7 @@
 
 Rules for authorization are expressed as
 [sift-rule](https://github.com/kba/sift-rule) rules and read as JSON from the
-environment variable `ANNO_ACL_RULES`.
+environment variable `ANNO_ACL_DATA`.
 
 Rules are an ordered list of `CONDITION`-`RESULT`-`DESCRIPTION` triplets:
 
