@@ -70,6 +70,7 @@ paths:
         - {in: 'query', name: 'metadataOnly', type: 'boolean', default: false, allowEmptyValue: true, description: 'Send only metadata'}
         - {in: 'query', name: 'skipVersions', type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off versions'}
         - {in: 'query', name: 'skipReplies',  type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off replies'}
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
         - in: 'header'
           name: 'Prefer'
           description: '<a href="https://www.w3.org/TR/annotation-protocol/#container-representations">Preferred Container Representation</a>'
@@ -100,6 +101,8 @@ paths:
         - in: 'header'
           name: 'Slug'
           description: 'Preferred annotation ID'
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
+        - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
         - {in: 'query', name: 'metadataOnly', type: 'boolean', default: false, allowEmptyValue: true, description: 'Send only metadata'}
         - {in: 'query', name: 'skipVersions', type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off versions'}
         - {in: 'query', name: 'skipReplies',  type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off replies'}
@@ -133,6 +136,7 @@ paths:
           type: 'string'
           required: true
           description: 'ID of the annotation'
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
         - {in: 'query', name: 'metadataOnly', type: 'boolean', default: false, allowEmptyValue: true, description: 'Send only metadata'}
         - {in: 'query', name: 'skipVersions', type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off versions'}
         - {in: 'query', name: 'skipReplies',  type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off replies'}
@@ -153,6 +157,7 @@ paths:
       tags: ['anno']
       summary: 'Get a single annotation without body/target'
       parameters:
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
         - in: 'path'
           name: 'annoId'
           type: 'string'
@@ -183,6 +188,8 @@ paths:
           type: 'string'
           required: true
           description: 'ID of the annotation'
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
+        - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
       responses:
         200:
           description: 'Annotation deleted'
@@ -207,6 +214,8 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Annotation'
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
+        - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
       responses:
         200:
           description: Created a new revision
@@ -226,7 +235,9 @@ paths:
         Will remove the annotation and all replies and versions from the store.
         Subsequent GET requests will return 404
         '
-      parameters: []
+      parameters:
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
+        - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
       responses:
         200:
           description: all okay
@@ -294,6 +305,8 @@ paths:
           required: true
           description: 'Reply to post'
           schema: {$ref: '#/definitions/AnnotationReply'}
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
+        - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
       responses:
         201:
           description: 'Reply created'
@@ -355,6 +368,8 @@ paths:
         - in: 'header'
           name: 'Slug'
           description: 'Preferred annotation ID'
+        - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
+        - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
       responses:
         201:
           description: "Imported the annotation"

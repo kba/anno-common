@@ -98,6 +98,12 @@
           },
           {
             "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
             "name": "Prefer",
             "description": "<a href=\"https://www.w3.org/TR/annotation-protocol/#container-representations\">Preferred Container Representation</a>",
             "enum": [
@@ -142,6 +148,18 @@
             "in": "header",
             "name": "Slug",
             "description": "Preferred annotation ID"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
           },
           {
             "in": "query",
@@ -207,6 +225,12 @@
             "description": "ID of the annotation"
           },
           {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
             "in": "query",
             "name": "metadataOnly",
             "type": "boolean",
@@ -253,6 +277,12 @@
         "summary": "Get a single annotation without body/target",
         "parameters": [
           {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
             "in": "path",
             "name": "annoId",
             "type": "string",
@@ -285,6 +315,18 @@
             "type": "string",
             "required": true,
             "description": "ID of the annotation"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
           }
         ],
         "responses": {
@@ -317,6 +359,18 @@
             "schema": {
               "$ref": "#/definitions/Annotation"
             }
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
           }
         ],
         "responses": {
@@ -341,7 +395,20 @@
         ],
         "summary": "Completely delete the annotation",
         "description": " Will remove the annotation and all replies and versions from the store. Subsequent GET requests will return 404 ",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "all okay"
@@ -427,6 +494,18 @@
             "schema": {
               "$ref": "#/definitions/AnnotationReply"
             }
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
           }
         ],
         "responses": {
@@ -528,6 +607,18 @@
             "in": "header",
             "name": "Slug",
             "description": "Preferred annotation ID"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
           }
         ],
         "responses": {
