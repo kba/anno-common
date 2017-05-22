@@ -18,8 +18,8 @@ function optionsFromRequest(req, resp, next) {
 
     // user set from jwt
     if ('user' in req) {
-        if ('id' in req.user) ret.user = req.user.id
-        if ('service' in req.user) ret.service = req.user.service
+        if ('sub' in req.user) ret.user = req.user.id
+        if ('iss' in req.user) ret.service = req.user.service
     }
     console.log("Options scraped", ret)
     req.annoOptions = ret
