@@ -1,0 +1,23 @@
+{
+  "name": "@kba/anno-pre-user-file",
+  "version": "0.0.1",
+  "description": "Anno user hydrator (file data)",
+  "main": "./pre-user-file.js",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-pre-user-file#readme",
+  "scripts": {
+    "test": "tap *.test.js"
+  },
+  "author": "kba",
+  "license": "MIT",
+  "devDependencies": {
+    "@kba/anno-fixtures": "^0.0.1"
+  },
+  "dependencies": {
+    "@kba/anno-user": "^0.0.1",
+    "js-yaml": "^3.8.3",
+    "chokidar": "^1.7.0",
+    "envyconf": "^0.0.5"
+  }
+}
