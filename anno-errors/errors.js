@@ -83,10 +83,21 @@ module.exports = {
      *
      */
     badRequest(reason, errors) {
-        const err = new Error(`[Bad reques]t ${reason}: ${errors ? JSON.stringify(errors, null, 2) : ''}`)
+        const err = new Error(`[Bad request] ${reason}: ${errors ? JSON.stringify(errors, null, 2) : ''}`)
         err.code = 400
         err.ctx = {errors}
         return err
     },
+
+    /**
+     * ## `fileNotFound(filename, error='')`
+     *
+     */
+    fileNotFound(filename, error='') {
+        const err = new Error(`[File not found] ${filename}: ${error ? JSON.stringify(error, null, 2) : ''}`)
+        err.code = 500
+        err.ctx = {error}
+        return err
+    }
 
 }
