@@ -38,7 +38,7 @@ class HttpStore extends Store {
         delete anno.hasVersion
         delete anno.versionOf
         delete anno.hasReply
-        this._httpClient.post('/', anno, this._configFromOptions(options))
+        this._httpClient.post('/', anno, this._axiosConfigFromAnnoOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(axiosErr => {
                 const err = new Error(axiosErr.response.data)
@@ -51,7 +51,7 @@ class HttpStore extends Store {
     _get(options, cb) {
         const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.get(annoUrl, this._configFromOptions(options))
+        this._httpClient.get(annoUrl, this._axiosConfigFromAnnoOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if (err.response) return (err.response.status === 404)
@@ -64,7 +64,7 @@ class HttpStore extends Store {
     /* @override */
     _search(options, cb) {
         const {query} = options
-        this._httpClient.get('/' + '?' + querystring.stringify(query), this._configFromOptions(options))
+        this._httpClient.get('/' + '?' + querystring.stringify(query), this._axiosConfigFromAnnoOptions(options))
             .then(resp => {
                 const col = resp.data
                 if (col.total === 0) {
@@ -87,7 +87,7 @@ class HttpStore extends Store {
         anno = JSON.parse(JSON.stringify(anno))
         // delete anno.via
         // delete anno.replyTo
-        this._httpClient.put(annoUrl, anno, this._configFromOptions(options))
+        this._httpClient.put(annoUrl, anno, this._axiosConfigFromAnnoOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
                 if (err.response) return (err.response.status === 404)
@@ -101,7 +101,7 @@ class HttpStore extends Store {
     _delete(options, cb) {
         const {annoId} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
-        this._httpClient.delete(annoUrl, this._configFromOptions(options))
+        this._httpClient.delete(annoUrl, this._axiosConfigFromAnnoOptions(options))
             .then(() => cb())
             .catch(err => {
                 if (err.response) return (err.response.status === 404)
@@ -113,7 +113,7 @@ class HttpStore extends Store {
 
     /* @override */
     _wipe(options, cb) {
-        return this._httpClient.delete('/', this._configFromOptions(options))
+        return this._httpClient.delete('/', this._axiosConfigFromAnnoOptions(options))
             .then(() => cb())
             .catch(err => {
                 if (err.response) return cb(err.response.data)
@@ -129,7 +129,7 @@ class HttpStore extends Store {
     _aclCheck(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         const {targets} = options
-        return this._httpClient.post('/acl', {targets}, this._configFromOptions(options))
+        return this._httpClient.post('/acl', {targets}, this._axiosConfigFromAnnoOptions(options))
             .then((resp) => cb(null, resp.data))
             .catch(err => {
                 if (err.response) return cb(err.response.data)
@@ -140,7 +140,7 @@ class HttpStore extends Store {
     // ----------------------------------------
     // PRIVATE
     // ----------------------------------------
-    _configFromOptions(options) {
+    _axiosConfigFromAnnoOptions(options) {
         const ret = {}
         // BasicAuth
         if (options.auth && options.auth.username) {
