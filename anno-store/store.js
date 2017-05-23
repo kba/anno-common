@@ -103,7 +103,7 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
-            this.log.silly('finished all preprocessing')
+            this.log.silly(`Finished all preprocessing: ${err}`)
             if (err) return cb(err)
             if (ctx.dryRun)
                 return cb(null, ctx)
@@ -112,7 +112,7 @@ class Store {
                 if (err) return cb(err)
                 async.eachSeries(this.hooks.post, (proc, next) => {
                     this.log.silly(`Running postproc ${proc.name}`)
-                    proc(ctx, (...args) => {
+                    proc({ctx, retvals}, (...args) => {
                         this.__logContext(proc.name, ctx)
                         next(...args)
                     })
