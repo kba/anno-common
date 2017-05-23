@@ -4,6 +4,7 @@ const prune       = require('object-prune')
 const {envyConf}  = require('envyconf')
 
 module.exports = ({store}) => {
+    console.log("Entering Anno Router")
 
     function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {

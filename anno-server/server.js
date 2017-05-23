@@ -32,8 +32,9 @@ function start(app, cb) {
     store.init(err => {
         if (err) return cb(err)
         app.use('/anno',
-            require('./middleware/jsonwebtoken')(),
             require('./middleware/anno-options')(),
+            require('./middleware/user-auth')(),
+            require('./middleware/acl-metadata')(),
             require('./routes/anno')({store}))
         app.use('/swagger',
             require('./routes/swagger')())

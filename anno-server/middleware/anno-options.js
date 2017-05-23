@@ -1,27 +1,38 @@
-module.exports = () => optionsFromRequest
+const errors = require('@kba/anno-errors')
+const {envyConf} = require('envyconf')
 
-function optionsFromRequest(req, resp, next) {
-    const ret = {}
+module.exports = function AnnoOptionsMiddleware() {
+    const conf = envyConf('ANNO', {
+        DEFAULT_COLLECTION: 'default',
+        COLLECTION_DATA: JSON.stringify({default:{secret:'123'}}),
+    })
+    const collectionConfig = JSON.parse(conf.COLLECTION_DATA)
 
-    // boolean values
-    ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {
-        if (option in req.query) {
-            ret[option] = !! req.query[option].match(/^(true|1)$/)
-            delete req.query[option]
+    return function optionsFromRequest(req, resp, next) {
+
+        req.annoOptions = req.annoOptions || {}
+
+        const options = req.annoOptions
+
+        // Determine collection from header
+        const collection = req.header('x-anno-collection') || conf.DEFAULT_COLLECTION
+        if (!(collection in collectionConfig)) {
+            return next(errors.badRequest(`No such collection: '${collection}'`))
         }
-    })
+        options.collection = collection
 
-    // Header
-    ;['slug'].forEach(hdrName => {
-        if (req.header(hdrName)) ret[hdrName] = req.header(hdrName)
-    })
+        // boolean values
+        ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {
+            if (option in req.query) {
+                options[option] = !! req.query[option].match(/^(true|1)$/)
+                delete req.query[option]
+            }
+        })
 
-    // user set from jwt
-    if ('user' in req) {
-        if ('sub' in req.user) ret.user = req.user.id
-        if ('iss' in req.user) ret.service = req.user.service
+        // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
+        if (req.header('slug')) options.slug = req.header('slug')
+
+        console.log("annoOptions scraped", options)
+        next()
     }
-    console.log("Options scraped", ret)
-    req.annoOptions = ret
-    next()
 }
