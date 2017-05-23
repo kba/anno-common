@@ -1,10 +1,12 @@
 const deepExtend = require('deep-extend')
 const {RuleSet} = require('sift-rule')
+const async = require('async')
+
 const RULESET = Symbol('_ruleset')
 
 module.exports = class UserProcessor {
 
-    constructor(users) {
+    constructor(users=[]) {
         // TODO validate
         Object.keys(users).forEach(id => {
             if (!users[id].id) {
@@ -22,6 +24,7 @@ module.exports = class UserProcessor {
         const userId = typeof ctx.user === 'string' ? ctx.user 
             : ctx.user.user ? ctx.user.user 
             : ctx.user.id
+        console.log(`Looking up user "${ctx.user}"`)
         if (userId in this.users) {
             // console.log(`Found user ${userId}`, this.users[userId])
             if (typeof ctx.user === 'string') ctx.user = {id: userId}
@@ -31,6 +34,43 @@ module.exports = class UserProcessor {
         }
         return cb()
     }
+
+    mapReduceCreators(retvals, cb) {
+        const ret = {}
+
+        // Map
+        console.log("...map", {retvals})
+        retvals.forEach((val) => {
+            if (!Array.isArray(val)) val = [val];
+            val.forEach(v => {
+                if (v.creator) ret[v.creator] = null
+            })
+        })
+
+        // Lookup
+        async.each(Object.keys(ret), (user, done) => {
+            const ctx = {user}
+            this.process(ctx, err => {
+                if (err) return done(err)
+                ret[user] = ctx[user]
+                return done()
+            })
+        },
+
+            // Reduce
+            (err) => {
+                console.log("...reduce", ret)
+                if (err) return cb(err)
+                retvals.forEach((val) => {
+                    if (!Array.isArray(val)) val = [val];
+                    val.forEach(v => {
+                        if (v.creator && ret[v.creator] && ret[v.creator].public) v.creator = ret[v.creator].public
+                    })
+                })
+                return cb()
+            })
+    }
 }
 
 module.exports.usersExample = require('./users-example.json')
+
