@@ -2,9 +2,14 @@ const {RuleSet} = require('sift-rule')
 const {envyConf, envyLog} = require('envyconf')
 const errors = require('@kba/anno-errors')
 
+const FALLBACK_RULE = {
+    name: 'Fallback Rule',
+    tail: false,
+}
+
 class AnnoAcl {
 
-    constructor(rules) {
+    constructor(rules=[]) {
         // TODO validate
         this.rules = new RuleSet(rules)
     }
@@ -14,7 +19,7 @@ class AnnoAcl {
         const log = envyLog('ANNO', 'acl')
         ctx.collection = (ctx.collection || 'default')
         // log.silly("Matching against rules:", ctx)
-        const matchingRule = this.rules.first(ctx)
+        const matchingRule = this.rules.first(ctx) || FALLBACK_RULE
         if (config.LOGLEVEL !== '') {
             // console.log(`Rule '${matchingRule}' matched ${JSON.stringify(ctx).substring(0,100)}`)
             console.log(`Rule '${matchingRule}' matched`)
