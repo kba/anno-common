@@ -56,6 +56,18 @@ module.exports = {
     },
 
     /**
+     * ## `mismatch(reason, ctx)`
+     *
+     * https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.13
+     */
+    mismatch(reason, expected, actual) {
+        const err = new Error(`Mismatch: ${reason}\n\tExpected: '${expected}'\n\tActual: ${actual}`)
+        err.code = 412
+        err.ctx = {expected, actual}
+        return err
+    },
+
+    /**
      * ## `forbidden(reason, ctx)`
      */
     forbidden(reason, ctx) {
@@ -63,6 +75,18 @@ module.exports = {
         err.code = 403
         err.ctx = ctx
         return err
-    }
+    },
+
+
+    /**
+     * ## `badRequest(reason, errors=[])`
+     *
+     */
+    badRequest(reason, errors) {
+        const err = new Error(`[Bad reques]t ${reason}: ${errors ? JSON.stringify(errors, null, 2) : ''}`)
+        err.code = 400
+        err.ctx = {errors}
+        return err
+    },
 
 }
