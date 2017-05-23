@@ -8,7 +8,7 @@ module.exports = function AnnoOptionsMiddleware() {
     })
     const collectionConfig = JSON.parse(conf.COLLECTION_DATA)
 
-    return function optionsFromRequest(req, resp, next) {
+    function AnnoOptionsMiddleware(req, resp, next) {
 
         req.annoOptions = req.annoOptions || {}
 
@@ -35,4 +35,6 @@ module.exports = function AnnoOptionsMiddleware() {
         console.log("annoOptions scraped", options)
         next()
     }
+    AnnoOptionsMiddleware.unless = require('express-unless')
+    return AnnoOptionsMiddleware
 }

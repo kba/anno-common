@@ -4,9 +4,8 @@ const {envyConf} = require('envyconf')
 
 module.exports = function UserAuthMiddlewareFactory() {
     const collectionConfig = JSON.parse(envyConf('ANNO').COLLECTION_DATA)
-    this.unless = require('express-unless')
 
-    return function UserAuthMiddleware(req, resp, next) {
+    function UserAuthMiddleware(req, resp, next) {
         const {collection} = req.annoOptions = req.annoOptions || {}
         if (!collection)
             return next(errors.badRequest("Missing 'collection' in the request context"))
@@ -44,4 +43,6 @@ module.exports = function UserAuthMiddlewareFactory() {
             next()
         })
     }
+    UserAuthMiddleware.unless = require('express-unless')
+    return UserAuthMiddleware
 }

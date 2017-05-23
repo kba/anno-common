@@ -22,7 +22,7 @@ function cached(metadataEndpoint, collection, context, cb) {
 module.exports = function AclMetadataMiddlewareFactory() {
     const collectionConfig = JSON.parse(envyConf('ANNO').COLLECTION_DATA)
 
-    return function AclMetadataMiddleware(req, resp, next) {
+    function AclMetadataMiddleware(req, resp, next) {
         const {collection} = req.annoOptions = req.annoOptions || {}
         if (!collection) {
             console.log(errors.badRequest("Missing 'collection' in the request context"))
@@ -48,6 +48,7 @@ module.exports = function AclMetadataMiddlewareFactory() {
             cached(metadataEndpoint, collection, context)
                 .then(data => {
                     req.annoOptions.metadata = data
+                    console.log("AclMetadataMiddleware finished", data)
                     next()
                 })
                 .catch(err => {
@@ -56,5 +57,7 @@ module.exports = function AclMetadataMiddlewareFactory() {
                 })
         }
     }
+    AclMetadataMiddleware.unless = require('express-unless')
+    return AclMetadataMiddleware
 }
 
