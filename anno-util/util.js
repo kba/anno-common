@@ -66,6 +66,33 @@ function collectIds(list) {
     return ret
 }
 
+/*
+ * ### `applyToAnno(anno, fn, options, cb)`
+ *
+ * Apply a function `fn` to `anno` and all elements contained therein, then call `cb`)
+ *
+ * `fn` takes the annotation as first and a callback as second argument
+ *
+ * The main point is to handle recursion into replies/versions here.
+ */
+function applyToAnno(anno, fn, options, cb) {
+    if (!options || typeof options === 'function') [cb, options] = [options, {}]
+    options.nestedProps = options.nestedProps || ['hasReply', 'hasVersion']
+    fn(anno)
+    options.nestedProps.forEach(k => {
+        if (!anno[k]) {
+            return
+        } else if (Array.isArray(anno[k])) {
+            anno[k].forEach(subanno => {
+                applyToAnno(subanno, fn, options, ()=>{})
+            })
+        } else if (typeof anno[k] === 'object') {
+            applyToAnno(anno[k], fn, options, ()=>{})
+        }
+    })
+    if (cb) return cb()
+}
+
 module.exports = {
 
     ensureArray,
@@ -77,5 +104,6 @@ module.exports = {
 
     splitIdRepliesRev,
     collectIds,
+    applyToAnno,
 
 }
