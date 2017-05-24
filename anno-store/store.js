@@ -119,7 +119,8 @@ class Store {
                 if (err) return cb(err)
                 async.eachSeries(this.hooks.post, (proc, next) => {
                     this.log.silly(`Running postproc ${proc.impl}`)
-                    proc({ctx, retvals}, (...args) => {
+                    ctx.retvals = retvals
+                    proc(ctx, (...args) => {
                         this.__logContext(proc.name, ctx)
                         next(...args)
                     })
@@ -305,7 +306,7 @@ class Store {
      * - `@param {function} callback`
      */
     reply(annoId, anno, options, cb) {
-        console.log(annoId, anno)
+        // console.log(annoId, anno)
         this.log.debug(`Replying to ${annoId}`, anno)
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {

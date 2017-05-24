@@ -18,9 +18,9 @@
   "dependencies": {
     "@kba/anno-acl": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
-    "chokidar": "^1.7.0",
+    "@kba/anno-util": "^0.0.1",
+    "@kba/anno-util-loaders": "^0.0.1",
     "envyconf": "^0.0.5",
-    "js-yaml": "^3.8.4",
     "sift-rule": "^0.1.0"
   }
 }
