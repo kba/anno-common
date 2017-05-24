@@ -54,7 +54,8 @@ class Store {
                 .map(s => s.trim())
                 .filter(s => s !== '')
             log.silly(`${hookName} hook: `, modNames)
-            async.eachSeries(modNames, (modName, next) => {
+            async.eachSeries(modNames, (modNameRaw, next) => {
+                const [modName, modImport] = modNameRaw.split(':')
                 var mod;
                 try {
                     log.silly(`Loading module ${modName}`)
@@ -64,7 +65,11 @@ class Store {
                     console.error(`Please install '${modName}' configured as ${hookName} processor`)
                     process.exit(1)
                 }
-                store.use(mod(), hookName)
+                if (modImport) {
+                    store.use(mod[modImport](), hookName)
+                } else {
+                    store.use(mod(), hookName)
+                }
                 next()
             }, nextHook)
         })
