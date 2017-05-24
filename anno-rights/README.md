@@ -1,6 +1,9 @@
-# anno-pre-acl-static
+# anno-rights
 
-> Authorization for anno-stores
+> Rights management for anno store (users and rules)
+
+<!-- BEGIN-MARKDOWN-TOC -->
+<!-- END-MARKDOWN-TOC -->
 
 ## ACL Users
 
@@ -27,3 +30,6 @@ Rules are an ordered list of `CONDITION`-`RESULT`-`DESCRIPTION` triplets:
   * `collection`: ID of the collection in question. Defaults to `default`
 * `RESULT` is `true` to allow or `false` to deny the request
 * `DESCRIPTION` is an optional description of the rule
+
+<!-- BEGIN-RENDER ./rights.js -->
+<!-- END-RENDER -->

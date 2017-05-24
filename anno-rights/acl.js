@@ -20,10 +20,10 @@ class AnnoAcl {
         ctx.collection = (ctx.collection || 'default')
         // log.silly("Matching against rules:", ctx)
         const matchingRule = this.rules.first(ctx) || FALLBACK_RULE
-        if (config.LOGLEVEL !== '') {
-            // console.log(`Rule '${matchingRule}' matched ${JSON.stringify(ctx).substring(0,100)}`)
-            console.log(`Rule '${matchingRule}' matched`)
-        }
+        // if (config.LOGLEVEL !== '') {
+        //     // log.silly(`Rule '${matchingRule}' matched ${JSON.stringify(ctx).substring(0,100)}`)
+        //     log.silly(`Rule '${matchingRule}' matched`)
+        // }
         this.reason = matchingRule.name
         if (matchingRule.tail)
             return cb(null, matchingRule.name)

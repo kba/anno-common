@@ -1,12 +1,13 @@
 const deepExtend = require('deep-extend')
 const {RuleSet} = require('sift-rule')
 const async = require('async')
+const {envyLog} = require('envyconf')
 
 const RULESET = Symbol('_ruleset')
 
 module.exports = class UserProcessor {
 
-    constructor(users=[]) {
+    constructor(users={}) {
         // TODO validate
         Object.keys(users).forEach(id => {
             if (!users[id].id) {
@@ -16,15 +17,16 @@ module.exports = class UserProcessor {
             delete users[id].rules
         })
         this.users = users
+        this.log = envyLog('ANNO', 'user')
     }
 
     process(ctx, cb) {
         if (!( 'user' in ctx ))
             return cb()
-        const userId = typeof ctx.user === 'string' ? ctx.user 
-            : ctx.user.user ? ctx.user.user 
+        const userId = typeof ctx.user === 'string' ? ctx.user
+            : ctx.user.user ? ctx.user.user
             : ctx.user.id
-        console.log(`Looking up user "${ctx.user}"`)
+        this.log.silly(`Looking up user ${JSON.stringify(ctx.user)}`)
         if (userId in this.users) {
             // console.log(`Found user ${userId}`, this.users[userId])
             if (typeof ctx.user === 'string') ctx.user = {id: userId}

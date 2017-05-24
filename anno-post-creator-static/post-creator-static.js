@@ -1,4 +1,4 @@
-const UserProcessor = require('@kba/anno-user')
+const {UserProcessor} = require('@kba/anno-rights')
 const async = require('async')
 const {envyConf} = require('envyconf')
 

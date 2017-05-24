@@ -52,7 +52,7 @@ function start(app, cb) {
 
 const app = express()
 start(app, (err) => {
-    console.log("Config", JSON.stringify(envyConf('ANNO'), null, 2))
+    // console.log("Config", JSON.stringify(envyConf('ANNO'), null, 2))
     if (err) throw err
     app.listen(envyConf('ANNO').PORT, () => {
         console.log("Config", JSON.stringify(envyConf('ANNO'), null, 2))

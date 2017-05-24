@@ -89,6 +89,7 @@ class Store {
     }
 
     __logContext(msg, ctx) {
+        if (ctx.dryRun) return
         // XXX this is just to keep logs small
         const ctxCopy = Object.assign({}, ctx)
         ;['anno', 'targets'].forEach(k => ctxCopy[k] = '[...]')
@@ -104,11 +105,12 @@ class Store {
         this.__logContext(`BEFORE Method: ${ctx.method}`, ctx)
         async.eachSeries(this.hooks.pre, (proc, next) => {
             proc(ctx, (...args) => {
-                this.__logContext(`After preproc ${proc.name}`, ctx)
+                this.__logContext(`After preproc ${proc.impl}`, ctx)
                 next(...args)
             })
         }, (err, pass) => {
-            this.log.silly(`Finished all preprocessing: ${err}`)
+            if (err)
+                this.log.silly(`${ctx.user.id ? ctx.user.id : ctx.user} may not ${ctx.method}: ${err}`)
             if (err) return cb(err)
             if (ctx.dryRun)
                 return cb(null, ctx)
@@ -116,7 +118,7 @@ class Store {
             this[impl](ctx, (err, ...retvals) => {
                 if (err) return cb(err)
                 async.eachSeries(this.hooks.post, (proc, next) => {
-                    this.log.silly(`Running postproc ${proc.name}`)
+                    this.log.silly(`Running postproc ${proc.impl}`)
                     proc({ctx, retvals}, (...args) => {
                         this.__logContext(proc.name, ctx)
                         next(...args)

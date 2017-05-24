@@ -42,3 +42,4 @@ mongo store
 [X] schema: use getters and load config
 [X] fix perm.nedb / acl
 [ ] ACL rules should emit status/message instead of true/false
+[ ] Unify ACL / User processor interfaces (DRY)
