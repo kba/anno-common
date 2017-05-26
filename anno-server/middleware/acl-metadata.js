@@ -33,11 +33,18 @@ module.exports = function AclMetadataMiddlewareFactory() {
         const {metadataEndpoint} = collectionConfig[collection]
 
         if (metadataToken) {
-            // TODO
-            // TODO
-            return next(errors.badRequest("X-Anno-Metadata not yet supported, sry :("))
-            // TODO
-            // TODO
+            const {secret} = collectionConfig[collection]
+            if (!secret) {
+                console.log(errors.badRequest(`No 'secret' for collection: ${collection}`))
+                return next()
+            }
+            jwt.verify(metadataToken, secret, (err, decoded) => {
+                if (err) {
+                    return next(errors.badRequest(`JWT choked on this X-Anno-Metadata token: ${err}`))
+                }
+                req.annoOptions.metadata = decoded
+                return next()
+            })
         } else if (!metadataEndpoint) {
             console.log(errors.badRequest(`Missing 'metadataEndpoint' in the configuration of collection '${collection}'`))
             return next()
