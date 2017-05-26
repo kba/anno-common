@@ -109,26 +109,32 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
-            if (err)
-                this.log.silly(`${ctx.user.id ? ctx.user.id : ctx.user} may not ${ctx.method}: ${err}`)
+            if (err) {
+                const userId = ctx.user && ctx.user.id ? ctx.user.id : ctx.user
+                this.log.silly(`${userId} may not ${ctx.method}: ${err}`)
+            }
             if (err) return cb(err)
             if (ctx.dryRun)
                 return cb(null)
             this.__logContext(`NOW Method: ${ctx.method}`, ctx)
-            this[impl](ctx, (err, ...retvals) => {
-                if (err) return cb(err)
-                async.eachSeries(this.hooks.post, (proc, next) => {
-                    this.log.silly(`Running postproc ${proc.impl}`)
-                    ctx.retvals = retvals
-                    proc(ctx, (...args) => {
-                        this.__logContext(proc.name, ctx)
-                        next(...args)
-                    })
-                }, (err) => {
+            try {
+                this[impl](ctx, (err, ...retvals) => {
                     if (err) return cb(err)
-                    return cb(null, ...retvals)
+                    async.eachSeries(this.hooks.post, (proc, next) => {
+                        this.log.silly(`Running postproc ${proc.impl}`)
+                        ctx.retvals = retvals
+                        proc(ctx, (...args) => {
+                            this.__logContext(proc.name, ctx)
+                            next(...args)
+                        })
+                    }, (err) => {
+                        if (err) return cb(err)
+                        return cb(null, ...retvals)
+                    })
                 })
-            })
+            } catch(exception) {
+                cb(exception)
+            }
         })
     }
 
@@ -350,15 +356,21 @@ class Store {
         const {targets} = options
         async.forEach(targets, (url, urlDone) => {
             ret[url] = {}
-            const anno = {target: url}
-            async.parallel({
-                read:   (cb) => this.get(url, options, (err)          => cb(null, !err)),
-                create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
-                revise: (cb) => this.revise(url, anno, options, (err) => cb(null, !err)),
-                remove: (cb) => this.delete(url, options, (err)       => cb(null, !err)),
-            }, (err, perms) => {
-                ret[url] = perms
-                urlDone()
+            this.get(url, {metadataOnly: true}, (err, found) => {
+                const anno = {target: url}
+                if (found) {
+                    Object.assign(anno, found)
+                }
+                anno.target = url
+                async.parallel({
+                    read:   (cb) => cb(null, true), // since we know this anno could be read/retrieved
+                    create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
+                    revise: (cb) => this.revise(url, anno, options, (err) => cb(null, !err)),
+                    remove: (cb) => this.delete(url, options, (err)       => cb(null, !err)),
+                }, (err, perms) => {
+                    ret[url] = perms
+                    urlDone()
+                })
             })
         }, (err) => cb(err, ret))
     }
