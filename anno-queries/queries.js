@@ -140,17 +140,21 @@ class simpleTagBody extends AnnoQuery {
  */
 class semanticTagBody extends AnnoQuery {
     match(body) {
+        const matchValues = ['linking', 'identifying', 'classifying']
         return (
-            body && (
-                body.motivation === 'linking'     || body.purpose === 'linking'     ||
-                body.motivation === 'identifying' || body.purpose === 'identifying' ||
-                body.motivation === 'classifying' || body.purpose === 'classifying'
+            body && body.purpose && (
+                matchValues.includes(body.purpose)
+                ||
+                (
+                   Array.isArray(body.purpose)
+                   && matchValues.find(v => body.purpose.includes(v))
+                )
             )
         )
     }
     create({id=''}={}) {
         return {
-            purpose: 'linking',
+            purpose: ['classifying'],
             id,
         }
     }
