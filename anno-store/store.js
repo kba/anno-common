@@ -113,7 +113,7 @@ class Store {
                 this.log.silly(`${ctx.user.id ? ctx.user.id : ctx.user} may not ${ctx.method}: ${err}`)
             if (err) return cb(err)
             if (ctx.dryRun)
-                return cb(null, ctx)
+                return cb(null)
             this.__logContext(`NOW Method: ${ctx.method}`, ctx)
             this[impl](ctx, (err, ...retvals) => {
                 if (err) return cb(err)
