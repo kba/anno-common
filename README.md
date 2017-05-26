@@ -11,7 +11,8 @@ reuse of components.
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Concepts](#concepts)
 	* [Store](#store)
-	* [Middleware](#middleware)
+	* [Plugins](#plugins)
+		* [Registering plugins](#registering-plugins)
 	* [Authentication](#authentication)
 	* [Revisions](#revisions)
 	* [Comments / Replies / Nesting](#comments--replies--nesting)
@@ -138,12 +139,10 @@ Click on the image for links
 <a href="./doc/repo-structure.svg"><img src="./doc/repo-structure.png"/></a>
 
 <!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
-- [anno-acl](./anno-acl): Authorization for anno-stores
 - [anno-cli](./anno-cli): Command line interface for anno-*
 - [anno-errors](./anno-errors): Shared errors for anno-*
 - [anno-fixtures](./anno-fixtures): Sample data for testing and experimentation
-- [anno-mw-acl-static](./anno-mw-acl-static): Authorization for anno-stores
-- [anno-mw-user-static](./anno-mw-user-static): Hydrating a context with user information from fixed data
+- [anno-plugins](./anno-plugins): Rights management for anno store (users and rules)
 - [anno-queries](./anno-queries): Search and create fragments of Web Annotations
 - [anno-schema](./anno-schema): JSON schema, OpenAPI and JSON-LD context
 - [anno-server](./anno-server): Web Annotation Protocol server with extensions
@@ -155,6 +154,7 @@ Click on the image for links
 - [anno-store-mongolike](./anno-store-mongolike): Store base class for Mongo-like NoSQL databases
 - [anno-test](./anno-test): 
 - [anno-util](./anno-util): Utility functions
+- [anno-util-loaders](./anno-util-loaders): Wrappers to configure processors
 - [anno-webpack](./anno-webpack): Bundling the anno-* tools for browser use
 
 <!-- END-EVAL -->
