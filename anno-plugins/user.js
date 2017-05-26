@@ -23,16 +23,16 @@ module.exports = class UserProcessor {
     process(ctx, cb) {
         if (!( 'user' in ctx ))
             return cb()
-        const userId = typeof ctx.user === 'string' ? ctx.user
+        const id = typeof ctx.user === 'string' ? ctx.user
             : ctx.user.user ? ctx.user.user
             : ctx.user.id
         this.log.silly(`Looking up user ${JSON.stringify(ctx.user)}`)
-        if (userId in this.users) {
-            // console.log(`Found user ${userId}`, this.users[userId])
-            if (typeof ctx.user === 'string') ctx.user = {id: userId}
-            deepExtend(ctx.user, this.users[userId], ...this.users[userId][RULESET].filterApply(ctx))
+        if (id in this.users) {
+            // console.log(`Found user ${id}`, this.users[id])
+            if (typeof ctx.user === 'string') ctx.user = {}
+            deepExtend(ctx.user, {id}, this.users[id], ...this.users[id][RULESET].filterApply(ctx))
         } else {
-            // console.log(`User not found: ${userId}`)
+            // console.log(`User not found: ${id}`)
         }
         return cb()
     }
