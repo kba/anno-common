@@ -1,22 +1,21 @@
 {
-  "name": "@kba/anno-rights",
+  "name": "@kba/anno-plugins",
   "version": "0.0.1",
-  "description": "Rights management for anno-stores",
-  "main": "rights.js",
+  "description": "Plugins to augment anno-store*",
+  "main": "index.js",
   "scripts": {
     "prepublish": "node ../scripts/yml2json.js *.yml",
     "test": "tap *.test.js"
   },
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
-  "homepage": "https://github.com/kba/anno/tree/master/anno-rights#readme",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-plugins#readme",
   "author": "kba",
   "license": "MIT",
   "devDependencies": {
     "@kba/anno-fixtures": "^0.0.1"
   },
   "dependencies": {
-    "@kba/anno-acl": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
     "@kba/anno-util": "^0.0.1",
     "@kba/anno-util-loaders": "^0.0.1",
