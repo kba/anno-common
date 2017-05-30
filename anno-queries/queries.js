@@ -126,36 +126,64 @@ class simpleTagBody extends AnnoQuery {
  *
  * Find/Create semantic tag bodies. 
  *
- * A semantic tag body is a web resource (must have an `id`) with a `purpose`/`motivation`
- * of either `linking`, `identifying` or `classifying`.
+ * A semantic tag body is a web resource (must have an `id`) with the sole purpose
+ * of `classifying`.
  *
  * #### Example
  *
  * ```js
  * {
  *   "id": "http://vocab/fruit17",
- *   "motivation": "classifying"
+ *   "purpose": "classifying"
  * }
  * ```
  */
 class semanticTagBody extends AnnoQuery {
     match(body) {
-        const matchValues = ['classifying', 'identifying', 'linking']
-        const matchFields = ['purpose', 'motivation']
         return (
-            body && matchFields.find(k => 
-                matchValues.includes(body[k])
-                ||
-                (
-                   Array.isArray(body[k])
-                   && matchValues.find(v => body[k].indexOf(v) !== -1)
-                )
-            )
+            body && body.purpose === 'classifying'
         )
     }
     create(tpl={}) {
         return Object.assign({
-            purpose: ['classifying'],
+            purpose: 'classifying',
+            id: '',
+        }, tpl)
+    }
+}
+
+/**
+ * ### relationLinkBody
+ *
+ * Find/Create qualified links to other web resources
+ *
+ * A semantic tag body is a web resource (must have an `id`) that is related to the
+ * target of the annotation by the relation in its 'predicate'.
+ *
+ * Always has a purpose of 'linking'.
+ *
+ * #### Example
+ *
+ * ```js
+ * {
+ *   "id": "http://example.org/work1",
+ *   "purpose": "linking",
+ *   "predicate": "http://purl.org/dcterms/partOf",
+ * }
+ * ```
+ */
+class relationLinkBody extends AnnoQuery {
+    match(body) {
+        return (
+            body
+            && body.purpose === 'linking'
+            && 'predicate' in body
+        )
+    }
+    create(tpl={}) {
+        return Object.assign({
+            purpose: 'linking',
+            predicate: '',
             id: '',
         }, tpl)
     }
