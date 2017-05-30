@@ -48,7 +48,7 @@ module.exports = class CreatorInjector {
 
         const fn = (anno) => {
             const user = this._lookupUser(anno.creator, ctx)
-            if (user) anno.creator = Object.assign(user.public, {id: user.id})
+            if (user && user.public) anno.creator = Object.assign(user.public, {id: user.id})
         }
         if (ctx.method === 'search') {
             for (let anno of ctx.retvals[0]) {
