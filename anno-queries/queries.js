@@ -147,7 +147,7 @@ class semanticTagBody extends AnnoQuery {
     create(tpl={}) {
         return Object.assign({
             purpose: 'classifying',
-            id: '',
+            source: '',
         }, tpl)
     }
 }
@@ -184,7 +184,7 @@ class relationLinkBody extends AnnoQuery {
         return Object.assign({
             purpose: 'linking',
             predicate: '',
-            id: '',
+            source: '',
         }, tpl)
     }
 }
@@ -276,6 +276,7 @@ module.exports = {
     textualHtmlBody:       new textualHtmlBody(['body']),
     simpleTagBody:         new simpleTagBody(['body']),
     semanticTagBody:       new semanticTagBody(['body']),
+    relationLinkBody:      new relationLinkBody(['body']),
 
     svgSelectorResource:   new svgSelectorResource(['target']),
     mediaFragmentResource: new mediaFragmentResource(['body']),
