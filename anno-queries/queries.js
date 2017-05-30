@@ -126,33 +126,66 @@ class simpleTagBody extends AnnoQuery {
  *
  * Find/Create semantic tag bodies. 
  *
- * A semantic tag body is a web resource (must have an `id`) with a `purpose`/`motivation`
- * of either `linking`, `identifying` or `classifying`.
+ * A semantic tag body is a web resource (must have an `id`) with the sole purpose
+ * of `classifying`.
  *
  * #### Example
  *
  * ```js
  * {
  *   "id": "http://vocab/fruit17",
- *   "motivation": "classifying"
+ *   "purpose": "classifying"
  * }
  * ```
  */
 class semanticTagBody extends AnnoQuery {
     match(body) {
         return (
-            body && (
-                body.motivation === 'linking'     || body.purpose === 'linking'     ||
-                body.motivation === 'identifying' || body.purpose === 'identifying' ||
-                body.motivation === 'classifying' || body.purpose === 'classifying'
-            )
+            body && body.purpose === 'classifying'
         )
     }
-    create({id=''}={}) {
-        return {
+    create(tpl={}) {
+        return Object.assign({
+            purpose: 'classifying',
+            source: '',
+        }, tpl)
+    }
+}
+
+/**
+ * ### relationLinkBody
+ *
+ * Find/Create qualified links to other web resources
+ *
+ * A semantic tag body is a web resource (must have an `id`) that is related to the
+ * target of the annotation by the relation in its 'predicate'.
+ *
+ * Always has a purpose of 'linking'.
+ *
+ * #### Example
+ *
+ * ```js
+ * {
+ *   "id": "http://example.org/work1",
+ *   "purpose": "linking",
+ *   "predicate": "http://purl.org/dcterms/partOf",
+ * }
+ * ```
+ */
+class relationLinkBody extends AnnoQuery {
+    match(body) {
+        return (
+            body
+            && body.purpose === 'linking'
+            && 'predicate' in body
+        )
+    }
+    create(tpl={}) {
+        return Object.assign({
             purpose: 'linking',
-            id,
-        }
+            predicate: '',
+            source: '',
+        }, tpl)
     }
 }
 
@@ -243,6 +276,7 @@ module.exports = {
     textualHtmlBody:       new textualHtmlBody(['body']),
     simpleTagBody:         new simpleTagBody(['body']),
     semanticTagBody:       new semanticTagBody(['body']),
+    relationLinkBody:      new relationLinkBody(['body']),
 
     svgSelectorResource:   new svgSelectorResource(['target']),
     mediaFragmentResource: new mediaFragmentResource(['body']),

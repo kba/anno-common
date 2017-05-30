@@ -11,7 +11,8 @@ reuse of components.
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Concepts](#concepts)
 	* [Store](#store)
-	* [Middleware](#middleware)
+	* [Plugins](#plugins)
+		* [Registering plugins](#registering-plugins)
 	* [Authentication](#authentication)
 	* [Revisions](#revisions)
 	* [Comments / Replies / Nesting](#comments--replies--nesting)
@@ -44,22 +45,39 @@ such as [mongodb](https://mongodb.com) or
 
 <img src="./doc/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
 
-### Middleware
+### Plugins
 
 When the method of a store is invoked, a **context** is created. The context is
 just an object with the method parameters, such as the new annotation in the
-case of `create` or the lookup ID in the case of `get`.
+case of `create` or the lookup ID in the case of `get`, as well as metadata
+pertinent to the annotation.
 
-Before the method is actually dispatched, middleware can be injected to act
-upon the context, modify it or cancel the operation. The mechanism is similar
-to middleware in HTTP frameworks such as Express or Plack. Use cases for
-middleware include:
+Plugins can be registered to intercept the context at specific points in the
+processing lifecycle, currently `pre` and `post`.
+
+Plugins hooking into the `pre` phase can augment the context with additional
+metadata or prevent further processing if certain conditions are met. Plugins
+hooking into the `post` phase can access and modify the context after the method has been
+dispatched.
+
+Examples where plugins are useful:
 
 * Validation: Detect invalid arguments for an operation
 * Authentication: Inject a user id from a session into the context
+* Authorization: Determine whether the calling user is may execute this
+  operation.
 * User lookup: Provide user details from an external data source, such as the
   display name.
-* Authorization: Determine whether the calling user is allowed this operation.
+* Notification: Send an e-mail for new annotations
+
+#### Registering plugins
+
+To register plugins, add them to the `ANNO_PLUGINS_PRE` / `ANNO_PLUGINS_POST`
+config variables. The syntax is `<module>[:<export>]`:
+
+* `mod1:AuthPlugin` will use the function exported as `AuthPlugin` from a module `mod1`
+* `mod1` will use the default export of module `mod1` as the plugin
+
 
 ### Authentication
 
@@ -121,12 +139,10 @@ Click on the image for links
 <a href="./doc/repo-structure.svg"><img src="./doc/repo-structure.png"/></a>
 
 <!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
-- [anno-acl](./anno-acl): Authorization for anno-stores
 - [anno-cli](./anno-cli): Command line interface for anno-*
 - [anno-errors](./anno-errors): Shared errors for anno-*
 - [anno-fixtures](./anno-fixtures): Sample data for testing and experimentation
-- [anno-mw-acl-static](./anno-mw-acl-static): Authorization for anno-stores
-- [anno-mw-user-static](./anno-mw-user-static): Hydrating a context with user information from fixed data
+- [anno-plugins](./anno-plugins): Rights management for anno store (users and rules)
 - [anno-queries](./anno-queries): Search and create fragments of Web Annotations
 - [anno-schema](./anno-schema): JSON schema, OpenAPI and JSON-LD context
 - [anno-server](./anno-server): Web Annotation Protocol server with extensions
@@ -138,6 +154,7 @@ Click on the image for links
 - [anno-store-mongolike](./anno-store-mongolike): Store base class for Mongo-like NoSQL databases
 - [anno-test](./anno-test): 
 - [anno-util](./anno-util): Utility functions
+- [anno-util-loaders](./anno-util-loaders): Wrappers to configure processors
 - [anno-webpack](./anno-webpack): Bundling the anno-* tools for browser use
 
 <!-- END-EVAL -->
