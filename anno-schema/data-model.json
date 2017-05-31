@@ -534,7 +534,9 @@
             },
             {
               "type": "array",
-              "[object Object]": null
+              "contains": {
+                "$ref": "#/definitions/Motivation"
+              }
             }
           ]
         },

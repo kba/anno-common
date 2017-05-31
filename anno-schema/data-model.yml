@@ -312,7 +312,7 @@ definitions:
       motivation: 
         oneOf:
           - {$ref: '#/definitions/Motivation'}
-          - {type: 'array', {contains: {$ref: '#/definitions/Motivation'}}}
+          - {type: 'array', contains: {$ref: '#/definitions/Motivation'}}
       purpose: 
         oneOf:
           - {$ref: '#/definitions/Motivation'}
