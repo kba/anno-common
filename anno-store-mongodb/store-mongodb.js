@@ -7,13 +7,16 @@ class MongodbStore extends Store {
     constructor() {
         super()
         this.config = envyConf('ANNO', {
-            MONGODB_URL: 'mongodb://localhost:27017/anno',
-            MONGODB_COLLECTION: 'anno'
+            MONGODB_PORT: '27017',
+            MONGODB_HOST: 'localhost',
+            MONGODB_DB: 'anno',
+            MONGODB_COLLECTION: 'anno',
         })
     }
 
     _init(options, cb) {
-        MongoClient.connect(this.config.MONGODB_URL, (err, db) => {
+        const {MONGODB_HOST, MONGODB_PORT, MONGODB_DB, MONGODB_COLLECTION} = this.config
+        MongoClient.connect(`mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DB}`, (err, db) => {
             if (err) return cb(err)
             this._mongodb = db
             this.db = db.collection(this.config.MONGODB_COLLECTION)
