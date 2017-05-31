@@ -316,7 +316,7 @@ definitions:
       purpose: 
         oneOf:
           - {$ref: '#/definitions/Motivation'}
-          - {type: 'array', {contains: {$ref: '#/definitions/Motivation'}}}
+          - {type: 'array', contains: {$ref: '#/definitions/Motivation'}}
       scope: {$ref: '#/definitions/iri'}
       accessibility: {type: 'string'} # TODO
       state:

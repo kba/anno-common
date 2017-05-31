@@ -527,8 +527,29 @@
             }
           ]
         },
+        "motivation": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Motivation"
+            },
+            {
+              "type": "array",
+              "[object Object]": null
+            }
+          ]
+        },
         "purpose": {
-          "$ref": "#/definitions/Motivation"
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Motivation"
+            },
+            {
+              "type": "array",
+              "contains": {
+                "$ref": "#/definitions/Motivation"
+              }
+            }
+          ]
         },
         "scope": {
           "$ref": "#/definitions/iri"
