@@ -11,9 +11,7 @@ function noSuchUser(username) {
 
 module.exports = () => {
 
-    const {SERVER_JWT_SECRET} = envyConf('ANNO', {
-        SERVER_JWT_SECRET: 'S3cr3t!'
-    })
+    const SERVER_JWT_SECRET = 'TODO';
 
     const LocalStrategy = require('passport-local').Strategy;
 
