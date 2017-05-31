@@ -26,7 +26,6 @@ class Store {
         const config = envyConf('ANNO', {
             BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
             BASE_PATH: '',
-            METADATA: '{}',
             STORE_HOOKS_PRE: '',
             STORE_HOOKS_POST: '',
         })
@@ -79,7 +78,12 @@ class Store {
     constructor(config={}) {
         // Override env config with config passed explicitly to constructor
         this.log = envyLog('ANNO', 'store')
-        this.config = Object.assign(envyConf('ANNO', {}), config)
+        this.config = Object.assign(envyConf('ANNO', {
+            BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
+            BASE_PATH: '',
+            STORE_HOOKS_PRE: '',
+            STORE_HOOKS_POST: '',
+        }), config)
         this.hooks = {
             pre: [],
             post: [],
