@@ -3,12 +3,13 @@ const async = require('async')
 const {envyConf} = require('envyconf')
 process.env.ANNO_LOGLEVEL = 'silly'
 
-envyConf('ANNO', {
+const config = envyConf('ANNO', {
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
     BASE_PATH: '',
     SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK',
-    STORE: '@kba/anno-store-file'
+    STORE: '@kba/anno-store-file',
+    SERVER_AUTH: '',
 })
 function start(app, cb) {
     app.use(require('morgan')('dev'))
@@ -38,8 +39,9 @@ function start(app, cb) {
             require('./routes/anno')({store}))
         app.use('/swagger',
             require('./routes/swagger')())
-        app.use('/auth',
-            require('./routes/auth')({store}))
+        if (config.SERVER_AUTH)
+            app.use('/auth',
+                require(`./routes/auth-${config.SERVER_AUTH}`)({store}))
 
         // Static files
         app.use(express.static(`${__dirname}/public`))

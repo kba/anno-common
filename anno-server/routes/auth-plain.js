@@ -50,6 +50,10 @@ module.exports = () => {
         })(req, resp, next)
     })
 
+    router.get('/test', (req, resp) => {
+        resp.send(req.headers)
+    })
+
     //
     // GET /auth/logout
     //
