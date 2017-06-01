@@ -20,6 +20,7 @@
     "@kba/anno-util": "^0.0.1",
     "@kba/anno-util-loaders": "^0.0.1",
     "envyconf": "^0.0.5",
+    "lodash.set": "^4.3.2",
     "sift-rule": "^0.1.1"
   }
 }
