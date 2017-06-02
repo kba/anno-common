@@ -7,15 +7,19 @@
 # RESULT is a tru-ish value to allow or false to deny request
 # DESCRIPTION is an optional description of the rule
 
-- - user.inactive: true
-  - false
-  - "Inactive users are not allowed to do anything"
-
 - - collection: 'test-collection'
   - true
   - "Allow everybody to do everything on 'test-collection'"
 
-- - method: {$or: ['get', 'search', 'searchRetrieve']}
+- - user.inactive: true
+  - false
+  - "Inactive users are not allowed to do anything"
+
+- - method: {$or: ['init', 'aclCheck']}
+  - true
+  - "Allow store initialization and rights checks"
+
+- - method: {$or: ['get', 'search']}
   - true
   - "Allow get and search by default"
 
@@ -23,34 +27,28 @@
   - true
   - "Allow users with 'admin' role to do everything"
 
-- - method: {$or: ['revise', 'delete']}
-    user.perm:
-      collection: {$ref: '/collection'}
-      role: 'moderator'
+- - method: 'delete'
+  - false
+  - 'Disallowed delete'
+
+- - method: {$or: ['create', 'revise']}
+    user.role: 'moderator'
   - true
-  - "Allow moderators of a collection to revise and delete any annotations"
+  - "Allow moderators to revise / reply to any annotations"
 
 - - method: 'create'
-    user.perm: 
-      collection: {$ref: '/collection'}
-      role: 'create'
+    user.role: 'create'
   - true
-  - "Allow users with 'create' role in the collection to create new annotations"
+  - "Allow users with 'create' role to create new annotations"
 
-- - method: {$or: ['revise', 'delete']}
+- - method: {$or: ['revise', 'create']}
     $or:
-      - anno.creator:       {$ref: '/user'}
-      - anno.creator.id:    {$ref: '/user'}
-      - anno.creator.email: {$ref: '/user'}
-      - anno.creator:       {$ref: '/user/id'}
-      - anno.creator.id:    {$ref: '/user/id'}
-      - anno.creator.email: {$ref: '/user/id'}
+      - anno.creator:    {$ref: '/user'}
+      - anno.creator.id: {$ref: '/user'}
+      - anno.creator:    {$ref: '/user/id'}
+      - anno.creator.id: {$ref: '/user/id'}
   - true
-  - "Allow users to revise or delete their own annotations"
-
-- - method: 'init'
-  - true
-  - "Allow store initialization"
+  - "Allow users to revise and reply to their own annotations"
 
 # Default Rule. Must be last
 - - {}
