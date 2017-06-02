@@ -32,7 +32,8 @@ module.exports = function UserAuthMiddlewareFactory() {
             }
 
             if (!('iss' in authToken) || !('sub' in authToken)) {
-                return next(errors.badMetadat(`AuthToken must have 'sub' and 'iss' fields`, authToken))
+                console.log("Obsolete token?", {authToken})
+                return next(errors.badRequest(`AuthToken must have 'sub' and 'iss' fields`, authToken))
             }
             if (collection !== authToken.iss) {
                 return next(errors.mismatch("Inconsistent 'X-Anno-Collection' vs 'JWT.iss'", collection, authToken.iss))
