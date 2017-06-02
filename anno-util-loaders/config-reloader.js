@@ -32,7 +32,7 @@ module.exports = function ConfigLoaderProcessorFactory(processorClass, envyconfN
         }
 
         chokidar
-            .watch(CONF_FILE, {persistent: true})
+            .watch(CONF_FILE, {persistent: true, usePolling: true})
             .on('change', () => {
                 console.log(`***** ${CONF_FILE} changed, reloading ${processorClass.name} *****`)
                 fs.readFile(CONF_FILE, parseContents)
