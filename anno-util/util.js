@@ -18,6 +18,7 @@ function splitIdRepliesRev(str) {
     const ret = {
         _replyids: []
     }
+    str = str.replace(/https?:\/\/[^\/]+\//, '')
     str = str.replace(/^([^\.~]+)/, (_, _id) => {
         ret._id = _id
         return ''
@@ -30,7 +31,7 @@ function splitIdRepliesRev(str) {
         ret._revid = _revid
         return ''
     })
-    if (str) throw new Error(`Could not parse ${origStr} into id/replyid/revid`)
+    if (str) throw new Error(`Could not parse '${origStr}' into id/replyid/revid, '${str}' remained`)
     return ret
 }
 
