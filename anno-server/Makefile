@@ -12,7 +12,7 @@ WARN = echo -ne "\x1b[31;1m"
 
 .PHONY: watch
 watch: swagger-ui
-	cd $(ROOT_DIR) ; pm2 startOrRestart --no-daemon pm2-dev.yml
+	cd $(ROOT_DIR) ; pm2 startOrRestart --no-daemon pm2.dev.yml
 
 .PHONY: serve
 serve: swagger-ui
