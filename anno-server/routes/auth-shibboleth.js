@@ -86,8 +86,10 @@ module.exports = () => {
             return next(`No secret configured for issuer '${iss}'`)
         }
         const secret = collectionConfig[iss].secret
+        const now = Math.floor(Date.now() / 1000)
+        const exp = now + (collectionConfig.tokenExpiration || 12 * 60 * 60)
 
-        const token = jsonwebtoken.sign({iss, sub}, secret)
+        const token = jsonwebtoken.sign({iss, sub, exp}, secret)
         if (req.xhr) resp.header('X-Token', token)
         resp.send(token)
     })
