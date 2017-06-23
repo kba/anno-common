@@ -29,7 +29,7 @@ reuse of components.
 
 A store provides persistent storage of annotations. A store exposes methods
 that reflect the [Web Annotation
-Protocol](http://www.w3.org/TR/annotation-protocol/)and the [extensions
+Protocol](http://www.w3.org/TR/annotation-protocol/) and the [extensions
 implemented of this framework](#extensions-to-web-annotation-data-model).
 
 The [`store`](./anno-store) module is a
