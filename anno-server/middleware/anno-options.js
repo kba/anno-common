@@ -4,9 +4,8 @@ const {envyConf} = require('envyconf')
 module.exports = function AnnoOptionsMiddleware() {
     const conf = envyConf('ANNO', {
         DEFAULT_COLLECTION: 'default',
-        COLLECTION_DATA: JSON.stringify({default:{secret:'123'}}),
+        STORE_HOOKS_OPTIONS: '',
     })
-    const collectionConfig = JSON.parse(conf.COLLECTION_DATA)
 
     function AnnoOptionsMiddleware(req, resp, next) {
 
@@ -14,12 +13,17 @@ module.exports = function AnnoOptionsMiddleware() {
 
         const options = req.annoOptions
 
+        // XXX Prevent users slipping collectionConfig by us
+        delete options.collectionConfig
+
         // Determine collection from header
-        const collection = req.header('x-anno-collection') || conf.DEFAULT_COLLECTION
-        if (!(collection in collectionConfig)) {
-            return next(errors.badRequest(`No such collection: '${collection}'`))
-        }
-        options.collection = collection
+        options.collection = req.header('x-anno-collection') || conf.DEFAULT_COLLECTION
+        async.eachSeries(this.hooks.pre, (proc, next) => {
+            proc(ctx, (...args) => {
+                this.__logContext(`After preproc ${proc.impl}`, ctx)
+                next(...args)
+            })
+        }, (err, pass) => {
 
         // boolean values
         ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {

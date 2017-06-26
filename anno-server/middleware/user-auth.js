@@ -3,19 +3,17 @@ const expressJWT = require('express-jwt')
 const {envyConf} = require('envyconf')
 
 module.exports = function UserAuthMiddlewareFactory() {
-    const collectionConfig = JSON.parse(envyConf('ANNO').COLLECTION_DATA)
 
     function UserAuthMiddleware(req, resp, next) {
-        const {collection} = req.annoOptions = req.annoOptions || {}
-        if (!collection)
-            return next(errors.badRequest("Missing 'collection' in the request context"))
-
-        const {secret} = collectionConfig[collection]
-        // Get Bearer token from Auth HTTP Header and verify with collection's secret
-        if (!secret) {
-            console.log(errors.badRequest(`No 'secret' for collection: ${collection}`))
-            return next()
+        const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
+        if (!collectionConfig || !collection) {
+            console.log(req.annoOptions)
+            return next(errors.badRequest(
+                "Missing 'collection'/'collectionConfig' in the request context"))
         }
+
+        const {secret} = collectionConfig
+        // Get Bearer token from Auth HTTP Header and verify with collection's secret
         expressJWT({
             secret,
             requestProperty: 'authToken'
@@ -33,10 +31,12 @@ module.exports = function UserAuthMiddlewareFactory() {
 
             if (!('iss' in authToken) || !('sub' in authToken)) {
                 console.log("Obsolete token?", {authToken})
-                return next(errors.badRequest(`AuthToken must have 'sub' and 'iss' fields`, authToken))
+                return next(errors.badRequest(
+                    `AuthToken must have 'sub' and 'iss' fields`, authToken))
             }
             if (collection !== authToken.iss) {
-                return next(errors.mismatch("Inconsistent 'X-Anno-Collection' vs 'JWT.iss'", collection, authToken.iss))
+                return next(errors.mismatch(
+                    "Inconsistent 'X-Anno-Collection' vs 'JWT.iss'", collection, authToken.iss))
             }
             req.annoOptions.user = authToken.sub
 

@@ -35,7 +35,6 @@ function determineUser(env) {
 module.exports = () => {
 
     const router = Router()
-    const collectionConfig = JSON.parse(envyConf('ANNO').COLLECTION_DATA)
 
     //
     // GET /login
@@ -70,6 +69,7 @@ module.exports = () => {
     // GET /token
     //
     router.get('/token/:iss', (req, resp, next) => {
+        const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
 
         const sub = determineUser(req.headers)
         if (!sub) {
@@ -78,14 +78,14 @@ module.exports = () => {
         }
 
         const iss = req.params.iss
-        if (!(iss in collectionConfig)) {
+        if (iss !== collection) {
             resp.status(404)
-            return next(`No such issuer '${iss}'`)
-        } else if (!('secret' in collectionConfig[iss])) {
+            return next(`Bad collection '${iss}'`)
+        } else if (!('secret' in collectionConfig)) {
             resp.status(500)
             return next(`No secret configured for issuer '${iss}'`)
         }
-        const secret = collectionConfig[iss].secret
+        const {secret} = collectionConfig
         const now = Math.floor(Date.now() / 1000)
         const exp = now + (collectionConfig.tokenExpiration || 12 * 60 * 60)
 
