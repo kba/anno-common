@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@kba/anno-errors": "^0.0.1",
+    "envyconf": "^0.0.5",
     "async": "^2.3.0",
     "chokidar": "^1.7.0",
     "envyconf": "^0.0.5",
