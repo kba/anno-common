@@ -25,9 +25,8 @@ class AnnoCollection {
         ctx.collection = (ctx.collection || 'default')
         ctx.collectionConfig = {}
         if (!(ctx.collection in this.collections)) {
-            return new Error(`Undefined collection ${ctx.collection}`)
+            return cb(new Error(`Undefined collection ${ctx.collection}`))
         }
-        // TODO check if exists
         Object.assign(ctx.collectionConfig, this.collections[ctx.collection])
         console.log(ctx.collectionConfig)
         if (!ctx.collectionConfig.secret) {
