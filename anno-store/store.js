@@ -22,7 +22,7 @@ class Store {
      *
      */
 
-    static load(loadingModule) {
+    static load({loadingModule, loadPlugins}) {
         const config = envyConf('ANNO', {
             BASE_URL: 'http://ANNO_BASE_URL-NOT-SET',
             BASE_PATH: '',
@@ -48,28 +48,12 @@ class Store {
 
         const store = new(impl)()
         async.eachSeries(['pre', 'post'], (hookName, nextHook) => {
-            const modNames = config[`STORE_HOOKS_${hookName.toUpperCase()}`]
-                .split(',')
-                .map(s => s.trim())
-                .filter(s => s !== '')
-            log.silly(`${hookName} hook: `, modNames)
-            async.eachSeries(modNames, (modNameRaw, next) => {
-                const [modName, modImport] = modNameRaw.split(':')
-                var mod;
-                try {
-                    log.silly(`Loading module ${modName}`)
-                    mod = loadingModule.require(modName)
-                } catch (err) {
-                    console.log(err)
-                    console.error(`Please install '${modName}' configured as ${hookName} processor`)
-                    process.exit(1)
-                }
-                if (modImport) {
-                    store.use(mod[modImport](), hookName)
-                } else {
-                    store.use(mod(), hookName)
-                }
-                next()
+            loadPlugins(config[`STORE_HOOKS_${hookName.toUpperCase()}`], {
+                loadingModule,
+                afterLoad(plugin, donePlugin) {
+                    store.use(plugin, hookName)
+                    donePlugin()
+                },
             }, nextHook)
         })
         return store
