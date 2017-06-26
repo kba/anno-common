@@ -1,11 +1,14 @@
 const errors = require('@kba/anno-errors')
 const {envyConf} = require('envyconf')
+const {loadPlugins} = require('@kba/anno-util-loaders')
 
 module.exports = function AnnoOptionsMiddleware(cb) {
     const conf = envyConf('ANNO', {
         DEFAULT_COLLECTION: 'default',
-        STORE_HOOKS_OPTIONS: '',
+        MIDDLEWARE_PLUGINS: '',
     })
+
+    var collectionProcessor;
 
     function AnnoOptionsMiddleware(req, resp, next) {
 
@@ -13,32 +16,38 @@ module.exports = function AnnoOptionsMiddleware(cb) {
 
         const options = req.annoOptions
 
-        // XXX Prevent users slipping collectionConfig by us
-        delete options.collectionConfig
-
         // Determine collection from header
         options.collection = req.header('x-anno-collection') || conf.DEFAULT_COLLECTION
-        async.eachSeries(this.hooks.pre, (proc, next) => {
-            proc(ctx, (...args) => {
-                this.__logContext(`After preproc ${proc.impl}`, ctx)
-                next(...args)
+
+        // XXX Prevent users slipping collectionConfig by us
+        collectionProcessor(options, err => {
+            if (err) return next(err)
+
+            // boolean values
+            ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {
+                if (option in req.query) {
+                    options[option] = !! req.query[option].match(/^(true|1)$/)
+                    delete req.query[option]
+                }
             })
-        }, (err, pass) => {
 
-        // boolean values
-        ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {
-            if (option in req.query) {
-                options[option] = !! req.query[option].match(/^(true|1)$/)
-                delete req.query[option]
-            }
+            // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
+            if (req.header('slug')) options.slug = req.header('slug')
+
+            console.log("annoOptions scraped", options)
+            next()
         })
-
-        // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
-        if (req.header('slug')) options.slug = req.header('slug')
-
-        console.log("annoOptions scraped", options)
-        next()
     }
+
     AnnoOptionsMiddleware.unless = require('express-unless')
+
+    loadPlugins(conf.MIDDLEWARE_PLUGINS, {
+        loadingModule: module,
+        afterLoad(plugin, loaded) {
+            collectionProcessor = plugin
+            loaded()
+        }
+    }, cb(null, AnnoOptionsMiddleware))
+
     return AnnoOptionsMiddleware
 }
