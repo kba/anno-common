@@ -8,7 +8,10 @@ module.exports = function AnnoOptionsMiddleware(cb) {
         MIDDLEWARE_PLUGINS: '',
     })
 
-    var collectionProcessor;
+    var collectionProcessor = function(ctx, cb) {
+        console.log('No collectionProcessor defined')
+        return cb()
+    };
 
     function AnnoOptionsMiddleware(req, resp, next) {
 

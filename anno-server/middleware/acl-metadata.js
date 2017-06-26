@@ -24,8 +24,8 @@ function cached(metadataEndpoint, collection, context, cb) {
 module.exports = function AclMetadataMiddlewareFactory(cb) {
     function AclMetadataMiddleware(req, resp, next) {
         const {collection, collectionConfig} = req.annoOptions = req.annoOptions || {}
-        if (!collection) {
-            console.log(errors.badRequest("Missing 'collection' in the request context"))
+        if (!collectionConfig) {
+            console.log(errors.badRequest("aclMetadata: Missing 'collection' in the request context"))
             return next()
         }
         const metadataToken = req.header('x-anno-metadata')
