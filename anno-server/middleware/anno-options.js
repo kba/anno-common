@@ -1,7 +1,7 @@
 const errors = require('@kba/anno-errors')
 const {envyConf} = require('envyconf')
 
-module.exports = function AnnoOptionsMiddleware() {
+module.exports = function AnnoOptionsMiddleware(cb) {
     const conf = envyConf('ANNO', {
         DEFAULT_COLLECTION: 'default',
         STORE_HOOKS_OPTIONS: '',

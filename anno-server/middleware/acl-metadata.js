@@ -21,7 +21,7 @@ function cached(metadataEndpoint, collection, context, cb) {
 }
 
 
-module.exports = function AclMetadataMiddlewareFactory() {
+module.exports = function AclMetadataMiddlewareFactory(cb) {
     function AclMetadataMiddleware(req, resp, next) {
         const {collection, collectionConfig} = req.annoOptions = req.annoOptions || {}
         if (!collection) {
@@ -64,6 +64,6 @@ module.exports = function AclMetadataMiddlewareFactory() {
         }
     }
     AclMetadataMiddleware.unless = require('express-unless')
-    return AclMetadataMiddleware
+    return cb(null, AclMetadataMiddleware)
 }
 

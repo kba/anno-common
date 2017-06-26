@@ -2,14 +2,14 @@ const errors = require('@kba/anno-errors')
 const expressJWT = require('express-jwt')
 const {envyConf} = require('envyconf')
 
-module.exports = function UserAuthMiddlewareFactory() {
+module.exports = function UserAuthMiddlewareFactory(cb) {
 
     function UserAuthMiddleware(req, resp, next) {
         const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
+        // TODO not an error
         if (!collectionConfig || !collection) {
-            console.log(req.annoOptions)
             return next(errors.badRequest(
-                "Missing 'collection'/'collectionConfig' in the request context"))
+                "Missing 'collection' in the request context"))
         }
 
         const {secret} = collectionConfig
@@ -45,5 +45,5 @@ module.exports = function UserAuthMiddlewareFactory() {
         })
     }
     UserAuthMiddleware.unless = require('express-unless')
-    return UserAuthMiddleware
+    return cb(null, UserAuthMiddleware)
 }
