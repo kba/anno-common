@@ -26,7 +26,7 @@ module.exports = class UserProcessor {
         const id = typeof ctx.user === 'string' ? ctx.user
             : ctx.user.user ? ctx.user.user
             : ctx.user.id
-        this.log.silly(`Looking up user ${JSON.stringify(ctx.user)}`)
+        //this.log.silly(`Looking up user ${JSON.stringify(ctx.user)}`)
         if (id in this.users) {
             // console.log(`Found user ${id}`, this.users[id])
             if (typeof ctx.user === 'string') ctx.user = {}

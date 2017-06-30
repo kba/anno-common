@@ -32,7 +32,7 @@ module.exports = class CreatorInjector {
         const id = typeof user === 'string' ? user
             : user.user ? user.user
             : user.id
-        this.log.silly(`Looking up user ${JSON.stringify(user)}`)
+        // this.log.silly(`Looking up user ${JSON.stringify(user)}`)
         const ret = {id}
         if (!(id in this.users))
             return ret
