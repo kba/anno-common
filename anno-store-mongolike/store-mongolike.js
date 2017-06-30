@@ -205,8 +205,8 @@ class MongolikeStore extends Store {
             if (_replyids.length > 0) {
                 const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
                 modQueries = [
-                    {$push: {[selector + '._revisions']: newData}},
                     {$set: {[selector]: newData}},
+                    {$push: {[selector + '._revisions']: newData}},
                 ]
             } else {
                 modQueries = [
