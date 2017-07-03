@@ -20,7 +20,7 @@ module.exports = function AnnoOptionsMiddleware(cb) {
         const options = req.annoOptions
 
         // Determine collection from header
-        options.collection = req.header('x-anno-collection') || conf.DEFAULT_COLLECTION
+        options.collection = req.header('x-anno-collection') || req.query.collection || conf.DEFAULT_COLLECTION
 
         // XXX Prevent users slipping collectionConfig by us
         collectionProcessor(options, err => {

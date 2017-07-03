@@ -396,6 +396,7 @@ class Store {
      *
      * Get only the slug part of a URL
      */
+    // TODO hard-coded route
     _idFromURL(url) {
         return url.replace(`${this.config.BASE_URL}${this.config.BASE_PATH}/anno/`, '')
     }

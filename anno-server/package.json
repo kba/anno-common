@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@kba/anno-fixtures": "^0.0.1",
+    "@kba/anno-queries": "^0.0.1",
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",

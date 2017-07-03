@@ -2,6 +2,7 @@ const querystring = require('querystring')
 const {Router}    = require('express')
 const prune       = require('object-prune')
 const {envyConf}  = require('envyconf')
+const {targetId}  = require('@kba/anno-queries')
 
 module.exports = ({store}) => {
     console.log("Entering Anno Router")
@@ -9,12 +10,22 @@ module.exports = ({store}) => {
     function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
-            resp.header('Location', doc.id)
-            resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
-            resp.header('Vary', 'Accept')
-            resp.header('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
-            resp.jsonld = doc
-            return next()
+            var {purlTemplate} = req.annoOptions.collectionConfig
+            if (purlTemplate && req.headers.accept.match('text/html')) {
+                resp.header('Location', purlTemplate
+                    .replace('{{ targetId }}', targetId(doc))
+                    .replace('{{ slug }}', doc.id.replace(/^.*\//, '')))
+                resp.status(301)
+                resp.send(`Redirecting to ${purlTemplate}`)
+                return
+            } else {
+                resp.header('Location', doc.id)
+                resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
+                resp.header('Vary', 'Accept')
+                resp.header('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
+                resp.jsonld = doc
+                return next()
+            }
         })
     }
 
