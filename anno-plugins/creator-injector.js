@@ -9,6 +9,8 @@ const RULESET = Symbol('_ruleset')
 
 const METHODS = new Set([
     'get',
+    'revise',
+    'create',
     'search',
 ])
 
@@ -36,7 +38,7 @@ module.exports = class CreatorInjector {
         const ret = {id}
         if (!(id in this.users))
             return ret
-        // console.log(`Found user ${id}`, this.users[id])
+        console.log(`Found user ${id}`, this.users[id])
         deepExtend(ret, this.users[id])
         this.users[id][RULESET].filterApply(ctx).forEach(kv =>
             Object.keys(kv).forEach(k => {
@@ -52,21 +54,25 @@ module.exports = class CreatorInjector {
     }
 
     process(ctx, cb) {
-        if (!( 'retvals' in ctx ))
-            return cb()
         if (!METHODS.has(ctx.method))
             return cb()
 
-        const fn = (anno) => {
-            const user = this._lookupUser(anno.creator, ctx)
-            if (user && user.public) anno.creator = Object.assign(user.public, {id: user.id})
-        }
-        if (ctx.method === 'search') {
-            for (let anno of ctx.retvals[0]) {
-                applyToAnno(anno, fn)
+        if ('retvals' in ctx) {
+            const fn = (anno) => {
+                const user = this._lookupUser(anno.creator, ctx)
+                if (user && user.public) anno.creator = Object.assign(user.public, {id: user.id})
             }
-        } else {
-            applyToAnno(ctx.retvals[0], fn)
+            if (ctx.method === 'search') {
+                for (let anno of ctx.retvals[0]) {
+                    applyToAnno(anno, fn)
+                }
+            } else if (ctx.method === 'get') {
+                applyToAnno(ctx.retvals[0], fn)
+            }
+        } else /* pre-processing */ {
+            if (ctx.anno && ! ctx.anno.creator && ctx.user && ctx.user.id) {
+                ctx.anno.creator = ctx.user.id
+            }
         }
         return cb()
     }

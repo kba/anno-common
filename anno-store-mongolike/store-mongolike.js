@@ -58,8 +58,6 @@ class MongolikeStore extends Store {
         anno = this._deleteId(anno)
         anno = this._normalizeTarget(anno)
         anno = this._normalizeType(anno)
-        if (!anno.creator && options.user && options.user.id)
-            anno.creator = options.user.id
 
         anno._replies = []
 

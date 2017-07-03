@@ -36,7 +36,9 @@
         "@id": "annox:versionOf",
         "@type": "@id"
       },
-      "deleted": "schema:dateDeleted",
+      "deleted": {
+        "@id": "schema:dateDeleted"
+      },
       "collection": {
         "@id": "dcterms:isPartOf"
       }
