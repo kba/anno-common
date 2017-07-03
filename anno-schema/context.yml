@@ -1,6 +1,7 @@
 '@context':
   - 'http://www.w3.org/ns/anno.jsonld'
   - annox: 'https://github.com/kba/anno/context.jsonld'
+    dcterms: 'http://www.w3.org/2000/01/rdf-schema#'
     rdfs: 'http://www.w3.org/2000/01/rdf-schema#'
     sioc: 'http://rdfs.org/sioc/ns#'
     AnnotationRevision:
@@ -27,6 +28,8 @@
     versionOf:
       '@id': "annox:versionOf"
       '@type': "@id"
-    deleted: 'schema:dateDeleted'
-
-
+    deleted: 
+      '@id': 'schema:dateDeleted'
+    collection:
+      '@id': 'dcterms:isPartOf'
+      '@type': "@id"
