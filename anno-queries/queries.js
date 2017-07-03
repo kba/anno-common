@@ -269,6 +269,25 @@ class emptyAnnotation extends AnnoQuery {
     }
 }
 
+/**
+ * ### targetId
+ *
+ * Guess the URL of the thing that is to be annotated
+ */
+function _targetId(target) {
+    return target.scope || target.source || target.id
+}
+function targetId(anno) {
+    if (!anno.target)
+        return;
+    if (typeof anno.target === 'string')
+        return anno.target
+    else if (Array.isArray(anno.target))
+        return anno.target.find(_targetId)
+    else
+        return _targetId(anno.target)
+}
+
 
 module.exports = {
     emptyAnnotation:       new emptyAnnotation(),
@@ -280,6 +299,8 @@ module.exports = {
 
     svgSelectorResource:   new svgSelectorResource(['target']),
     mediaFragmentResource: new mediaFragmentResource(['body']),
+
+    targetId
 
 }
 
