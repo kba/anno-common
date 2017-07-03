@@ -63,6 +63,13 @@ function start(app, cb) {
                 app.use('/auth',
                     require(`./routes/auth-${config.SERVER_AUTH}`)({store}))
 
+            // Fallback for GET: Redirect /:id to /anno/:id for pretty short URL
+            app.get('/:id(*)', (req, resp, next) => {
+                resp.header('Location', `anno/${req.params.id}`)
+                resp.status(302)
+                resp.end()
+            })
+
             // Static files
             app.use(express.static(`${__dirname}/public`))
 
