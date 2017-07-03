@@ -2,20 +2,17 @@ const errors = require('@kba/anno-errors')
 const expressJWT = require('express-jwt')
 const {envyConf} = require('envyconf')
 
-module.exports = function UserAuthMiddlewareFactory() {
-    const collectionConfig = JSON.parse(envyConf('ANNO').COLLECTION_DATA)
+module.exports = function UserAuthMiddlewareFactory(cb) {
 
     function UserAuthMiddleware(req, resp, next) {
-        const {collection} = req.annoOptions = req.annoOptions || {}
-        if (!collection)
-            return next(errors.badRequest("Missing 'collection' in the request context"))
-
-        const {secret} = collectionConfig[collection]
-        // Get Bearer token from Auth HTTP Header and verify with collection's secret
-        if (!secret) {
-            console.log(errors.badRequest(`No 'secret' for collection: ${collection}`))
+        const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
+        if (!collectionConfig) {
+            console.log(errors.badRequest("userAuth: Missing 'collection' in the request context"))
             return next()
         }
+
+        const {secret} = collectionConfig
+        // Get Bearer token from Auth HTTP Header and verify with collection's secret
         expressJWT({
             secret,
             requestProperty: 'authToken'
@@ -33,10 +30,12 @@ module.exports = function UserAuthMiddlewareFactory() {
 
             if (!('iss' in authToken) || !('sub' in authToken)) {
                 console.log("Obsolete token?", {authToken})
-                return next(errors.badRequest(`AuthToken must have 'sub' and 'iss' fields`, authToken))
+                return next(errors.badRequest(
+                    `AuthToken must have 'sub' and 'iss' fields`, authToken))
             }
             if (collection !== authToken.iss) {
-                return next(errors.mismatch("Inconsistent 'X-Anno-Collection' vs 'JWT.iss'", collection, authToken.iss))
+                return next(errors.mismatch(
+                    "Inconsistent 'X-Anno-Collection' vs 'JWT.iss'", collection, authToken.iss))
             }
             req.annoOptions.user = authToken.sub
 
@@ -45,5 +44,5 @@ module.exports = function UserAuthMiddlewareFactory() {
         })
     }
     UserAuthMiddleware.unless = require('express-unless')
-    return UserAuthMiddleware
+    return cb(null, UserAuthMiddleware)
 }

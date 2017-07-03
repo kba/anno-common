@@ -25,30 +25,51 @@ function start(app, cb) {
         resave: false,
         saveUninitialized: false
     }))
-    app.use(require('./middleware/cors')())
 
-    const store = require('@kba/anno-store').load(module)
+    const store = require('@kba/anno-store').load({
+        loadingModule: module,
+        loadPlugins: require('@kba/anno-util-loaders').loadPlugins,
+    })
 
     const routes = [ 'anno', 'swagger', 'token' ]
-    store.init(err => {
-        if (err) return cb(err)
-        app.use('/anno',
-            require('./middleware/anno-options')().unless({ method: 'OPTIONS' }),
-            require('./middleware/user-auth')().unless({ method: 'OPTIONS' }),
-            require('./middleware/acl-metadata')().unless({ method: 'OPTIONS' }),
-            require('./routes/anno')({store}))
-        app.use('/swagger',
-            require('./routes/swagger')())
-        if (config.SERVER_AUTH)
-            app.use('/auth',
-                require(`./routes/auth-${config.SERVER_AUTH}`)({store}))
+    const middlewares = [
+        'anno-options',
+        'user-auth',
+        'acl-metadata',
+        'cors',
+    ]
+    async.map(middlewares, (middleware, doneMiddleware) => {
+        console.log(`Loading middleware ${middleware}`)
+        require(`./middleware/${middleware}`)(doneMiddleware)
+    }, (err, [
+        annoOptions,
+        userAuth,
+        aclMetadata,
+        cors,
+    ]) => {
+        if (err)
+            return cb(err)
+        app.use(cors)
+        store.init(err => {
+            if (err) return cb(err)
+            app.use('/anno',
+                annoOptions.unless({method:'OPTIONS'}),
+                userAuth.unless({method:'OPTIONS'}),
+                aclMetadata.unless({method:'OPTIONS'}),
+                require('./routes/anno')({store}))
+            app.use('/swagger',
+                require('./routes/swagger')())
+            if (config.SERVER_AUTH)
+                app.use('/auth',
+                    require(`./routes/auth-${config.SERVER_AUTH}`)({store}))
 
-        // Static files
-        app.use(express.static(`${__dirname}/public`))
+            // Static files
+            app.use(express.static(`${__dirname}/public`))
 
-        // Error handler
-        app.use(require('./middleware/error-handler')())
-        return cb()
+            // Error handler
+            app.use(require('./middleware/error-handler')())
+            return cb()
+        })
     })
 }
 

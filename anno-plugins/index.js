@@ -1,21 +1,25 @@
 const {StaticLoader, ConfigReloader} = require('@kba/anno-util-loaders')
 
-const AclProcessor = require('./acl')
-const UserProcessor = require('./user')
-const CreatorInjector = require('./creator-injector')
+const AclProcessor        = require('./acl')
+const UserProcessor       = require('./user')
+const CollectionProcessor = require('./collection')
+const CreatorInjector     = require('./creator-injector')
 
 module.exports = {
     defaultRules: require('./default-rules.json'),
     AclProcessor,
     UserProcessor,
 
-    PreAclFile:            ConfigReloader(AclProcessor,    'ACL_FILE'),
-    PreAclStatic:          StaticLoader(AclProcessor,      'ACL_DATA',   require('./default-rules.json')),
+    PreCollectionFile:     ConfigReloader(CollectionProcessor, 'COLLECTION_FILE'),
+    PreCollectionStatic:   StaticLoader(CollectionProcessor,   'COLLECTION_DATA',   require('./collections.json')),
 
-    PreUserFile:           ConfigReloader(UserProcessor,   'USER_FILE'),
-    PreUserStatic:         StaticLoader(UserProcessor,     'USER_DATA',  require('./users-example.json')),
+    PreAclFile:            ConfigReloader(AclProcessor,        'ACL_FILE'),
+    PreAclStatic:          StaticLoader(AclProcessor,          'ACL_DATA',   require('./default-rules.json')),
 
-    CreatorInjectorFile:   ConfigReloader(CreatorInjector, 'USER_FILE'),
-    CreatorInjectorStatic: StaticLoader(CreatorInjector,   'USER_DATA',  require('./users-example.json')),
+    PreUserFile:           ConfigReloader(UserProcessor,       'USER_FILE'),
+    PreUserStatic:         StaticLoader(UserProcessor,         'USER_DATA',  require('./users-example.json')),
+
+    CreatorInjectorFile:   ConfigReloader(CreatorInjector,     'USER_FILE'),
+    CreatorInjectorStatic: StaticLoader(CreatorInjector,       'USER_DATA',  require('./users-example.json')),
 }
 

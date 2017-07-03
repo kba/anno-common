@@ -6,9 +6,11 @@ const cacheManager = require('cache-manager')
 const _caches = {}
 
 function cached(metadataEndpoint, collection, context, cb) {
-    const cache = (collection in _caches)
-        ? _caches[collection]
-        : cacheManager.caching({store: 'memory', max: 1000, ttl: 60 * 60 * 12})
+    const cache = (collection in _caches) ? _caches[collection] : cacheManager.caching({
+        store: 'memory',
+        max: 1000,
+        ttl: 60 * 60 * 12
+    })
     return cache.wrap(context, function() {
         return new Promise(function(resolve, reject) {
             axios.get(`${metadataEndpoint}?uri=${context}`)
@@ -19,21 +21,18 @@ function cached(metadataEndpoint, collection, context, cb) {
 }
 
 
-module.exports = function AclMetadataMiddlewareFactory() {
-    const collectionConfig = JSON.parse(envyConf('ANNO').COLLECTION_DATA)
-
+module.exports = function AclMetadataMiddlewareFactory(cb) {
     function AclMetadataMiddleware(req, resp, next) {
-        const {collection} = req.annoOptions = req.annoOptions || {}
-        if (!collection) {
-            console.log(errors.badRequest("Missing 'collection' in the request context"))
+        const {collection, collectionConfig} = req.annoOptions = req.annoOptions || {}
+        if (!collectionConfig) {
+            console.log(errors.badRequest("aclMetadata: Missing 'collection' in the request context"))
             return next()
         }
         const metadataToken = req.header('x-anno-metadata')
         const context = req.header('x-anno-context')
-        const {metadataEndpoint} = collectionConfig[collection]
+        const {metadataEndpoint, secret} = collectionConfig
 
         if (metadataToken) {
-            const {secret} = collectionConfig[collection]
             if (!secret) {
                 console.log(errors.badRequest(`No 'secret' for collection: ${collection}`))
                 return next()
@@ -65,6 +64,6 @@ module.exports = function AclMetadataMiddlewareFactory() {
         }
     }
     AclMetadataMiddleware.unless = require('express-unless')
-    return AclMetadataMiddleware
+    return cb(null, AclMetadataMiddleware)
 }
 
