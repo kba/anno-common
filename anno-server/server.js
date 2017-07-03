@@ -1,6 +1,7 @@
 const express = require('express')
 const async = require('async')
 const {envyConf} = require('envyconf')
+const fs = require('fs')
 process.env.ANNO_LOGLEVEL = 'silly'
 
 const config = envyConf('ANNO', {
@@ -63,8 +64,16 @@ function start(app, cb) {
                 app.use('/auth',
                     require(`./routes/auth-${config.SERVER_AUTH}`)({store}))
 
+            app.get('/favicon.ico', (req, resp, next) => {
+                fs.readFile(`${__dirname}/public/favicon.ico`, (err, ico) => {
+                    if (err) return next(err)
+                    resp.header('Content-Type', 'image/x-icon')
+                    return resp.send(ico)
+                })
+            })
+
             // Fallback for GET: Redirect /:id to /anno/:id for pretty short URL
-            app.get('/:id(*)', (req, resp, next) => {
+            app.get('/:id', (req, resp, next) => {
                 resp.header('Location', `anno/${req.params.id}`)
                 resp.status(302)
                 resp.end()
