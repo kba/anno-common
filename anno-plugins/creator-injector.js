@@ -38,7 +38,7 @@ module.exports = class CreatorInjector {
         const ret = {id}
         if (!(id in this.users))
             return ret
-        console.log(`Found user ${id}`, this.users[id])
+        // console.log(`Found user ${id}`, this.users[id])
         deepExtend(ret, this.users[id])
         this.users[id][RULESET].filterApply(ctx).forEach(kv =>
             Object.keys(kv).forEach(k => {
