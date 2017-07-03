@@ -92,6 +92,9 @@ class MongolikeStore extends Store {
         if (!validFn(anno)) {
             return cb(errors.invalidAnnotation(anno, validFn.errors))
         }
+        if (options.collection) {
+            anno.collection = options.collection
+        }
         this.db.insert(anno, (err, savedAnno) => {
             // TODO differentiate, use errors from anno-errors
             if (err) return cb(err)

@@ -33,6 +33,7 @@ class AnnoCollection {
             console.log(errors.badRequest(`No 'secret' for collection: ${ctx.collection}`))
             return cb(errors.badRequest(`No 'secret' for collection: ${ctx.collection}`))
         }
+        ctx.collectionConfigFor = c => this.collections[c]
         return cb()
     }
 

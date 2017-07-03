@@ -10,13 +10,16 @@ module.exports = ({store}) => {
     function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
-            var {purlTemplate} = req.annoOptions.collectionConfig
-            if (purlTemplate && req.headers.accept.match('text/html')) {
-                resp.header('Location', purlTemplate
+            const collectionConfig = (doc.collection) 
+                ? req.annoOptions.collectionConfigFor(doc.collection)
+                : req.annoOptions.collectionConfig
+            if (collectionConfig && collectionConfig.purlTemplate && req.headers.accept.match('text/html')) {
+                const purl = collectionConfig.purlTemplate
                     .replace('{{ targetId }}', targetId(doc))
-                    .replace('{{ slug }}', doc.id.replace(/^.*\//, '')))
+                    .replace('{{ slug }}', doc.id.replace(/^.*\//, ''))
+                resp.header('Location', purl)
                 resp.status(301)
-                resp.send(`Redirecting to ${purlTemplate}`)
+                resp.send(`Redirecting to ${purl}`)
                 return
             } else {
                 resp.header('Location', doc.id)
