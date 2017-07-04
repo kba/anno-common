@@ -105,7 +105,11 @@ class MongolikeStore extends Store {
     }
 
     _createReply(anno, options, cb) {
-        anno.target = anno.replyTo
+        if (!anno.target || typeof anno.target === 'string') {
+            anno.target = anno.replyTo
+        } else {
+            anno.target.id = anno.replyTo
+        }
         const validFn = schema.validate.Annotation
         if (!validFn(anno)) {
             return cb(errors.invalidAnnotation(anno, validFn.errors))

@@ -286,8 +286,9 @@ function targetId(anno) {
         let found = anno.target.find(_targetId)
         if (found) return _targetId(found)
     }
-    else
+    else {
         return _targetId(anno.target)
+    }
 }
 
 
