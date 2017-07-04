@@ -282,8 +282,10 @@ function targetId(anno) {
         return;
     if (typeof anno.target === 'string')
         return anno.target
-    else if (Array.isArray(anno.target))
-        return anno.target.find(_targetId)
+    else if (Array.isArray(anno.target)) {
+        let found = anno.target.find(_targetId)
+        if (found) return _targetId(found)
+    }
     else
         return _targetId(anno.target)
 }
