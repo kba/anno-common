@@ -29,8 +29,8 @@ const config = {
     module: {
         rules: [
             {
-                test: /.*\.js$/,
-                exclude: /node_modules/,
+                test: /\.js$/,
+                exclude: /node_modules\/(?!(envyconf|@kba\/anno))/,
                 loader: 'babel-loader',
             }
         ]
