@@ -160,7 +160,7 @@ class MongolikeStore extends Store {
             if (!ret._revisions) {
                 const woReplies = JSON.parse(JSON.stringify(ret))
                 delete woReplies._replies
-                woReplies.id = `${woReplies}~1`
+                woReplies.id = `${woReplies.id}~1`
                 ret._revisions = [woReplies]
             }
             ret._replies = ret._replies || []
