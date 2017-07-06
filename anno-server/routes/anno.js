@@ -17,6 +17,7 @@ module.exports = ({store}) => {
             if (collectionConfig && collectionConfig.purlTemplate && req.headers.accept.match('text/html')) {
                 const purl = collectionConfig.purlTemplate
                     .replace('{{ targetId }}', targetId(doc))
+                    .replace('{{ annoId }}', doc.id)
                     .replace('{{ slug }}', doc.id.replace(/^.*\//, ''))
                 resp.header('Location', purl)
                 resp.status(301)
