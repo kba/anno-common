@@ -62,7 +62,9 @@ function start(app, cb) {
                 require('./routes/swagger')())
             if (config.SERVER_AUTH)
                 app.use('/auth',
-                    require(`./routes/auth-${config.SERVER_AUTH}`)({store}))
+                    annoOptions.unless({method:'OPTIONS'}),
+                    require(`./routes/auth-${config.SERVER_AUTH}`)({store})
+                )
 
             app.get('/favicon.ico', (req, resp, next) => {
                 fs.readFile(`${__dirname}/public/favicon.ico`, (err, ico) => {
