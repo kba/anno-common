@@ -69,7 +69,7 @@ module.exports = () => {
     // GET /token
     //
     router.get('/token/:iss', (req, resp, next) => {
-        const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
+        const collectionConfig = req.annoOptions.collectionConfigFor(req.params.iss)
 
         const sub = determineUser(req.headers)
         if (!sub) {
@@ -78,10 +78,7 @@ module.exports = () => {
         }
 
         const iss = req.params.iss
-        if (iss !== collection) {
-            resp.status(404)
-            return next(`Bad collection '${iss}'`)
-        } else if (!('secret' in collectionConfig)) {
+        if (!('secret' in collectionConfig)) {
             resp.status(500)
             return next(`No secret configured for issuer '${iss}'`)
         }
