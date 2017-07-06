@@ -197,30 +197,55 @@ class MongolikeStore extends Store {
                     // delete anno[prop]
                 }
             }
-            var newData = JSON.parse(JSON.stringify(anno))
-            newData.created = new Date().toISOString()
-            this._deleteId(newData)
-            this._normalizeType(newData)
+            const annoRevision = JSON.parse(JSON.stringify(anno))
+
+            annoRevision.created = new Date().toISOString()
+            // A revision cannot be modified
+            delete annoRevision.modified
+            // A revision should not have an id TODO
+            this._deleteId(annoRevision)
+            this._normalizeType(annoRevision)
+
             const validFn = schema.validate.Annotation
-            if (!validFn(newData)) {
+            if (!validFn(annoRevision)) {
                 return cb(errors.invalidAnnotation(anno, validFn.errors))
             }
+
+            const annoRoot = JSON.parse(JSON.stringify(annoRevision))
+            // Last modification of the annotation is the creation date of its newest revision
+            annoRoot.modified = annoRevision.created
 
             var modQueries;
             // walk replies and add revision
             if (_replyids.length > 0) {
+                //
+                // Revising a reply
+                //
+
+                // A selector that drills down to the nesting level of the reply (e.g. '_replies.1._replies.3._replies.7')
                 const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
+
+                // Prepend the selector to all fields that should be replaced
+                const setQuery = {}
+                Object.keys(annoRoot).forEach(k => setQuery[`${selector}.${k}`] = annoRoot[k])
                 modQueries = [
-                    {$set: {[selector]: newData}},
-                    {$push: {[selector + '._revisions']: newData}},
+                    {$set: setQuery},
+                    {$push: {[selector + '._revisions']: annoRevision}},
                 ]
             } else {
+                //
+                // Revising a 'top-level' annotation
+                //
+
+                // Never change the created or creator attributes
+                delete annoRoot.created
+                delete annoRevision.creator
                 modQueries = [
-                    {$push: {_revisions: newData}},
-                    {$set: newData},
+                    {$set: annoRoot},
+                    {$push: {_revisions: annoRevision}},
                 ]
             }
-            // console.log(_id, ...modQueries)
+            // console.log("REVISERINO", JSON.stringify({_id, modQueries}, null, 2))
             this.db.update({_id}, modQueries[0], {}, (err, arg) => {
                 if (err) return cb(err)
                 this.db.update({_id}, modQueries[1], {}, (err, arg) => {
