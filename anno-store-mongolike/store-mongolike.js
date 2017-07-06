@@ -56,7 +56,7 @@ class MongolikeStore extends Store {
     _create(options, cb) {
         var anno = JSON.parse(JSON.stringify(options.anno))
         anno = this._deleteId(anno)
-        anno = this._normalizeTarget(anno)
+        // anno = this._normalizeTarget(anno)
         anno = this._normalizeType(anno)
 
         anno._replies = []
@@ -129,6 +129,7 @@ class MongolikeStore extends Store {
                 })
             }
             anno.id = anno.replyTo + '.' + ((parent._replies).length + 1)
+            // console.log("CREATEREPLY", JSON.stringify({anno}, null, 2))
             this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
@@ -202,6 +203,8 @@ class MongolikeStore extends Store {
             annoRevision.created = new Date().toISOString()
             // A revision cannot be modified
             delete annoRevision.modified
+            // Never change creator attribute
+            delete annoRevision.creator
             // A revision should not have an id TODO
             this._deleteId(annoRevision)
             this._normalizeType(annoRevision)
@@ -237,15 +240,14 @@ class MongolikeStore extends Store {
                 // Revising a 'top-level' annotation
                 //
 
-                // Never change the created or creator attributes
+                // Never change the creation date of a top-level annotation
                 delete annoRoot.created
-                delete annoRevision.creator
                 modQueries = [
                     {$set: annoRoot},
                     {$push: {_revisions: annoRevision}},
                 ]
             }
-            // console.log("REVISERINO", JSON.stringify({_id, modQueries}, null, 2))
+            console.log("REVISERINO", JSON.stringify({_id, modQueries}, null, 2))
             this.db.update({_id}, modQueries[0], {}, (err, arg) => {
                 if (err) return cb(err)
                 this.db.update({_id}, modQueries[1], {}, (err, arg) => {
