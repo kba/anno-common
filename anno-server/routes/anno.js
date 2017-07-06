@@ -13,6 +13,7 @@ module.exports = ({store}) => {
             const collectionConfig = (doc.collection) 
                 ? req.annoOptions.collectionConfigFor(doc.collection)
                 : req.annoOptions.collectionConfig
+            // console.log({targetId: targetId(doc)})
             if (collectionConfig && collectionConfig.purlTemplate && req.headers.accept.match('text/html')) {
                 const purl = collectionConfig.purlTemplate
                     .replace('{{ targetId }}', targetId(doc))
