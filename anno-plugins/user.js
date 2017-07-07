@@ -8,15 +8,22 @@ const RULESET = Symbol('_ruleset')
 module.exports = class UserProcessor {
 
     constructor(users={}) {
+        const built = {}
         // TODO validate
         Object.keys(users).forEach(id => {
-            if (!users[id].id) {
-                users[id].id = id
-            }
-            users[id][RULESET] = new RuleSet({name: `Rules for user ${id}`, rules: users[id].rules || []})
-            delete users[id].rules
+            const userDesc = users[id]
+            if (!userDesc.id) userDesc.id = id
+            userDesc[RULESET] = new RuleSet({name: `Rules for user ${id}`, rules: userDesc.rules || []})
+            delete userDesc.rules
+
+            if (Array.isArray(userDesc.alias))
+                userDesc.alias.forEach(alias => built[alias] = userDesc)
+            else if (typeof userDesc === 'string' && userDesc.match(/[a-z]+/))
+                built[userDesc.alias] = userDesc
+            delete userDesc.alias
+            built[id] = userDesc
         })
-        this.users = users
+        this.users = built
         this.log = envyLog('ANNO', 'user')
     }
 
