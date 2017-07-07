@@ -1,13 +1,6 @@
 [
   [
     {
-      "collection": "test-collection"
-    },
-    true,
-    "Allow everybody to do everything on 'test-collection'"
-  ],
-  [
-    {
       "user.inactive": true
     },
     false,
@@ -18,24 +11,14 @@
       "method": {
         "$or": [
           "init",
-          "aclCheck"
-        ]
-      }
-    },
-    true,
-    "Allow store initialization and rights checks"
-  ],
-  [
-    {
-      "method": {
-        "$or": [
+          "aclCheck",
           "get",
           "search"
         ]
       }
     },
     true,
-    "Allow get and search by default"
+    "Allow store initialization, rights checks, search and retrieval for anyone by default"
   ],
   [
     {
@@ -43,13 +26,6 @@
     },
     true,
     "Allow users with 'admin' role to do everything"
-  ],
-  [
-    {
-      "method": "delete"
-    },
-    false,
-    "Disallowed delete"
   ],
   [
     {
@@ -80,35 +56,39 @@
           "create"
         ]
       },
-      "$or": [
+      "$and": [
         {
           "anno.creator": {
-            "$ref": "/user"
+            "$exists": true
           }
         },
         {
-          "anno.creator.id": {
-            "$ref": "/user"
+          "user.id": {
+            "$exists": true
           }
         },
         {
-          "anno.creator": {
-            "$ref": "/user/id"
-          }
-        },
-        {
-          "anno.creator.id": {
-            "$ref": "/user/id"
-          }
+          "$or": [
+            {
+              "anno.creator": {
+                "$ref": "/user/id"
+              }
+            },
+            {
+              "anno.creator.id": {
+                "$ref": "/user/id"
+              }
+            }
+          ]
         }
       ]
     },
     true,
-    "Allow users to revise and reply to their own annotations"
+    "Allow users to revise their own annotations / Allow users to reply to their own annotations"
   ],
   [
     {},
     false,
-    "Not authorized by acl rules"
+    "Fallback to disallow any interaction"
   ]
 ]

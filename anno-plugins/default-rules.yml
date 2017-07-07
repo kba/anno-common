@@ -7,29 +7,21 @@
 # RESULT is a tru-ish value to allow or false to deny request
 # DESCRIPTION is an optional description of the rule
 
-- - collection: 'test-collection'
-  - true
-  - "Allow everybody to do everything on 'test-collection'"
+# - - collection: 'test-collection'
+#   - true
+#   - "Allow everybody to do everything on 'test-collection'"
 
 - - user.inactive: true
   - false
   - "Inactive users are not allowed to do anything"
 
-- - method: {$or: ['init', 'aclCheck']}
+- - method: {$or: ['init', 'aclCheck', 'get', 'search']}
   - true
-  - "Allow store initialization and rights checks"
-
-- - method: {$or: ['get', 'search']}
-  - true
-  - "Allow get and search by default"
+  - "Allow store initialization, rights checks, search and retrieval for anyone by default"
 
 - - user.role: 'admin'
   - true
   - "Allow users with 'admin' role to do everything"
-
-- - method: 'delete'
-  - false
-  - 'Disallowed delete'
 
 - - method: {$or: ['create', 'revise']}
     user.role: 'moderator'
@@ -42,15 +34,16 @@
   - "Allow users with 'create' role to create new annotations"
 
 - - method: {$or: ['revise', 'create']}
-    $or:
-      - anno.creator:    {$ref: '/user'}
-      - anno.creator.id: {$ref: '/user'}
-      - anno.creator:    {$ref: '/user/id'}
-      - anno.creator.id: {$ref: '/user/id'}
+    $and:
+      - anno.creator: {$exists: true}
+      - user.id: {$exists: true}
+      - $or:
+        - anno.creator: {$ref: '/user/id'}
+        - anno.creator.id: {$ref: '/user/id'}
   - true
-  - "Allow users to revise and reply to their own annotations"
+  - "Allow users to revise their own annotations / Allow users to reply to their own annotations"
 
 # Default Rule. Must be last
 - - {}
   - false
-  - "Not authorized by acl rules"
+  - "Fallback to disallow any interaction"
