@@ -274,21 +274,27 @@ class emptyAnnotation extends AnnoQuery {
  *
  * Guess the URL of the thing that is to be annotated
  */
-function _targetId(target) {
-    return target.scope || target.source || target.id
-}
+const _targetProps = ['scope', 'source', 'id']
 function targetId(anno) {
-    if (!anno.target)
-        return;
+    let ret;
     if (typeof anno.target === 'string')
-        return anno.target
+        ret = anno.target
     else if (Array.isArray(anno.target)) {
-        let found = anno.target.find(_targetId)
-        if (found) return _targetId(found)
+        ret = anno.target.find(t => typeof t === 'string')
+        if (!ret)
+            ret = _targetProps.find(k => {
+                return anno.target.find(t => {
+                    if (t[k]) return t[k]
+                })
+            })
     }
     else {
-        return _targetId(anno.target)
+        ret = _targetProps.find(k => {
+            return anno.target[k]
+        })
     }
+    console.log("targetId", {ret})
+    return ret
 }
 
 
