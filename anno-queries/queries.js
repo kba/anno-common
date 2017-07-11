@@ -282,17 +282,18 @@ function targetId(anno) {
     else if (Array.isArray(anno.target)) {
         ret = anno.target.find(t => typeof t === 'string')
         if (!ret)
-            ret = _targetProps.find(k => {
+            _targetProps.find(k => {
                 return anno.target.find(t => {
-                    if (t[k]) return t[k]
+                    if (!t[k]) return
+                    ret = t[k]
+                    return true
                 })
             })
-    }
-    else {
+    } else {
         const prop = _targetProps.find(k => anno.target[k])
         if (prop) ret = anno.target[prop]
     }
-    console.log("targetId", {ret})
+    console.log('targetId', {ret})
     return ret
 }
 
