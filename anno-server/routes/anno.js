@@ -10,11 +10,9 @@ module.exports = ({store}) => {
     function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
-            const collectionConfig = (doc.collection) 
-                ? req.annoOptions.collectionConfigFor(doc.collection)
-                : req.annoOptions.collectionConfig
+            const collectionConfig = req.annoOptions.collectionConfigFor(doc.collection || 'default')
             // console.log({targetId: targetId(doc)})
-            if (collectionConfig && collectionConfig.purlTemplate && req.headers.accept.match('text/html')) {
+            if (collectionConfig.purlTemplate && req.headers.accept.match('text/html')) {
                 const purl = collectionConfig.purlTemplate
                     .replace('{{ targetId }}', targetId(doc))
                     .replace('{{ annoId }}', doc.id)
