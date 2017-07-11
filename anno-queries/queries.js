@@ -289,9 +289,8 @@ function targetId(anno) {
             })
     }
     else {
-        ret = _targetProps.find(k => {
-            return anno.target[k]
-        })
+        const prop = _targetProps.find(k => anno.target[k])
+        if (prop) ret = anno.target[prop]
     }
     console.log("targetId", {ret})
     return ret
