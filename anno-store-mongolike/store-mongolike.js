@@ -285,21 +285,32 @@ class MongolikeStore extends Store {
     /* @override */
     _search(options, cb) {
         var {query} = options 
+        const asRegex = query.$regex === 'true'  || query.$regex == 1
+
+        if (query.includeDeleted === 'true' || query.includeDeleted == 1) {
+            query.deleted = {$exists: false}
+        }
+        delete query.includeDeleted
 
         if ('$target' in query) {
+            const needle = asRegex ? {$regex: query.$target} : query.$target
             query.$or = [
-                { target: query.$target },
-                { 'target.id': query.$target },
-                { 'target.scope': query.$target },
-                { 'target.source': query.$target },
+                { target: needle },
+                { 'target.id': needle },
+                { 'target.scope': needle },
+                { 'target.source': needle },
             ]
             delete query.$target
         }
-        if (query.includeDeleted) {
-            delete query.includeDeleted
-        } else {
-            query.deleted = {$exists: false}
+
+        if (asRegex) {
+            Object.keys(query).forEach(k => {
+                if (typeof query[k] === 'string') {
+                    query[k] = {$regex: query[k]}
+                }
+            })
         }
+
 
         const projection = this._projectionFromOptions(options)
 
