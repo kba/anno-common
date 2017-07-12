@@ -286,6 +286,7 @@ class MongolikeStore extends Store {
     _search(options, cb) {
         var {query} = options 
         const asRegex = query.$regex === 'true'  || query.$regex == 1
+        delete query.$regex
 
         if (query.includeDeleted === 'true' || query.includeDeleted == 1) {
             query.deleted = {$exists: false}
