@@ -3,7 +3,8 @@ const jsonldRapper = require('jsonld-rapper')
 module.exports = () => {
     const j2r = new jsonldRapper()
     return (req, resp, next) => {
-        if (req.header('Accept').match(/text\/(turtle|n3)/)) {
+        const accept = req.header('Accept') || ''
+        if (accept.match(/text\/(turtle|n3)/)) {
             j2r.convert(resp.jsonld, 'jsonld', 'turtle', (err, turtle) => {
                 if (err) return next(err)
                 return resp.send(turtle)
