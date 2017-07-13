@@ -101,7 +101,8 @@ class Store {
                 const userId = ctx.user && ctx.user.id ? ctx.user.id : ctx.user
                 this.log.silly(`${userId} may not ${ctx.method}: ${err}`)
             }
-            if (err) return cb(err)
+            if (err)
+                return cb(err)
             if (ctx.dryRun)
                 return cb(null)
             this.__logContext(`NOW Method: ${ctx.method}`, ctx)
@@ -347,9 +348,10 @@ class Store {
             this.get(url, {metadataOnly: true}, (err, found) => {
                 const anno = {target: url}
                 if (found) {
-                    Object.assign(anno, found)
+                    Object.assign(anno, found, {target: url})
                 }
-                anno.target = url
+                // console.log({user: options.user.id, anno: anno.creator ? anno.creator.id : '---'})
+                // console.log(url, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
                 async.parallel({
                     read:   (cb) => cb(null, true), // since we know this anno could be read/retrieved
                     create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
