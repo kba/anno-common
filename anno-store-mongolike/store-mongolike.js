@@ -36,14 +36,18 @@ class MongolikeStore extends Store {
                     return cb(errors.replyNotFound(annoId))
                 }
             }
-            const rev = (_revid)
-                ? doc._revisions[_revid -1]
-                : doc._revisions[doc._revisions.length - 1]
-            if (!rev) return cb(errors.revisionNotFound(_id, _revid))
+            if (!Array.isArray(doc._revisions)) {
+                console.error("BAD ANNOTATION IN STORE", annoId)
+            } else {
+                const rev = (_revid)
+                    ? doc._revisions[_revid -1]
+                    : doc._revisions[doc._revisions.length - 1]
+                if (!rev) return cb(errors.revisionNotFound(_id, _revid))
 
-            if (options.latest) {
-                annoId = `${_id}~${doc._revisions.length}`
-                doc = rev
+                if (options.latest) {
+                    annoId = `${_id}~${doc._revisions.length}`
+                    doc = rev
+                }
             }
 
             if (_replyids.length) doc.replyTo = this._urlFromId(`${_id}${_replyids.map(x=>`.${x}`).join('')}`)
