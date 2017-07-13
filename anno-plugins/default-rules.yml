@@ -34,12 +34,11 @@
   - "Allow users with 'create' role to create new annotations"
 
 - - method: {$or: ['revise', 'create']}
-    $and:
-      - anno.creator: {$exists: true}
-      - user.id: {$exists: true}
-      - $or:
-        - anno.creator: {$ref: '/user/id'}
-        - anno.creator.id: {$ref: '/user/id'}
+    anno.creator: {$exists: true}
+    user.id: {$exists: true}
+    $or:
+    - anno.creator: {$ref: '/user/id'}
+    - anno.creator.id: {$ref: '/user/id'}
   - true
   - "Allow users to revise their own annotations / Allow users to reply to their own annotations"
 

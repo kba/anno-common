@@ -56,30 +56,22 @@
           "create"
         ]
       },
-      "$and": [
+      "anno.creator": {
+        "$exists": true
+      },
+      "user.id": {
+        "$exists": true
+      },
+      "$or": [
         {
           "anno.creator": {
-            "$exists": true
+            "$ref": "/user/id"
           }
         },
         {
-          "user.id": {
-            "$exists": true
+          "anno.creator.id": {
+            "$ref": "/user/id"
           }
-        },
-        {
-          "$or": [
-            {
-              "anno.creator": {
-                "$ref": "/user/id"
-              }
-            },
-            {
-              "anno.creator.id": {
-                "$ref": "/user/id"
-              }
-            }
-          ]
         }
       ]
     },
