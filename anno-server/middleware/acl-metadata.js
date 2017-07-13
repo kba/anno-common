@@ -25,7 +25,7 @@ module.exports = function AclMetadataMiddlewareFactory(cb) {
     function AclMetadataMiddleware(req, resp, next) {
         const {collection, collectionConfig} = req.annoOptions = req.annoOptions || {}
         if (!collectionConfig) {
-            console.log(errors.badRequest("aclMetadata: Missing 'collection' in the request context"))
+            // console.log(errors.badRequest("aclMetadata: Missing 'collection' in the request context"))
             return next()
         }
         const metadataToken = req.header('x-anno-metadata')
@@ -45,7 +45,7 @@ module.exports = function AclMetadataMiddlewareFactory(cb) {
                 return next()
             })
         } else if (!metadataEndpoint) {
-            console.log(errors.badRequest(`Missing 'metadataEndpoint' in the configuration of collection '${collection}'`))
+            // console.log(errors.badRequest(`Missing 'metadataEndpoint' in the configuration of collection '${collection}'`))
             return next()
         } else if (!context) {
             console.log(errors.badRequest(`No X-Anno-Context was passed, nothing to do :(`))
