@@ -1,11 +1,7 @@
 const deepExtend = require('deep-extend')
-const {RuleSet} = require('sift-rule')
-const async = require('async')
 const lodashSet = require('lodash.set')
-const {envyLog} = require('envyconf')
 const {applyToAnno} = require('@kba/anno-util')
-
-const RULESET = Symbol('_ruleset')
+const UserBase = require('./user-base')
 
 const METHODS = new Set([
     'get',
@@ -14,19 +10,10 @@ const METHODS = new Set([
     'search',
 ])
 
-module.exports = class CreatorInjector {
+class CreatorInjector extends UserBase {
 
     constructor(users={}) {
-        // TODO validate
-        Object.keys(users).forEach(id => {
-            if (!users[id].id) {
-                users[id].id = id
-            }
-            users[id][RULESET] = new RuleSet({name: `Rules for user ${id}`, rules: users[id].rules || []})
-            delete users[id].rules
-        })
-        this.users = users
-        this.log = envyLog('ANNO', 'creator-injector')
+        super('creator-injector', users)
     }
 
     _lookupUser(user, ctx) {
@@ -40,7 +27,7 @@ module.exports = class CreatorInjector {
             return ret
         // console.log(`Found user ${id}`, this.users[id])
         deepExtend(ret, this.users[id])
-        this.users[id][RULESET].filterApply(ctx).forEach(kv =>
+        this.users[id][UserBase.RULESET].filterApply(ctx).forEach(kv =>
             Object.keys(kv).forEach(k => {
                 if (k.indexOf('.') > -1) {
                     // 'public.displayName: ...'
@@ -78,3 +65,5 @@ module.exports = class CreatorInjector {
     }
 
 }
+
+module.exports = CreatorInjector
