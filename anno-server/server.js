@@ -10,6 +10,7 @@ const config = envyConf('ANNO', {
     SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK',
     STORE: '@kba/anno-store-file',
     SERVER_AUTH: '',
+    ENABLE_JWT_AUTH: 'true',
 })
 function start(app, cb) {
     app.use(require('morgan')('dev'))
@@ -52,13 +53,14 @@ function start(app, cb) {
         app.use(cors)
         store.init(err => {
             if (err) return cb(err)
-            app.use('/anno',
-                annoOptions.unless({method:'OPTIONS'}),
-                userAuth.unless({method:'OPTIONS'}),
-                aclMetadata.unless({method:'OPTIONS'}),
-                require('./routes/anno')({store}))
-            app.use('/swagger',
-                require('./routes/swagger')())
+
+            const annoMiddlewares = []
+            annoMiddlewares.push(annoOptions.unless({method:'OPTIONS'}))
+            if (config.ENABLE_JWT_AUTH) annoMiddlewares.push(userAuth.unless({method:'OPTIONS'}))
+            annoMiddlewares.push(aclMetadata.unless({method:'OPTIONS'}))
+
+            app.use('/anno', ...annoMiddlewares, require('./routes/anno')({store}))
+            app.use('/swagger', require('./routes/swagger')())
             if (config.SERVER_AUTH)
                 app.use('/auth',
                     annoOptions.unless({method:'OPTIONS'}),

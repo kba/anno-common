@@ -80,7 +80,7 @@ class Store {
         if (ctx.dryRun) return
         // XXX this is just to keep logs small
         const ctxCopy = Object.assign({}, ctx)
-        ;['anno', 'targets', 'retvals'].forEach(k => ctxCopy[k] = '[...]')
+        // ;['anno', 'targets', 'retvals'].forEach(k => ctxCopy[k] = '[...]')
         this.log.silly(`${msg}: ${JSON.stringify(ctxCopy)}`)
     }
 

@@ -10,7 +10,9 @@ module.exports = ({store}) => {
     function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
-            const collectionConfig = req.annoOptions.collectionConfigFor(doc.collection || 'default')
+            const collectionConfig = req.annoOptions.collectionConfigFor
+                ? req.annoOptions.collectionConfigFor(doc.collection || 'default')
+                : {}
             // console.log({targetId: targetId(doc)})
             if (collectionConfig.purlTemplate && req.headers.accept.match('text/html')) {
                 const purl = collectionConfig.purlTemplate
@@ -109,6 +111,7 @@ module.exports = ({store}) => {
     // POST /anno
     //
     router.post('/', (req, resp, next) => {
+        console.log(req.body)
         const anno = prune(req.body)
         store.create(anno, req.annoOptions, (err, anno) => {
             if (err) return next(err)
