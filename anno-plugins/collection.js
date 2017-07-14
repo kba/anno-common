@@ -17,6 +17,7 @@ class AnnoCollection {
         console.log("Instantiating CollectionProcessor with", collections)
         // TODO validate
         this.collections = collections
+        this.log = envyLog('ANNO', 'plugin/collection')
     }
 
     process(ctx, cb) {
@@ -28,9 +29,9 @@ class AnnoCollection {
             return cb(new Error(`Undefined collection ${ctx.collection}`))
         }
         Object.assign(ctx.collectionConfig, this.collections[ctx.collection])
-        console.log(ctx.collectionConfig)
+        // this.log.silly(ctx.collectionConfig)
         if (!ctx.collectionConfig.secret) {
-            console.log(errors.badRequest(`No 'secret' for collection: ${ctx.collection}`))
+            this.log.debug(errors.badRequest(`No 'secret' for collection: ${ctx.collection}`))
             return cb(errors.badRequest(`No 'secret' for collection: ${ctx.collection}`))
         }
         ctx.collectionConfigFor = c => this.collections[c]

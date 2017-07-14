@@ -1,15 +1,16 @@
 const errors = require('@kba/anno-errors')
-const {envyConf} = require('envyconf')
+const {envyConf, envyLog} = require('envyconf')
 const {loadPlugins} = require('@kba/anno-util-loaders')
 
 module.exports = function AnnoOptionsMiddleware(cb) {
+    const log = envyLog('ANNO', 'options-mw')
     const conf = envyConf('ANNO', {
         DEFAULT_COLLECTION: 'default',
         MIDDLEWARE_PLUGINS: '',
     })
 
     var collectionProcessor = function(ctx, cb) {
-        console.log('No collectionProcessor defined')
+        log.debug('No collectionProcessor defined')
         return cb()
     };
 
@@ -37,7 +38,7 @@ module.exports = function AnnoOptionsMiddleware(cb) {
             // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
             if (req.header('slug')) options.slug = req.header('slug')
 
-            console.log("annoOptions scraped", options)
+            log.silly("annoOptions scraped", options)
             next()
         })
     }

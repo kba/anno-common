@@ -2,7 +2,6 @@ const express = require('express')
 const async = require('async')
 const {envyConf} = require('envyconf')
 const fs = require('fs')
-process.env.ANNO_LOGLEVEL = 'silly'
 
 const config = envyConf('ANNO', {
     PORT: "3000",
