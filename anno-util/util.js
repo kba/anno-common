@@ -54,6 +54,7 @@ function collectIds(list) {
             if (obj.id) _ret.push(obj.id)
             if (typeof obj === 'object') {
                 Object.keys(obj).forEach(k => {
+                    if (k === 'creator') return
                     if (Array.isArray(obj[k])) _collectIds(obj[k], _ret)
                     else _collectIds([obj[k]], _ret)
                 })
