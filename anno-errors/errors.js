@@ -10,6 +10,15 @@ module.exports = {
     },
 
     /*
+     * ## `annotationDeleted(id, date)`
+     */
+    annotationDeleted(id, date) {
+        const err = new Error(`Annotation was deleted: ${JSON.stringify({id, date})}`)
+        err.code = 410
+        return err
+    },
+
+    /*
      * ## `annotationNotFound(id)`
      */
     annotationNotFound(id) {
