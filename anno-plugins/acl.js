@@ -37,10 +37,13 @@ class AnnoAcl {
         //     anno: ctx.anno,
         // })
         const matchingRule = this.rules.first(ctx) || FALLBACK_RULE
-        // if (config.LOGLEVEL !== '') {
-        //     // log.silly(`Rule '${matchingRule}' matched ${JSON.stringify(ctx).substring(0,100)}`)
-        //    log.silly(`Rule '${matchingRule}' matched`)
-        // }
+        if (config.LOGLEVEL !== '') {
+            // log.silly(`Rule '${matchingRule}' matched ${JSON.stringify(ctx).substring(0,100)}`)
+            // const anno = ctx.anno || {}
+            // const target = anno.target || '????'
+            // log.debug(`Rule '${matchingRule}' matched`, {anno})
+           // log.silly(`Rule '${matchingRule}' matched`)
+        }
         this.reason = matchingRule.name
         if (matchingRule.tail)
             return cb(null, matchingRule.name)
