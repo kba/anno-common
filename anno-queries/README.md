@@ -10,7 +10,7 @@ of a [Web Annotation](https://www.w3.org/TR/annotation-model).
 <!-- BEGIN-MARKDOWN-TOC -->
 * [API](#api)
 	* [AnnoQuery](#annoquery)
-		* [`new AnnoQuery(_defaultkeys=[])`](#new-annoquery_defaultkeys---)
+		* [`new AnnoQuery(_defaultkeys=)`](#new-annoquery_defaultkeys-)
 		* [`first(anno, ...keys)`](#firstanno-keys)
 		* [`all(anno, ...keys)`](#allanno-keys)
 	* [textualHtmlBody](#textualhtmlbody)
@@ -19,10 +19,13 @@ of a [Web Annotation](https://www.w3.org/TR/annotation-model).
 		* [Example](#example-1)
 	* [semanticTagBody](#semantictagbody)
 		* [Example](#example-2)
-	* [svgSelectorResource](#svgselectorresource)
+	* [relationLinkBody](#relationlinkbody)
 		* [Example](#example-3)
+	* [svgSelectorResource](#svgselectorresource)
+		* [Example](#example-4)
 	* [mediaFragmentResource](#mediafragmentresource)
 	* [emptyAnnotation](#emptyannotation)
+	* [targetId](#targetid)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -71,13 +74,26 @@ A simple tag body is a `TextualBody` with a `purpose` of `tagging` and a value.
 ```
 ### semanticTagBody
 Find/Create semantic tag bodies. 
-A semantic tag body is a web resource (must have an `id`) with a `purpose`/`motivation`
-of either `linking`, `identifying` or `classifying`.
+A semantic tag body is a web resource (must have an `id`) with the sole purpose
+of `classifying`.
 #### Example
 ```js
 {
   "id": "http://vocab/fruit17",
-  "motivation": "classifying"
+  "purpose": "classifying"
+}
+```
+### relationLinkBody
+Find/Create qualified links to other web resources
+A semantic tag body is a web resource (must have an `id`) that is related to the
+target of the annotation by the relation in its 'predicate'.
+Always has a purpose of 'linking'.
+#### Example
+```js
+{
+  "id": "http://example.org/work1",
+  "purpose": "linking",
+  "predicate": "http://purl.org/dcterms/partOf",
 }
 ```
 ### svgSelectorResource
@@ -98,5 +114,7 @@ A `mediaFragmentResource` is a resource with a `selector` of type
 Specs](http://www.w3.org/TR/media-frags/).
 ### emptyAnnotation
 An empty annotation is an object that has either no `body` or no `target`.
+### targetId
+Guess the URL of the thing that is to be annotated
 
 <!-- END-RENDER -->
