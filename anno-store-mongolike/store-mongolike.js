@@ -28,10 +28,8 @@ class MongolikeStore extends Store {
         var {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
         const query = {_id}
         this.db.findOne(query, projection, (err, doc) => {
-            if (doc.deleted) {
-                return cb(errors.annotationDeleted(annoId, doc.deleted))
-            }
             if (!doc) return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
+            if (doc.deleted) return cb(errors.annotationDeleted(annoId, doc.deleted))
             for (let _replyid of _replyids) {
                 // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]
