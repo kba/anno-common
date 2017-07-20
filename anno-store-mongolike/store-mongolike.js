@@ -26,9 +26,12 @@ class MongolikeStore extends Store {
         var annoId = this._idFromURL(options.annoId)
         const projection = this._projectionFromOptions(options)
         var {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
-        const query = {_id, deleted: {$exists: false}}
+        const query = {_id}
         this.db.findOne(query, projection, (err, doc) => {
-            if (!doc) return cb(errors.annotationNotFound(annoId))
+            if (doc.deleted) {
+                return cb(errors.annotationDeleted(annoId, doc.deleted))
+            }
+            if (!doc) return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
             for (let _replyid of _replyids) {
                 // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]
@@ -251,7 +254,7 @@ class MongolikeStore extends Store {
                     {$push: {_revisions: annoRevision}},
                 ]
             }
-            console.log("REVISERINO", JSON.stringify({_id, modQueries}, null, 2))
+            // console.log("REVISERINO", JSON.stringify({_id, modQueries}, null, 2))
             this.db.update({_id}, modQueries[0], {}, (err, arg) => {
                 if (err) return cb(err)
                 this.db.update({_id}, modQueries[1], {}, (err, arg) => {
