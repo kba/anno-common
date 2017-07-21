@@ -57,7 +57,7 @@ class CreatorInjector extends UserBase {
                 applyToAnno(ctx.retvals[0], fn)
             }
         // pre-processing
-        } else if (ctx.anno && (ctx.anno.body || ctx.anno.title) && ! ctx.anno.creator && ctx.user && ctx.user.id) {
+        } else if (ctx.anno && ! ctx.metadataOnly && ! ctx.anno.creator && ctx.user && ctx.user.id) {
             ctx.anno.creator = ctx.user.id
         }
         return cb()

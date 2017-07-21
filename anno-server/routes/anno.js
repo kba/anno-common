@@ -111,7 +111,7 @@ module.exports = ({store}) => {
     // POST /anno
     //
     router.post('/', (req, resp, next) => {
-        console.log(req.body)
+        // console.log(req.body)
         const anno = prune(req.body)
         store.create(anno, req.annoOptions, (err, anno) => {
             if (err) return next(err)

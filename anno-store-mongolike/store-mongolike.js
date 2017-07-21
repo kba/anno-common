@@ -133,7 +133,8 @@ class MongolikeStore extends Store {
                     parent = parent._replies[_replyid - 1]
                 })
             }
-            anno.id = anno.replyTo + '.' + ((parent._replies).length + 1)
+            const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
+            // console.log("CREATEREPLY", {replyFullId, selector})
             // console.log("CREATEREPLY", JSON.stringify({anno}, null, 2))
             this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
@@ -141,7 +142,7 @@ class MongolikeStore extends Store {
                 options.latest = true
                 delete options.annoId
                 delete options.anno
-                return this.get(anno.id, options, cb)
+                return this.get(replyFullId, options, cb)
             })
         })
     }
@@ -166,7 +167,7 @@ class MongolikeStore extends Store {
             if (!ret._revisions) {
                 const woReplies = JSON.parse(JSON.stringify(ret))
                 delete woReplies._replies
-                woReplies.id = `${woReplies.id}~1`
+                delete woReplies.id
                 ret._revisions = [woReplies]
             }
             ret._replies = ret._replies || []
@@ -374,7 +375,7 @@ class MongolikeStore extends Store {
                         })
                         .filter(reply => ! reply.deleted)
                 }
-            } else if (!prop.match(/^_/)) {
+            } else if (!prop.match(/^_/) && !(prop in ret)) {
                 ret[prop] = anno[prop]
             }
         })
