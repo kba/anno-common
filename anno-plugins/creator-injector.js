@@ -56,10 +56,9 @@ class CreatorInjector extends UserBase {
             } else if (ctx.method === 'get') {
                 applyToAnno(ctx.retvals[0], fn)
             }
-        } else /* pre-processing */ {
-            if (ctx.anno && ctx.anno.body && ! ctx.anno.creator && ctx.user && ctx.user.id) {
-                ctx.anno.creator = ctx.user.id
-            }
+        // pre-processing
+        } else if (ctx.anno && (ctx.anno.body || ctx.anno.title) && ! ctx.anno.creator && ctx.user && ctx.user.id) {
+            ctx.anno.creator = ctx.user.id
         }
         return cb()
     }
