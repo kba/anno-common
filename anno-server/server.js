@@ -14,10 +14,10 @@ const config = envyConf('ANNO', {
     ENABLE_JWT_AUTH: 'true',
 })
 function start(app, cb) {
-    app.use(require('morgan')('dev'))
-
     // Static files
     app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
+
+    app.use(require('morgan')('dev'))
 
     app.set('views', `${__dirname}/views`)
     app.set('view engine', 'pug')
