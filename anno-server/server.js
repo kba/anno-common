@@ -9,11 +9,16 @@ const config = envyConf('ANNO', {
     BASE_PATH: '',
     SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK',
     STORE: '@kba/anno-store-file',
+    DIST_DIR: __dirname + '/dist',
     SERVER_AUTH: '',
     ENABLE_JWT_AUTH: 'true',
 })
 function start(app, cb) {
     app.use(require('morgan')('dev'))
+
+    // Static files
+    app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
+
     app.set('views', `${__dirname}/views`)
     app.set('view engine', 'pug')
 
@@ -39,6 +44,7 @@ function start(app, cb) {
         'acl-metadata',
         'cors',
     ]
+
     async.map(middlewares, (middleware, doneMiddleware) => {
         console.log(`Loading middleware ${middleware}`)
         require(`./middleware/${middleware}`)(doneMiddleware)
@@ -81,9 +87,6 @@ function start(app, cb) {
                 resp.status(302)
                 resp.end()
             })
-
-            // Static files
-            app.use(express.static(`${__dirname}/public`))
 
             // Error handler
             app.use(require('./middleware/error-handler')())
