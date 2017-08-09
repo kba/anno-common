@@ -292,6 +292,7 @@ class MongolikeStore extends Store {
     _search(options, cb) {
         var {query} = options 
         const asRegex = query.$regex === 'true'  || query.$regex == 1
+        const nested = query.$nested === 'true'  || query.$nested == 1
         delete query.$regex
 
         if (query.includeDeleted === 'true' || query.includeDeleted == 1) {
@@ -316,6 +317,18 @@ class MongolikeStore extends Store {
                     query[k] = {$regex: query[k]}
                 }
             })
+        }
+
+        if (nested) {
+            if (!query.$or)
+                query.$or = []
+            for (let i = 0; i < 20 ; i++) {
+                const queryHere = {}
+                for (let clause in query) {
+                    queryHere[`_reply.${i}.${clause}`] = JSON.parse(JSON.stringify(query[clause]))
+                }
+                query.$or.push(queryHere)
+            }
         }
 
 
