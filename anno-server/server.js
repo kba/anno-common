@@ -2,6 +2,7 @@ const express = require('express')
 const async = require('async')
 const {envyConf} = require('envyconf')
 const fs = require('fs')
+// const compression = require('compression')
 
 const config = envyConf('ANNO', {
     PORT: "3000",
@@ -12,10 +13,12 @@ const config = envyConf('ANNO', {
     DIST_DIR: __dirname + '/dist',
     SERVER_AUTH: '',
     ENABLE_JWT_AUTH: 'true',
+    // ENABLE_COMPRESSION: 'true',
 })
 function start(app, cb) {
     // Static files
     app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
+    // app.use(compression())
 
     app.use(require('morgan')('dev'))
 
