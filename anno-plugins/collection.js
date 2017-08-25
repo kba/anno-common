@@ -35,6 +35,7 @@ class AnnoCollection {
             return cb(errors.badRequest(`No 'secret' for collection: ${ctx.collection}`))
         }
         ctx.collectionConfigFor = c => this.collections[c]
+        ctx.collectionsAvailable = Object.keys(this.collections)
         return cb()
     }
 
