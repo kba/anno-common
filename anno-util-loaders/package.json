@@ -10,7 +10,7 @@
     "test": "tap *.test.js"
   },
   "author": "kba",
-  "license": "MIT",
+  "license": "ISC",
   "devDependencies": {
     "@kba/anno-fixtures": "^0.0.1"
   },

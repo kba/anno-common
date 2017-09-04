@@ -8,7 +8,7 @@
     "type": "git"
   },
   "author": "kba",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "@kba/anno-util": "^0.0.1",
     "object-prune": "^0.0.4"

@@ -10,7 +10,7 @@
     "watch": "webpack -w -d"
   },
   "author": "kba",
-  "license": "MIT",
+  "license": "ISC",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-webpack#readme",

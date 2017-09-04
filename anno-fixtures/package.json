@@ -10,7 +10,7 @@
     "prepublish": "make index.json"
   },
   "author": "kba",
-  "license": "MIT",
+  "license": "ISC",
   "devDependencies": {
     "async": "^2.3.0"
   }
