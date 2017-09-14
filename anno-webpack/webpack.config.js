@@ -1,20 +1,20 @@
-const webpack = require('webpack');
-const path = require('path');
+require('webpack')
+const path = require('path')
 
 // detect if webpack bundle is being processed in a production or development env
-let prodBuild = require('yargs').argv.p || false;
+let prodBuild = require('yargs').argv.p || false
 
 const config = {
     entry: {
         core: './entry.js',
     },
-    node: { fs: "empty" },
+    node: {fs: "empty"},
     // externals: {
     //     'ajv': 'ajv',
     // },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: `anno${prodBuild ? '.min' : ''}.js`,
+        filename: `anno-common${!prodBuild ? '.dev' : ''}.js`,
         library: 'Anno',
         libraryTarget: 'umd'
     },

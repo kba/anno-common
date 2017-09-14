@@ -13,3 +13,4 @@ ignore.*
 *~
 anno-docker
 .~*
+anno-webpack/deploy.mk
