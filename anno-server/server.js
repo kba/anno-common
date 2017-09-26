@@ -25,10 +25,10 @@ function start(app, cb) {
     app.set('views', `${__dirname}/views`)
     app.set('view engine', 'pug')
 
-    app.use(require('body-parser').urlencoded({ extended: true }));
-    app.use(require('body-parser').json({type: '*/*', limit: 1 * 1024 * 1024 }))
+    app.use(require('body-parser').urlencoded({extended: true}))
+    app.use(require('body-parser').json({type: '*/*', limit: 1 * 1024 * 1024}))
 
-    app.use(require('cookie-parser')());
+    app.use(require('cookie-parser')())
     app.use(require('express-session')({
         secret: envyConf('ANNO').SERVER_SESSION_KEY,
         resave: false,
@@ -40,7 +40,6 @@ function start(app, cb) {
         loadPlugins: require('@kba/anno-util-loaders').loadPlugins,
     })
 
-    const routes = [ 'anno', 'swagger', 'token' ]
     const middlewares = [
         'anno-options',
         'user-auth',
@@ -69,12 +68,15 @@ function start(app, cb) {
             annoMiddlewares.push(aclMetadata.unless({method:'OPTIONS'}))
 
             app.use('/anno', ...annoMiddlewares, require('./routes/anno')({store}))
+
             app.use('/swagger', require('./routes/swagger')())
-            if (config.SERVER_AUTH)
+
+            if (config.SERVER_AUTH) {
+                const authRoute = new(require(`./routes/auth-${config.SERVER_AUTH}`))()
                 app.use('/auth',
                     annoOptions.unless({method:'OPTIONS'}),
-                    require(`./routes/auth-${config.SERVER_AUTH}`)({store})
-                )
+                    authRoute.build())
+            }
 
             app.get('/favicon.ico', (req, resp, next) => {
                 fs.readFile(`${__dirname}/public/favicon.ico`, (err, ico) => {
