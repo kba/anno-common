@@ -26,12 +26,17 @@ module.exports = class AuthPlain extends AuthBase {
     passport.serializeUser((user, cb) => cb(null, JSON.stringify(user)))
     passport.deserializeUser((userJSON, cb) => cb(null, JSON.parse(userJSON)) )
 
-    this.router.use(require('connect-flash')())
     this.router.use(passport.initialize())
     this.router.use(passport.session())
   }
 
   determineUser(req) {return req.user}
+
+  getLogin(req, resp) {
+    const {query, user} = req
+    const error = req.flash('error')
+    resp.render('plain-login', {query, user, error})
+  }
 
   postLogin(req, resp, next) {
     passport.authenticate('local', {
@@ -46,23 +51,16 @@ module.exports = class AuthPlain extends AuthBase {
     })
   }
 
-  postLogout(req, resp) {
-    req.flash('error')
-    req.logout()
-    resp.redirect(req.query.from || 'login')
-  }
-
-  getLogin(req, resp) {
-    const {query, user} = req
-    const error = req.flash('error')
-    resp.render('plain-login', {query, user, error})
-  }
-
   getLogout(req, resp) {
     const {query, user} = req
     const error = req.flash('error')
     resp.render('plain-logout', {query, user, error})
   }
 
+  postLogout(req, resp) {
+    req.flash('error')
+    req.logout()
+    resp.redirect(req.query.from || 'login')
+  }
 
 }

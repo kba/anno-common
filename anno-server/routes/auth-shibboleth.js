@@ -29,7 +29,20 @@ const AuthBase = require('./auth-base')
 
 module.exports = class AuthShibboleth extends AuthBase {
 
-    login(req, resp, next) {
+    getLogin(req, resp, next) {
+        console.log(req.headers)
+        this.postLogin(req, resp, next)
+    }
+
+    getLogout(req, resp, next) {
+        console.log('getLogout')
+    }
+
+    postLogout(req, resp, next) {
+        console.log('postLogout')
+    }
+
+    postLogin(req, resp, next) {
       const sub = this.determineUser(req)
       if (sub) {
         const redirectTo = [
@@ -44,7 +57,7 @@ module.exports = class AuthShibboleth extends AuthBase {
           resp.redirect(redirectTo)
         }
       } else {
-        resp.status(401)
+        resp.status(402)
         next('Not logged in')
       }
     }

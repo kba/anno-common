@@ -25,7 +25,14 @@ class AuthBase {
 
   constructor(router=require('express').Router()) {
     this.router = router
-    ;['postLogin', 'postLogout', 'determineUser'].map(fn => {
+    this.router.use(require('connect-flash')())
+    ;[
+        'determineUser',
+        'postLogin',
+        'postLogout',
+        'getLogin',
+        'getLogout',
+    ].map(fn => {
       if (typeof this[fn] !== 'function')
         throw new Error(`Invalid auth subclass ${this.constructor.name}: Must implement '${fn}'`)
     })
@@ -112,7 +119,7 @@ class AuthBase {
       }
 
       const collectionConfig = req.annoOptions.collectionConfigFor(req.params.iss)
-      const iss = req.params.iss
+      const {iss} = req.params
       if (!('secret' in collectionConfig)) {
         resp.status(500)
         return next(`No secret configured for issuer '${iss}'`)
