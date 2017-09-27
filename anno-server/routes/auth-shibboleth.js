@@ -1,27 +1,19 @@
-const jsonwebtoken = require('jsonwebtoken')
 const AuthBase = require('./auth-base')
 
 /**
  * Apache config:
 
- * <Location /anno/auth/token>
+ * <LocationMatch /anno/auth/*>
  *  AuthType shibboleth
+ *  Require shibboleth
  *  ShibRequestSetting requireSession 0
- *  Require Shibboleth
  *  ShibUseHeaders On
- * </Location>
- *
- * <Location /anno/auth/register>
- *  AuthType shibboleth
- *  ShibRequestSetting requireSession 0
- *  Require Shibboleth
- *  ShibUseHeaders On
- * </Location>
+ * </LocationMatch>
  *
  * <Location /anno/auth/login>
  *  AuthType shibboleth
  *  ShibRequestSetting requireSession 1
- *  require valid-user
+ *  Require valid-user
  *  ShibUseHeaders On
  * </Location>
  *
@@ -29,18 +21,8 @@ const AuthBase = require('./auth-base')
 
 module.exports = class AuthShibboleth extends AuthBase {
 
-    getLogin(req, resp, next) {
-        console.log(req.headers)
-        this.postLogin(req, resp, next)
-    }
-
-    getLogout(req, resp, next) {
-        console.log('getLogout')
-    }
-
-    postLogout(req, resp, next) {
-        console.log('postLogout')
-    }
+    // NOTE must be protected externally!
+    getLogin(req, resp, next) {this.postLogin(req, resp, next)}
 
     postLogin(req, resp, next) {
       const sub = this.determineUser(req)
@@ -62,16 +44,10 @@ module.exports = class AuthShibboleth extends AuthBase {
       }
     }
 
-    determineUser(req) {
-      const field = [
-        'eppn',
-        'persistent_id',
-        'persistent-id',
-        'remote-user',
-      ].find(k => req.headers[k])
-      if (field)
-        return req.headers[field]
-    }
+    getLogout(req, resp, next) {return resp.send("Logout not implemented")}
 
+    postLogout(req, resp, next) {return resp.send("Logout not implemented")}
+
+    determineUser(req) {return req.headers.remote_user}
 
 }

@@ -5,6 +5,18 @@ html
 	body
 		nav.navbar.navbar-inverse
 			.container
-				.navbar-brand Annotation Server Authentication
+				.navbar-header
+					.navbar-brand Annotation Server Authentication
+				ul.nav.navbar-right.navbar-nav
+					if ! sub
+						li
+							a(href=`login?from=${from}`) Log in
+						li
+							a(href="register") Register
+					else
+						li
+							a(href=sub)= 'Logged in as' + sub.replace(/.*\//, '')
+						li
+							a(href="request") Request access
 		block body
 		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")

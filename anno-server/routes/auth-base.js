@@ -3,12 +3,14 @@ const {envyConf} = require('envyconf')
 const bodyParser = require('body-parser')
 const nodemailer = require('nodemailer')
 
-function mailNewUser(user, displayName, collections) {
+function textRequestMail({user, displayName, collections, email, reasons}) {
+    email = email ? email : 'not provided'
     return `
 Dear Admin,
 
-${user} wants to annotate in collection(s) ${collections.join(', ')}.
-If she/he should, please add a new entry to users.yml:
+a user '${displayName}' (Email: ${email}, ID: ${user}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
+
+If the user is not yet in the users.yml, add an entry such as this:
 
 '${user}':
   public:
@@ -46,10 +48,14 @@ class AuthBase {
       SMTP_PORT,
       SMTP_TO,
       SMTP_FROM,
-      SMTP_SECURE
+      SMTP_SECURE,
+      TEXT_REGISTER,
+      TEXT_REQUEST,
     } = envyConf('ANNO', {
       TOKEN_EXPIRATION: 12 * 60 * 60,
       SMTP_SECURE: true,
+      TEXT_REGISTER: `<pre>Set the TEXT_REGISTER conf variable to add text here</pre>`,
+      TEXT_REQUEST: `<pre>Set the TEXT_REQUEST conf variable to add text here</pre>`,
     })
 
     const smtp = nodemailer.createTransport({
@@ -74,37 +80,6 @@ class AuthBase {
     //
     this.router.post('/logout', (...args) => this.postLogout(...args))
     this.router.get('/logout', (...args) => this.getLogout(...args))
-
-    //
-    // GET /register
-    //
-    this.router.get('/register', (req, resp) => {
-        const sub = this.determineUser(req.headers)
-        if (!sub) {
-            return resp.status(401).send("You are not logged in, please do")
-        } else {
-            const {collectionsAvailable} = req.annoOptions
-            resp.status(200)
-            resp.render('register', {sub, collectionsAvailable})
-        }
-    })
-
-    //
-    // POST /register
-    //
-    this.router.post('/register', bodyParser.urlencoded('extended'), (req, resp) => {
-        const sub = this.determineUser(req)
-        const collections = Object.keys(req.body).filter(c => c.match(/^c_/)).map(c => c.substr(2))
-        const {displayName} = req.body || 'Nicht angegeben'
-        smtp.sendMail({
-            from: SMTP_FROM,
-            to: SMTP_TO,
-            subject: `Anno-Registrierung ${sub}`, // Subject line
-            text: mailNewUser(sub, displayName, collections)
-        })
-        resp.status(200)
-        resp.send("Thank you, we'll review your application")
-    })
 
 
     //
@@ -134,6 +109,49 @@ class AuthBase {
       resp.send(token)
 
     })
+
+    //
+    // GET /auth/register
+    //
+    this.router.get('/register', (req, resp, next) => {
+        const sub = this.determineUser(req)
+      console.log(sub)
+        resp.status(200).render('register', {from: 'register', sub, TEXT_REGISTER})
+    })
+
+    //
+    // GET /auth/request
+    //
+    this.router.get('/request', (req, resp, next) => {
+        const sub = this.determineUser(req)
+        const {collectionsAvailable} = req.annoOptions
+        resp.status(200).render('request', {from: 'request', sub, collectionsAvailable, TEXT_REQUEST})
+    })
+
+    //
+    // POST /auth/request
+    //
+    this.router.post('/request', bodyParser.urlencoded('extended'), (req, resp) => {
+        const sub = this.determineUser(req)
+        const collections = Object.keys(req.body).filter(c => c.match(/^c_/)).map(c => c.substr(2))
+        const {displayName, reasons, email} = req.body || 'None'
+        let success = sub && collections.length
+        const redirect = () => resp.redirect(`request?ok=${success}`)
+        if (success) {
+            smtp.sendMail({
+                from: SMTP_FROM,
+                to: SMTP_TO,
+                subject: `Anno-Registrierung ${sub}`,
+                text: textRequestMail({sub, displayName, collections, reasons, email})
+            }, (err) => {
+                if (err) console.error(err)
+                redirect()
+            })
+        } else {
+            redirect()
+        }
+    })
+
 
     return this.router
   }

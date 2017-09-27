@@ -1,0 +1,31 @@
+extends ./layout.pug
+block body
+	.container
+		.row
+			h1 Request rights to annotate a collection
+		.row
+			if sub
+				if success
+					div.alert.alert-success
+						p Thank you for your interest, we'll review your request as soon as possible.
+				else
+					form(method="POST",enctype="application/x-www-form-urlencoded").form-horizontal
+						.col-md-12
+							.form-group
+								input(type="text",required,name="displayName",placeholder="Your full name, please",class="col-md-6")
+							.form-group
+								input(type="email",name="displayName",placeholder="Your email address (Optional, in case of questions)",class="col-md-6")
+							.form-group
+								textarea(required,name="reasons",placeholder="What's your research interest?",rows=5,class="col-md-6")
+							.form-group
+								p I want to annotate these collections:
+								each collection in collectionsAvailable
+									.checkbox
+										label
+											input(type='checkbox',name=`c_${collection}`)
+											= collection
+							.form-group
+								button.btn.btn-default(type='submit') Submit
+			else
+				div.alert.alert-danger
+					p You need to be logged in to request rights

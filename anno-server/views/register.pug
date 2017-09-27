@@ -2,17 +2,6 @@ extends ./layout.pug
 block body
 	.container
 		.row
-			h1 Register for annotation privileges
-			p= `Logged in as ${sub}`
+			h1 Register for an account
 		.row
-			form(method="POST",enctype="application/x-www-form-urlencoded").form-horizontal
-				.form-group
-					input(type="text",required,name="displayName",placeholder="Your full name, please")
-				.form-group
-					each collection in collectionsAvailable
-						.checkbox
-							label
-								input(type='checkbox',name=`c_${collection}`)
-								= collection
-				.form-group
-					button.btn.btn-default(type='submit') Submit
+			p !{TEXT_REGISTER}
