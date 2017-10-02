@@ -1,4 +1,3 @@
-const errors = require('@kba/anno-errors')
 const {envyConf, envyLog} = require('envyconf')
 const {loadPlugins} = require('@kba/anno-util-loaders')
 
@@ -9,10 +8,10 @@ module.exports = function AnnoOptionsMiddleware(cb) {
         MIDDLEWARE_PLUGINS: '',
     })
 
-    var collectionProcessor = function(ctx, cb) {
+    let collectionProcessor = function(ctx, cb) {
         log.debug('No collectionProcessor defined')
         return cb()
-    };
+    }
 
     function AnnoOptionsMiddleware(req, resp, next) {
 
@@ -21,6 +20,12 @@ module.exports = function AnnoOptionsMiddleware(cb) {
         const options = req.annoOptions
 
         // Determine collection from header
+        // console.log(req.headers)
+        // console.log(
+        //   req.header('x-anno-collection'),
+        //   req.query.collection,
+        //   conf.DEFAULT_COLLECTION
+        // )
         options.collection = req.header('x-anno-collection') || req.query.collection || conf.DEFAULT_COLLECTION
 
         collectionProcessor(options, err => {

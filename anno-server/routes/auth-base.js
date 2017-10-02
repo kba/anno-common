@@ -3,16 +3,16 @@ const {envyConf} = require('envyconf')
 const bodyParser = require('body-parser')
 const nodemailer = require('nodemailer')
 
-function textRequestMail({user, displayName, collections, email, reasons}) {
+function textRequestMail({sub, displayName, collections, email, reasons}) {
     email = email ? email : 'not provided'
     return `
 Dear Admin,
 
-a user '${displayName}' (Email: ${email}, ID: ${user}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
+a user '${displayName}' (Email: ${email}, ID: ${sub}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
 
 If the user is not yet in the users.yml, add an entry such as this:
 
-'${user}':
+'${sub}':
   public:
       displayName: "${displayName}"
   rules:
@@ -125,7 +125,8 @@ class AuthBase {
     this.router.get('/request', (req, resp, next) => {
         const sub = this.determineUser(req)
         const {collectionsAvailable} = req.annoOptions
-        resp.status(200).render('request', {from: 'request', sub, collectionsAvailable, TEXT_REQUEST})
+        const success = req.query.ok
+        resp.status(200).render('request', {from: 'request', sub, collectionsAvailable, success, TEXT_REQUEST})
     })
 
     //
@@ -138,11 +139,12 @@ class AuthBase {
         let success = sub && collections.length
         const redirect = () => resp.redirect(`request?ok=${success}`)
         if (success) {
+            const text = textRequestMail({sub, displayName, collections, reasons, email})
             smtp.sendMail({
                 from: SMTP_FROM,
                 to: SMTP_TO,
                 subject: `Anno-Registrierung ${sub}`,
-                text: textRequestMail({sub, displayName, collections, reasons, email})
+                text
             }, (err) => {
                 if (err) console.error(err)
                 redirect()

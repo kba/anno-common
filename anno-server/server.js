@@ -75,6 +75,7 @@ function start(app, cb) {
                 const authRoute = new(require(`./routes/auth-${config.SERVER_AUTH}`))()
                 app.use('/auth',
                     annoOptions.unless({method:'OPTIONS'}),
+                    userAuth.unless({method:'OPTIONS'}),
                     authRoute.build())
             }
 

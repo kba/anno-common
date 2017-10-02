@@ -1,10 +1,10 @@
 const errors = require('@kba/anno-errors')
 const expressJWT = require('express-jwt')
-const {envyConf} = require('envyconf')
 
 module.exports = function UserAuthMiddlewareFactory(cb) {
 
     function UserAuthMiddleware(req, resp, next) {
+      // console.log(req.annoOptions)
         const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
         if (!collectionConfig) {
             console.log(errors.badRequest("userAuth: Missing 'collection' in the request context"))
