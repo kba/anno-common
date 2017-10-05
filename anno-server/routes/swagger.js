@@ -29,7 +29,7 @@ module.exports = () => {
     router.get('/', (req, resp) => {
         if (req.header('Accept').match('text/html')) {
             resp.status(302)
-            resp.header('Location', `${config.BASE_URL}${config.BASE_PATH}/swagger-ui/dist/index.html?url=${config.BASE_PATH}/swagger`)
+            resp.header('Location', `${config.BASE_URL}${config.BASE_PATH}/dist/swagger-ui/dist/index.html?url=${config.BASE_PATH}/swagger`)
             return resp.end()
         }
         return (req.header('Accept').match('text/yaml'))
