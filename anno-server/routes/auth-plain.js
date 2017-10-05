@@ -15,12 +15,14 @@ module.exports = class AuthPlain extends AuthBase {
     const LocalStrategy = require('passport-local').Strategy
 
     passport.use(new LocalStrategy(function(username, password, done) {
-      console.log(arguments)
-      // TODO this is a giant hack of course
-      if (username === 'john') return done(null, {id: username})
-      return password === 'anno'
-        ? done(null, {id: username})
-        : done(null, false, noSuchUser(username))
+      // console.log(arguments)
+      // // TODO this is a giant hack of course
+      // if (username === 'john') return done(null, {id: username})
+      // return password === 'anno'
+      //   ? done(null, {id: username})
+      //   : done(null, false, noSuchUser(username))
+      // XXX TODO WARNING this is a wide open stupid security no-no!
+      return done(null, {id: username})
     }))
 
     passport.serializeUser((user, cb) => cb(null, JSON.stringify(user)))
