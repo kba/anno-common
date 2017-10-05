@@ -21,6 +21,10 @@
     {
       "name": "extensions",
       "description": "Extensions to Web Annotation Protocol"
+    },
+    {
+      "name": "authentication",
+      "description": "Authentication/token related endpoints"
     }
   ],
   "securityDefinitions": {
@@ -624,6 +628,78 @@
         "responses": {
           "201": {
             "description": "Imported the annotation"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Show login mask using whatever auth backend is configured",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "type": "uri",
+            "required": true,
+            "description": "Back link"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Post login data if applicable to backend."
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Show logout mask using whatever auth backend is configured",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "type": "uri",
+            "required": true,
+            "description": "Back link"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Logout."
+      }
+    },
+    "/auth/token/{collection}": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Get the JWT token to authenticate against the backend",
+        "responses": {
+          "200": {
+            "description": "The token",
+            "schema": {
+              "type": "object"
+            }
           }
         }
       }
