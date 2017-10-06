@@ -2,38 +2,27 @@ const express = require('express')
 const async = require('async')
 const {envyConf} = require('envyconf')
 const fs = require('fs')
-// const compression = require('compression')
+const errorHandler = require('./middleware/error-handler')()
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
-const config = envyConf('ANNO', {
+envyConf('ANNO', {
     PORT: "3000",
     BASE_URL: 'http://localhost:3000',
     BASE_PATH: '',
-    SERVER_SESSION_KEY: '9rzF3nWDAhmPS3snhh3nwe4RCDNebaIkg7Iw3aJY9JLbiXxnVahcTCckuls6qlaK',
     STORE: '@kba/anno-store-file',
-    DIST_DIR: __dirname + '/dist',
-    SERVER_AUTH: '',
+    DIST_DIR: __dirname + '/public',
     ENABLE_JWT_AUTH: 'true',
-    // ENABLE_COMPRESSION: 'true',
 })
+
 function start(app, cb) {
+
     // Static files
     app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
-    // app.use(compression())
 
-    app.use(require('morgan')('dev'))
+    app.use(morgan('dev'))
 
-    app.set('views', `${__dirname}/views`)
-    app.set('view engine', 'pug')
-
-    app.use(require('body-parser').urlencoded({extended: true}))
-    app.use(require('body-parser').json({type: '*/*', limit: 1 * 1024 * 1024}))
-
-    app.use(require('cookie-parser')())
-    app.use(require('express-session')({
-        secret: envyConf('ANNO').SERVER_SESSION_KEY,
-        resave: false,
-        saveUninitialized: false
-    }))
+    app.use(bodyParser.json({type: '*/*', limit: 1 * 1024 * 1024}))
 
     const store = require('@kba/anno-store').load({
         loadingModule: module,
@@ -64,20 +53,11 @@ function start(app, cb) {
 
             const annoMiddlewares = []
             annoMiddlewares.push(annoOptions.unless({method:'OPTIONS'}))
-            if (config.ENABLE_JWT_AUTH) annoMiddlewares.push(userAuth.unless({method:'OPTIONS'}))
             annoMiddlewares.push(aclMetadata.unless({method:'OPTIONS'}))
 
             app.use('/anno', ...annoMiddlewares, require('./routes/anno')({store}))
 
             app.use('/swagger', require('./routes/swagger')())
-
-            if (config.SERVER_AUTH) {
-                const authRoute = new(require(`./routes/auth-${config.SERVER_AUTH}`))()
-                app.use('/auth',
-                    annoOptions.unless({method:'OPTIONS'}),
-                    userAuth.unless({method:'OPTIONS'}),
-                    authRoute.build())
-            }
 
             app.get('/favicon.ico', (req, resp, next) => {
                 fs.readFile(`${__dirname}/public/favicon.ico`, (err, ico) => {
@@ -94,8 +74,7 @@ function start(app, cb) {
                 resp.end()
             })
 
-            // Error handler
-            app.use(require('./middleware/error-handler')())
+            app.use(errorHandler)
             return cb()
         })
     })

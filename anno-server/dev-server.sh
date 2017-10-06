@@ -1,7 +1,6 @@
 #!/bin/bash
 lerna bootstrap
 ANNO_LOGLEVEL="silly" \
-ANNO_SERVER_AUTH="plain" \
 ANNO_STORE_FILE="/tmp/annotest.nedb" \
 ANNO_ENABLE_JWT_AUTH="true" \
 ANNO_MIDDLEWARE_PLUGINS='@kba/anno-plugins:PreCollectionStatic' \
