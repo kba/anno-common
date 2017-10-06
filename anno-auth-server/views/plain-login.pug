@@ -1,0 +1,19 @@
+extends ./layout.pug
+block body
+	.container
+		.row
+			if error != ''
+				.alert.alert-danger= error
+		.row
+			form(method="POST").form-horizontal
+				.form-group
+					label(for='username').control-label.col-sm-3 Username
+					.col-sm-3
+						input(type=text,name='username').form-control#username
+				.form-group
+					label(for='password').control-label.col-sm-3  Password
+					.col-sm-3
+						input(type=text,name='password').form-control#password
+				.form-group
+					.col-sm-offset-3.col-sm-3
+						button.btn.btn-default(type='submit') Login
