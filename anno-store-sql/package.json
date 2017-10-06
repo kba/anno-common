@@ -1,0 +1,24 @@
+{
+  "name": "@kba/anno-store-sql",
+  "version": "0.0.1",
+  "description": "Open Annotation sql store",
+  "main": "store-sql.js",
+  "scripts": {
+    "test": "tap *.test.js"
+  },
+  "author": "kba",
+  "license": "ISC",
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-store-sql#readme",
+  "dependencies": {
+    "@kba/anno-store": "^0.0.1",
+    "envyconf": "^0.0.5",
+    "knex": "^0.13.0",
+    "objection": "^0.8.9",
+    "sqlite3": "^3.1.13"
+  },
+  "devDependencies": {
+    "@kba/anno-store": "^0.0.1"
+  }
+}
