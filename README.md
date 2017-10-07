@@ -1,5 +1,7 @@
 # anno
 
+[![Build Status](https://travis-ci.org/kba/anno-common.svg?branch=master)](https://travis-ci.org/kba/anno-common)
+
 This monorepo contains packages that provide the building blocks for annotation
 software implementing the [Web Annotation Data
 Model](http://www.w3.org/TR/annotation-model/) and [Web Annotation
