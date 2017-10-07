@@ -16,9 +16,10 @@
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
+    "@kba/anno-plugins": "^0.0.1",
+    "@kba/anno-util-loaders": "^0.0.1",
     "@kba/anno-store-memory": "^0.0.1",
     "@kba/anno-store-file": "^0.0.1",
-    "async": "^2.3.0",
     "tap": "^10.3.0"
   }
 }

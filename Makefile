@@ -24,11 +24,14 @@ help:
 	@echo ""
 	@echo "  Targets"
 	@echo ""
-	@echo "    bootstrap                 lerna bootstrap"
+	@echo "    bootstrap                 lerna bootstrap and check for binaries"
 	@echo "    anno-fixtures/index.json  Setup test fixtures"
+	@echo "    start\:%                  cd anno-% && make start"
+	@echo "    stop\:%                   cd anno-% && make stop"
 	@echo "    start-all                 start mongodb and server"
 	@echo "    stop-all                  stop mongodb and server"
-	@echo "    test                      Run all unit/integration tests."
+	@echo "    test-all                  Run all unit/integration tests."
+	@echo "    test                      Run all tests set as TESTS."
 	@echo "    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql"
 	@echo "    clean                     Remove tempdir"
 	@echo "    webpack                   webpack dev, min, fixtures"
@@ -50,9 +53,10 @@ help:
 
 # END-EVAL
 
-# lerna bootstrap
+# lerna bootstrap and check for binaries
 .PHONY: bootstrap
 bootstrap:
+	@if ! which rapper >/dev/null;then echo "rapper not installed. try 'apt install raptor2-utils'" ; exit 1 ;fi
 	lerna bootstrap
 
 # Setup test fixtures
@@ -62,24 +66,41 @@ bootstrap-test: bootstrap anno-fixtures/index.json
 anno-fixtures/index.json:
 	cd $(dir $@) && make $(notdir $@)
 
+#
+# Starting / Stopping
+#
+
+# cd anno-% && make start
+start\:%: anno-%
+	cd $< && make start
+
+# cd anno-% && make stop
+stop\:%: anno-%
+	cd $< && make stop
+
 # start mongodb and server
-start-all:
-	$(MAKE) -sC anno-store-mongodb start
-	$(MAKE) -sC anno-server start
+start-all: start\:store-mongodb start\:server
 	sleep 2
 
 # stop mongodb and server
-stop-all:
-	$(MAKE) -sC anno-store-mongodb stop
-	$(MAKE) -sC anno-server stop
+stop-all: stop\:store-mongodb stop\:server
+
+
+#
+# Tests
+#
 
 # Run all unit/integration tests.
+.PHONY: test-all
+test-all: $(TESTS)
+	$(MAKE) start-all
+	$(MAKE) test TESTS="$(TESTS)"
+	$(MAKE) stop-all
+
+# Run all tests set as TESTS.
 .PHONY: test
 test: $(TESTS)
-	-$(MAKE) bootstrap-test
-	$(MAKE) start-all
 	-tap -R$(REPORTER) $^ | grep -v async
-	$(MAKE) stop-all
 
 # Run all unit/integration tests in <MODULE>, e.g. make test:store-sql
 .PHONY: anno-%

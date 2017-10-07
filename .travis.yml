@@ -4,13 +4,12 @@ node_js:
   - "8"
 
 install:
+  - sudo apt install raptor2-utils
   - npm install
   - make bootstrap-test
 
 script:
-  - make test:store-memory
-  - make test:store-file
-  - make test:store-mongodb
+  - make test-all
 
 cache:
   directories:

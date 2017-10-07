@@ -4,18 +4,26 @@ const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 const {envyConf, envyLog} = require('envyconf')
 
-envyConf('ANNO',{
-    BASE_URL: 'http://localhost:3000/anno',
+envyConf('ANNO', {
+    BASE_URL: 'http://localhost:3000',
+    BASE_PATH: 'anno',
     HTTP_HEADERS: '{}',
     HTTP_AUTH: '',
 })
+
+function urlJoin(...args) {
+  return args.join('/')
+    .replace(/\/\/+/g, '/')
+    .replace(/\/+$/, '')
+    .replace(':/', '://')
+}
 
 class HttpStore extends Store {
 
     constructor(...args) {
         super(...args)
         const axiosOptions = {
-            baseURL: this.config.BASE_URL,
+            baseURL: urlJoin(this.config.BASE_URL, this.config.BASE_PATH),
             headers: JSON.parse(this.config.HTTP_HEADERS),
         }
         if (this.config.HTTP_BASIC_AUTH) {
@@ -33,7 +41,7 @@ class HttpStore extends Store {
     /* @override */
     _create(options, cb) {
         // console.log(options)
-        var {anno} = options
+        let {anno} = options
         anno = JSON.parse(JSON.stringify(anno))
         delete anno.hasVersion
         delete anno.versionOf
@@ -54,10 +62,11 @@ class HttpStore extends Store {
         this._httpClient.get(annoUrl, this._axiosConfigFromAnnoOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {
-                if (err.response) return (err.response.status === 404)
-                    ? cb(errors.annotationNotFound(annoUrl))
-                    : cb(err.response.data)
-                else return cb(err)
+              if (err.response) {
+                if (err.response.status === 404) cb(errors.annotationNotFound(annoUrl))
+                else if (err.response.status === 410) cb(errors.annotationDeleted(annoUrl))
+                else cb(err.response.data)
+              } else cb(err)
             })
     }
 
@@ -82,7 +91,7 @@ class HttpStore extends Store {
 
     /* @override */
     _revise(options, cb) {
-        var {annoId, anno} = options
+        let {annoId, anno} = options
         const annoUrl = annoId.match('//') ? annoId : `/${annoId}`
         anno = JSON.parse(JSON.stringify(anno))
         // delete anno.via
