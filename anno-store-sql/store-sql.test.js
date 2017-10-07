@@ -1,8 +1,13 @@
 process.env.ANNO_BASE_URL = `http://localhost:3000`
 process.env.ANNO_BASE_PATH = ``
-process.env.ANNO_SQL_BACKEND = `sqlite3`
-process.env.ANNO_SQLITE_DBFILE = `${__dirname}/../temp/test.sqlite3`
+process.env.ANNO_KNEXFILE = `${__dirname}/knexfile.js`
 
-const SqlStore = require('./store-sql')
-const store = new SqlStore()
-require('../anno-store/store-test')(store, () => {})
+const tap = require('tap')
+const store = new(require('./store-sql'))()
+const StoreTests = new(require('../anno-store/store-test'))(store)
+
+tap.test(async t => {
+  console.log(store)
+  await StoreTests.testWipe(t, store)
+  t.end()
+})
