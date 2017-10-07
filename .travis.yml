@@ -9,6 +9,8 @@ install:
 
 script:
   - make test:store-memory
+  - make test:store-file
+  - make test:store-mongodb
 
 cache:
   directories:
