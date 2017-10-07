@@ -9,3 +9,23 @@ install:
 
 script:
   - make test:store-memory
+
+cache:
+  directories:
+    - node_modules
+    - anno-cli/node_modules
+    - anno-fixtures/node_modules
+    - anno-plugins/node_modules
+    - anno-queries/node_modules
+    - anno-schema/node_modules
+    - anno-server/node_modules
+    - anno-store-file/node_modules
+    - anno-store-http/node_modules
+    - anno-store-memory/node_modules
+    - anno-store-mongodb/node_modules
+    - anno-store-mongolike/node_modules
+    - anno-store/node_modules
+    - anno-store-sql/node_modules
+    - anno-test/node_modules
+    - anno-util-loaders/node_modules
+    - anno-webpack/node_modules
