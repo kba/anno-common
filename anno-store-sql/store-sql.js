@@ -42,18 +42,26 @@ module.exports =
     _create(options, cb) {
         let anno = JSON.parse(JSON.stringify(options.anno))
         anno = this._deleteId(anno)
-        // anno = this._normalizeTarget(anno)
-        anno = this._normalizeType(anno)
-        const validFn = schema.validate.Annotation
-        if (!validFn(anno)) {
-            return cb(errors.invalidAnnotation(anno, validFn.errors))
-        }
+      delete(anno.body)
+      delete(anno.target)
+      delete(anno.type)
+
+      //   anno = this._normalizeType(anno)
+      // anno.type = anno.type.map(id => {return {type: id}})
+      // console.log(anno)
+
+        // const validFn = schema.validate.Annotation
+        // if (!validFn(anno)) {
+        //     return cb(errors.invalidAnnotation(anno, validFn.errors))
+        // }
         if (options.collection) {
             anno.collection = options.collection
         }
       this.models.Annotation.query()
-        .upsertGraph(anno)
-        .then(() => {
+        .insertGraph(anno)
+        .then(inserted => {
+          console.log(inserted)
+          cb(null, inserted)
           // // Mongodb returns an object describing the result, nedb returns just the results
           // if ('insertedIds' in savedAnno)
           //   return this.get(savedAnno.insertedIds[0], options, cb)

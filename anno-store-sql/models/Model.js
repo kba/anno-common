@@ -2,6 +2,8 @@ const {Model} = require('objection')
 
 module.exports = class BaseModel extends Model {
 
+  static get idColumn() {return '_id'}
+
   static get veryEager() {
     return this.relationMappings
       ?  `[${Object.keys(this.relationMappings).join(',')}]`

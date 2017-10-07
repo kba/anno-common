@@ -6,12 +6,39 @@ module.exports = class Annotation extends Model {
   static get relationMappings() {
     return {
 
+      type: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/AnnotationType`,
+        join: {
+          from: 'AnnotationType.ofAnnotationId',
+          to: 'Annotation._id',
+        }
+      },
+
+      body: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/AnnotationTextualBody`,
+        join: {
+          from: 'AnnotationTextualBody.ofAnnotationId',
+          to: 'Annotation._id',
+        }
+      },
+
+      target: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/AnnotationTarget`,
+        join: {
+          from: 'AnnotationTarget.ofAnnotationId',
+          to: 'Annotation._id',
+        }
+      },
+
       creators: {
         relation: Model.HasManyRelation,
         modelClass: `${__dirname}/Person`,
         join: {
-          from: 'Person.id',
-          to: 'Annotation.id',
+          from: 'Person._id',
+          to: 'Annotation._id',
         }
       },
 

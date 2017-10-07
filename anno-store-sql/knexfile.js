@@ -9,7 +9,7 @@ module.exports = {
     //     directory: './data/fixtures'
     // },
     connection: {
-      filename: './example.db'
+      filename: __dirname + '/../temp/example.sqlite3'
     },
     // XXX Otherwise sqlite won't constrain foreign keys
     pool: {
