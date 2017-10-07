@@ -3,8 +3,16 @@ language: node_js
 node_js:
   - "8"
 
+sudo: false
+
+dist: trusty
+
+addons:
+  apt:
+    packages:
+    - raptor2-utils
+
 install:
-  - sudo apt install raptor2-utils
   - npm install
   - make bootstrap-test
 

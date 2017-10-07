@@ -1,4 +1,4 @@
-# XXX TODO improve
+// XXX TODO improve
 process.env.ANNO_STORE = '@kba/anno-store-memory'
 process.env.ANNO_STORE_MIDDLEWARES = [
   '@kba/anno-pre-user-static',

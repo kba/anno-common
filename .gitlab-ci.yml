@@ -1,16 +1,17 @@
-image: node:7
+image: node:8
 
 stages:
   - test
 
 before_script:
+  - sudo apt install raptor2-utils mongodb-server
   - npm install
-  - npm run link-all
+  - make bootstrap-test
 
 test:
   stage: test
   script:
-    - make test
+    - make test-all
   cache:
     paths:
     - node_modules/

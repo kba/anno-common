@@ -79,11 +79,15 @@ stop\:%: anno-%
 	cd $< && make stop
 
 # start mongodb and server
-start-all: start\:store-mongodb start\:server
+start-all:
+	make start:store-mongodb
+	make start:server
 	sleep 2
 
 # stop mongodb and server
-stop-all: stop\:store-mongodb stop\:server
+stop-all:
+	make stop:store-mongodb
+	make stop:server
 
 
 #
