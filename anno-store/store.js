@@ -467,4 +467,34 @@ class Store {
 Store.prototype.remove = Store.prototype.delete
 Store.prototype.comment = Store.prototype.reply
 
+//
+// Promisified API
+//
+
+Store.prototype.promisify = function() {
+  const store = this
+  const ret = {}
+  ;[
+    'use',
+    'init',
+    'wipe',
+    'disconnect',
+    'get',
+    'create',
+    'revise',
+    'delete',
+    'search',
+    'reply',
+    'aclCheck',
+    'import',
+  ].map(fn => {
+    ret[fn] = (...args) => {
+      return new Promise((resolve, reject) => {
+        return store[fn](...args, (err, ...ret) => err ? reject(err) : resolve(...ret))
+      })
+    }
+  })
+  return ret
+}
+
 module.exports = Store

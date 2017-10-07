@@ -290,12 +290,12 @@ class MongolikeStore extends Store {
 
     /* @override */
     _search(options, cb) {
-        var {query} = options 
+        var {query} = options
         const asRegex = query.$regex === 'true'  || query.$regex == 1
         const nested = query.$nested === 'true'  || query.$nested == 1
         delete query.$regex
 
-        if (query.includeDeleted === 'true' || query.includeDeleted == 1) {
+        if (!(query.includeDeleted === 'true' || query.includeDeleted == 1)) {
             query.deleted = {$exists: false}
         }
         delete query.includeDeleted
@@ -303,10 +303,10 @@ class MongolikeStore extends Store {
         if ('$target' in query) {
             const needle = asRegex ? {$regex: query.$target} : query.$target
             query.$or = [
-                { target: needle },
-                { 'target.id': needle },
-                { 'target.scope': needle },
-                { 'target.source': needle },
+                {target: needle},
+                {'target.id': needle},
+                {'target.scope': needle},
+                {'target.source': needle},
             ]
             delete query.$target
         }
@@ -413,8 +413,6 @@ class MongolikeStore extends Store {
         }
         return ret
     }
-
-
 
 }
 

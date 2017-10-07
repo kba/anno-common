@@ -2,6 +2,16 @@ process.env.ANNO_BASE_URL = `http://localhost:3000`
 process.env.ANNO_BASE_PATH = ``
 process.env.ANNO_NEDB_DIR = `${__dirname}/../temp`
 
-const FileStore = require('./store-file')
-const store = new FileStore()
-require('../anno-store/store-test')(store, () => {})
+const store = new(require('.'))()
+require('tap').test(store.constructor.name, async t => {
+  const StoreTests = new(require('../anno-store/store-test'))(store)
+
+  await StoreTests.testAll(t)
+  // await StoreTests.testWipe()
+  // await StoreTests.testCreateGet()
+  // await StoreTests.testSearch()
+  // await StoreTests.testRevise()
+  // await StoreTests.testDelete()
+
+  t.end()
+})

@@ -13,8 +13,9 @@
   "author": "kba",
   "license": "ISC",
   "dependencies": {
-    "envyconf": "^0.0.5",
     "ajv": "^4.11.4",
+    "envyconf": "^0.0.5",
+    "js-yaml": "3.10.0",
     "mustache": "^2.3.0"
   },
   "devDependencies": {
