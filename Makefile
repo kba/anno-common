@@ -28,8 +28,8 @@ help:
 	@echo "    anno-fixtures/index.json  Setup test fixtures"
 	@echo "    start\:%                  cd anno-% && make start"
 	@echo "    stop\:%                   cd anno-% && make stop"
-	@echo "    start-all                 start mongodb and server"
-	@echo "    stop-all                  stop mongodb and server"
+	@echo "    start-all                 start mongodb, sql and server"
+	@echo "    stop-all                  stop mongodb, sql and server"
 	@echo "    test-all                  Run all unit/integration tests."
 	@echo "    test                      Run all tests set as TESTS."
 	@echo "    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql"
@@ -78,14 +78,16 @@ start\:%: anno-%
 stop\:%: anno-%
 	cd $< && make stop
 
-# start mongodb and server
+# start mongodb, sql and server
 start-all:
+	make start:store-sql
 	make start:store-mongodb
 	make start:server
 	sleep 2
 
-# stop mongodb and server
+# stop mongodb, sql and server
 stop-all:
+	make start:store-sql
 	make stop:store-mongodb
 	make stop:server
 
