@@ -1,67 +1,94 @@
 MAKEFLAGS += --no-print-directory --silent
-TEMPDIR = $(PWD)/temp
-
 PATH := ./node_modules/.bin:$(PATH)
-PACKAGES = $(shell find . -mindepth 1 -maxdepth 1 -name 'anno-*' -type d)
-TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
-# REPORTER = spec
-REPORTER = tap
-# REPORTER = classic
-
-SITEDIR = gh-pages
-
 MKDIR = mkdir -p
 RM = rm -rf
 
-help:
-	@echo
-	@echo "  Targets"
-	@echo
-	@echo "    bootstrap         lerna bootstrap"
-	@echo "    start-all         Start mongodb and server"
-	@echo "    stop-all          Stop mongodb and server"
-	@echo "    clean             Remove tempdir"
-	@echo "    test              Run all unit/integration tests"
-	@echo "    test:MODULE       Run all unit/integration tests in <MODULE>"
-	@echo "    site              Generate static website in $(SITEDIR)"
-	@echo "    site-deploy       Generate site and deploy to github"
-	@echo "    webpack           dev, min, fixtures"
-	@echo "    webpack-dev       webpack -p"
-	@echo "    webpack-watch     webpack -d -w"
-	@echo "    webpack-min       webpack -p"
-	@echo "    webpack-fixtures  webpack for fixtures"
-	@echo
-	@echo "  Variables"
-	@echo
-	@echo "    TEMPDIR     Directory for temporary data. Default: $(TEMPDIR)"
-	@echo "    REPORTER    TAP Reporter for node-tap (spec, classic, tap...). Default: $(REPORTER)"
+# Directory for temporary data. Default: '$(TEMPDIR)'
+TEMPDIR = $(PWD)/temp
 
+# TAP reporter to use. Default "$(REPORTER)". One of
+#   classic doc dot dump json jsonstream
+#   landing list markdown min nyan progress  
+#   silent spec tap xunit 
+#REPORTER = spec
+REPORTER = tap
+
+# All Tests. Default: '$(TESTS)'
+TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
+
+SITEDIR = gh-pages
+
+# BEGIN-EVAL makefile-parser --make-help Makefile
+
+help:
+	@echo ""
+	@echo "  Targets"
+	@echo ""
+	@echo "    bootstrap                 lerna bootstrap"
+	@echo "    anno-fixtures/index.json  Setup test fixtures"
+	@echo "    start-all                 start mongodb and server"
+	@echo "    stop-all                  stop mongodb and server"
+	@echo "    test                      Run all unit/integration tests."
+	@echo "    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql"
+	@echo "    clean                     Remove tempdir"
+	@echo "    webpack                   webpack dev, min, fixtures"
+	@echo "    webpack-dev               webpack -s"
+	@echo "    webpack-watch             webpack -d -w"
+	@echo "    webpack-fixtures          webpack fixtures"
+	@echo "    webpack-min               webpack production version"
+	@echo "    site                      Generate static website in $(SITEDIR)"
+	@echo "    site-deploy               Generate site and deploy to github"
+	@echo ""
+	@echo "  Variables"
+	@echo ""
+	@echo "    TEMPDIR   Directory for temporary data. Default: '$(TEMPDIR)'"
+	@echo "    REPORTER  TAP reporter to use. Default "$(REPORTER)". One of"
+	@echo "                classic doc dot dump json jsonstream"
+	@echo "                landing list markdown min nyan progress  "
+	@echo "                silent spec tap xunit "
+	@echo "    TESTS     All Tests. Default: '$(TESTS)'"
+
+# END-EVAL
+
+# lerna bootstrap
 .PHONY: bootstrap
 bootstrap:
 	lerna bootstrap
 
-start-all: bootstrap
+# Setup test fixtures
+.PHONY: bootstrap-test
+bootstrap-test: bootstrap anno-fixtures/index.json
+	
+anno-fixtures/index.json:
+	cd $(dir $@) && make $(notdir $@)
+
+# start mongodb and server
+start-all:
 	$(MAKE) -sC anno-store-mongodb start
 	$(MAKE) -sC anno-server start
 	sleep 2
 
+# stop mongodb and server
 stop-all:
 	$(MAKE) -sC anno-store-mongodb stop
 	$(MAKE) -sC anno-server stop
 
+# Run all unit/integration tests.
 .PHONY: test
 test: $(TESTS)
+	-$(MAKE) bootstrap-test
 	$(MAKE) start-all
-	-tap -R$(REPORTER) $^
+	-tap -R$(REPORTER) $^ | grep -v async
 	$(MAKE) stop-all
 
+# Run all unit/integration tests in <MODULE>, e.g. make test:store-sql
 .PHONY: anno-%
 test\:%: anno-%
-	-$(MAKE) bootstrap
 	-$(MAKE) -siC $< start 2>/dev/null && sleep 2
-	-tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js
+	-tap -R$(REPORTER) "$</"*.test.js "$</test/"*.test.js | grep -v async
 	-$(MAKE) -siC $< stop 2>/dev/null
 
+# Remove tempdir
 .PHONY: clean
 clean:
 	$(RM) $(TEMPDIR)
@@ -70,21 +97,26 @@ clean:
 # Webpack
 #
 
+# webpack dev, min, fixtures
 .PHONY: webpack
 webpack: webpack-dev webpack-fixtures webpack-min 
 
+# webpack -s
 .PHONY: webpack-dev
 webpack-dev:
 	cd anno-webpack && webpack -d
 
+# webpack -d -w
 .PHONY: webpack-watch
 webpack-watch:
 	cd anno-webpack && webpack -d -w
 
+# webpack fixtures
 .PHONY: webpack-fixtures
 webpack-fixtures:
 	cd anno-webpack && webpack --config webpack.config.fixtures.js
 
+# webpack production version
 .PHONY: webpack-min
 webpack-min:
 	cd anno-webpack && webpack -p --output-filename anno.min.js
@@ -96,6 +128,7 @@ webpack-min:
 $(SITEDIR):
 	git clone --branch gh-pages https://github.com/kba/anno $(SITEDIR)
 
+# Generate static website in $(SITEDIR)
 .PHONY: site
 site: $(SITEDIR)
 	cp anno-schema/context.json $(SITEDIR)/context.jsonld
@@ -104,6 +137,7 @@ site: $(SITEDIR)
 	$(MAKE) -C $(SITEDIR) clean
 	cd $(SITEDIR) && $(MAKE) -j4 STAGE=prod all
 
+# Generate site and deploy to github
 .PHONY: site-deploy
 site-deploy: site
 	cd $(SITEDIR) && git add . && git commit --edit -m "updated docs `date`" && git push
