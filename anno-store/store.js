@@ -320,6 +320,11 @@ class Store {
         anno.replyTo = annoId.match(/\/\//)
             ? annoId
             : this._urlFromId(annoId)
+        if (!anno.target || typeof anno.target === 'string') {
+            anno.target = anno.replyTo
+        } else {
+            anno.target.id = anno.replyTo
+        }
         this.log.debug(`Replying to ${annoId}`, anno)
         this.create(anno, cb)
     }

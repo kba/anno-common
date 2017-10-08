@@ -276,7 +276,7 @@ class emptyAnnotation extends AnnoQuery {
  */
 const _targetProps = ['scope', 'source', 'id']
 function targetId(anno) {
-    let ret;
+    let ret
     if (typeof anno.target === 'string')
         ret = anno.target
     else if (Array.isArray(anno.target)) {
@@ -293,7 +293,6 @@ function targetId(anno) {
         const prop = _targetProps.find(k => anno.target[k])
         if (prop) ret = anno.target[prop]
     }
-    console.log('targetId', {ret})
     return ret
 }
 

@@ -19,7 +19,7 @@ function splitIdRepliesRev(str) {
     const ret = {
         _replyids: []
     }
-    str = str.replace(/https?:\/\/[^\/]+\//, '')
+    str = str.replace(/https?:\/\/.*\//, '')
     str = str.replace(/^([^\.~]+)/, (_, _id) => {
         ret._id = _id
         return ''

@@ -107,6 +107,17 @@ module.exports = {
         err.code = 500
         err.ctx = {error}
         return err
+    },
+
+    /**
+     * ## `notImplemented(fn, error='')`
+     *
+     */
+    notImplemented(fn, error='') {
+        const err = new Error(`[Not Implemented] ${fn}: ${error ? JSON.stringify(error, null, 2) : ''}`)
+        err.code = 500
+        err.ctx = {error}
+        return err
     }
 
 }

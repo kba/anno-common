@@ -1,13 +1,25 @@
 const {envyConf}  = require('envyconf')
-const errors      = require('@kba/anno-errors')
 const knex        = require('knex')
 const knexCleaner = require('knex-cleaner')
 const {Model}     = require('objection')
 const schema      = require('@kba/anno-schema')
 const Store       = require('@kba/anno-store')
 const inspect     = require('@kba/anno-util/inspect')
+const errors      = require('@kba/anno-errors')
+const {targetId}  = require('@kba/anno-queries')
 
 const {splitIdRepliesRev, ensureArray} = require('@kba/anno-util')
+const EAGER = `[
+  replies.[
+    revisions,
+  ],
+  revisions.[
+    bodyResources,
+    bodyUris,
+    targetResources,
+    targetUris
+  ]
+]`
 
 module.exports =
   class SqlStore extends Store {
@@ -47,25 +59,61 @@ module.exports =
     }
 
     /* @override */
+    _delete(options, cb) {
+      // TODO recursion
+      // TODO revisions
+      const {_fullid, _revid} = splitIdRepliesRev(this._idFromURL(options.annoId))
+      const qb = this.models.Annotation.query()
+          .where({_id: _fullid})
+      if (options.forceDelete) {
+        console.log("FORCE DELETE", options)
+        qb.delete()
+      } else {
+        qb.update({'deleted': true})
+      }
+      return qb
+    }
+
+
+    _createReply(anno, options, cb) {
+      anno = this._deleteId(anno)
+      anno = this._normalizeType(anno)
+      const validFn = schema.validate.Annotation
+      if (!validFn(anno)) return cb(errors.invalidAnnotation(anno, validFn.errors))
+      const {_fullid} = splitIdRepliesRev(targetId(anno))
+
+      this.models.Annotation.query()
+        .findOne({_id: _fullid})
+        .eager('replies')
+        .then(replyTo => {
+          options._id = replyTo._id + `.${replyTo.replies.length + 1}`
+          const sqlAnno = this.transform.annoFromJSONLD(anno, options)
+          this.models.Annotation.query()
+            .insertGraph(sqlAnno)
+            .then(reply => this.get(reply._id, cb))
+            .catch(cb)
+        })
+        .catch(cb)
+    }
+
+    /* @override */
     _create(options, cb) {
       let anno = JSON.parse(JSON.stringify(options.anno))
+      if (anno.replyTo) {
+        return this._createReply(anno, options, cb)
+      }
 
       anno = this._deleteId(anno)
       anno = this._normalizeType(anno)
-
       const validFn = schema.validate.Annotation
-      if (!validFn(anno)) {
-          return cb(errors.invalidAnnotation(anno, validFn.errors))
-      }
+      if (!validFn(anno)) return cb(errors.invalidAnnotation(anno, validFn.errors))
       const sqlAnno = this.transform.annoFromJSONLD(anno, options)
 
       // console.log("Inserting", sqlAnno)
       this.models.Annotation.query()
         .insertGraph(sqlAnno)
         .then(inserted => {
-          // inspect.log({inserted})
-          // inspect.log(this.transform.annoToJSONLD(inserted))
-          cb(null, this.transform.annoToJSONLD(inserted))
+          this.get(inserted._id, cb)
         })
         .catch(err => {
           // TODO differentiate, use errors from anno-errors
@@ -76,21 +124,14 @@ module.exports =
     /* @override */
     _get(options, cb) {
       let annoId = this._idFromURL(options.annoId)
-      let {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
+      let {_fullid, _revid} = splitIdRepliesRev(annoId)
       this.models.Annotation.query()
-        .eager(`revisions.[
-          bodyResources,
-          bodyUris,
-          targetResources,
-          targetUris
-        ]`)
-        .findOne({_id})
+        .eager(EAGER)
+        .findOne({_id: _fullid})
         .then((found) => {
-          if (!found) return cb(errors.annotationNotFound(_id))
-          // inspect.log({found})
+          if (!found) return cb(errors.annotationNotFound(_fullid))
           cb(null, this.transform.annoToJSONLD(found, {_revid}))
-        })
-        .catch(err => {
+        }).catch(err => {
           console.log(err)
           cb(err)
         })
@@ -99,11 +140,29 @@ module.exports =
     /* @override */
     _revise(options, cb) {
       const annoId = this._idFromURL(options.annoId)
-      const anno = options.anno
-      const sqlRev = this.transform.revFromJSONLD(anno, options)
-      const {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
-      // this.models.AnnotationRevision.query()
-      //   .insertGraph
+      const {_fullid, _replyids} = splitIdRepliesRev(annoId)
+      let isReply = _replyids.length
+      let _revOf = _fullid
+      // TODO replies
+      this.models.AnnotationRevision.query()
+        .where({_revOf})
+        .orderBy('created', 'desc')
+        .first()
+        .then(latestRev => {
+          let {_revid} = splitIdRepliesRev(latestRev._id)
+          const sqlRev = this.transform.revFromJSONLD(options.anno, options)
+          Object.assign(sqlRev, {
+            _id: `${annoId}~${parseInt(_revid) + 1}`,
+            _revOf,
+          })
+          if (isReply) sqlRev._replyTo = _revOf.replace(/\.[\d]+$/, '')
+          return this.models.AnnotationRevision.query()
+            .insertGraph(sqlRev)
+            .then(inserted => cb(null, this.transform.revToJSONLD(sqlRev)))
+            .catch(cb)
+        })
+        .catch(cb)
+        // .insertGraph
     }
 
   }

@@ -41,6 +41,19 @@ module.exports = class StoreTests {
 
   }
 
+  async testGetByRevId(t) {
+    return t.test('get/revId', async t => {
+      const {store} = this
+
+      const saved1 = await store.create(input1)
+      const revId = `${saved1.id}~1`
+      const byRevId = await store.get(revId)
+      t.equals(byRevId.id, revId, `get by revision-id: ${revId}`)
+
+      t.end()
+    })
+  }
+
   async testCreateGet(t) {
     return t.test('create/get', async t => {
       const {store} = this
@@ -55,10 +68,6 @@ module.exports = class StoreTests {
       t.equals(byId.id, id, `get by url: ${id}`)
       input1.id = byId.id
 
-      const revId = `${saved1.id}~1`
-      const byRevId = await store.get(revId)
-      t.equals(byRevId.id, revId, `get by revision-id: ${revId}`)
-
       try {await store.get('DOES-NOT-EXIST')}
       catch (err) {t.equals(err.code, 404, "DOES-NOT-EXIST isnt found")}
 
@@ -70,7 +79,8 @@ module.exports = class StoreTests {
         t.equals(saved2.target.source, input2.target.source, 'target kept (object)')
         t.equals(saved3.target[0].source, input3.target[0].source, 'target kept (array of objects)')
         t.equals(saved4.target, input4.target, 'target kept (string)')
-      })
+
+      }, () => t.end())
     })
   }
 
@@ -96,15 +106,32 @@ module.exports = class StoreTests {
     })
   }
 
+  async testReply(t) {
+    return t.test('reply', async t => {
+      const {store} = this
+
+      let saved1 = await store.create(input1)
+      let reply = await store.reply(saved1.id, {body: {value: 'Nonsense!'}})
+      let saved2 = await store.get(saved1.id)
+      t.equals(saved1.id + '.1', reply.id, 'URL has .1 added')
+      t.equals(saved2.hasReply.length, 1, 'now has 1 reply')
+
+      t.end()
+    })
+  }
+
   async testRevise(t) {
     return t.test('revise', async t => {
       const {store} = this
 
-      input1.target = newTarget
-      const revised1 = await store.revise(input1.id, input1)
-      const revId = `${input1.id}~2`
+      let saved1 = await store.create(input1)
+      const target = newTarget
+      const revised1 = await store.revise(saved1.id, Object.assign(saved1, {target}))
+      const revId = `${saved1.id}~2`
+      let saved2  = await store.get(saved1.id)
       t.equals(revised1.id, revId, `revised revision-id: ${revId}`)
       t.equals(revised1.target, newTarget, 'target updated')
+      t.equals(saved2.hasVersion.length, 2, 'now 2 versions')
 
       t.end()
     })
@@ -163,6 +190,8 @@ module.exports = class StoreTests {
       await store.init()
       await this.testWipe(t)
       await this.testCreateGet(t)
+      await this.testGetByRevId(t)
+      await this.testReply(t)
       await this.testRevise(t)
       await this.testSearch(t)
       await this.testDelete(t)
