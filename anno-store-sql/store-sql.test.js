@@ -10,6 +10,7 @@ require('tap').test(store.constructor.name, async t => {
   await StoreTests.store.init()
   await StoreTests.testWipe(t)
   await StoreTests.testCreateGet(t)
+  // await StoreTests.testRevise(t)
   await StoreTests.store.disconnect()
   t.end()
 })

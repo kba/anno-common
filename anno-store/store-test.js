@@ -1,3 +1,4 @@
+const inspect = require('@kba/anno-util/inspect')
 const fixtures = require(__dirname + '/../anno-fixtures')
 const toImport = {
   type: ['Annotation'],
@@ -13,7 +14,6 @@ const toImport = {
 }
 
 const input1 = fixtures.Annotation.ok['minimal-string-target.json']
-const oldTarget = input1.target
 const newTarget = 'https://foo.example.bar'
 const input2 = fixtures.Annotation.ok['minimal-object-target.json']
 const input3 = fixtures.Annotation.ok['minimal-array-target.json']
@@ -68,8 +68,8 @@ module.exports = class StoreTests {
         store.create(input4),
       ]).then(([saved2, saved3, saved4]) => {
         t.equals(saved2.target.source, input2.target.source, 'target kept (object)')
-        t.equals(saved4.target, input4.target, 'target kept (string)')
         t.equals(saved3.target[0].source, input3.target[0].source, 'target kept (array of objects)')
+        t.equals(saved4.target, input4.target, 'target kept (string)')
       })
     })
   }

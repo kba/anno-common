@@ -4,6 +4,7 @@ exports.up = function (knex) {
   .createTable('Annotation', function (table) {
     table.string('_id').primary()
     table.string('collectionId').references('_id').inTable('AnnotationCollection')
+    table.string('_replyTo').references('_id').inTable('Annotation')
     table.string('via')
     table.dateTime('modified')
   })
@@ -37,6 +38,7 @@ exports.up = function (knex) {
     table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
     table.string('_prop').notNull() // body or target
     table.string('value')
+    table.string('source')
     table.string('format')
     table.string('type')
   })

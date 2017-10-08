@@ -1,13 +1,13 @@
 const {envyConf}  = require('envyconf')
+const errors      = require('@kba/anno-errors')
 const knex        = require('knex')
 const knexCleaner = require('knex-cleaner')
 const {Model}     = require('objection')
-const errors      = require('@kba/anno-errors')
 const schema      = require('@kba/anno-schema')
 const Store       = require('@kba/anno-store')
 const inspect     = require('@kba/anno-util/inspect')
 
-const {splitIdRepliesRev} = require('@kba/anno-util')
+const {splitIdRepliesRev, ensureArray} = require('@kba/anno-util')
 
 module.exports =
   class SqlStore extends Store {
@@ -57,41 +57,7 @@ module.exports =
       if (!validFn(anno)) {
           return cb(errors.invalidAnnotation(anno, validFn.errors))
       }
-
-      const now = new Date()
-      let sqlAnno = {
-        _id: this._genid(),
-        modified: now,
-        revisions: [
-          {
-            created: now,
-            bodyUris: [],
-            bodyResources: [],
-            targetUris: [],
-            targetResources: [],
-          }
-        ]
-      }
-      if (options.collection) sqlAnno.collection = options.collection
-
-      let sqlRev = sqlAnno.revisions[0]
-      if ('id' in anno) sqlAnno.via = anno.id
-      if ('generator' in anno) sqlRev.generator = anno.generator
-      ;['body', 'target'].map(k => {
-        if (k in anno) {
-          if (typeof anno[k] === 'string') {
-            sqlRev[`${k}Uris`].push({uri: anno[k], _prop: k})
-          } else if (!(Array.isArray(anno[k]))) {
-            anno[k]._prop = k
-            sqlRev[`${k}Resources`].push(anno[k])
-          } else {
-            // TODO arrays
-          }
-        }
-      })
-      if ('type' in anno) {
-        sqlRev.type = anno.type.map(t => {return {_id: t}})
-      }
+      const sqlAnno = this.transform.annoFromJSONLD(anno, options)
 
       // console.log("Inserting", sqlAnno)
       this.models.Annotation.query()
@@ -99,7 +65,6 @@ module.exports =
         .then(inserted => {
           // inspect.log({inserted})
           // inspect.log(this.transform.annoToJSONLD(inserted))
-          // TODO should delegate to this.get once implemented
           cb(null, this.transform.annoToJSONLD(inserted))
         })
         .catch(err => {
@@ -113,16 +78,32 @@ module.exports =
       let annoId = this._idFromURL(options.annoId)
       let {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
       this.models.Annotation.query()
-        // .eager(this.models.Annotation.veryEager)
-        .eager(`revisions.[bodyResources, bodyUris, targetResources, targetUris]`)
+        .eager(`revisions.[
+          bodyResources,
+          bodyUris,
+          targetResources,
+          targetUris
+        ]`)
         .findOne({_id})
         .then((found) => {
+          if (!found) return cb(errors.annotationNotFound(_id))
           // inspect.log({found})
-          cb(null, this.transform.annoToJSONLD(found))
+          cb(null, this.transform.annoToJSONLD(found, {_revid}))
         })
         .catch(err => {
+          console.log(err)
           cb(err)
         })
+    }
+
+    /* @override */
+    _revise(options, cb) {
+      const annoId = this._idFromURL(options.annoId)
+      const anno = options.anno
+      const sqlRev = this.transform.revFromJSONLD(anno, options)
+      const {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
+      // this.models.AnnotationRevision.query()
+      //   .insertGraph
     }
 
   }
