@@ -4,7 +4,6 @@ const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 const {envyConf, envyLog} = require('envyconf')
 const {urlJoin} = require('@kba/anno-util')
-
 envyConf('ANNO', {
     BASE_URL: 'http://localhost:3000',
     BASE_PATH: 'anno',

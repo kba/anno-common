@@ -16,7 +16,7 @@ function ensureArray(anno, k) {
     if (Array.isArray(anno[k]))
         return
     if (anno[k] === undefined || anno[k] === null)
-        anno[k] = [] 
+        anno[k] = []
     else
         anno[k] = [anno[k]]
 }
@@ -38,8 +38,20 @@ function add(anno, k, v) {
         anno[k].push(v)
     else
         anno[k] = [anno[k], v]
+    packArray(anno, k)
+}
+
+/**
+ * ### `packArray(obj, k)`
+ *
+ * If obj[k] is a single-item array, replace it with the value.
+ * If obj[k] is null, delete it
+ */
+function packArray(anno, k) {
     if (Array.isArray(anno[k]) && anno[k].length === 1) {
         anno[k] = anno[k][0]
+    } else if (anno[k] === null) {
+        delete anno[k]
     }
 }
 
@@ -99,5 +111,6 @@ module.exports = {
     remove,
     numberOf,
     find,
+    packArray,
     filter
 }

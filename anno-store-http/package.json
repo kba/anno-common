@@ -7,7 +7,7 @@
     "XXXtest": "tap *.test.js"
   },
   "author": "kba",
-  "license": "ISC",
+  "license": "MIT",
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-http#readme",
@@ -16,6 +16,7 @@
     "@kba/anno-schema": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
     "@kba/anno-store": "^0.0.1",
+    "@kba/anno-util": "^0.0.1",
     "axios": "^0.15.3",
     "querystring": "^0.2.0"
   },

@@ -4,7 +4,8 @@ const {
     remove,
     numberOf,
     find,
-    filter
+    filter,
+    packArray
 } = require('./array-like')
 
 /**
@@ -114,6 +115,7 @@ module.exports = {
     numberOf,
     find,
     filter,
+    packArray,
 
     splitIdRepliesRev,
     collectIds,
