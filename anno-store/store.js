@@ -1,5 +1,6 @@
 const slugid = require('slugid')
 const async = require('async')
+const {urlJoin} = require('@kba/anno-util')
 const {envyConf, envyLog} = require('envyconf')
 
 class Store {
@@ -29,7 +30,7 @@ class Store {
             STORE_HOOKS_PRE: '',
             STORE_HOOKS_POST: '',
         })
-        const log = envyLog('ANNO', 'store')
+        // const log = envyLog('ANNO', 'store')
         if (!loadingModule)
             throw new Error("Must pass the loading module to Store.load")
         if (!config.STORE)
@@ -37,7 +38,7 @@ class Store {
         if (config.DEBUG)
             console.log(`Loading store ${config.STORE} for ${loadingModule.filename}`)
 
-        var impl;
+        let impl
         try {
             impl = loadingModule.require(config.STORE)
         } catch (err) {
@@ -121,7 +122,7 @@ class Store {
                         return cb(null, ...retvals)
                     })
                 })
-            } catch(exception) {
+            } catch (exception) {
                 cb(exception)
             }
         })
@@ -316,7 +317,7 @@ class Store {
         const {anno, annoId} = options
         // TODO take fragment identifier from target URL if any
         // TODO handle selectors in pre-existing target
-        anno.replyTo = annoId.match(/\/\//) 
+        anno.replyTo = annoId.match(/\/\//)
             ? annoId
             : this._urlFromId(annoId)
         this.log.debug(`Replying to ${annoId}`, anno)
@@ -400,7 +401,7 @@ class Store {
      */
     // TODO hard-coded route
     _idFromURL(url) {
-        return url.replace(`${this.config.BASE_URL}${this.config.BASE_PATH}/anno/`, '')
+        return url.replace(urlJoin(this.config.BASE_URL, this.config.BASE_PATH, 'anno') + '/', '')
     }
 
     /**
@@ -409,7 +410,7 @@ class Store {
      * Generate a full URL to an annotation by its id.
      */
     _urlFromId(annoId) {
-        return `${this.config.BASE_URL}${this.config.BASE_PATH}/anno/${annoId}`
+        return urlJoin(this.config.BASE_URL, this.config.BASE_PATH, 'anno', annoId)
     }
 
     /**
