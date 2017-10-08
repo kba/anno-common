@@ -12,12 +12,13 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-sql#readme",
   "dependencies": {
-    "@kba/anno-store": "^0.0.1",
-    "@kba/anno-schema": "^0.0.1",
     "@kba/anno-errors": "^0.0.1",
+    "@kba/anno-schema": "^0.0.1",
+    "@kba/anno-store": "^0.0.1",
     "@kba/anno-util": "^0.0.1",
     "envyconf": "^0.0.5",
     "knex": "^0.13.0",
+    "knex-cleaner": "1.1.3",
     "objection": "^0.8.9",
     "sqlite3": "^3.1.13"
   },

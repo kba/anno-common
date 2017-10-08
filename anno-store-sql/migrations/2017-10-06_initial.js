@@ -1,48 +1,61 @@
 exports.up = function (knex) {
   return knex.schema
 
-    .createTable('Annotation', function (table) {
-      table.string('_id').primary()
-      table.string('via')
-    })
+  .createTable('Annotation', function (table) {
+    table.string('_id').primary()
+    table.string('collectionId').references('_id').inTable('AnnotationCollection')
+    table.string('via')
+    table.dateTime('modified')
+  })
 
-    .createTable('AnnotationType', function (table) {
-      table.increments('_id').primary()
-      table.string('ofAnnotationId').references('_id').inTable('Annotation')
-      table.string('type')
-    })
+  .createTable('AnnotationRevision', function (table) {
+    table.increments('_id').primary()
+    table.string('annoId').references('_id').inTable('Annotation')
+    table.string('creatorId').references('_id').inTable('Person')
+    table.dateTime('created')
+    table.dateTime('generated')
+    table.string('title')
+    table.string('canonical')
+  })
 
-    .createTable('AnnotationTarget', function (table) {
-      table.string('ofAnnotationId').references('_id').inTable('Annotation')
-    })
+  .createTable('Type', function (table) {
+    table.string('_id').primary()
+  })
 
-    .createTable('AnnotationTextualBody', function (table) {
-      table.string('ofAnnotationId').references('_id').inTable('Annotation')
-    })
+  .createTable('AnnotationType', function (table) {
+    table.string('_revId').references('_id').inTable('AnnotationRevision')
+    table.string('typeId').references('_id').inTable('Type')
+  })
 
-    .createTable('AnnotationRevision', function (table) {
-      table.increments('_id').primary()
-      table.string('title')
-      table.string('name')
-      table.string('ofAnnotationId').references('_id').inTable('Annotation')
-      table.string('creatorId').references('_id').inTable('Person')
-    })
+  .createTable('Uri', function (table) {
+    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+    table.string('_prop').notNull() // body or target
+    table.string('uri').notNull()
+  })
 
-    .createTable('Person', function (table) {
-      table.string('_id').primary()
-      table.string('displayName')
-    })
+  .createTable('Resource', function (table) {
+    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+    table.string('_prop').notNull() // body or target
+    table.string('value')
+    table.string('format')
+    table.string('type')
+  })
 
-    .createTable('PersonAlias', function (table) {
-      table.string('personId')
-      table.string('alias')
-    })
+  .createTable('Person', function (table) {
+    table.string('_id').primary()
+    table.string('displayName')
+  })
 
-    .createTable('AnnotationCollection', function (table) {
-      table.string('_id').primary()
-      table.string('name')
-      table.string('secret')
-    })
+  .createTable('PersonAlias', function (table) {
+    table.string('personId')
+    table.string('alias')
+  })
+
+  .createTable('AnnotationCollection', function (table) {
+    table.string('_id').primary()
+    table.string('name')
+    table.string('secret')
+  })
 
 }
 exports.down = function (knex) {
