@@ -33,6 +33,7 @@ function splitIdRepliesRev(str) {
         return ''
     })
     if (str) throw new Error(`Could not parse '${origStr}' into id/replyid/revid, '${str}' remained`)
+    ret._fullid = ret._replyids.length ? `${ret._id}.${ret._replyids.join('.')}` : ret._id
     return ret
 }
 
