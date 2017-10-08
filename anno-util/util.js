@@ -95,6 +95,17 @@ function applyToAnno(anno, fn, options, cb) {
     if (cb) return cb()
 }
 
+/**
+ * Join a base URI and possibly empty path segments
+ */
+function urlJoin(...args) {
+  return args.join('/')
+    .replace(/\/\/+/g, '/')
+    .replace(/\/+$/, '')
+    .replace(':/', '://')
+}
+
+
 module.exports = {
 
     ensureArray,
@@ -107,5 +118,7 @@ module.exports = {
     splitIdRepliesRev,
     collectIds,
     applyToAnno,
+
+    urlJoin,
 
 }

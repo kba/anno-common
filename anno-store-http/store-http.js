@@ -3,6 +3,7 @@ const Store = require('@kba/anno-store')
 const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 const {envyConf, envyLog} = require('envyconf')
+const {urlJoin} = require('@kba/anno-util')
 
 envyConf('ANNO', {
     BASE_URL: 'http://localhost:3000',
@@ -10,13 +11,6 @@ envyConf('ANNO', {
     HTTP_HEADERS: '{}',
     HTTP_AUTH: '',
 })
-
-function urlJoin(...args) {
-  return args.join('/')
-    .replace(/\/\/+/g, '/')
-    .replace(/\/+$/, '')
-    .replace(':/', '://')
-}
 
 class HttpStore extends Store {
 
