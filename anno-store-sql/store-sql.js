@@ -58,6 +58,72 @@ module.exports =
       this.knex.destroy(cb)
     }
 
+    _search(options, cb) {
+      var {query} = options
+      // TODO regex
+      // const asRegex = query.$regex === 'true'  || query.$regex == 1
+      // const nested = query.$nested === 'true'  || query.$nested == 1
+      // delete query.$regex
+
+      const qb = this.models.Annotation.query()
+        .joinRelation('revisions')
+
+      if (!(query.includeDeleted === 'true' || query.includeDeleted == 1)) {
+        qb.where({deleted: null})
+      }
+      delete query.includeDeleted
+
+      if ('$target' in query) {
+        // qb.where('revisions
+        const needle = query.$target
+        query.$or = [
+          {target: needle},
+          {'target.id': needle},
+          {'target.scope': needle},
+          {'target.source': needle},
+        ]
+        delete query.$target
+      }
+
+      if (asRegex) {
+        Object.keys(query).forEach(k => {
+          if (typeof query[k] === 'string') {
+            query[k] = {$regex: query[k]}
+          }
+        })
+      }
+
+      if (nested) {
+        if (!query.$or)
+          query.$or = []
+        for (let i = 0; i < 20 ; i++) {
+          const queryHere = {}
+          for (let clause in query) {
+            queryHere[`_reply.${i}.${clause}`] = JSON.parse(JSON.stringify(query[clause]))
+          }
+          query.$or.push(queryHere)
+        }
+      }
+
+
+      const projection = this._projectionFromOptions(options)
+
+      // console.log(JSON.stringify({query, projection}, null, 2))
+      this.db.find(query, projection, (err, docs) => {
+        if (err) return cb(err)
+        if (docs === undefined) docs = []
+        options.skipContext = true
+        // mongodb returns a cursor, nedb a list of documents
+        if (Array.isArray(docs))
+          return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
+        else
+          docs.toArray((err, docs) => {
+            if (err) return cb(err)
+            return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
+          })
+      })
+    }
+
     /* @override */
     _delete(options, cb) {
       // TODO recursion
@@ -69,7 +135,7 @@ module.exports =
         console.log("FORCE DELETE", options)
         qb.delete()
       } else {
-        qb.update({'deleted': true})
+        qb.update({deleted: true})
       }
       return qb
     }
