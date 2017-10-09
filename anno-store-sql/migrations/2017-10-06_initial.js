@@ -7,11 +7,12 @@ exports.up = function (knex) {
     table.string('_replyTo').references('_id').inTable('Annotation')
     table.string('via')
     table.dateTime('modified')
+    table.dateTime('deleted')
   })
 
   .createTable('AnnotationRevision', function (table) {
     table.string('_id').primary()
-    table.string('_revOf').references('_id').inTable('Annotation')
+    table.string('_revOf').references('_id').inTable('Annotation').onDelete('CASCADE')
     table.string('creatorId').references('_id').inTable('Person')
     table.dateTime('created')
     table.dateTime('generated')

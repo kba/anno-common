@@ -8,7 +8,11 @@ const inspect     = require('@kba/anno-util/inspect')
 const errors      = require('@kba/anno-errors')
 const {targetId}  = require('@kba/anno-queries')
 
-const {splitIdRepliesRev, ensureArray} = require('@kba/anno-util')
+const {
+  splitIdRepliesRev,
+  truthy,
+} = require('@kba/anno-util')
+
 const EAGER = `[
   replies.[
     revisions,
@@ -59,85 +63,54 @@ module.exports =
     }
 
     _search(options, cb) {
-      var {query} = options
+      const {query} = options
+
       // TODO regex
-      // const asRegex = query.$regex === 'true'  || query.$regex == 1
-      // const nested = query.$nested === 'true'  || query.$nested == 1
+      // const asRegex = truthy(query.$regex)
       // delete query.$regex
+
+      // TODO nested, i.e. whether to search in replies
+      // const nested = truthy(query.$nested)
 
       const qb = this.models.Annotation.query()
         .joinRelation('revisions')
 
-      if (!(query.includeDeleted === 'true' || query.includeDeleted == 1)) {
-        qb.where({deleted: null})
+      if (!(truthy(query.includeDeleted))) {
+        qb.whereNull('deleted')
       }
       delete query.includeDeleted
 
       if ('$target' in query) {
-        // qb.where('revisions
         const needle = query.$target
-        query.$or = [
-          {target: needle},
-          {'target.id': needle},
-          {'target.scope': needle},
-          {'target.source': needle},
-        ]
+        qb.where(function() {this
+          .where(  {'revisions.target':        needle})
+          .orWhere({'revisions.target.id':     needle})
+          .orWhere({'revisions.target.scope':  needle})
+          .orWhere({'revisions.target.source': needle})
+        })
         delete query.$target
       }
 
-      if (asRegex) {
-        Object.keys(query).forEach(k => {
-          if (typeof query[k] === 'string') {
-            query[k] = {$regex: query[k]}
-          }
-        })
-      }
-
-      if (nested) {
-        if (!query.$or)
-          query.$or = []
-        for (let i = 0; i < 20 ; i++) {
-          const queryHere = {}
-          for (let clause in query) {
-            queryHere[`_reply.${i}.${clause}`] = JSON.parse(JSON.stringify(query[clause]))
-          }
-          query.$or.push(queryHere)
-        }
-      }
-
-
-      const projection = this._projectionFromOptions(options)
-
-      // console.log(JSON.stringify({query, projection}, null, 2))
-      this.db.find(query, projection, (err, docs) => {
-        if (err) return cb(err)
-        if (docs === undefined) docs = []
-        options.skipContext = true
-        // mongodb returns a cursor, nedb a list of documents
-        if (Array.isArray(docs))
-          return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
-        else
-          docs.toArray((err, docs) => {
-            if (err) return cb(err)
-            return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
-          })
-      })
+      qb
+        .eager(EAGER)
+        .select()
+        .then(annos => cb(null, annos.map(anno => this.transform.annoToJSONLD(anno))))
+        .catch(cb)
     }
 
     /* @override */
     _delete(options, cb) {
       // TODO recursion
       // TODO revisions
-      const {_fullid, _revid} = splitIdRepliesRev(this._idFromURL(options.annoId))
+      const {_fullid} = splitIdRepliesRev(this._idFromURL(options.annoId))
       const qb = this.models.Annotation.query()
-          .where({_id: _fullid})
+        .where({_id: _fullid})
       if (options.forceDelete) {
-        console.log("FORCE DELETE", options)
         qb.delete()
       } else {
         qb.update({deleted: true})
       }
-      return qb
+      return qb.then(() => cb()).catch(cb)
     }
 
 
@@ -195,7 +168,10 @@ module.exports =
         .eager(EAGER)
         .findOne({_id: _fullid})
         .then((found) => {
-          if (!found) return cb(errors.annotationNotFound(_fullid))
+          if (!found)
+            return cb(errors.annotationNotFound(options.annoId))
+          if (found.deleted && !options.includeDeleted)
+            return cb(errors.annotationDeleted(options.annoId))
           cb(null, this.transform.annoToJSONLD(found, {_revid}))
         }).catch(err => {
           console.log(err)

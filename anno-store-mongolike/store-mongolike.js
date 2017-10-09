@@ -2,7 +2,10 @@ const Store = require('@kba/anno-store')
 const schema = require('@kba/anno-schema')
 const async = require('async')
 const errors = require('@kba/anno-errors')
-const {splitIdRepliesRev} = require('@kba/anno-util')
+const {
+  splitIdRepliesRev,
+  truthy,
+} = require('@kba/anno-util')
 
 class MongolikeStore extends Store {
 
@@ -285,12 +288,14 @@ class MongolikeStore extends Store {
 
     /* @override */
     _search(options, cb) {
-        var {query} = options
-        const asRegex = query.$regex === 'true'  || query.$regex == 1
-        const nested = query.$nested === 'true'  || query.$nested == 1
+        const {query} = options
+
+        const asRegex = truthy(query.$regex)
         delete query.$regex
 
-        if (!(query.includeDeleted === 'true' || query.includeDeleted == 1)) {
+        const nested = truthy(query.$nested)
+
+        if (!(truthy(query.includeDeleted))) {
             query.deleted = {$exists: false}
         }
         delete query.includeDeleted

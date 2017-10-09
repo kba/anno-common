@@ -28,6 +28,7 @@ module.exports = class StoreTests {
   async testWipe(t) {
 
     return t.test('wipe', async t => {
+      t.plan(2)
 
       await this.store.wipe()
       t.ok(true, 'wipe worked')
@@ -43,6 +44,7 @@ module.exports = class StoreTests {
 
   async testGetByRevId(t) {
     return t.test('get/revId', async t => {
+      t.plan(1)
       const {store} = this
 
       const saved1 = await store.create(input1)
@@ -56,6 +58,8 @@ module.exports = class StoreTests {
 
   async testCreateGet(t) {
     return t.test('create/get', async t => {
+      t.plan(7)
+
       const {store} = this
 
       const saved1 = await store.create(input1)
@@ -86,8 +90,13 @@ module.exports = class StoreTests {
 
   async testSearch(t) {
     return t.test('search', async t => {
+      t.plan(2)
+
       const {store} = this
       let annos
+
+      await store.wipe()
+      await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
 
       annos = await store.search()
       t.equals(annos.length, 4, '4 anno in store total')
@@ -108,6 +117,7 @@ module.exports = class StoreTests {
 
   async testReply(t) {
     return t.test('reply', async t => {
+      t.plan(2)
       const {store} = this
 
       let saved1 = await store.create(input1)
@@ -122,6 +132,7 @@ module.exports = class StoreTests {
 
   async testRevise(t) {
     return t.test('revise', async t => {
+      t.plan(3)
       const {store} = this
 
       let saved1 = await store.create(input1)
@@ -139,24 +150,39 @@ module.exports = class StoreTests {
 
   async testDelete(t) {
     return t.test('delete', async t => {
+      t.plan(7)
       const {store} = this
 
-      let annos
+      await store.wipe()
+      const [saved1, saved2] = await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
 
-      annos = await store.search()
+      let annos = await store.search()
       t.equals(annos.length, 4, '4 annos before delete')
 
-      const found = await store.get(input1.id)
+      const found = await store.get(saved1.id)
+      t.equals(found.id, saved1.id, 'still there')
+
       await store.delete(found.id)
 
-      try {await store.get(input1.id)}
-      catch (err) {t.equals(err.code, 410, "get on deleted should result in 410 GONE")}
+      try {
+        await store.get(saved1.id)
+        t.fail("This one should be gone")
+      } catch (err) {t.equals(err.code, 410, "get on deleted should result in 410 GONE")}
+
+      const found410 = await store.get(saved1.id, {includeDeleted: true})
+      t.ok(found410, "includeDeleted => found")
+
+      await store.delete(saved2.id, {forceDelete: true})
+      try {await store.get(saved2.id)}
+      catch (err) {t.equals(err.code, 404, "Aaaand it's gone (404)")}
 
       annos = await store.search()
-      t.equals(annos.length, 3, '3 anno after delete')
+      t.equals(annos.length, 2, '2 anno after delete')
 
-      t.ok(true, "testDelete")
-      return Promise.resolve()
+      annos = await store.search({includeDeleted: true})
+      t.equals(annos.length, 3, '3 anno after delete including the one set to deleted')
+
+      t.end()
     })
   }
 

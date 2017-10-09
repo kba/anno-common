@@ -107,6 +107,13 @@ function urlJoin(...args) {
     .replace(':/', '://')
 }
 
+/**
+ * Return whether a string value should be interpreted as boolean `true`.
+ */
+function truthy(str) {
+  return str === true || str === 1 || str === 'true' || str === '1'
+}
+
 
 module.exports = {
 
@@ -123,5 +130,6 @@ module.exports = {
     applyToAnno,
 
     urlJoin,
+    truthy,
 
 }
