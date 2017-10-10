@@ -15,8 +15,18 @@ html
 							a(href="register") Register
 					else
 						li
-							a(href=sub)= 'Logged in as' + sub.replace(/.*\//, '')
-						li
-							a(href="request") Request access
+							a(href=sub)= 'Logged in as ' + sub.replace(/.*\//, '')
+						li.dropdown
+							a.dropdown-toggle(data-toggle="dropdown") Tokens #[span.caret]
+							ul.dropdown-menu
+								for c in collectionsAvailable
+									li
+										a(href=`token/${c}`)= c
+						li.dropdown
+							a.dropdown-toggle(data-toggle="dropdown") Request access #[span.caret]
+							ul.dropdown-menu
+								for c in collectionsAvailable
+									li
+										a(href=`request?c=${c}`)= c
 		block body
 		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")

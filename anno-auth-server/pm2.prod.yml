@@ -1,0 +1,6 @@
+apps:
+  - name:   "anno-auth"
+    script: "auth-server.js"
+    autorestart: true
+    no_daemon: false
+    restart_delay: 1000
