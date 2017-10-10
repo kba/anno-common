@@ -1,6 +1,5 @@
 const Store = require('@kba/anno-store')
 const schema = require('@kba/anno-schema')
-const async = require('async')
 const errors = require('@kba/anno-errors')
 const {
   splitIdRepliesRev,
@@ -9,26 +8,26 @@ const {
 
 class MongolikeStore extends Store {
 
-    constructor(...args) { super(...args) }
+    constructor(...args) {super(...args)}
 
     /* @override */
     _wipe(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        throw(new Error("Must override '_wipe'"))
+        throw new Error("Must override '_wipe'")
     }
 
     /* @override */
     _disconnect(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        return cb();
+        return cb()
     }
 
     /* @override */
     // TODO replies!
     _get(options, cb) {
-        var annoId = this._idFromURL(options.annoId)
+        let annoId = this._idFromURL(options.annoId)
         const projection = this._projectionFromOptions(options)
-        var {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
+        let {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
         const query = {_id}
         this.db.findOne(query, projection, (err, doc) => {
             if (!doc) return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
@@ -62,7 +61,7 @@ class MongolikeStore extends Store {
 
     /* @override */
     _create(options, cb) {
-        var anno = JSON.parse(JSON.stringify(options.anno))
+        let anno = JSON.parse(JSON.stringify(options.anno))
         anno = this._deleteId(anno)
         // anno = this._normalizeTarget(anno)
         anno = this._normalizeType(anno)
@@ -117,13 +116,13 @@ class MongolikeStore extends Store {
         if (!validFn(anno)) {
             return cb(errors.invalidAnnotation(anno, validFn.errors))
         }
-        const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(anno.replyTo))
+        const {_id, _replyids} = splitIdRepliesRev(this._idFromURL(anno.replyTo))
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err)
                 return cb(err)
-            if (!existingAnno) 
+            if (!existingAnno)
                 return cb(errors.annotationNotFound(anno.replyTo))
-            var selector = '';
+            let selector = ''
             let parent = existingAnno
             if (_replyids.length > 0) {
                 _replyids.forEach(_replyid => {
@@ -133,7 +132,7 @@ class MongolikeStore extends Store {
             }
             const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
             // console.log("CREATEREPLY", {replyFullId, selector})
-            // console.log("CREATEREPLY", JSON.stringify({anno}, null, 2))
+            console.log("CREATEREPLY", JSON.stringify({anno}, null, 2))
             this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
@@ -147,7 +146,7 @@ class MongolikeStore extends Store {
 
     /* @override */
     _import(options, cb) {
-        var anno = options.anno
+        let anno = options.anno
         const fromJSONLD = (anno) => {
             anno = this._normalizeType(anno)
             const ret = {}
@@ -186,8 +185,8 @@ class MongolikeStore extends Store {
     /* @override */
     _revise(options, cb) {
         const annoId = this._idFromURL(options.annoId)
-        var anno = options.anno
-        const {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
+        let anno = options.anno
+        const {_id, _replyids} = splitIdRepliesRev(annoId)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err)
                 return cb(err)
@@ -222,7 +221,7 @@ class MongolikeStore extends Store {
             // Last modification of the annotation is the creation date of its newest revision
             annoRoot.modified = annoRevision.created
 
-            var modQueries;
+            let modQueries
             // walk replies and add revision
             if (_replyids.length > 0) {
                 //
@@ -266,7 +265,7 @@ class MongolikeStore extends Store {
 
     /* @override */
     _delete(options, cb) {
-        const {_id, _replyids, _revid} = splitIdRepliesRev(this._idFromURL(options.annoId))
+        const {_id, _replyids} = splitIdRepliesRev(this._idFromURL(options.annoId))
         if (options.forceDelete) {
             console.log("FORCE DELETE", options)
             this.db.remove({_id}, (err, numRemoved) => {
@@ -274,7 +273,7 @@ class MongolikeStore extends Store {
                 return cb()
             })
         }
-        var selector = ''
+        let selector = ''
         for (let _replyid of _replyids) {
             selector += `_replies.${_replyid - 1}.`
         }
@@ -322,7 +321,7 @@ class MongolikeStore extends Store {
         if (nested) {
             if (!query.$or)
                 query.$or = []
-            for (let i = 0; i < 20 ; i++) {
+            for (let i = 0; i < 20; i++) {
                 const queryHere = {}
                 for (let clause in query) {
                     queryHere[`_reply.${i}.${clause}`] = JSON.parse(JSON.stringify(query[clause]))
@@ -368,7 +367,7 @@ class MongolikeStore extends Store {
         Object.keys(anno).forEach(prop => {
             if (prop === '_revisions' && !(annoId.match(/~\d$/))) {
                 if (anno._revisions.length > 0 && !options.skipVersions) {
-                    var revId = 0
+                    let revId = 0
                     ret.hasVersion = anno._revisions.map(revision => {
                         const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision, options, {
                             versionOf: ret.id
