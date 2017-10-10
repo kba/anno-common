@@ -20,7 +20,7 @@ app.use(authRouter({
 
 app.use((err, req, resp, next) => {
   console.log(err)
-  resp.status(err.code)
+  resp.status(err.code || 400)
   resp.send(err.message)
 })
 
