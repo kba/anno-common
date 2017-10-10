@@ -17,10 +17,11 @@ envyConf('ANNO', {
 
 function start(app, cb) {
 
+    const ENABLE_JWT_AUTH = envyConf('ANNO')
     // Static files
     app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
 
-    app.use(morgan('dev'))
+    app.use(morgan('short'))
 
     app.use(bodyParser.json({type: '*/*', limit: 1 * 1024 * 1024}))
 
@@ -53,6 +54,7 @@ function start(app, cb) {
 
             const annoMiddlewares = []
             annoMiddlewares.push(annoOptions.unless({method:'OPTIONS'}))
+            if (ENABLE_JWT_AUTH) annoMiddlewares.push(userAuth.unless({method:'OPTIONS'}))
             annoMiddlewares.push(aclMetadata.unless({method:'OPTIONS'}))
 
             app.use('/anno', ...annoMiddlewares, require('./routes/anno')({store}))
