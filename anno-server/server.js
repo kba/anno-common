@@ -18,6 +18,9 @@ envyConf('ANNO', {
 function start(app, cb) {
 
     const ENABLE_JWT_AUTH = envyConf('ANNO')
+
+    app.set('trust proxy', 'loopback')
+
     // Static files
     app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
 
