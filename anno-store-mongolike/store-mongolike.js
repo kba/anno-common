@@ -31,7 +31,8 @@ class MongolikeStore extends Store {
         const query = {_id}
         this.db.findOne(query, projection, (err, doc) => {
             if (!doc) return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
-            if (doc.deleted) return cb(errors.annotationDeleted(annoId, doc.deleted))
+            if (doc.deleted && !options.includeDeleted)
+              return cb(errors.annotationDeleted(annoId, doc.deleted))
             for (let _replyid of _replyids) {
                 // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]
@@ -132,11 +133,11 @@ class MongolikeStore extends Store {
             }
             const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
             // console.log("CREATEREPLY", {replyFullId, selector})
-            console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
+            // console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
             this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
-                options.latest = true
+                // options.latest = true
                 delete options.annoId
                 delete options.anno
                 return this.get(replyFullId, options, cb)
@@ -267,7 +268,7 @@ class MongolikeStore extends Store {
     _delete(options, cb) {
         const {_id, _replyids} = splitIdRepliesRev(this._idFromURL(options.annoId))
         if (options.forceDelete) {
-            console.log("FORCE DELETE", options)
+            // console.log("FORCE DELETE", options)
             this.db.remove({_id}, (err, numRemoved) => {
                 if (err) return cb(err)
                 return cb()
