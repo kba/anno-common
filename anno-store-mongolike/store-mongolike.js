@@ -132,7 +132,7 @@ class MongolikeStore extends Store {
             }
             const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
             // console.log("CREATEREPLY", {replyFullId, selector})
-            console.log("CREATEREPLY", JSON.stringify({anno}, null, 2))
+            console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
             this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
