@@ -1,4 +1,5 @@
 const {envyConf, envyLog} = require('envyconf')
+const {truthy} = require('@kba/anno-util')
 const {loadPlugins} = require('@kba/anno-util-loaders')
 
 module.exports = function AnnoOptionsMiddleware(cb) {
@@ -32,10 +33,19 @@ module.exports = function AnnoOptionsMiddleware(cb) {
             if (err) return next(err)
 
             // boolean values
-            ;['skipVersions', 'skipReplies', 'metadataOnly'].forEach(option => {
+            ;[
+              'skipVersions',
+              'skipReplies',
+              'metadataOnly',
+              'includeDeleted',
+              'forceDelete',
+            ].forEach(option => {
+                const optionHeader = `X-Anno-${option}`.toLowerCase()
                 if (option in req.query) {
-                    options[option] = !! req.query[option].match(/^(true|1)$/)
+                    options[option] = truthy(req.query[option])
                     delete req.query[option]
+                } else if (optionHeader in req.headers) {
+                    options[option] = truthy(req.headers[optionHeader])
                 }
             })
 
