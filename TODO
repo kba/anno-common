@@ -30,10 +30,10 @@ mongo store
     [ ] delete
 [ ] server
     [ ] auth
-    [ ] reply/comment
+    [X] reply/comment
     [-] handle id/via/canonical
     [X] RDF conneg
-    [ ] 410
+    [X] 410
     [ ] 409 If replacing 'via' or changing 'canonical'
     [X] 415 for invalid: The Annotation Client sent an entity-body that is not able to be processed by the Server, such as non-Annotation or in a context that is unrecognized.
     [X] hasParent undefined?
@@ -43,3 +43,7 @@ mongo store
 [X] fix perm.nedb / acl
 [ ] ACL rules should emit status/message instead of true/false
 [ ] Unify ACL / User processor interfaces (DRY)
+
+Tue Oct 10 22:38:04 CEST 2017
+[ ] http-store tests fail
+[ ] sql tests hang after disconnect

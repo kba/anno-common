@@ -6,6 +6,7 @@ process.env.ANNO_KNEXFILE = `${__dirname}/knexfile.js`
 const store = new(require('.'))()
 require('tap').test(store.constructor.name, async t => {
   const StoreTests = new(require('../anno-store/store-test'))(store)
+  t.plan(6)
   // console.log(store)
   await StoreTests.store.init()
   await StoreTests.testWipe(t)
@@ -15,5 +16,8 @@ require('tap').test(store.constructor.name, async t => {
   await StoreTests.testReply(t)
   await StoreTests.testDelete(t)
   await StoreTests.store.disconnect()
-  t.end()
+  process.nextTick(() => {
+    t.end()
+    process.exit()
+  })
 })
