@@ -3,7 +3,8 @@ const Store = require('@kba/anno-store')
 const errors = require('@kba/anno-errors')
 const querystring = require('querystring')
 const {envyConf, envyLog} = require('envyconf')
-const {urlJoin} = require('@kba/anno-util')
+const {urlJoin, truthy} = require('@kba/anno-util')
+
 envyConf('ANNO', {
     BASE_URL: 'http://localhost:3000',
     BASE_PATH: 'anno',
@@ -144,19 +145,36 @@ class HttpStore extends Store {
     // ----------------------------------------
     _axiosConfigFromAnnoOptions(options) {
         const ret = {}
+
+        // TODO
         // BasicAuth
         if (options.auth && options.auth.username) {
             ret.auth = ret.auth || {}
             ret.auth.username = options.auth.username
             ret.auth.password = options.auth.password
         }
+
         // Custom Headers
+        ret.headers = ret.headers || {}
         if (options.httpHeaders) {
-            ret.headers = ret.headers || {}
             Object.assign(ret.headers, options.httpHeaders)
         }
+
+        ;[
+            'skipVersions',
+            'skipReplies',
+            'metadataOnly',
+            'includeDeleted',
+            'forceDelete'
+        ].forEach(option => {
+            if (option in options) {
+                ret.headers[`X-Anno-${option}`] = truthy(options[option])
+            }
+        })
+
         const log = envyLog('ANNO', 'store-http')
         log.silly("axios config from options", ret)
+
         return ret
     }
 

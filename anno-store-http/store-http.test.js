@@ -8,10 +8,11 @@ require('tap').test(store.constructor.name, async t => {
   const StoreTests = new(require('../anno-store/store-test'))(store)
 
   await StoreTests.store.init()
-  await StoreTests.testWipe(t)
-  await StoreTests.testCreateGet(t)
-  await StoreTests.testRevise(t)
-  await StoreTests.testSearch(t)
+  // await StoreTests.testWipe(t)
+  // await StoreTests.testCreateGet(t)
+  // await StoreTests.testReply(t)
+  // await StoreTests.testRevise(t)
+  // await StoreTests.testSearch(t)
   await StoreTests.testDelete(t)
   await StoreTests.store.disconnect()
 
