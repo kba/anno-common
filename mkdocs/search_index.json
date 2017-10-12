@@ -1,0 +1,59 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Welcome to MkDocs\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#welcome-to-mkdocs", 
+            "text": "For full documentation visit  mkdocs.org .", 
+            "title": "Welcome to MkDocs"
+        }, 
+        {
+            "location": "/#commands", 
+            "text": "mkdocs new [dir-name]  - Create a new project.  mkdocs serve  - Start the live-reloading docs server.  mkdocs build  - Build the documentation site.  mkdocs help  - Print this help message.", 
+            "title": "Commands"
+        }, 
+        {
+            "location": "/#project-layout", 
+            "text": "mkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
+            "title": "Project layout"
+        }, 
+        {
+            "location": "/options/", 
+            "text": "Options\n\n\nskipVersions\n\n\nReturn only the top-level annotation.\n\n\nskipReplies\n\n\nDo not include replies with an annotation.\n\n\nmetadataOnly\n\n\nDo not include the annotation body.\n\n\nincludeDeleted\n\n\nInclude annotations that have been set to \ndeleted\n, which would otherwise result in a \n410\n.\n\n\nforceDelete\n\n\nCompletely remove an annotation, not just set it to \ndelete\n. \n\n\nSubsequent retrievals will result in \n404\n not \n410\n.", 
+            "title": "Options"
+        }, 
+        {
+            "location": "/options/#options", 
+            "text": "", 
+            "title": "Options"
+        }, 
+        {
+            "location": "/options/#skipversions", 
+            "text": "Return only the top-level annotation.", 
+            "title": "skipVersions"
+        }, 
+        {
+            "location": "/options/#skipreplies", 
+            "text": "Do not include replies with an annotation.", 
+            "title": "skipReplies"
+        }, 
+        {
+            "location": "/options/#metadataonly", 
+            "text": "Do not include the annotation body.", 
+            "title": "metadataOnly"
+        }, 
+        {
+            "location": "/options/#includedeleted", 
+            "text": "Include annotations that have been set to  deleted , which would otherwise result in a  410 .", 
+            "title": "includeDeleted"
+        }, 
+        {
+            "location": "/options/#forcedelete", 
+            "text": "Completely remove an annotation, not just set it to  delete .   Subsequent retrievals will result in  404  not  410 .", 
+            "title": "forceDelete"
+        }
+    ]
+}

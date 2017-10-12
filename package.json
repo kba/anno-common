@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "jstransformer-markdown-it": "^2.0.0",
-    "pug-cli": "^1.0.0-alpha6"
-  }
-}
