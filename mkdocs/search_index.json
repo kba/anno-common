@@ -2,13 +2,13 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Welcome to MkDocs\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
+            "text": "Anno documentation\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
             "title": "Home"
         }, 
         {
-            "location": "/#welcome-to-mkdocs", 
+            "location": "/#anno-documentation", 
             "text": "For full documentation visit  mkdocs.org .", 
-            "title": "Welcome to MkDocs"
+            "title": "Anno documentation"
         }, 
         {
             "location": "/#commands", 
@@ -19,6 +19,126 @@
             "location": "/#project-layout", 
             "text": "mkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
             "title": "Project layout"
+        }, 
+        {
+            "location": "/configuration/", 
+            "text": "Configuration settings\n\n\nACL_DATA\n\n\nBACKEND\n\n\nBASEPATH\n\n\nCOLLECTION_DATA\n\n\nCOLLECTION_FILE\n\n\nDEBUG\n\n\nDIST_DIR\n\n\nSTORE_HOOKS_PRE\n\n\nSTORE_HOOKS_POST\n\n\nHOST\n\n\nANNO_OPENAPI_HOST\n\n\nENABLE_JWT_AUTH\n\n\nKNEXFILE\n\n\nLOGFILE\n\n\nLOGLEVEL\n\n\nMIDDLEWARES\n\n\nPORT\n\n\nSTORE", 
+            "title": "Configuration"
+        }, 
+        {
+            "location": "/configuration/#configuration-settings", 
+            "text": "", 
+            "title": "Configuration settings"
+        }, 
+        {
+            "location": "/configuration/#acl_data", 
+            "text": "", 
+            "title": "ACL_DATA"
+        }, 
+        {
+            "location": "/configuration/#backend", 
+            "text": "", 
+            "title": "BACKEND"
+        }, 
+        {
+            "location": "/configuration/#basepath", 
+            "text": "", 
+            "title": "BASEPATH"
+        }, 
+        {
+            "location": "/configuration/#collection_data", 
+            "text": "", 
+            "title": "COLLECTION_DATA"
+        }, 
+        {
+            "location": "/configuration/#collection_file", 
+            "text": "", 
+            "title": "COLLECTION_FILE"
+        }, 
+        {
+            "location": "/configuration/#debug", 
+            "text": "", 
+            "title": "DEBUG"
+        }, 
+        {
+            "location": "/configuration/#dist_dir", 
+            "text": "", 
+            "title": "DIST_DIR"
+        }, 
+        {
+            "location": "/configuration/#store_hooks_pre", 
+            "text": "", 
+            "title": "STORE_HOOKS_PRE"
+        }, 
+        {
+            "location": "/configuration/#store_hooks_post", 
+            "text": "", 
+            "title": "STORE_HOOKS_POST"
+        }, 
+        {
+            "location": "/configuration/#host", 
+            "text": "", 
+            "title": "HOST"
+        }, 
+        {
+            "location": "/configuration/#anno_openapi_host", 
+            "text": "", 
+            "title": "ANNO_OPENAPI_HOST"
+        }, 
+        {
+            "location": "/configuration/#enable_jwt_auth", 
+            "text": "", 
+            "title": "ENABLE_JWT_AUTH"
+        }, 
+        {
+            "location": "/configuration/#knexfile", 
+            "text": "", 
+            "title": "KNEXFILE"
+        }, 
+        {
+            "location": "/configuration/#logfile", 
+            "text": "", 
+            "title": "LOGFILE"
+        }, 
+        {
+            "location": "/configuration/#loglevel", 
+            "text": "", 
+            "title": "LOGLEVEL"
+        }, 
+        {
+            "location": "/configuration/#middlewares", 
+            "text": "", 
+            "title": "MIDDLEWARES"
+        }, 
+        {
+            "location": "/configuration/#port", 
+            "text": "", 
+            "title": "PORT"
+        }, 
+        {
+            "location": "/configuration/#store", 
+            "text": "", 
+            "title": "STORE"
+        }, 
+        {
+            "location": "/glossary/", 
+            "text": "Glossary\n\n\nStore\n\n\nA store is a class adhering to the \nStore API\n. It is an interface to a\n\nstorage backend\n.\n\n\nTop-Level Annotation", 
+            "title": "Glossary"
+        }, 
+        {
+            "location": "/glossary/#glossary", 
+            "text": "", 
+            "title": "Glossary"
+        }, 
+        {
+            "location": "/glossary/#store", 
+            "text": "A store is a class adhering to the  Store API . It is an interface to a storage backend .", 
+            "title": "Store"
+        }, 
+        {
+            "location": "/glossary/#top-level-annotation", 
+            "text": "", 
+            "title": "Top-Level Annotation"
         }, 
         {
             "location": "/options/", 
@@ -54,6 +174,26 @@
             "location": "/options/#forcedelete", 
             "text": "Completely remove an annotation, not just set it to  delete .   Subsequent retrievals will result in  404  not  410 .", 
             "title": "forceDelete"
+        }, 
+        {
+            "location": "/server/", 
+            "text": "Setting up a server", 
+            "title": "Server"
+        }, 
+        {
+            "location": "/server/#setting-up-a-server", 
+            "text": "", 
+            "title": "Setting up a server"
+        }, 
+        {
+            "location": "/stores/", 
+            "text": "Stores", 
+            "title": "Stores"
+        }, 
+        {
+            "location": "/stores/#stores", 
+            "text": "", 
+            "title": "Stores"
         }
     ]
 }
