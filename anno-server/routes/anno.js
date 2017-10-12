@@ -37,7 +37,7 @@ module.exports = ({store}) => {
     function getCollection(req, resp, next) {
         // TODO see _urlFromId in store.js
         const {BASE_URL, BASE_PATH} = envyConf('ANNO')
-        var colUrl = `${BASE_URL}${BASE_PATH}/anno/`
+        const colUrl = `${BASE_URL}${BASE_PATH}/anno/`
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         const searchParams = {}
@@ -46,8 +46,11 @@ module.exports = ({store}) => {
                 searchParams[k] = req.query[k]
             }
         })
-        store.search(searchParams, req.annoOptions, (err, docs) => {
+      const {annoOptions} = req
+      console.log({searchParams, annoOptions, store: store.constructor.name})
+        store.search(searchParams, annoOptions, (err, docs) => {
             if (err) return next(err)
+          console.log(docs.length)
             resp.header('Content-Location', colUrl)
             resp.header('Vary', 'Accept, Prefer')
             resp.header('Link',
@@ -59,9 +62,9 @@ module.exports = ({store}) => {
             resp.header('Link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
             const col = {
                 '@context': 'http://www.w3.org/ns/anno.jsonld',
-                type: ['BasicContainer', 'AnnotationCollection'],
-                id: colUrl,
-                total: docs.length,
+                'type': ['BasicContainer', 'AnnotationCollection'],
+                'id': colUrl,
+                'total': docs.length,
             }
             // TODO paging
             if (col.total > 0) {
@@ -71,7 +74,7 @@ module.exports = ({store}) => {
                         startIndex: 0,
                         items: docs,
                     },
-                    last: { id: colUrl },
+                    last: {id: colUrl},
                 })
             }
             resp.jsonld = col
@@ -82,9 +85,9 @@ module.exports = ({store}) => {
 
     const router = Router()
 
-    //----------------------------------------------------------------
-    // Web Annotation Protocol
-    //----------------------------------------------------------------
+    // ----------------------------------------------------------------
+    //  Web Annotation Protocol
+    // ----------------------------------------------------------------
 
     // 'Allow' header
     router.use((req, resp, next) => {
@@ -167,16 +170,16 @@ module.exports = ({store}) => {
     // DELETE /anno/{annoId}
     //
     router.delete('/:annoId', (req, resp, next) => {
-        store.delete(req.params.annoId, req.annoOptions, (err, doc) => {
+        store.delete(req.params.annoId, req.annoOptions, (err) => {
             if (err) return next(err)
             resp.status(204)
-            return resp.send(doc)
+            return resp.end()
         })
     })
 
-    //----------------------------------------------------------------
-    // Extensions
-    //----------------------------------------------------------------
+    // ----------------------------------------------------------------
+    //  Extensions
+    // ----------------------------------------------------------------
 
     //
     // DELETE /anno/{annoId}/!

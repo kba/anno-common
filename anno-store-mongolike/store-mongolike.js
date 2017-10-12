@@ -295,10 +295,9 @@ class MongolikeStore extends Store {
 
         const nested = truthy(query.$nested)
 
-        if (!(truthy(query.includeDeleted))) {
+        if (!(truthy(options.includeDeleted))) {
             query.deleted = {$exists: false}
         }
-        delete query.includeDeleted
 
         if ('$target' in query) {
             const needle = asRegex ? {$regex: query.$target} : query.$target
