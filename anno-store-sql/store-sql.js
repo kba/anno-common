@@ -75,10 +75,9 @@ module.exports =
       const qb = this.models.Annotation.query()
         .joinRelation('revisions')
 
-      if (!(truthy(query.includeDeleted))) {
+      if (!(truthy(options.includeDeleted))) {
         qb.whereNull('deleted')
       }
-      delete query.includeDeleted
 
       if ('$target' in query) {
         const needle = query.$target

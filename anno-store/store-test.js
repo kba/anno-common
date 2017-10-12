@@ -179,7 +179,7 @@ module.exports = class StoreTests {
       annos = await store.search()
       t.equals(annos.length, 2, '2 anno after delete')
 
-      annos = await store.search({includeDeleted: true})
+      annos = await store.search({}, {includeDeleted: true})
       t.equals(annos.length, 3, '3 anno after delete including the one set to deleted')
 
       t.end()

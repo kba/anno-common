@@ -37,7 +37,7 @@ module.exports = ({store}) => {
     function getCollection(req, resp, next) {
         // TODO see _urlFromId in store.js
         const {BASE_URL, BASE_PATH} = envyConf('ANNO')
-        const colUrl = `${BASE_URL}${BASE_PATH}/anno/`
+        let colUrl = `${BASE_URL}${BASE_PATH}/anno/`
         const qs = querystring.stringify(req.query)
         if (qs) colUrl += '?' + qs
         const searchParams = {}

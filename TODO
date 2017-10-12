@@ -45,6 +45,6 @@ mongo store
 [ ] Unify ACL / User processor interfaces (DRY)
 
 Tue Oct 10 22:38:04 CEST 2017
-[ ] http-store tests fail
+[X] http-store tests fail
 [X] sql tests hang after disconnect
-[ ] distinguish between options and query for search
+[X] distinguish between options and query for search
