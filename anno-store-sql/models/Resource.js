@@ -31,7 +31,20 @@ module.exports = class Resource extends Model {
           from: 'Resource._stateId',
           to: 'State._id',
         }
-      }
+      },
+
+      items: {
+        relation: Model.HasManyRelation,
+        modelClass: `${__dirname}/Resource`,
+        join: {
+          from: 'Resource._id',
+          through: {
+            from: 'Choice._resId',
+            to: 'Choice._itemId',
+          },
+          to: 'Resource._id',
+        }
+      },
 
     }
   }

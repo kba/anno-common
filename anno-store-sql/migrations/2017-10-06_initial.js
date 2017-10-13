@@ -13,7 +13,6 @@ exports.up = function (knex) {
   .createTable('AnnotationRevision', function (table) {
     table.string('_id').primary()
     table.string('_revOf').references('_id').inTable('Annotation').onDelete('CASCADE')
-    table.string('creatorId').references('_id').inTable('Person')
     table.dateTime('created')
     table.dateTime('generated')
     table.string('generator')
@@ -37,6 +36,7 @@ exports.up = function (knex) {
   })
 
   .createTable('Resource', function (table) {
+    table.increments('_id').primary()
     table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
     table.string('_prop').notNull() // body or target
     table.string('id')
@@ -56,6 +56,11 @@ exports.up = function (knex) {
     table.string('styleClass')
     table.integer('_selId').references('_id').inTable('Selector')
     table.integer('_stateId').references('_id').inTable('State')
+  })
+
+  .createTable('Choice', function (table) {
+    table.integer('_resId').references('_id').inTable('Ressource')
+    table.integer('_itemId').references('_id').inTable('Ressource')
   })
 
   .createTable('Selector', function (table) {
