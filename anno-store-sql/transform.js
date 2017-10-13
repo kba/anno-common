@@ -5,6 +5,25 @@ const {
   packArray
 } = require('@kba/anno-util')
 
+const tblToProp = {
+  Resource: [
+    'body',
+    'target',
+    'stylesheet',
+  ],
+  AnnotationAgent: [
+    'generator',
+    'audience',
+    'creator',
+  ]
+}
+const propToTbl = {}
+Object.keys(tblToProp).map(tbl => {
+  tblToProp[tbl].map(prop => {
+    propToTbl[prop] = tbl
+  })
+})
+
 class SqlToJSONLD {
 
   constructor(store) {
@@ -40,26 +59,40 @@ class SqlToJSONLD {
     options.now = (options.now || new Date())
     const sqlRev = {
       created: options.now,
-      bodyUris: [],
-      bodyResources: [],
-      targetUris: [],
-      targetResources: [],
     }
-    if ('generator' in anno) sqlRev.generator = anno.generator
-    ;['body', 'target'].map(k => {
-      if (k in anno) {
+    Object.keys(tblToProp).map(tbl => tblToProp[tbl].map(prop => {
+      sqlRev[`${prop}${tbl}s`] = []
+      sqlRev[`${prop}Uris`] = []
+    }))
+    // console.log(sqlRev)
+    // process.exit()
+    Object.keys(anno).map(k => {
+      if ([
+        'motivation',
+        'purpose',
+        'rights',
+        'via',
+        'canonical',
+      ].includes(k)) {
+        sqlRev[k] = anno[k]
+      } else if (Object.keys(propToTbl).includes(k)) {
         ensureArray(anno, k)
         anno[k].map(v => {
           if (typeof v === 'string') {
             sqlRev[`${k}Uris`].push({uri: v, _prop: k})
           } else {
             v._prop = k
-            sqlRev[`${k}Resources`].push(v)
+            sqlRev[`${k}${propToTbl[k]}s`].push(v)
           }
         })
+      } else if (k === '@context') {
+        // XXX Ignore @context
+      } else if (k === 'type') {
+        sqlRev.type = anno.type.map(t => {return {_id: t}})
+      } else {
+        console.warn(`UNHANDLED PROPERTY: '${k}'=${JSON.stringify(anno[k])}`)
       }
     })
-    if ('type' in anno) sqlRev.type = anno.type.map(t => {return {_id: t}})
     return sqlRev
   }
 
@@ -114,10 +147,12 @@ class SqlToJSONLD {
   revToJSONLD(sqlRev, options={}) {
     const ret = {}
     ret.id = this.store._urlFromId(sqlRev._id)
+    // TODO
     ;['body', 'target'].map(k => {
       ret[k] = []
       if (`${k}Uris` in sqlRev) ret[k].push(...sqlRev[`${k}Uris`].map(this.uriToJSONLD))
       if (`${k}Resources` in sqlRev) ret[k].push(...sqlRev[`${k}Resources`].map(this.resourceToJSONLD))
+      if (`${k}Agents` in sqlRev) ret[k].push(...sqlRev[`${k}Agents`].map(this.resourceToJSONLD))
       packArray(ret, k)
     })
     return ret
@@ -126,3 +161,5 @@ class SqlToJSONLD {
 }
 
 module.exports = (store) => new SqlToJSONLD(store)
+module.exports.tblToProp = tblToProp
+module.exports.propToTbl = propToTbl

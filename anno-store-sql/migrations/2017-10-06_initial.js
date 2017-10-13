@@ -5,7 +5,6 @@ exports.up = function (knex) {
     table.string('_id').primary()
     table.string('_collectionId').references('_id').inTable('AnnotationCollection')
     table.string('_replyTo').references('_id').inTable('Annotation')
-    table.string('via')
     table.dateTime('modified')
     table.dateTime('deleted')
   })
@@ -16,6 +15,10 @@ exports.up = function (knex) {
     table.dateTime('created')
     table.dateTime('generated')
     table.string('generator')
+    table.string('purpose')
+    table.string('motivation')
+    table.string('rights')
+    table.string('via')
     table.string('title')
     table.string('canonical')
   })
@@ -52,6 +55,7 @@ exports.up = function (knex) {
     table.string('textDirection')
     table.string('motivation')
     table.string('language')
+    table.string('renderedVia')
     table.string('scope')
     table.string('styleClass')
     table.integer('_selId').references('_id').inTable('Selector')
@@ -90,9 +94,29 @@ exports.up = function (knex) {
     table.integer('_refinedBy').references('_id').inTable('State').onDelete('CASCADE')
   })
 
-  .createTable('Person', function (table) {
+  .createTable('AnnotationAgent', function (table) {
+    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
     table.string('_id').primary()
-    table.string('displayName')
+    table.string('_prop').notNull() // body or target
+    table.string('homepage')
+    table.string('id')
+    table.string('name')
+    table.string('nickname')
+    table.string('type')
+    table.string('email_sha1')
+    table.string('schema:educationalRole')
+  })
+
+  .createTable('ResourceAgent', function (table) {
+    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+    table.string('_id').primary()
+    table.string('_prop').notNull() // body or target
+    table.string('homepage')
+    table.string('id')
+    table.string('name')
+    table.string('nickname')
+    table.string('type')
+    table.string('email_sha1')
   })
 
   .createTable('PersonAlias', function (table) {
