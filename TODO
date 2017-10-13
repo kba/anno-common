@@ -48,3 +48,9 @@ Tue Oct 10 22:38:04 CEST 2017
 [X] http-store tests fail
 [X] sql tests hang after disconnect
 [X] distinguish between options and query for search
+
+
+Fri Oct 13 02:45:58 CEST 2017
+[ ] SQL: items
+[ ] SQL: renderedVia
+[ ] SQL: creator

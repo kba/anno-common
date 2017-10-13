@@ -7,11 +7,6 @@ require('tap').test(store.constructor.name, async t => {
   const StoreTests = new(require('../anno-store/store-test'))(store)
 
   await StoreTests.testAll(t)
-  // await StoreTests.testWipe()
-  // await StoreTests.testCreateGet()
-  // await StoreTests.testSearch()
-  // await StoreTests.testRevise()
-  // await StoreTests.testDelete()
 
   t.end()
 })

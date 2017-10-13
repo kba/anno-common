@@ -59,6 +59,7 @@ module.exports = class AnnotationRevision extends Model {
         }
       },
 
+
       // creators: {
       //   relation: Model.HasManyRelation,
       //   modelClass: `${__dirname}/Person`,

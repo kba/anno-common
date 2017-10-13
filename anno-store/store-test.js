@@ -186,6 +186,28 @@ module.exports = class StoreTests {
     })
   }
 
+  /**
+   * Ensures all valid annotations to be creatable
+   */
+  async testCreateAll(t, keys=Object.keys(fixtures.Annotation.ok)) {
+    return t.test('create all', async t => {
+      t.plan(keys.length + 1)
+      const {store} = this
+      await this.testWipe(t)
+      await Promise.all(keys.map(async k => {
+        await t.test(k, async () => {
+          console.log(`# Testing ${k}`)
+          await store.create(fixtures.Annotation.ok[k])
+          t.ok(true, `created ${k}`)
+        })
+        // const anno = annos[k]
+        // const created = await store.create(anno)
+        // t.ok(true, `created ${k}` + JSON.stringify(created))
+      }))
+      t.end()
+    })
+  }
+
   async testImport(t) {
     return t.test('import', async t => {
       const {store} = this
@@ -212,10 +234,11 @@ module.exports = class StoreTests {
   async testAll(t) {
     return t.test('all', async t => {
       const {store} = this
-      t.plan(8)
+      t.plan(9)
       await store.init()
       await this.testWipe(t)
       await this.testCreateGet(t)
+      await this.testCreateAll(t)
       await this.testGetByRevId(t)
       await this.testReply(t)
       await this.testRevise(t)

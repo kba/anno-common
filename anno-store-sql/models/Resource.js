@@ -15,6 +15,24 @@ module.exports = class Resource extends Model {
         }
       },
 
+      selector: {
+        relation: Model.HasOneRelation,
+        modelClass: `${__dirname}/Selector`,
+        join: {
+          from: 'Resource._selId',
+          to: 'Selector._id',
+        }
+      },
+
+      state: {
+        relation: Model.HasOneRelation,
+        modelClass: `${__dirname}/State`,
+        join: {
+          from: 'Resource._stateId',
+          to: 'State._id',
+        }
+      }
+
     }
   }
 
