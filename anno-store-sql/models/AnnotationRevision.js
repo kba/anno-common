@@ -1,5 +1,19 @@
 const Model = require('./Model')
-const {tblToProp} = require('../transform')
+
+const tableName = 'AnnotationRevision'
+
+const tblToProp = {
+  Resource: [
+    'body',
+    'target',
+    'stylesheet',
+  ],
+  Agent: [
+    'generator',
+    'audience',
+    'creator',
+  ]
+}
 
 const relationMappings = {
 
@@ -14,52 +28,17 @@ const relationMappings = {
       },
       to: 'Type._id',
     }
-  },
-
-
-  // creators: {
-  //   relation: Model.HasManyRelation,
-  //   modelClass: `${__dirname}/Person`,
-  //   join: {
-  //     from: 'Person._id',
-  //     to: 'Annotation._id',
-  //   }
-  // },
-
-}
-
-Object.keys(tblToProp).map(tbl => {
-  tblToProp[tbl].map(_prop => {
-    relationMappings[`${_prop}${tbl}s`] = {
-      relation: Model.HasManyRelation,
-      modelClass: `${__dirname}/${tbl}`,
-      filter: {_prop},
-      join: {
-        from: `${tbl}._revId`,
-        to: 'AnnotationRevision._id',
-      }
-    }
-    relationMappings[`${_prop}Uris`] = {
-      relation: Model.HasManyRelation,
-      modelClass: `${__dirname}/Uri`,
-      filter: {_prop},
-      join: {
-        from: `Uri._revId`,
-        to: 'AnnotationRevision._id',
-      }
-    }
-  })
-})
-console.log(relationMappings)
-// process.exit()
-
-module.exports = class AnnotationRevision extends Model {
-
-  static get tableName() {return 'AnnotationRevision'}
-
-  static get relationMappings() {
-    return relationMappings
   }
 
 }
 
+Model.createUriOrResourceJoins(tableName, tblToProp, relationMappings)
+console.log(relationMappings.bodyUris)
+
+module.exports = class AnnotationRevision extends Model {
+
+  static get tableName() {return tableName}
+  static get tblToProp() {return tblToProp}
+  static get relationMappings() {return relationMappings}
+
+}

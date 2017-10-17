@@ -13,6 +13,7 @@ exports.up = function (knex) {
     table.string('_id').primary()
     table.string('_revOf').references('_id').inTable('Annotation').onDelete('CASCADE')
     table.dateTime('created')
+    table.dateTime('modified')
     table.dateTime('generated')
     table.string('generator')
     table.string('purpose')
@@ -32,16 +33,20 @@ exports.up = function (knex) {
     table.string('typeId').references('_id').inTable('Type')
   })
 
-  .createTable('Uri', function (table) {
-    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
-    table.string('_prop').notNull() // body or target
+  .createTable('AnnotationRevisionUri', function (table) {
+    table.string('_from').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+    table.string('_prop').notNull()
+    table.string('uri').notNull()
+  })
+
+  .createTable('ResourceUri', function (table) {
+    table.string('_from').references('_id').inTable('Resource').onDelete('CASCADE')
+    table.string('_prop').notNull()
     table.string('uri').notNull()
   })
 
   .createTable('Resource', function (table) {
     table.increments('_id').primary()
-    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
-    table.string('_prop').notNull() // body or target
     table.string('id')
     table.string('value')
     table.string('source')
@@ -55,7 +60,6 @@ exports.up = function (knex) {
     table.string('textDirection')
     table.string('motivation')
     table.string('language')
-    table.string('renderedVia')
     table.string('scope')
     table.string('styleClass')
     table.integer('_selId').references('_id').inTable('Selector')
@@ -63,8 +67,8 @@ exports.up = function (knex) {
   })
 
   .createTable('Choice', function (table) {
-    table.integer('_resId').references('_id').inTable('Ressource')
-    table.integer('_itemId').references('_id').inTable('Ressource')
+    table.integer('_resId').references('_id').inTable('Resource')
+    table.integer('_itemId').references('_id').inTable('Resource')
   })
 
   .createTable('Selector', function (table) {
@@ -94,10 +98,8 @@ exports.up = function (knex) {
     table.integer('_refinedBy').references('_id').inTable('State').onDelete('CASCADE')
   })
 
-  .createTable('AnnotationAgent', function (table) {
-    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+  .createTable('Agent', function (table) {
     table.string('_id').primary()
-    table.string('_prop').notNull() // body or target
     table.string('homepage')
     table.string('id')
     table.string('name')
@@ -107,21 +109,26 @@ exports.up = function (knex) {
     table.string('schema:educationalRole')
   })
 
-  .createTable('ResourceAgent', function (table) {
-    table.string('_revId').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
-    table.string('_id').primary()
-    table.string('_prop').notNull() // body or target
-    table.string('homepage')
-    table.string('id')
-    table.string('name')
-    table.string('nickname')
-    table.string('type')
-    table.string('email_sha1')
+  .createTable('AnnotationRevisionAgent', function (table) {
+    table.string('_from').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+    table.string('_prop').notNull()
+    table.string('_to').references('_id').inTable('Agent').onDelete('CASCADE')
+  })
+  .createTable('AnnotationRevisionResource', function (table) {
+    table.string('_from').references('_id').inTable('AnnotationRevision').onDelete('CASCADE')
+    table.string('_prop').notNull()
+    table.string('_to').references('_id').inTable('Resource').onDelete('CASCADE')
   })
 
-  .createTable('PersonAlias', function (table) {
-    table.string('personId')
-    table.string('alias')
+  .createTable('ResourceResource', function (table) {
+    table.string('_from').references('_id').inTable('Resource').onDelete('CASCADE')
+    table.string('_prop').notNull()
+    table.string('_to').references('_id').inTable('Resource').onDelete('CASCADE')
+  })
+  .createTable('ResourceAgent', function (table) {
+    table.string('_from').references('_id').inTable('Resource').onDelete('CASCADE')
+    table.string('_prop').notNull()
+    table.string('_to').references('_id').inTable('Agent').onDelete('CASCADE')
   })
 
   .createTable('AnnotationCollection', function (table) {

@@ -1,7 +1,7 @@
 const Model = require('./Model')
-module.exports = class Uri extends Model {
+module.exports = class AnnotationRevisionUri extends Model {
 
-  static get tableName() {return 'Uri'}
+  static get tableName() {return 'AnnotationRevisionUri'}
 
   static get relationMappings() {
     return {
@@ -10,7 +10,7 @@ module.exports = class Uri extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: `${__dirname}/AnnotationRevision`,
         join: {
-          from: 'Uri.revId',
+          from: 'AnnotationRevisionUri.revId',
           to: 'AnnotationRevision._id',
         }
       },

@@ -8,7 +8,49 @@ module.exports = class BaseModel extends Model {
     return this.relationMappings
       ?  `[${Object.keys(this.relationMappings).join(',')}]`
       : ''
-}
+  }
+
+  static get propToTbl() {
+    const propToTbl = {}
+    Object.keys(this.tblToProp).map(tbl => {
+      this.tblToProp[tbl].map(prop => {
+        propToTbl[prop] = tbl
+      })
+    })
+    return propToTbl
+  }
+
+  static createUriOrResourceJoins(self, tblToProp, relationMappings) {
+
+    // Resource, Agent
+    Object.keys(tblToProp).map(tbl => {
+      // creator, target, body ...
+      tblToProp[tbl].map(_prop => {
+        relationMappings[`${_prop}${tbl}s`] = {
+          relation: Model.HasManyRelation,
+          modelClass: `${__dirname}/${tbl}`,
+          join: {
+            from: `${tbl}._id`,
+            through: {
+              from: `${self}${tbl}._from`,
+              filter: {_prop},
+              to: `${self}${tbl}._to`,
+            },
+            to: `${self}._id`,
+          }
+        }
+        relationMappings[`${_prop}Uris`] = {
+          relation: Model.HasManyRelation,
+          modelClass: `${__dirname}/${self}Uri`,
+          filter: {_prop},
+          join: {
+            from: `${self}Uri._from`,
+            to: `${self}._id`,
+          }
+        }
+      })
+    })
+  }
 
   static findOne(where, eager='') {
     return new Promise((resolve, reject) => {
