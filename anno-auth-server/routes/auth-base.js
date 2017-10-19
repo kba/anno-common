@@ -162,7 +162,6 @@ module.exports =
         const success = req.query.ok
         const {collectionsAvailable} = req
         const collectionsSelected = new Set((req.query.c || '').split(','))
-        console.log({collectionsSelected, c: (req.query.c || '').split(',')})
         resp.status(200).render('request', {
           from: 'request',
           debugAuth: req.debugAuth,
@@ -191,7 +190,11 @@ module.exports =
             subject: `Anno-Registrierung ${sub}`,
             text
           }, (err) => {
-            if (err) console.error(err)
+            if (err) {
+              console.log(err)
+              console.log("Failed to send this data by mail")
+              console.log({sub, displayName, collections, reasons, email})
+            }
             redirect()
           })
         } else {
