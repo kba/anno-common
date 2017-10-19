@@ -37,6 +37,7 @@ module.exports = class AuthPlain extends AuthBase {
     } else {
       resp.render('plain-login', {
         sub: false,
+        debugAuth: req.debugAuth,
         collectionsAvailable,
         error
       })
@@ -54,6 +55,7 @@ module.exports = class AuthPlain extends AuthBase {
       resp.render('plain-logout', {
         from: 'logout',
         sub,
+        debugAuth: req.debugAuth,
         collectionsAvailable,
         error
       })

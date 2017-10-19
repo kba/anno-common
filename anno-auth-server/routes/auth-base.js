@@ -1,10 +1,11 @@
-const jsonwebtoken = require('jsonwebtoken')
-const {envyConf}   = require('envyconf')
-const bodyParser   = require('body-parser')
-const nodemailer   = require('nodemailer')
-const express      = require('express')
-const connectFlash = require('connect-flash')
+const jsonwebtoken        = require('jsonwebtoken')
+const {envyConf}          = require('envyconf')
+const bodyParser          = require('body-parser')
+const nodemailer          = require('nodemailer')
+const express             = require('express')
+const connectFlash        = require('connect-flash')
 const {PreCollectionFile} = require('@kba/anno-plugins')
+const truthy              = require('truthy')
 
 function textRequestMail({sub, displayName, collections, email, reasons}) {
   email = email ? email : 'not provided'
@@ -56,11 +57,9 @@ module.exports =
 
       // ?from middleware
       this.router.use((req, resp, next) => {
-        if (req.query.from && req.query.from !== 'undefined') {
-          req.from = req.query.from
-        } else {
-          req.from = ''
-        }
+        if (req.query.from && req.query.from !== 'undefined') req.from = req.query.from
+        else req.from = ''
+        if (truthy(req.query.debugAuth)) req.debugAuth = true
         return next()
       })
 
@@ -148,6 +147,7 @@ module.exports =
         const {collectionsAvailable} = req
         resp.status(200).render('register', {
           from: 'register',
+          debugAuth: req.debugAuth,
           sub,
           collectionsAvailable,
           TEXT_REGISTER
@@ -165,6 +165,7 @@ module.exports =
         console.log({collectionsSelected, c: (req.query.c || '').split(',')})
         resp.status(200).render('request', {
           from: 'request',
+          debugAuth: req.debugAuth,
           sub,
           collectionsAvailable,
           collectionsSelected,
