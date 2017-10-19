@@ -158,9 +158,11 @@ webpack/clean:
 .PHONY: site
 site: webpack/clean webpack-fixtures webpack-min
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
+	@if ! which shinclude >/dev/null;then echo "shinclude not installed. See https://github.com/kba/shinclude'" ; exit 1 ;fi
 	rm -rf doc/assets/dist
 	cp -r anno-webpack/dist doc/assets
 	cp anno-schema/context.json doc/context.jsonld
+	find doc -name '*.md' -exec shinclude -c xml -i {} \;
 
 # Deploy site to Github pages
 .PHONY: site-deploy

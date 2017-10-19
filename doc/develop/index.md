@@ -46,8 +46,8 @@ Testing and building is orchestrated with a self-documenting Makefile. Running `
     webpack-watch             webpack -d -w
     webpack-fixtures          webpack fixtures
     webpack-min               webpack production version
-    site                      Generate static website in gh-pages
-    site-deploy               Generate site and deploy to github
+    site                      Generate Github Pages site in ./site
+    site-deploy               Deploy site to Github pages
 
   Variables
 
