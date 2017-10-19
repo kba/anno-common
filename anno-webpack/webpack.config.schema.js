@@ -5,17 +5,18 @@ const path = require('path')
 let prodBuild = require('yargs').argv.p || false
 
 const config = {
-    entry: './Anno.js',
+    entry: './AnnoSchema.js',
     node: {fs: "empty"},
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: `anno-common${!prodBuild ? '.dev' : ''}.js`,
-        library: 'Anno',
+        filename: `anno-schema${!prodBuild ? '.dev' : ''}.js`,
+        library: 'AnnoSchema',
         libraryTarget: 'umd'
     },
     resolve: {
         unsafeCache: true,
         alias: {
+            'ajv': 'ajv/dist/ajv.min.js',
             'async': 'async/dist/async.min.js'
         }
     },

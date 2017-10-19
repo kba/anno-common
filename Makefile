@@ -124,9 +124,9 @@ clean:
 # Webpack
 #
 
-# webpack dev, min, fixtures
+# webpack min, fixtures, schema, memory-store, schema
 .PHONY: webpack
-webpack: webpack-dev webpack-fixtures webpack-min 
+webpack: webpack-min webpack/fixtures webpack/memory-store webpack/schema
 
 # webpack -s
 .PHONY: webpack-dev
@@ -138,15 +138,19 @@ webpack-dev:
 webpack-watch:
 	cd anno-webpack && webpack -d -w
 
-# webpack fixtures
-.PHONY: webpack-fixtures
-webpack-fixtures:
-	cd anno-webpack && webpack --config webpack.config.fixtures.js
+.PHONY: webpack/%
+webpack/%:
+	@echo "# `date` Building anno-$(notdir $@).js"
+	cd anno-webpack && webpack -p --config webpack.config.$(notdir $@).js
 
 # webpack production version
 .PHONY: webpack-min
 webpack-min:
 	cd anno-webpack && webpack -p --output-filename anno.min.js
+
+# Remove all webpacked files
+webpack-clean:
+	rm -rvf anno-webpack/dist
 
 #
 # Github pages
@@ -157,14 +161,32 @@ $(SITEDIR):
 
 # Generate static website in $(SITEDIR)
 .PHONY: site
-site: $(SITEDIR)
-	cp anno-schema/context.json $(SITEDIR)/context.jsonld
-	$(MKDIR) $(SITEDIR)/dist/
-	cp anno-webpack/dist/* $(SITEDIR)/dist/
-	$(MAKE) -C $(SITEDIR) clean
-	cd $(SITEDIR) && $(MAKE) -j4 STAGE=prod all
+site:
+	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
+	mkdocs build
 
-# Generate site and deploy to github
-.PHONY: site-deploy
+# Continuously serve the site on localhost:8000
+.PHONY: site/serve
+site/serve:
+	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
+	mkdocs serve
+
+# Rebuild the dist folder to be deployed
+.PHONY: site-dist
+site-dist: webpack-clean webpack
+	rm -rvf site/assets/dist
+	cp -rv anno-webpack/dist site/assets/dist
+	cp -v anno-schema/context.json doc/context.jsonld
+
+# Run shinclude on markdown sources
+.PHONY: shinclude
+shinclude:
+	@if ! which shinclude >/dev/null;then echo "shinclude not installed. See https://github.com/kba/shinclude'" ; exit 1 ;fi
+	find doc -name '*.md' -exec shinclude -c xml -i {} \;
+	shinclude -c pound -i Makefile
+	find . -maxdepth 1 -name 'README.md' -exec shinclude -c xml -i {} \;
+
+# Deploy site to Github pages
+.PHONY: site-dist shinclude
 site-deploy: site
 	cd $(SITEDIR) && git add . && git commit --edit -m "updated docs `date`" && git push
