@@ -34,14 +34,14 @@ help:
 	@echo "    test                      Run all tests set as TESTS."
 	@echo "    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql"
 	@echo "    clean                     Remove tempdir"
-	@echo "    webpack                   webpack dev, min, fixtures"
+	@echo "    webpack                   webpack min, fixtures, schema, memory-store, schema"
 	@echo "    webpack-dev               webpack -s"
 	@echo "    webpack-watch             webpack -d -w"
-	@echo "    webpack-fixtures          webpack fixtures"
 	@echo "    webpack-min               webpack production version"
-	@echo "    webpack/clean             Remove all webpacked files"
+	@echo "    webpack-clean             Remove all webpacked files"
 	@echo "    site                      Build the documentation in './site'"
-	@echo "    site/serve                Continuously serve the site on localhost:8000"
+	@echo "    site-serve                Continuously serve the site on localhost:8000"
+	@echo "    site-dist                 Rebuild the dist folder to be deployed"
 	@echo "    shinclude                 Run shinclude on markdown sources"
 	@echo "    site-deploy               Deploy site to Github pages"
 	@echo ""
@@ -166,16 +166,16 @@ site:
 	mkdocs build
 
 # Continuously serve the site on localhost:8000
-.PHONY: site/serve
-site/serve:
+.PHONY: site-serve
+site-serve:
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs serve
 
 # Rebuild the dist folder to be deployed
 .PHONY: site-dist
 site-dist: webpack-clean webpack
-	rm -rvf site/assets/dist
-	cp -rv anno-webpack/dist site/assets/dist
+	rm -rvf doc/assets/dist
+	cp -rv anno-webpack/dist doc/assets/dist
 	cp -v anno-schema/context.json doc/context.jsonld
 
 # Run shinclude on markdown sources
