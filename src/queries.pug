@@ -1,0 +1,16 @@
+extends ./include/layout.pug
+block after-body
+	script(src="./queries.js")
+block body
+	.row
+		.col.sm-6
+		.col.sm-6
+	.row
+		.col.sm-12
+	.row
+		.col.sm-6
+		.col.sm-6
+		.col.sm-6
+	.row
+		.col.sm-12
+			pre#result

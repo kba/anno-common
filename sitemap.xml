@@ -4,7 +4,15 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-10-12</lastmod>
+     <lastmod>2017-10-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/acl/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +20,15 @@
     
     <url>
      <loc>/configuration/</loc>
-     <lastmod>2017-10-12</lastmod>
+     <lastmod>2017-10-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/development/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +36,7 @@
     
     <url>
      <loc>/glossary/</loc>
-     <lastmod>2017-10-12</lastmod>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -28,7 +44,15 @@
     
     <url>
      <loc>/options/</loc>
-     <lastmod>2017-10-12</lastmod>
+     <lastmod>2017-10-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/persistent-identifiers/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -36,7 +60,7 @@
     
     <url>
      <loc>/server/</loc>
-     <lastmod>2017-10-12</lastmod>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -44,9 +68,25 @@
     
     <url>
      <loc>/stores/</loc>
-     <lastmod>2017-10-12</lastmod>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
+    
+
+    
+        
+    <url>
+     <loc>/demos/queries/</loc>
+     <lastmod>2017-10-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/demos/validator/</loc>
+     <lastmod>2017-10-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
 </urlset>

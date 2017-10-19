@@ -1,0 +1,47 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    {
+      "annox": "https://github.com/kba/anno/context.jsonld",
+      "dcterms": "http://www.w3.org/2000/01/rdf-schema#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+      "sioc": "http://rdfs.org/sioc/ns#",
+      "AnnotationRevision": {
+        "@id": "annox:AnnotationRevision",
+        "rdfs:subClassOf": "oa:Annotation"
+      },
+      "AnnotationReply": {
+        "@id": "annox:AnnotationReply",
+        "rdfs:subClassOf": "oa:Annotation"
+      },
+      "hasReply": {
+        "@id": "annox:hasReply",
+        "@type": "@id",
+        "rdfs:subClassOf": "sioc:has_reply",
+        "rdfs:domain": "oa:Annotation",
+        "rdfs:range": "annox:AnnotationComment"
+      },
+      "replyTo": {
+        "@id": "annox:replyTo",
+        "@type": "@id",
+        "rdfs:subClassOf": "sioc:reply_to",
+        "rdfs:domain": "annox:AnnotationComment",
+        "rdfs:range": "oa:Annotation"
+      },
+      "hasVersion": {
+        "@id": "http://purl.org/pav/hasVersion",
+        "@type": "@id"
+      },
+      "versionOf": {
+        "@id": "annox:versionOf",
+        "@type": "@id"
+      },
+      "deleted": {
+        "@id": "schema:dateDeleted"
+      },
+      "collection": {
+        "@id": "dcterms:isPartOf"
+      }
+    }
+  ]
+}

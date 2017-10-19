@@ -21,6 +21,46 @@
             "title": "Project layout"
         }, 
         {
+            "location": "/acl/", 
+            "text": "Rights Management\n\n\nRules\n\n\n\n\nTodo\n\n\n\n\nRoles\n\n\nRoles are used in \nRules\n to define rights for groups of users. They have no meaning without rules that use them!\n\n\nThe descriptions here are valid for the \ndefault rules\n\n\nadmin\n\n\n\n\nAll-powerful\n\n\n\n\ncreator\n\n\n\n\nMay create new annotations\n\n\nMay edit their own annotations\n\n\nMay comment on annotations\n\n\n\n\nmoderator\n\n\n\n\nAll from \ncreator\n\n\nMay edit other people's annotations\n\n\n\n\ndoiMinter\n\n\n\n\nMay assign DOI to an annotation", 
+            "title": "Acl"
+        }, 
+        {
+            "location": "/acl/#rights-management", 
+            "text": "", 
+            "title": "Rights Management"
+        }, 
+        {
+            "location": "/acl/#rules", 
+            "text": "Todo", 
+            "title": "Rules"
+        }, 
+        {
+            "location": "/acl/#roles", 
+            "text": "Roles are used in  Rules  to define rights for groups of users. They have no meaning without rules that use them!  The descriptions here are valid for the  default rules", 
+            "title": "Roles"
+        }, 
+        {
+            "location": "/acl/#admin", 
+            "text": "All-powerful", 
+            "title": "admin"
+        }, 
+        {
+            "location": "/acl/#creator", 
+            "text": "May create new annotations  May edit their own annotations  May comment on annotations", 
+            "title": "creator"
+        }, 
+        {
+            "location": "/acl/#moderator", 
+            "text": "All from  creator  May edit other people's annotations", 
+            "title": "moderator"
+        }, 
+        {
+            "location": "/acl/#doiminter", 
+            "text": "May assign DOI to an annotation", 
+            "title": "doiMinter"
+        }, 
+        {
             "location": "/configuration/", 
             "text": "Configuration settings\n\n\nACL_DATA\n\n\nBACKEND\n\n\nBASEPATH\n\n\nCOLLECTION_DATA\n\n\nCOLLECTION_FILE\n\n\nDEBUG\n\n\nDIST_DIR\n\n\nSTORE_HOOKS_PRE\n\n\nSTORE_HOOKS_POST\n\n\nHOST\n\n\nANNO_OPENAPI_HOST\n\n\nENABLE_JWT_AUTH\n\n\nKNEXFILE\n\n\nLOGFILE\n\n\nLOGLEVEL\n\n\nMIDDLEWARES\n\n\nPORT\n\n\nSTORE", 
             "title": "Configuration"
@@ -121,6 +161,26 @@
             "title": "STORE"
         }, 
         {
+            "location": "/development/", 
+            "text": "Development\n\n\nThe project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.\n\n\nOther projects of interest are:\n\n\n\n\nanno-frontend\n - A web user interface based on Vue.js\n\n\n\n\nBootstrap\n\n\nYou need the lerna tool to bootstrap all the modules:\n\n\n# Install lerna\n\nnpm install\n\n\n# Bootstrap dependencies of all modules\n\nlerna bootstrap --hoist\n\n\n\n\n\n\nWarning\n\n\nThis might take a while\n\n\n\n\nMakefile\n\n\nTesting and building is orchestrated with a self-documenting Makefile. Running \nmake\n in the root of the repository will give you an overview:\n\n\n\n\n\nTargets\n\n\nbootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-% \n make start\nstop\\:%                   cd anno-% \n make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in \nMODULE\n, e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate static website in gh-pages\nsite-deploy               Generate site and deploy to github\n\n\n\n\n\nVariables\n\n\nTEMPDIR   Directory for temporary data. Default: \n/home/kba/build/github.com/kba/anno-docker/anno-common/temp\n\nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default: \n./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
+            "title": "Development"
+        }, 
+        {
+            "location": "/development/#development", 
+            "text": "The project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.  Other projects of interest are:   anno-frontend  - A web user interface based on Vue.js", 
+            "title": "Development"
+        }, 
+        {
+            "location": "/development/#bootstrap", 
+            "text": "You need the lerna tool to bootstrap all the modules:  # Install lerna \nnpm install # Bootstrap dependencies of all modules \nlerna bootstrap --hoist   Warning  This might take a while", 
+            "title": "Bootstrap"
+        }, 
+        {
+            "location": "/development/#makefile", 
+            "text": "Testing and building is orchestrated with a self-documenting Makefile. Running  make  in the root of the repository will give you an overview:   Targets  bootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-%   make start\nstop\\:%                   cd anno-%   make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in  MODULE , e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate static website in gh-pages\nsite-deploy               Generate site and deploy to github  Variables  TEMPDIR   Directory for temporary data. Default:  /home/kba/build/github.com/kba/anno-docker/anno-common/temp \nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default:  ./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
+            "title": "Makefile"
+        }, 
+        {
             "location": "/glossary/", 
             "text": "Glossary\n\n\nStore\n\n\nA store is a class adhering to the \nStore API\n. It is an interface to a\n\nstorage backend\n.\n\n\nTop-Level Annotation", 
             "title": "Glossary"
@@ -176,6 +236,21 @@
             "title": "forceDelete"
         }, 
         {
+            "location": "/persistent-identifiers/", 
+            "text": "Algorithms\n\n\nDOI\n\n\nTLA and AR have a field \ndoi\n that is by default \nnull\n and can be set to a DOI.\n\n\nA user with a \ndoiMinter\n role may call the \nmintDoi\n method.\n\n\nIf TLA has no doi:\n  Mint doi1 for URL of TLA\n  TLA.doi := doi1\nFor AR in TLA.hasReply:\n  If AR has no doi:\n    Mint doiN for URL of AR\n    AR.doi := doiN", 
+            "title": "Persistent identifiers"
+        }, 
+        {
+            "location": "/persistent-identifiers/#algorithms", 
+            "text": "", 
+            "title": "Algorithms"
+        }, 
+        {
+            "location": "/persistent-identifiers/#doi", 
+            "text": "TLA and AR have a field  doi  that is by default  null  and can be set to a DOI.  A user with a  doiMinter  role may call the  mintDoi  method.  If TLA has no doi:\n  Mint doi1 for URL of TLA\n  TLA.doi := doi1\nFor AR in TLA.hasReply:\n  If AR has no doi:\n    Mint doiN for URL of AR\n    AR.doi := doiN", 
+            "title": "DOI"
+        }, 
+        {
             "location": "/server/", 
             "text": "Setting up a server", 
             "title": "Server"
@@ -194,6 +269,46 @@
             "location": "/stores/#stores", 
             "text": "", 
             "title": "Stores"
+        }, 
+        {
+            "location": "/demos/queries/", 
+            "text": "Demo for queries\n\n\n\n\nThis demo exposes the interface of the \nAnno.Queries\n API.\n\n\n\n\nDemo\n\n\n\n\nLoad Fixture\n\n\n\n\n\n\n\n  \nfirst\n\n  \nall\n\n  \nnumberOf\n\n\n\n\nQuery\n\n\n\n\nHelp\n\n\nIt loads the fixtures of the \nWeb Platform Tests for the Web Annotation\nProtocol\n\nvia the \nAnno.Fixtures\n module.\n\n\nChoose an annotation or write/paste your own in the textarea.\n\n\nThen select a query type and choose whether to return the first, all or the\ncount of return values.\n\n\nHTML\n\n\nSee markdown source\n\n\nJavascript\n\n\nSee \n/assets/js/queries.js\n for full source\n\n\nfunction\n \nquery\n()\n \n{\n\n    \nconst\n \ninput\n \n=\n \ninputField\n.\neditor\n.\ngetDoc\n().\ngetValue\n()\n\n    \nconst\n \nanno\n \n=\n \nJSON\n.\nparse\n(\ninput\n)\n\n    \nconst\n \nqueryClass\n \n=\n \nqueryClassList\n.\nvalue\n\n    \nconst\n \nmethod\n \n=\n \nmethodList\n.\nvalue\n\n    \nconst\n \nresult\n \n=\n \nAnno\n.\nQueries\n[\nqueryClass\n][\nmethod\n](\nanno\n)\n\n    \nresultField\n.\ninnerHTML\n \n=\n \nJSON\n.\nstringify\n(\nresult\n,\n \nnull\n,\n \n2\n)\n\n\n}", 
+            "title": "Queries"
+        }, 
+        {
+            "location": "/demos/queries/#demo-for-queries", 
+            "text": "This demo exposes the interface of the  Anno.Queries  API.", 
+            "title": "Demo for queries"
+        }, 
+        {
+            "location": "/demos/queries/#demo", 
+            "text": "Load Fixture    \n   first \n   all \n   numberOf   Query", 
+            "title": "Demo"
+        }, 
+        {
+            "location": "/demos/queries/#help", 
+            "text": "It loads the fixtures of the  Web Platform Tests for the Web Annotation\nProtocol \nvia the  Anno.Fixtures  module.  Choose an annotation or write/paste your own in the textarea.  Then select a query type and choose whether to return the first, all or the\ncount of return values.", 
+            "title": "Help"
+        }, 
+        {
+            "location": "/demos/queries/#html", 
+            "text": "See markdown source", 
+            "title": "HTML"
+        }, 
+        {
+            "location": "/demos/queries/#javascript", 
+            "text": "See  /assets/js/queries.js  for full source  function   query ()   { \n     const   input   =   inputField . editor . getDoc (). getValue () \n     const   anno   =   JSON . parse ( input ) \n     const   queryClass   =   queryClassList . value \n     const   method   =   methodList . value \n     const   result   =   Anno . Queries [ queryClass ][ method ]( anno ) \n     resultField . innerHTML   =   JSON . stringify ( result ,   null ,   2 )  }", 
+            "title": "Javascript"
+        }, 
+        {
+            "location": "/demos/validator/", 
+            "text": "Validator\n\n\n\n\nTodo\n\n\nbroken\n\n\n\n\n\n\nLoad Fixture\n\n\n\n\n\n\nValidate", 
+            "title": "Validator"
+        }, 
+        {
+            "location": "/demos/validator/#validator", 
+            "text": "Todo  broken    Load Fixture    Validate", 
+            "title": "Validator"
         }
     ]
 }

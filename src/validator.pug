@@ -1,0 +1,20 @@
+extends ./include/layout.pug
+block after-body
+	script(src="./validator.js")
+block body
+	.row
+		.col.sm-6
+		.col.sm-6
+	.row
+		.col.sm-12
+	.row
+		.col.sm-6
+		.col.sm-6
+	.row
+		.col.sm-12
+select#fixture
+button#load-fixture(onclick='loadFixture()') Load Fixture
+textarea.codemirror#input(rows=10, cols=40)
+select#type
+button#validate(onclick='validate()') Validate
+pre#result
