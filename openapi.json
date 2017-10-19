@@ -1,0 +1,708 @@
+{
+  "swagger": "2.0",
+  "basePath": "{{{ OPENAPI_BASEPATH }}}",
+  "host": "{{{ OPENAPI_HOST }}}",
+  "info": {
+    "title": "Anno Server API",
+    "version": "0.0.1",
+    "description": " See [Web Annotation Protocol](https://www.w3.org/TR/annotation-protocol) "
+  },
+  "consumes": [
+    "application/ld+json"
+  ],
+  "produces": [
+    "application/ld+json;profile=\"http://www.w3.org/ns/anno.jsonld\""
+  ],
+  "tags": [
+    {
+      "name": "anno",
+      "description": "Web Annotation Protocol"
+    },
+    {
+      "name": "extensions",
+      "description": "Extensions to Web Annotation Protocol"
+    },
+    {
+      "name": "authentication",
+      "description": "Authentication/token related endpoints"
+    }
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "description": "Format: 'Bearer TOKEN_HERE'",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/{{ OPENAPI_PATH }}": {
+      "head": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get all annotations that adhere to query without body/target",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$target",
+            "required": true,
+            "type": "string",
+            "format": "url"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Annotation"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get all annotations that adhere to query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target.source",
+            "required": false,
+            "type": "string",
+            "format": "url"
+          },
+          {
+            "in": "query",
+            "name": "metadataOnly",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Send only metadata"
+          },
+          {
+            "in": "query",
+            "name": "skipVersions",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off versions"
+          },
+          {
+            "in": "query",
+            "name": "skipReplies",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off replies"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "Prefer",
+            "description": "<a href=\"https://www.w3.org/TR/annotation-protocol/#container-representations\">Preferred Container Representation</a>",
+            "enum": [
+              "return=representation;include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"",
+              "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedIRIs",
+              "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Annotation"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "anno"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Post a new annotation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New annotation to post",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Slug",
+            "description": "Preferred annotation ID"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "metadataOnly",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Send only metadata"
+          },
+          {
+            "in": "query",
+            "name": "skipVersions",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off versions"
+          },
+          {
+            "in": "query",
+            "name": "skipReplies",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off replies"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "extensions"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Wipe the store",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      }
+    },
+    "/{{ OPENAPI_PATH }}/{annoId}": {
+      "get": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get a single annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "query",
+            "name": "metadataOnly",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Send only metadata"
+          },
+          {
+            "in": "query",
+            "name": "skipVersions",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off versions"
+          },
+          {
+            "in": "query",
+            "name": "skipReplies",
+            "type": "boolean",
+            "default": false,
+            "allowEmptyValue": true,
+            "description": "Leave off replies"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          },
+          "404": {
+            "description": "No such annotation exists in the store"
+          },
+          "410": {
+            "description": "This annotation has been deleted"
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get a single annotation without body/target",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          },
+          "404": {
+            "description": "No such annotation exists in the store"
+          },
+          "410": {
+            "description": "This annotation has been deleted"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Delete an annotation",
+        "description": " Will mark the annotation as deleted.\nSubsequent GET requests will return 410. ",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Annotation deleted"
+          },
+          "404": {
+            "description": "Annotation not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Store a new revision of an annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated annotation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created a new revision",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          }
+        }
+      }
+    },
+    "/anno/{annoId}/!": {
+      "delete": {
+        "tags": [
+          "extensions"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Completely delete the annotation",
+        "description": " Will remove the annotation and all replies and versions from the store. Subsequent GET requests will return 404 ",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      }
+    },
+    "/anno/{annoId}~{revId}": {
+      "get": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Get a single revision of one annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "path",
+            "name": "revId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the revision"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Get a single revision of one annotation without body/target",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "path",
+            "name": "revId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the revision"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      }
+    },
+    "/anno/{annoId}/reply": {
+      "post": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Reply to an annotation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "annoId",
+            "type": "string",
+            "required": true,
+            "description": "ID of the annotation"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Reply to post",
+            "schema": {
+              "$ref": "#/definitions/AnnotationReply"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Reply created"
+          },
+          "404": {
+            "description": "Annotation not found"
+          }
+        }
+      }
+    },
+    "/anno/acl": {
+      "post": {
+        "tags": [
+          "extensions"
+        ],
+        "summary": "Get authorization information for a list of targets",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "List of target urls",
+            "schema": {
+              "type": "object",
+              "required": [
+                "targets"
+              ],
+              "properties": {
+                "targets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "url"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "create/revise/read/remove information",
+            "schema": {
+              "type": "object",
+              "patternProperties": {
+                "*": {
+                  "type": "object",
+                  "required": [
+                    "read",
+                    "create",
+                    "revise",
+                    "remove"
+                  ],
+                  "properties": {
+                    "read": {
+                      "type": "boolean"
+                    },
+                    "create": {
+                      "type": "boolean"
+                    },
+                    "revise": {
+                      "type": "boolean"
+                    },
+                    "remove": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/anno/import": {
+      "post": {
+        "description": "' Import an annotation, including replies and versions. Honor `Slug` and replace as necessary '",
+        "tags": [
+          "extensions"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Import an annotation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New annotation to post",
+            "schema": {
+              "$ref": "#/definitions/Annotation"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Slug",
+            "description": "Preferred annotation ID"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Collection",
+            "description": "Anno Collection",
+            "default": "default"
+          },
+          {
+            "in": "header",
+            "name": "X-Anno-Context",
+            "description": "Context from whence this annotation origins",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Imported the annotation"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Show login mask using whatever auth backend is configured",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "type": "uri",
+            "required": true,
+            "description": "Back link"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Post login data if applicable to backend."
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Show logout mask using whatever auth backend is configured",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "type": "uri",
+            "required": true,
+            "description": "Back link"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all okay"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Logout."
+      }
+    },
+    "/auth/token/{collection}": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Get the JWT token to authenticate against the backend",
+        "responses": {
+          "200": {
+            "description": "The token",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
