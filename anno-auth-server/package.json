@@ -1,0 +1,35 @@
+{
+  "name": "@kba/anno-auth-server",
+  "version": "0.0.1",
+  "description": "Auth server",
+  "main": "auth-server.js",
+  "scripts": {
+    "start": "node auth-server.js",
+    "docker": "docker build -t kbai/anno-auth-server"
+  },
+  "repository": "github:kba/anno",
+  "bugs": "https://github.com/kba/anno/issues",
+  "homepage": "https://github.com/kba/anno/tree/master/anno-server#readme",
+  "author": "kba",
+  "license": "MIT",
+  "dependencies": {
+    "@kba/anno-plugins": "^0.0.1",
+    "body-parser": "^1.17.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "envyconf": "^0.0.5",
+    "express": "^4.15.0",
+    "express-session": "^1.15.2",
+    "express-unless": "^0.3.0",
+    "jsonwebtoken": "^7.3.0",
+    "morgan": "^1.8.1",
+    "nodemailer": "^4.0.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.4",
+    "truthy": "0.0.1"
+  },
+  "devDependencies": {
+    "pm2": "^2.4.6"
+  }
+}

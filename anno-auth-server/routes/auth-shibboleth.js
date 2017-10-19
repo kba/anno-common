@@ -21,22 +21,23 @@ const AuthBase = require('./auth-base')
 
 module.exports = class AuthShibboleth extends AuthBase {
 
+  constructor(...args) {
+    super(...args)
+  }
+
     // NOTE must be protected externally!
     getLogin(req, resp, next) {this.postLogin(req, resp, next)}
 
     postLogin(req, resp, next) {
       const sub = this.determineUser(req)
+      const {from} = req
       if (sub) {
-        const redirectTo = [
-          req.query.from,
-          '/'
-        ].find(x => !! x)
-        if (!redirectTo) {
+        if (!from) {
           resp.status(501)
           next('Logged in but cannot determine where to redirect')
         } else {
           resp.status(200)
-          resp.redirect(redirectTo)
+          resp.redirect(from)
         }
       } else {
         resp.status(402)
