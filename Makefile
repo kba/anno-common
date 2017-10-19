@@ -25,6 +25,7 @@ help:
 	@echo "  Targets"
 	@echo ""
 	@echo "    bootstrap                 lerna bootstrap and check for binaries"
+	@echo "    prepublish                Compile YAML and such"
 	@echo "    anno-fixtures/index.json  Setup test fixtures"
 	@echo "    start\:%                  cd anno-% && make start"
 	@echo "    stop\:%                   cd anno-% && make stop"
@@ -61,6 +62,11 @@ help:
 bootstrap:
 	@if ! which rapper >/dev/null;then echo "rapper not installed. try 'apt install raptor2-utils'" ; exit 1 ;fi
 	lerna bootstrap
+
+# Compile YAML and such
+prepublish:
+	cd anno-schema; npm run prepublish
+	cd anno-plugins; npm run prepublish
 
 # Setup test fixtures
 .PHONY: bootstrap-test
@@ -173,10 +179,12 @@ site-serve:
 
 # Rebuild the dist folder to be deployed
 .PHONY: site-dist
-site-dist: webpack-clean webpack
+site-dist: webpack-clean webpack prepublish
 	rm -rvf doc/assets/dist
 	cp -rv anno-webpack/dist doc/assets/dist
-	cp -v anno-schema/context.json doc/context.jsonld
+	cd anno-schema; \
+		node -e "console.log(JSON.stringify(require('.').openapi, null, 2))" > ../doc/openapi.json ;\
+		node -e "console.log(JSON.stringify(require('.').jsonldContext, null, 2))" > ../doc/context.jsonld
 
 # Run shinclude on markdown sources
 .PHONY: shinclude
@@ -188,6 +196,6 @@ shinclude:
 
 # Deploy site to Github pages
 .PHONY: site-dist shinclude
-site-deploy: site
+site-deploy: shinclude site-dist
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs gh-deploy

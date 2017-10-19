@@ -18,3 +18,4 @@ package-lock.json
 site
 doc/assets/dist
 doc/context.jsonld
+doc/openapi.json
