@@ -5,6 +5,7 @@ const {envyConf}  = require('envyconf')
 const {targetId}  = require('@kba/anno-queries')
 
 module.exports = ({store}) => {
+    const storePromisified = store.promisify()
     console.log("Entering Anno Router")
 
     function getAnnotation(req, resp, next) {
@@ -216,6 +217,17 @@ module.exports = ({store}) => {
     router.post('/acl', (req, resp, next) => {
         const urls = req.body.targets
         store.aclCheck(urls, req.annoOptions, (err, perms) => {
+            if (err) return next(err)
+            return resp.send(perms)
+        })
+    })
+
+    //
+    // POST /anno/acl
+    //
+    router.post('/doi', (req, resp, next) => {
+        const urls = req.body.annoIds
+        store.mintDoi(url, req.annoOptions, (err, perms) => {
             if (err) return next(err)
             return resp.send(perms)
         })

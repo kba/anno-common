@@ -1,6 +1,6 @@
 const slugid = require('slugid')
 const async = require('async')
-const {urlJoin} = require('@kba/anno-util')
+const {urlJoin, anno2heiper} = require('@kba/anno-util')
 const {envyConf, envyLog} = require('envyconf')
 
 class Store {
@@ -347,7 +347,6 @@ class Store {
 
     _aclCheck(options, cb) {
         const ret = {}
-        options.dryRun = true
         const {targets} = options
         async.forEach(targets, (url, urlDone) => {
             ret[url] = {}
@@ -358,11 +357,13 @@ class Store {
                 }
                 // console.log({user: options.user.id, anno: anno.creator ? anno.creator.id : '---'})
                 // console.log(url, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
+                options.dryRun = true
                 async.parallel({
                     read:   (cb) => cb(null, true), // since we know this anno could be read/retrieved
                     create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
                     revise: (cb) => this.revise(url, anno, options, (err) => cb(null, !err)),
                     remove: (cb) => this.delete(url, options, (err)       => cb(null, !err)),
+                    mintDoi: (cb) => this.mintDoi(url, options, (err)      => cb(null, !err)),
                 }, (err, perms) => {
                     ret[url] = perms
                     urlDone()
@@ -389,6 +390,31 @@ class Store {
             method: 'import',
             anno,
         }), cb)
+    }
+
+    /**
+     * ### `mintDoi(anno, options, callback)`
+     *
+     * Replaces the complete annotation with the passed annotation, not just revise it.
+     *
+     * - `@param {Object} anno`
+     * - `@param {Options} options`
+     * - `@param {function} callback`
+     *
+     */
+    mintDoi(annoId, options, cb) {
+        if (typeof options === 'function') [cb, options] = [options, {}]
+        this._callMethod(Object.assign(options, {
+            method: 'mintDoi',
+            annoId,
+        }), cb)
+    }
+
+    _mintDoi(options, cb) {
+        const ret = {}
+        const {annoId} = options
+        console.log('MINT MINT MINT', options)
+        return cb(null, JSON.stringify(options))
     }
 
 
@@ -493,6 +519,7 @@ Store.prototype.promisify = function() {
     'reply',
     'aclCheck',
     'import',
+    'mintDoi',
   ].map(fn => {
     ret[fn] = (...args) => {
       return new Promise((resolve, reject) => {

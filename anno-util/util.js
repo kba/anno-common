@@ -132,4 +132,6 @@ module.exports = {
     urlJoin,
     truthy,
 
+    anno2heiper: require('./anno2heiper'),
+
 }
