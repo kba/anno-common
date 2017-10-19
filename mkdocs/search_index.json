@@ -2,183 +2,13 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Anno documentation\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
+            "text": "Anno documentation\n\n\n\n\nDeveloper Guide\n\n\nRunning a server\n\n\nDemos\n\n\nGlossary", 
             "title": "Home"
         }, 
         {
             "location": "/#anno-documentation", 
-            "text": "For full documentation visit  mkdocs.org .", 
+            "text": "Developer Guide  Running a server  Demos  Glossary", 
             "title": "Anno documentation"
-        }, 
-        {
-            "location": "/#commands", 
-            "text": "mkdocs new [dir-name]  - Create a new project.  mkdocs serve  - Start the live-reloading docs server.  mkdocs build  - Build the documentation site.  mkdocs help  - Print this help message.", 
-            "title": "Commands"
-        }, 
-        {
-            "location": "/#project-layout", 
-            "text": "mkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
-            "title": "Project layout"
-        }, 
-        {
-            "location": "/acl/", 
-            "text": "Rights Management\n\n\nRules\n\n\n\n\nTodo\n\n\n\n\nRoles\n\n\nRoles are used in \nRules\n to define rights for groups of users. They have no meaning without rules that use them!\n\n\nThe descriptions here are valid for the \ndefault rules\n\n\nadmin\n\n\n\n\nAll-powerful\n\n\n\n\ncreator\n\n\n\n\nMay create new annotations\n\n\nMay edit their own annotations\n\n\nMay comment on annotations\n\n\n\n\nmoderator\n\n\n\n\nAll from \ncreator\n\n\nMay edit other people's annotations\n\n\n\n\ndoiMinter\n\n\n\n\nMay assign DOI to an annotation", 
-            "title": "Acl"
-        }, 
-        {
-            "location": "/acl/#rights-management", 
-            "text": "", 
-            "title": "Rights Management"
-        }, 
-        {
-            "location": "/acl/#rules", 
-            "text": "Todo", 
-            "title": "Rules"
-        }, 
-        {
-            "location": "/acl/#roles", 
-            "text": "Roles are used in  Rules  to define rights for groups of users. They have no meaning without rules that use them!  The descriptions here are valid for the  default rules", 
-            "title": "Roles"
-        }, 
-        {
-            "location": "/acl/#admin", 
-            "text": "All-powerful", 
-            "title": "admin"
-        }, 
-        {
-            "location": "/acl/#creator", 
-            "text": "May create new annotations  May edit their own annotations  May comment on annotations", 
-            "title": "creator"
-        }, 
-        {
-            "location": "/acl/#moderator", 
-            "text": "All from  creator  May edit other people's annotations", 
-            "title": "moderator"
-        }, 
-        {
-            "location": "/acl/#doiminter", 
-            "text": "May assign DOI to an annotation", 
-            "title": "doiMinter"
-        }, 
-        {
-            "location": "/configuration/", 
-            "text": "Configuration settings\n\n\nACL_DATA\n\n\nBACKEND\n\n\nBASEPATH\n\n\nCOLLECTION_DATA\n\n\nCOLLECTION_FILE\n\n\nDEBUG\n\n\nDIST_DIR\n\n\nSTORE_HOOKS_PRE\n\n\nSTORE_HOOKS_POST\n\n\nHOST\n\n\nANNO_OPENAPI_HOST\n\n\nENABLE_JWT_AUTH\n\n\nKNEXFILE\n\n\nLOGFILE\n\n\nLOGLEVEL\n\n\nMIDDLEWARES\n\n\nPORT\n\n\nSTORE", 
-            "title": "Configuration"
-        }, 
-        {
-            "location": "/configuration/#configuration-settings", 
-            "text": "", 
-            "title": "Configuration settings"
-        }, 
-        {
-            "location": "/configuration/#acl_data", 
-            "text": "", 
-            "title": "ACL_DATA"
-        }, 
-        {
-            "location": "/configuration/#backend", 
-            "text": "", 
-            "title": "BACKEND"
-        }, 
-        {
-            "location": "/configuration/#basepath", 
-            "text": "", 
-            "title": "BASEPATH"
-        }, 
-        {
-            "location": "/configuration/#collection_data", 
-            "text": "", 
-            "title": "COLLECTION_DATA"
-        }, 
-        {
-            "location": "/configuration/#collection_file", 
-            "text": "", 
-            "title": "COLLECTION_FILE"
-        }, 
-        {
-            "location": "/configuration/#debug", 
-            "text": "", 
-            "title": "DEBUG"
-        }, 
-        {
-            "location": "/configuration/#dist_dir", 
-            "text": "", 
-            "title": "DIST_DIR"
-        }, 
-        {
-            "location": "/configuration/#store_hooks_pre", 
-            "text": "", 
-            "title": "STORE_HOOKS_PRE"
-        }, 
-        {
-            "location": "/configuration/#store_hooks_post", 
-            "text": "", 
-            "title": "STORE_HOOKS_POST"
-        }, 
-        {
-            "location": "/configuration/#host", 
-            "text": "", 
-            "title": "HOST"
-        }, 
-        {
-            "location": "/configuration/#anno_openapi_host", 
-            "text": "", 
-            "title": "ANNO_OPENAPI_HOST"
-        }, 
-        {
-            "location": "/configuration/#enable_jwt_auth", 
-            "text": "", 
-            "title": "ENABLE_JWT_AUTH"
-        }, 
-        {
-            "location": "/configuration/#knexfile", 
-            "text": "", 
-            "title": "KNEXFILE"
-        }, 
-        {
-            "location": "/configuration/#logfile", 
-            "text": "", 
-            "title": "LOGFILE"
-        }, 
-        {
-            "location": "/configuration/#loglevel", 
-            "text": "", 
-            "title": "LOGLEVEL"
-        }, 
-        {
-            "location": "/configuration/#middlewares", 
-            "text": "", 
-            "title": "MIDDLEWARES"
-        }, 
-        {
-            "location": "/configuration/#port", 
-            "text": "", 
-            "title": "PORT"
-        }, 
-        {
-            "location": "/configuration/#store", 
-            "text": "", 
-            "title": "STORE"
-        }, 
-        {
-            "location": "/development/", 
-            "text": "Development\n\n\nThe project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.\n\n\nOther projects of interest are:\n\n\n\n\nanno-frontend\n - A web user interface based on Vue.js\n\n\n\n\nBootstrap\n\n\nYou need the lerna tool to bootstrap all the modules:\n\n\n# Install lerna\n\nnpm install\n\n\n# Bootstrap dependencies of all modules\n\nlerna bootstrap --hoist\n\n\n\n\n\n\nWarning\n\n\nThis might take a while\n\n\n\n\nMakefile\n\n\nTesting and building is orchestrated with a self-documenting Makefile. Running \nmake\n in the root of the repository will give you an overview:\n\n\n\n\n\nTargets\n\n\nbootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-% \n make start\nstop\\:%                   cd anno-% \n make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in \nMODULE\n, e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate static website in gh-pages\nsite-deploy               Generate site and deploy to github\n\n\n\n\n\nVariables\n\n\nTEMPDIR   Directory for temporary data. Default: \n/home/kba/build/github.com/kba/anno-docker/anno-common/temp\n\nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default: \n./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
-            "title": "Development"
-        }, 
-        {
-            "location": "/development/#development", 
-            "text": "The project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.  Other projects of interest are:   anno-frontend  - A web user interface based on Vue.js", 
-            "title": "Development"
-        }, 
-        {
-            "location": "/development/#bootstrap", 
-            "text": "You need the lerna tool to bootstrap all the modules:  # Install lerna \nnpm install # Bootstrap dependencies of all modules \nlerna bootstrap --hoist   Warning  This might take a while", 
-            "title": "Bootstrap"
-        }, 
-        {
-            "location": "/development/#makefile", 
-            "text": "Testing and building is orchestrated with a self-documenting Makefile. Running  make  in the root of the repository will give you an overview:   Targets  bootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-%   make start\nstop\\:%                   cd anno-%   make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in  MODULE , e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate static website in gh-pages\nsite-deploy               Generate site and deploy to github  Variables  TEMPDIR   Directory for temporary data. Default:  /home/kba/build/github.com/kba/anno-docker/anno-common/temp \nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default:  ./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
-            "title": "Makefile"
         }, 
         {
             "location": "/glossary/", 
@@ -199,76 +29,6 @@
             "location": "/glossary/#top-level-annotation", 
             "text": "", 
             "title": "Top-Level Annotation"
-        }, 
-        {
-            "location": "/options/", 
-            "text": "Options\n\n\nskipVersions\n\n\nReturn only the top-level annotation.\n\n\nskipReplies\n\n\nDo not include replies with an annotation.\n\n\nmetadataOnly\n\n\nDo not include the annotation body.\n\n\nincludeDeleted\n\n\nInclude annotations that have been set to \ndeleted\n, which would otherwise result in a \n410\n.\n\n\nforceDelete\n\n\nCompletely remove an annotation, not just set it to \ndelete\n. \n\n\nSubsequent retrievals will result in \n404\n not \n410\n.", 
-            "title": "Options"
-        }, 
-        {
-            "location": "/options/#options", 
-            "text": "", 
-            "title": "Options"
-        }, 
-        {
-            "location": "/options/#skipversions", 
-            "text": "Return only the top-level annotation.", 
-            "title": "skipVersions"
-        }, 
-        {
-            "location": "/options/#skipreplies", 
-            "text": "Do not include replies with an annotation.", 
-            "title": "skipReplies"
-        }, 
-        {
-            "location": "/options/#metadataonly", 
-            "text": "Do not include the annotation body.", 
-            "title": "metadataOnly"
-        }, 
-        {
-            "location": "/options/#includedeleted", 
-            "text": "Include annotations that have been set to  deleted , which would otherwise result in a  410 .", 
-            "title": "includeDeleted"
-        }, 
-        {
-            "location": "/options/#forcedelete", 
-            "text": "Completely remove an annotation, not just set it to  delete .   Subsequent retrievals will result in  404  not  410 .", 
-            "title": "forceDelete"
-        }, 
-        {
-            "location": "/persistent-identifiers/", 
-            "text": "Algorithms\n\n\nDOI\n\n\nTLA and AR have a field \ndoi\n that is by default \nnull\n and can be set to a DOI.\n\n\nA user with a \ndoiMinter\n role may call the \nmintDoi\n method.\n\n\nIf TLA has no doi:\n  Mint doi1 for URL of TLA\n  TLA.doi := doi1\nFor AR in TLA.hasReply:\n  If AR has no doi:\n    Mint doiN for URL of AR\n    AR.doi := doiN", 
-            "title": "Persistent identifiers"
-        }, 
-        {
-            "location": "/persistent-identifiers/#algorithms", 
-            "text": "", 
-            "title": "Algorithms"
-        }, 
-        {
-            "location": "/persistent-identifiers/#doi", 
-            "text": "TLA and AR have a field  doi  that is by default  null  and can be set to a DOI.  A user with a  doiMinter  role may call the  mintDoi  method.  If TLA has no doi:\n  Mint doi1 for URL of TLA\n  TLA.doi := doi1\nFor AR in TLA.hasReply:\n  If AR has no doi:\n    Mint doiN for URL of AR\n    AR.doi := doiN", 
-            "title": "DOI"
-        }, 
-        {
-            "location": "/server/", 
-            "text": "Setting up a server", 
-            "title": "Server"
-        }, 
-        {
-            "location": "/server/#setting-up-a-server", 
-            "text": "", 
-            "title": "Setting up a server"
-        }, 
-        {
-            "location": "/stores/", 
-            "text": "Stores", 
-            "title": "Stores"
-        }, 
-        {
-            "location": "/stores/#stores", 
-            "text": "", 
-            "title": "Stores"
         }, 
         {
             "location": "/demos/queries/", 
@@ -309,6 +69,251 @@
             "location": "/demos/validator/#validator", 
             "text": "Todo  broken    Load Fixture    Validate", 
             "title": "Validator"
+        }, 
+        {
+            "location": "/develop/algorithms/", 
+            "text": "Algorithms\n\n\nDOI\n\n\nTLA and AR have a field \ndoi\n that is by default \nnull\n and can be set to a DOI.\n\n\nA user with a \ndoiMinter\n role may call the \nmintDoi\n method.\n\n\nIf TLA has no doi:\n  Mint doi1 for URL of TLA\n  TLA.doi := doi1\nFor AR in TLA.hasReply:\n  If AR has no doi:\n    Mint doiN for URL of AR\n    AR.doi := doiN", 
+            "title": "Algorithms"
+        }, 
+        {
+            "location": "/develop/algorithms/#algorithms", 
+            "text": "", 
+            "title": "Algorithms"
+        }, 
+        {
+            "location": "/develop/algorithms/#doi", 
+            "text": "TLA and AR have a field  doi  that is by default  null  and can be set to a DOI.  A user with a  doiMinter  role may call the  mintDoi  method.  If TLA has no doi:\n  Mint doi1 for URL of TLA\n  TLA.doi := doi1\nFor AR in TLA.hasReply:\n  If AR has no doi:\n    Mint doiN for URL of AR\n    AR.doi := doiN", 
+            "title": "DOI"
+        }, 
+        {
+            "location": "/develop/", 
+            "text": "Development\n\n\nThe project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.\n\n\nOther projects of interest are:\n\n\n\n\nanno-frontend\n - A web user interface based on Vue.js\n\n\n\n\nBootstrap\n\n\nYou need the lerna tool to bootstrap all the modules:\n\n\n# Install lerna\n\nnpm install\n\n\n# Bootstrap dependencies of all modules\n\nlerna bootstrap --hoist\n\n\n\n\n\n\nWarning\n\n\nThis might take a while\n\n\n\n\nMakefile\n\n\nTesting and building is orchestrated with a self-documenting Makefile. Running \nmake\n in the root of the repository will give you an overview:\n\n\n\n\n\nTargets\n\n\nbootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-% \n make start\nstop\\:%                   cd anno-% \n make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in \nMODULE\n, e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate static website in gh-pages\nsite-deploy               Generate site and deploy to github\n\n\n\n\n\nVariables\n\n\nTEMPDIR   Directory for temporary data. Default: \n/home/kba/build/github.com/kba/anno-docker/anno-common/temp\n\nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default: \n./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/develop/#development", 
+            "text": "The project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.  Other projects of interest are:   anno-frontend  - A web user interface based on Vue.js", 
+            "title": "Development"
+        }, 
+        {
+            "location": "/develop/#bootstrap", 
+            "text": "You need the lerna tool to bootstrap all the modules:  # Install lerna \nnpm install # Bootstrap dependencies of all modules \nlerna bootstrap --hoist   Warning  This might take a while", 
+            "title": "Bootstrap"
+        }, 
+        {
+            "location": "/develop/#makefile", 
+            "text": "Testing and building is orchestrated with a self-documenting Makefile. Running  make  in the root of the repository will give you an overview:   Targets  bootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-%   make start\nstop\\:%                   cd anno-%   make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in  MODULE , e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate static website in gh-pages\nsite-deploy               Generate site and deploy to github  Variables  TEMPDIR   Directory for temporary data. Default:  /home/kba/build/github.com/kba/anno-docker/anno-common/temp \nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default:  ./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
+            "title": "Makefile"
+        }, 
+        {
+            "location": "/develop/modules/", 
+            "text": "Modules\n\n\nClick on the image for links\n\n\n\n\n\n\n\n\n\nanno-auth-server\n: Authentication and token generation server\n\n\nanno-cli\n: Command line interface for anno-*\n\n\nanno-errors\n: Shared errors for anno-*\n\n\nanno-fixtures\n: Sample data for testing and experimentation\n\n\nanno-plugins\n: Rights management for anno store (users and rules)\n\n\nanno-queries\n: Search and create fragments of Web Annotations\n\n\nanno-schema\n: JSON schema, OpenAPI and JSON-LD context\n\n\nanno-server\n: Web Annotation Protocol server with extensions\n\n\nanno-store\n: Interface for stores\n\n\nanno-store-file\n: Flat file store based on NeDB\n\n\nanno-store-http\n: HTTP Client to Web Annotation Protocol servers\n\n\nanno-store-memory\n: In-Memory store backed by NeDB\n\n\nanno-store-mongodb\n: MongoDB store\n\n\nanno-store-mongolike\n: Store base class for Mongo-like NoSQL databases\n\n\nanno-store-sql\n: \n\n\nanno-test\n: \n\n\nanno-util\n: Utility functions\n\n\nanno-util-loaders\n: Wrappers to configure processors\n\n\nanno-webpack\n: Bundling the anno-* tools for browser use", 
+            "title": "Modules"
+        }, 
+        {
+            "location": "/develop/modules/#modules", 
+            "text": "Click on the image for links     anno-auth-server : Authentication and token generation server  anno-cli : Command line interface for anno-*  anno-errors : Shared errors for anno-*  anno-fixtures : Sample data for testing and experimentation  anno-plugins : Rights management for anno store (users and rules)  anno-queries : Search and create fragments of Web Annotations  anno-schema : JSON schema, OpenAPI and JSON-LD context  anno-server : Web Annotation Protocol server with extensions  anno-store : Interface for stores  anno-store-file : Flat file store based on NeDB  anno-store-http : HTTP Client to Web Annotation Protocol servers  anno-store-memory : In-Memory store backed by NeDB  anno-store-mongodb : MongoDB store  anno-store-mongolike : Store base class for Mongo-like NoSQL databases  anno-store-sql :   anno-test :   anno-util : Utility functions  anno-util-loaders : Wrappers to configure processors  anno-webpack : Bundling the anno-* tools for browser use", 
+            "title": "Modules"
+        }, 
+        {
+            "location": "/develop/options/", 
+            "text": "Options\n\n\nskipVersions\n\n\nReturn only the top-level annotation.\n\n\nskipReplies\n\n\nDo not include replies with an annotation.\n\n\nmetadataOnly\n\n\nDo not include the annotation body.\n\n\nincludeDeleted\n\n\nInclude annotations that have been set to \ndeleted\n, which would otherwise result in a \n410\n.\n\n\nforceDelete\n\n\nCompletely remove an annotation, not just set it to \ndelete\n. \n\n\nSubsequent retrievals will result in \n404\n not \n410\n.", 
+            "title": "Options"
+        }, 
+        {
+            "location": "/develop/options/#options", 
+            "text": "", 
+            "title": "Options"
+        }, 
+        {
+            "location": "/develop/options/#skipversions", 
+            "text": "Return only the top-level annotation.", 
+            "title": "skipVersions"
+        }, 
+        {
+            "location": "/develop/options/#skipreplies", 
+            "text": "Do not include replies with an annotation.", 
+            "title": "skipReplies"
+        }, 
+        {
+            "location": "/develop/options/#metadataonly", 
+            "text": "Do not include the annotation body.", 
+            "title": "metadataOnly"
+        }, 
+        {
+            "location": "/develop/options/#includedeleted", 
+            "text": "Include annotations that have been set to  deleted , which would otherwise result in a  410 .", 
+            "title": "includeDeleted"
+        }, 
+        {
+            "location": "/develop/options/#forcedelete", 
+            "text": "Completely remove an annotation, not just set it to  delete .   Subsequent retrievals will result in  404  not  410 .", 
+            "title": "forceDelete"
+        }, 
+        {
+            "location": "/develop/plugins/", 
+            "text": "Plugins\n\n\nWhen the method of a store is invoked, a \ncontext\n is created. The context is\njust an object with the method parameters, such as the new annotation in the\ncase of \ncreate\n or the lookup ID in the case of \nget\n, as well as metadata\npertinent to the annotation.\n\n\nPlugins can be registered to intercept the context at specific points in the\nprocessing lifecycle, currently \npre\n and \npost\n.\n\n\nPlugins hooking into the \npre\n phase can augment the context with additional\nmetadata or prevent further processing if certain conditions are met. Plugins\nhooking into the \npost\n phase can access and modify the context after the method has been\ndispatched.\n\n\nExamples where plugins are useful:\n\n\n\n\nValidation: Detect invalid arguments for an operation\n\n\nAuthentication: Inject a user id from a session into the context\n\n\nAuthorization: Determine whether the calling user is may execute this\n  operation.\n\n\nUser lookup: Provide user details from an external data source, such as the\n  display name.\n\n\nNotification: Send an e-mail for new annotations\n\n\n\n\nRegistering plugins\n\n\nTo register plugins, add them to the \nANNO_PLUGINS_PRE\n / \nANNO_PLUGINS_POST\n\nconfig variables. The syntax is \nmodule\n[:\nexport\n]\n:\n\n\n\n\nmod1\n:\nAuthPlugin\n will use the function exported as \nAuthPlugin\n from a module \nmod1\n\n\nmod1\n will use the default export of module \nmod1\n as the plugin", 
+            "title": "Plugins"
+        }, 
+        {
+            "location": "/develop/plugins/#plugins", 
+            "text": "When the method of a store is invoked, a  context  is created. The context is\njust an object with the method parameters, such as the new annotation in the\ncase of  create  or the lookup ID in the case of  get , as well as metadata\npertinent to the annotation.  Plugins can be registered to intercept the context at specific points in the\nprocessing lifecycle, currently  pre  and  post .  Plugins hooking into the  pre  phase can augment the context with additional\nmetadata or prevent further processing if certain conditions are met. Plugins\nhooking into the  post  phase can access and modify the context after the method has been\ndispatched.  Examples where plugins are useful:   Validation: Detect invalid arguments for an operation  Authentication: Inject a user id from a session into the context  Authorization: Determine whether the calling user is may execute this\n  operation.  User lookup: Provide user details from an external data source, such as the\n  display name.  Notification: Send an e-mail for new annotations", 
+            "title": "Plugins"
+        }, 
+        {
+            "location": "/develop/plugins/#registering-plugins", 
+            "text": "To register plugins, add them to the  ANNO_PLUGINS_PRE  /  ANNO_PLUGINS_POST \nconfig variables. The syntax is  module [: export ] :   mod1 : AuthPlugin  will use the function exported as  AuthPlugin  from a module  mod1  mod1  will use the default export of module  mod1  as the plugin", 
+            "title": "Registering plugins"
+        }, 
+        {
+            "location": "/server/acl/", 
+            "text": "Rights Management\n\n\nRules\n\n\n\n\nTodo\n\n\n\n\nRoles\n\n\nRoles are used in \nRules\n to define rights for groups of users. They have no meaning without rules that use them!\n\n\nThe descriptions here are valid for the \ndefault rules\n\n\nadmin\n\n\n\n\nAll-powerful\n\n\n\n\ncreator\n\n\n\n\nMay create new annotations\n\n\nMay edit their own annotations\n\n\nMay comment on annotations\n\n\n\n\nmoderator\n\n\n\n\nAll from \ncreator\n\n\nMay edit other people's annotations\n\n\n\n\ndoiMinter\n\n\n\n\nMay assign DOI to an annotation", 
+            "title": "Acl"
+        }, 
+        {
+            "location": "/server/acl/#rights-management", 
+            "text": "", 
+            "title": "Rights Management"
+        }, 
+        {
+            "location": "/server/acl/#rules", 
+            "text": "Todo", 
+            "title": "Rules"
+        }, 
+        {
+            "location": "/server/acl/#roles", 
+            "text": "Roles are used in  Rules  to define rights for groups of users. They have no meaning without rules that use them!  The descriptions here are valid for the  default rules", 
+            "title": "Roles"
+        }, 
+        {
+            "location": "/server/acl/#admin", 
+            "text": "All-powerful", 
+            "title": "admin"
+        }, 
+        {
+            "location": "/server/acl/#creator", 
+            "text": "May create new annotations  May edit their own annotations  May comment on annotations", 
+            "title": "creator"
+        }, 
+        {
+            "location": "/server/acl/#moderator", 
+            "text": "All from  creator  May edit other people's annotations", 
+            "title": "moderator"
+        }, 
+        {
+            "location": "/server/acl/#doiminter", 
+            "text": "May assign DOI to an annotation", 
+            "title": "doiMinter"
+        }, 
+        {
+            "location": "/server/env/", 
+            "text": "Configuration settings\n\n\nACL_DATA\n\n\nBACKEND\n\n\nBASEPATH\n\n\nCOLLECTION_DATA\n\n\nCOLLECTION_FILE\n\n\nDEBUG\n\n\nDIST_DIR\n\n\nSTORE_HOOKS_PRE\n\n\nSTORE_HOOKS_POST\n\n\nHOST\n\n\nANNO_OPENAPI_HOST\n\n\nENABLE_JWT_AUTH\n\n\nKNEXFILE\n\n\nLOGFILE\n\n\nLOGLEVEL\n\n\nMIDDLEWARES\n\n\nPORT\n\n\nSTORE", 
+            "title": "Env"
+        }, 
+        {
+            "location": "/server/env/#configuration-settings", 
+            "text": "", 
+            "title": "Configuration settings"
+        }, 
+        {
+            "location": "/server/env/#acl_data", 
+            "text": "", 
+            "title": "ACL_DATA"
+        }, 
+        {
+            "location": "/server/env/#backend", 
+            "text": "", 
+            "title": "BACKEND"
+        }, 
+        {
+            "location": "/server/env/#basepath", 
+            "text": "", 
+            "title": "BASEPATH"
+        }, 
+        {
+            "location": "/server/env/#collection_data", 
+            "text": "", 
+            "title": "COLLECTION_DATA"
+        }, 
+        {
+            "location": "/server/env/#collection_file", 
+            "text": "", 
+            "title": "COLLECTION_FILE"
+        }, 
+        {
+            "location": "/server/env/#debug", 
+            "text": "", 
+            "title": "DEBUG"
+        }, 
+        {
+            "location": "/server/env/#dist_dir", 
+            "text": "", 
+            "title": "DIST_DIR"
+        }, 
+        {
+            "location": "/server/env/#store_hooks_pre", 
+            "text": "", 
+            "title": "STORE_HOOKS_PRE"
+        }, 
+        {
+            "location": "/server/env/#store_hooks_post", 
+            "text": "", 
+            "title": "STORE_HOOKS_POST"
+        }, 
+        {
+            "location": "/server/env/#host", 
+            "text": "", 
+            "title": "HOST"
+        }, 
+        {
+            "location": "/server/env/#anno_openapi_host", 
+            "text": "", 
+            "title": "ANNO_OPENAPI_HOST"
+        }, 
+        {
+            "location": "/server/env/#enable_jwt_auth", 
+            "text": "", 
+            "title": "ENABLE_JWT_AUTH"
+        }, 
+        {
+            "location": "/server/env/#knexfile", 
+            "text": "", 
+            "title": "KNEXFILE"
+        }, 
+        {
+            "location": "/server/env/#logfile", 
+            "text": "", 
+            "title": "LOGFILE"
+        }, 
+        {
+            "location": "/server/env/#loglevel", 
+            "text": "", 
+            "title": "LOGLEVEL"
+        }, 
+        {
+            "location": "/server/env/#middlewares", 
+            "text": "", 
+            "title": "MIDDLEWARES"
+        }, 
+        {
+            "location": "/server/env/#port", 
+            "text": "", 
+            "title": "PORT"
+        }, 
+        {
+            "location": "/server/env/#store", 
+            "text": "", 
+            "title": "STORE"
+        }, 
+        {
+            "location": "/server/", 
+            "text": "Setting up a server", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/server/#setting-up-a-server", 
+            "text": "", 
+            "title": "Setting up a server"
         }
     ]
 }
