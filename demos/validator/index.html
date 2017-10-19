@@ -172,6 +172,19 @@
   
     <li class="md-tabs__item">
       
+        <a href="../../api/store/" title="Api" class="md-tabs__link">
+          Api
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
         <a href="../queries/" title="Demos" class="md-tabs__link md-tabs__link--active">
           Demos
         </a>
@@ -279,18 +292,54 @@
       
       
 
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Api
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Api
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api/store/" title="Store" class="md-nav__link">
+      Store
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
-    <label class="md-nav__link" for="nav-3">
+    <label class="md-nav__link" for="nav-4">
       Demos
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         Demos
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -341,13 +390,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
-    <label class="md-nav__link" for="nav-4">
+    <label class="md-nav__link" for="nav-5">
       Develop
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
+      <label class="md-nav__title" for="nav-5">
         Develop
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -425,13 +474,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
-    <label class="md-nav__link" for="nav-5">
+    <label class="md-nav__link" for="nav-6">
       Server
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
+      <label class="md-nav__title" for="nav-6">
         Server
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -507,15 +556,11 @@
                 
                 
                 <h1 id="validator">Validator<a class="headerlink" href="#validator" title="Permanent link">&para;</a></h1>
-<div class="admonition todo">
-<p class="admonition-title">Todo</p>
-<p>broken</p>
-</div>
 <p><select id="fixture"></select>
-<button id="load-fixture" onclick="loadFixture()">Load Fixture</button></p>
+<a id="load-fixture" onclick="loadFixture()">Load Fixture</a></p>
 <p><textarea id="input" rows="10" cols="40" class="codemirror"></textarea></p>
 <p><select id="type"></select>
-<button id="validate" onclick="validate()">Validate</button></p>
+<a id="validate" onclick="validate()">Validate</a></p>
 <p><textarea class="codemirror" readonly id="result"></textarea></p>
 <script src="../../assets/js/validator.js"></script>
                 
@@ -596,7 +641,7 @@
       
         <script src="../../assets/dist/anno-fixtures.js"></script>
       
-        <script src="../../assets/dist/anno-fixtures.js"></script>
+        <script src="../../assets/dist/anno-schema.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.30.0/codemirror.min.js"></script>
       

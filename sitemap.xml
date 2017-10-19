@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>/glossary/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,14 +20,24 @@
     
         
     <url>
+     <loc>/api/store/</loc>
+     <lastmod>2017-10-20</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+        
+    <url>
      <loc>/demos/queries/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/demos/validator/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -37,31 +47,31 @@
         
     <url>
      <loc>/develop/algorithms/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/develop/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/develop/modules/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/develop/options/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/develop/plugins/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -71,19 +81,19 @@
         
     <url>
      <loc>/server/acl/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/server/env/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/server/</loc>
-     <lastmod>2017-10-19</lastmod>
+     <lastmod>2017-10-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         

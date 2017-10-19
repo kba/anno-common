@@ -31,6 +31,131 @@
             "title": "Top-Level Annotation"
         }, 
         {
+            "location": "/api/store/", 
+            "text": "Store API\n\n\n\n\n\nPublic API\n\n\nstatic\n load(loadingModule)\n\n\nModules may call this static method to instantiate a store from the\nenvironment and using the packages installed in the calling package.\n\n// my-package/index.js\n\n\nconst\n \nstore\n \n=\n \nrequire\n(\n@kba/anno-store\n).\nload\n(\nmodule\n)\n\n\nstore\n.\ninit\n(...)\n\n\n\n\nuse(proc, hook=\npre\n)\n\n\nUse processor before (\nhook=pre\n) or after (\nhook=post\n) store method.\n\n\ninit(options, cb)\n\n\nInitialize a connection to the store.\n- \n@param {Options} options\n\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\nwipe(options, callback)\n\n\nWipe the store, revisions and all.\n- \n@param {Options} options\n\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\ndisconnect(options, callback)\n\n\nDisconnect a store.\nA disconnected store cannot be used until \ninit\n is called again.\n- \n@param {Options} options\n\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\nget(annoId, options, cb)\n\n\nRetrieve an annotation.\n- \n@param {String|Array\nString\n} annoIds\n\n- \n@param {Object} options\n\n    - \n@param {Boolean} options.latest\n Return the latest revision only\n    - \n@param {Boolean} options.metadataOnly\n Return only metadata\n    - \n@param {Boolean} options.skipVersions\n Omit versions\n    - \n@param {Boolean} options.skipReplies\n Omit replies\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\ncreate(anno, options, callback)\n\n\nCreate an annotation.\n- \n@param {Object} anno\n\n- \n@param {Options} options\n\n- \n@param String options.slug Proposal for the ID to create\n\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\nrevise(annoId, anno, options, callback)\n\n\nRevise an annotation.\n- \n@param {String} annoId\n\n- \n@param {Object} anno\n\n- \n@param {Options} options\n\n  - \n@param {String} options.user\n\n- \n@param {function} callback\n\n\ndelete(annoId, options, callback)\n\n\nremove(annoId, options, callback)\n\n\nDelete an annotation, i.e. set the deleted date.\n- \n@param {String} annoId\n\n- \n@param {Options} options\n\n- \n@param {Boolean} options.forceDelete\n Set to \ntrue\n to hint the store to\n                                     actually delete, not just mark deleted\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\nsearch(query, options, callback)\n\n\nSearch the store.\n- \n@param {Object} query\n\n- \n@param {Options} options\n\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\nreply(annoId, anno, options, callback)\n\n\ncomment(annoId, anno, options, callback)\n\n\nReply to an annotation\n- \n@param {String} annoId\n\n- \n@param {Object} anno\n\n- \n@param {Options} options\n\n- \n@param {String} options.user\n\n- \n@param {function} callback\n\n\naclcheck(targets, options, callback)\n\n\n\n\n@param {Array} targets\n\n\n@param {Options} options\n\n\n@param {function} callback\n\n\n\n\nimport(anno, options, callback)\n\n\nReplaces the complete annotation with the passed annotation, not just revise it.\n- \n@param {Object} anno\n\n- \n@param {Options} options\n\n  - \n@param String options.slug Proposal for the ID to create\n\n  - \n@param {String} options.user\n\n- \n@param {function} callback\n\n\nProtected API\n\n\nThese methods are available for store implementations but should not be\nused by consumers.\n\n\n_idFromURL(url)\n\n\nGet only the slug part of a URL\n\n\n_urlFromId(annoId)\n\n\nGenerate a full URL to an annotation by its id.\n\n\n_normalizeTarget(annoDoc)\n\n\nTODO no idempotency of targets with normalization -\n disabled for now\n\n\n_normalizeType(anno)\n\n\nMake sure \nanno.type\n exists, is an Array and contains \nAnnotation\n\n\ndeleteId(anno)\n\n\nDelete the \nid\n and store it in \nvia\n.\n- \n@param Object anno\n\n\n_genid(slug=\n)\n\n\nGenerate an ID for the annotation from \nslug\n and a \n\"nice\"\nslugid", 
+            "title": "Store"
+        }, 
+        {
+            "location": "/api/store/#store-api", 
+            "text": "", 
+            "title": "Store API"
+        }, 
+        {
+            "location": "/api/store/#public-api", 
+            "text": "", 
+            "title": "Public API"
+        }, 
+        {
+            "location": "/api/store/#static-loadloadingmodule", 
+            "text": "Modules may call this static method to instantiate a store from the\nenvironment and using the packages installed in the calling package. // my-package/index.js  const   store   =   require ( @kba/anno-store ). load ( module )  store . init (...)", 
+            "title": "static load(loadingModule)"
+        }, 
+        {
+            "location": "/api/store/#useproc-hookpre", 
+            "text": "Use processor before ( hook=pre ) or after ( hook=post ) store method.", 
+            "title": "use(proc, hook=&#39;pre&#39;)"
+        }, 
+        {
+            "location": "/api/store/#initoptions-cb", 
+            "text": "Initialize a connection to the store.\n-  @param {Options} options \n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "init(options, cb)"
+        }, 
+        {
+            "location": "/api/store/#wipeoptions-callback", 
+            "text": "Wipe the store, revisions and all.\n-  @param {Options} options \n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "wipe(options, callback)"
+        }, 
+        {
+            "location": "/api/store/#disconnectoptions-callback", 
+            "text": "Disconnect a store.\nA disconnected store cannot be used until  init  is called again.\n-  @param {Options} options \n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "disconnect(options, callback)"
+        }, 
+        {
+            "location": "/api/store/#getannoid-options-cb", 
+            "text": "Retrieve an annotation.\n-  @param {String|Array String } annoIds \n-  @param {Object} options \n    -  @param {Boolean} options.latest  Return the latest revision only\n    -  @param {Boolean} options.metadataOnly  Return only metadata\n    -  @param {Boolean} options.skipVersions  Omit versions\n    -  @param {Boolean} options.skipReplies  Omit replies\n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "get(annoId, options, cb)"
+        }, 
+        {
+            "location": "/api/store/#createanno-options-callback", 
+            "text": "Create an annotation.\n-  @param {Object} anno \n-  @param {Options} options \n-  @param String options.slug Proposal for the ID to create \n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "create(anno, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#reviseannoid-anno-options-callback", 
+            "text": "Revise an annotation.\n-  @param {String} annoId \n-  @param {Object} anno \n-  @param {Options} options \n  -  @param {String} options.user \n-  @param {function} callback", 
+            "title": "revise(annoId, anno, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#deleteannoid-options-callback", 
+            "text": "", 
+            "title": "delete(annoId, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#removeannoid-options-callback", 
+            "text": "Delete an annotation, i.e. set the deleted date.\n-  @param {String} annoId \n-  @param {Options} options \n-  @param {Boolean} options.forceDelete  Set to  true  to hint the store to\n                                     actually delete, not just mark deleted\n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "remove(annoId, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#searchquery-options-callback", 
+            "text": "Search the store.\n-  @param {Object} query \n-  @param {Options} options \n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "search(query, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#replyannoid-anno-options-callback", 
+            "text": "", 
+            "title": "reply(annoId, anno, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#commentannoid-anno-options-callback", 
+            "text": "Reply to an annotation\n-  @param {String} annoId \n-  @param {Object} anno \n-  @param {Options} options \n-  @param {String} options.user \n-  @param {function} callback", 
+            "title": "comment(annoId, anno, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#aclchecktargets-options-callback", 
+            "text": "@param {Array} targets  @param {Options} options  @param {function} callback", 
+            "title": "aclcheck(targets, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#importanno-options-callback", 
+            "text": "Replaces the complete annotation with the passed annotation, not just revise it.\n-  @param {Object} anno \n-  @param {Options} options \n  -  @param String options.slug Proposal for the ID to create \n  -  @param {String} options.user \n-  @param {function} callback", 
+            "title": "import(anno, options, callback)"
+        }, 
+        {
+            "location": "/api/store/#protected-api", 
+            "text": "These methods are available for store implementations but should not be\nused by consumers.", 
+            "title": "Protected API"
+        }, 
+        {
+            "location": "/api/store/#_idfromurlurl", 
+            "text": "Get only the slug part of a URL", 
+            "title": "_idFromURL(url)"
+        }, 
+        {
+            "location": "/api/store/#_urlfromidannoid", 
+            "text": "Generate a full URL to an annotation by its id.", 
+            "title": "_urlFromId(annoId)"
+        }, 
+        {
+            "location": "/api/store/#_normalizetargetannodoc", 
+            "text": "TODO no idempotency of targets with normalization -  disabled for now", 
+            "title": "_normalizeTarget(annoDoc)"
+        }, 
+        {
+            "location": "/api/store/#_normalizetypeanno", 
+            "text": "Make sure  anno.type  exists, is an Array and contains  Annotation", 
+            "title": "_normalizeType(anno)"
+        }, 
+        {
+            "location": "/api/store/#deleteidanno", 
+            "text": "Delete the  id  and store it in  via .\n-  @param Object anno", 
+            "title": "deleteId(anno)"
+        }, 
+        {
+            "location": "/api/store/#_genidslug", 
+            "text": "Generate an ID for the annotation from  slug  and a  \"nice\"\nslugid", 
+            "title": "_genid(slug=&#39;&#39;)"
+        }, 
+        {
             "location": "/demos/queries/", 
             "text": "Demo for queries\n\n\n\n\nThis demo exposes the interface of the \nAnno.Queries\n API.\n\n\n\n\nDemo\n\n\n\n\nLoad Fixture\n\n\n\n\n\n\n\n  \nfirst\n\n  \nall\n\n  \nnumberOf\n\n\n\n\nQuery\n\n\n\n\nHelp\n\n\nIt loads the fixtures of the \nWeb Platform Tests for the Web Annotation\nProtocol\n\nvia the \nAnno.Fixtures\n module.\n\n\nChoose an annotation or write/paste your own in the textarea.\n\n\nThen select a query type and choose whether to return the first, all or the\ncount of return values.\n\n\nHTML\n\n\nSee markdown source\n\n\nJavascript\n\n\nSee \n/assets/js/queries.js\n for full source\n\n\nfunction\n \nquery\n()\n \n{\n\n    \nconst\n \ninput\n \n=\n \ninputField\n.\neditor\n.\ngetDoc\n().\ngetValue\n()\n\n    \nconst\n \nanno\n \n=\n \nJSON\n.\nparse\n(\ninput\n)\n\n    \nconst\n \nqueryClass\n \n=\n \nqueryClassList\n.\nvalue\n\n    \nconst\n \nmethod\n \n=\n \nmethodList\n.\nvalue\n\n    \nconst\n \nresult\n \n=\n \nAnno\n.\nQueries\n[\nqueryClass\n][\nmethod\n](\nanno\n)\n\n    \nresultField\n.\ninnerHTML\n \n=\n \nJSON\n.\nstringify\n(\nresult\n,\n \nnull\n,\n \n2\n)\n\n\n}", 
             "title": "Queries"
@@ -62,12 +187,12 @@
         }, 
         {
             "location": "/demos/validator/", 
-            "text": "Validator\n\n\n\n\nTodo\n\n\nbroken\n\n\n\n\n\n\nLoad Fixture\n\n\n\n\n\n\nValidate", 
+            "text": "Validator\n\n\n\n\nLoad Fixture\n\n\n\n\n\n\nValidate", 
             "title": "Validator"
         }, 
         {
             "location": "/demos/validator/#validator", 
-            "text": "Todo  broken    Load Fixture    Validate", 
+            "text": "Load Fixture    Validate", 
             "title": "Validator"
         }, 
         {
@@ -87,7 +212,7 @@
         }, 
         {
             "location": "/develop/", 
-            "text": "Development\n\n\nThe project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.\n\n\nOther projects of interest are:\n\n\n\n\nanno-frontend\n - A web user interface based on Vue.js\n\n\n\n\nBootstrap\n\n\nYou need the lerna tool to bootstrap all the modules:\n\n\n# Install lerna\n\nnpm install\n\n\n# Bootstrap dependencies of all modules\n\nlerna bootstrap --hoist\n\n\n\n\n\n\nWarning\n\n\nThis might take a while\n\n\n\n\nMakefile\n\n\nTesting and building is orchestrated with a self-documenting Makefile. Running \nmake\n in the root of the repository will give you an overview:\n\n\n\n\n\nTargets\n\n\nbootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-% \n make start\nstop\\:%                   cd anno-% \n make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in \nMODULE\n, e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate Github Pages site in ./site\nsite-deploy               Deploy site to Github pages\n\n\n\n\n\nVariables\n\n\nTEMPDIR   Directory for temporary data. Default: \n/home/kba/build/github.com/kba/anno-docker/anno-common/temp\n\nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default: \n./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
+            "text": "Development\n\n\nThe project is organized as a set of modules inside a monorepo. To build the\ncore services like stores, server and browser library, you need to clone this\nrepo and build/develop what you want.\n\n\nOther projects of interest are:\n\n\n\n\nanno-frontend\n - A web user interface based on Vue.js\n\n\n\n\nBootstrap\n\n\nYou need the lerna tool to bootstrap all the modules:\n\n\n# Install lerna\n\nnpm install\n\n\n# Bootstrap dependencies of all modules\n\nlerna bootstrap --hoist\n\n\n\n\n\n\nWarning\n\n\nThis might take a while\n\n\n\n\nMakefile\n\n\nTesting and building is orchestrated with a self-documenting Makefile. Running \nmake\n in the root of the repository will give you an overview:\n\n\n\n\n\nTargets\n\n\nbootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-% \n make start\nstop\\:%                   cd anno-% \n make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in \nMODULE\n, e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nwebpack/clean             Remove all webpacked files\nsite                      Build the documentation in \n./site\n\nsite/serve                Continuously serve the site on localhost:8000\nshinclude                 Run shinclude on markdown sources\nsite-deploy               Deploy site to Github pages\n\n\n\n\n\nVariables\n\n\nTEMPDIR   Directory for temporary data. Default: \n/home/kba/build/github.com/kba/anno-docker/anno-common/temp\n\nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default: \n./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
             "title": "Home"
         }, 
         {
@@ -102,7 +227,7 @@
         }, 
         {
             "location": "/develop/#makefile", 
-            "text": "Testing and building is orchestrated with a self-documenting Makefile. Running  make  in the root of the repository will give you an overview:   Targets  bootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-%   make start\nstop\\:%                   cd anno-%   make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in  MODULE , e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nsite                      Generate Github Pages site in ./site\nsite-deploy               Deploy site to Github pages  Variables  TEMPDIR   Directory for temporary data. Default:  /home/kba/build/github.com/kba/anno-docker/anno-common/temp \nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default:  ./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
+            "text": "Testing and building is orchestrated with a self-documenting Makefile. Running  make  in the root of the repository will give you an overview:   Targets  bootstrap                 lerna bootstrap and check for binaries\nanno-fixtures/index.json  Setup test fixtures\nstart\\:%                  cd anno-%   make start\nstop\\:%                   cd anno-%   make stop\nstart-all                 start mongodb, sql and server\nstop-all                  stop mongodb, sql and server\ntest-all                  Run all unit/integration tests.\ntest                      Run all tests set as TESTS.\ntest\\:%                   Run all unit/integration tests in  MODULE , e.g. make test:store-sql\nclean                     Remove tempdir\nwebpack                   webpack dev, min, fixtures\nwebpack-dev               webpack -s\nwebpack-watch             webpack -d -w\nwebpack-fixtures          webpack fixtures\nwebpack-min               webpack production version\nwebpack/clean             Remove all webpacked files\nsite                      Build the documentation in  ./site \nsite/serve                Continuously serve the site on localhost:8000\nshinclude                 Run shinclude on markdown sources\nsite-deploy               Deploy site to Github pages  Variables  TEMPDIR   Directory for temporary data. Default:  /home/kba/build/github.com/kba/anno-docker/anno-common/temp \nREPORTER  TAP reporter to use. Default tap. One of\n            classic doc dot dump json jsonstream\n            landing list markdown min nyan progress  \n            silent spec tap xunit \nTESTS     All Tests. Default:  ./anno-queries/queries.test.js ./anno-util/util.test.js ./anno-store-memory/store-memory.test.js ./anno-plugins/rights.test.js ./anno-test/middlewares.test.js ./anno-schema/schema.test.js ./anno-store-file/store-file.test.js ./anno-store-http/store-http.test.js ./anno-store-sql/store-sql.test.js ./anno-store-mongodb/store-mongodb.test.js ./envyconf/envyconf.test.js", 
             "title": "Makefile"
         }, 
         {
