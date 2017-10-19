@@ -17,7 +17,7 @@ block body
 								input(type="email",name="email",placeholder="Your email address (Optional, in case of questions)",class="col-md-6")
 							.form-group
 								textarea(required,name="reasons",placeholder="What's your research interest?",rows=5,class="col-md-6")
-							.form-group
+							.form-group(style=debugAuth ? '' : "display:none")
 								p I want to annotate these collections:
 								each collection in collectionsAvailable
 									.checkbox
