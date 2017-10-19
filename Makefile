@@ -127,9 +127,9 @@ clean:
 # Webpack
 #
 
-# webpack dev, min, fixtures
+# webpack min, fixtures, schema, memory-store, schema
 .PHONY: webpack
-webpack: webpack-dev webpack-fixtures webpack-min 
+webpack: webpack-min webpack/fixtures webpack/memory-store webpack/schema
 
 # webpack -s
 .PHONY: webpack-dev
@@ -141,10 +141,10 @@ webpack-dev:
 webpack-watch:
 	cd anno-webpack && webpack -d -w
 
-# webpack fixtures
-.PHONY: webpack-fixtures
-webpack-fixtures:
-	cd anno-webpack && webpack --config webpack.config.fixtures.js
+.PHONY: webpack/%
+webpack/%:
+	@echo "# `date` Building anno-$(notdir $@).js"
+	cd anno-webpack && webpack -p --config webpack.config.$(notdir $@).js
 
 # webpack production version
 .PHONY: webpack-min
@@ -152,7 +152,7 @@ webpack-min:
 	cd anno-webpack && webpack -p --output-filename anno.min.js
 
 # Remove all webpacked files
-webpack/clean:
+webpack-clean:
 	rm -rvf anno-webpack/dist
 
 #
@@ -171,11 +171,12 @@ site/serve:
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs serve
 
-.PHONY: site/assets/dist
-sites/assets/dist: webpack/clean webpack-fixtures webpack-min
-	rm -rvf $@
-	cp -r anno-webpack/dist $@
-	cp anno-schema/context.json doc/context.jsonld
+# Rebuild the dist folder to be deployed
+.PHONY: site-dist
+site-dist: webpack-clean webpack
+	rm -rvf site/assets/dist
+	cp -rv anno-webpack/dist site/assets/dist
+	cp -v anno-schema/context.json doc/context.jsonld
 
 # Run shinclude on markdown sources
 .PHONY: shinclude
@@ -186,7 +187,7 @@ shinclude:
 	find . -maxdepth 1 -name 'README.md' -exec shinclude -c xml -i {} \;
 
 # Deploy site to Github pages
-.PHONY: site/assets/dist shinclude
+.PHONY: site-dist shinclude
 site-deploy: site
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs gh-deploy
