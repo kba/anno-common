@@ -11,14 +11,14 @@ module.exports = function ConfigLoaderProcessorFactory(processorClass, envyconfN
             [envyconfName]: '/FILENAME-NOT-SET.json'
         })[envyconfName]
         // console.log({processorClass, envyconfName, CONF_FILE})
-        var processor = new processorClass()
+        let processor = new processorClass()
 
         function parseContents(err, contents) {
             if (err) {
                 console.log(new Error(`Error reading file ${CONF_FILE} ${err}`))
                 return
             }
-            let confData = (CONF_FILE.endsWith('.yml')) 
+            let confData = (CONF_FILE.endsWith('.yml'))
                 ? YAML.safeLoad(contents)
                 : JSON.parse(contents)
             processor = new processorClass(confData)
@@ -28,7 +28,7 @@ module.exports = function ConfigLoaderProcessorFactory(processorClass, envyconfN
             parseContents(null, contents)
         } catch (err) {
             console.log(errors.fileNotFound(CONF_FILE, err))
-            throw(errors.fileNotFound(CONF_FILE, err))
+            throw errors.fileNotFound(CONF_FILE, err)
         }
 
         chokidar

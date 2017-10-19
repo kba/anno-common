@@ -22,7 +22,8 @@ block body
 								each collection in collectionsAvailable
 									.checkbox
 										label
-											input(type='checkbox',name=`c_${collection}`)
+											- checked = collectionsSelected.has(collection)
+											input(type='checkbox',name=`c_${collection}`,checked=checked)
 											= collection
 							.form-group
 								button.btn.btn-default(type='submit') Submit

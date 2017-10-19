@@ -1,11 +1,6 @@
 const AuthBase = require('./auth-base')
 const passport = require('passport')
-
-function noSuchUser(username) {
-  const ret = new Error(`No such user: ${username}`)
-  ret.code = 404
-  return ret
-}
+const bodyParser   = require('body-parser')
 
 module.exports = class AuthPlain extends AuthBase {
 
@@ -15,7 +10,6 @@ module.exports = class AuthPlain extends AuthBase {
     const LocalStrategy = require('passport-local').Strategy
 
     passport.use(new LocalStrategy(function(username, password, done) {
-      // console.log(arguments)
       // // TODO this is a giant hack of course
       // if (username === 'john') return done(null, {id: username})
       // return password === 'anno'
@@ -30,17 +24,44 @@ module.exports = class AuthPlain extends AuthBase {
 
     this.router.use(passport.initialize())
     this.router.use(passport.session())
+    this.router.use(bodyParser.urlencoded({extended: true}))
   }
 
-  determineUser(req) {return req.user}
+  determineUser(req) {return req.user ? req.user.id : ''}
 
   getLogin(req, resp) {
-    const {query, user} = req
     const error = req.flash('error')
-    resp.render('plain-login', {query, user, error})
+    const {from, collectionsAvailable} = req
+    if (req.user) {
+      resp.redirect(`logout?from=${from}`)
+    } else {
+      resp.render('plain-login', {
+        sub: false,
+        collectionsAvailable,
+        error
+      })
+    }
+  }
+
+  getLogout(req, resp) {
+    const {from} = req.query
+    const error = req.flash('error')
+    const {collectionsAvailable} = req
+    const sub = this.determineUser(req)
+    if (!req.user) {
+      resp.redirect(`login?from=${from}`)
+    } else {
+      resp.render('plain-logout', {
+        from: 'logout',
+        sub,
+        collectionsAvailable,
+        error
+      })
+    }
   }
 
   postLogin(req, resp, next) {
+    console.log(req.query)
     passport.authenticate('local', {
       successRedirect: req.query.from || 'logout',
       failureRedirect: 'login',
@@ -51,12 +72,6 @@ module.exports = class AuthPlain extends AuthBase {
         return next(err)
       }
     })
-  }
-
-  getLogout(req, resp) {
-    const {query, user} = req
-    const error = req.flash('error')
-    resp.render('plain-logout', {query, user, error})
   }
 
   postLogout(req, resp) {

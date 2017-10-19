@@ -1,15 +1,5 @@
-const {RuleSet} = require('sift-rule')
-const {envyConf, envyLog} = require('envyconf')
+const {envyLog} = require('envyconf')
 const errors = require('@kba/anno-errors')
-
-const schema = {
-    type: 'object',
-    properties: {
-        secret: {
-            type: 'string'
-        }
-    }
-}
 
 class AnnoCollection {
 
@@ -21,8 +11,6 @@ class AnnoCollection {
     }
 
     process(ctx, cb) {
-        const config = envyConf('ANNO')
-        const log = envyLog('ANNO', 'collection')
         ctx.collection = (ctx.collection || 'default')
         ctx.collectionConfig = {}
         if (!(ctx.collection in this.collections)) {
