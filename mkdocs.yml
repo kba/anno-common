@@ -9,7 +9,8 @@ extra:
 extra_javascript:
   - assets/dist/anno.min.js
   - assets/dist/anno-fixtures.js
-  - assets/dist/anno-fixtures.js
+  - assets/dist/anno-schema.js
+  # - assets/dist/anno-memory-store.js
   - https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.30.0/codemirror.min.js
   - https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.30.0/mode/javascript/javascript.min.js
 extra_css:

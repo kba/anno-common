@@ -1,15 +1,12 @@
 # Validator
 
-!!! TODO
-    broken
-
 <select id="fixture"></select>
-<button id="load-fixture" onclick="loadFixture()">Load Fixture</button>
+<a id="load-fixture" onclick="loadFixture()">Load Fixture</a>
 
 <textarea id="input" rows="10" cols="40" class="codemirror"></textarea>
 
 <select id="type"></select>
-<button id="validate" onclick="validate()">Validate</button>
+<a id="validate" onclick="validate()">Validate</a>
 
 <textarea class="codemirror" readonly id="result"></textarea>
 

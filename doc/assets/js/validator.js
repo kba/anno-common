@@ -1,34 +1,38 @@
 /* globals Anno */
+/* globals AnnoSchema */
 /* globals CodeMirror */
 /* exported validate */
 /* exported loadFixture */
 
-const input = document.getElementById('input')
+const inputTextarea = document.getElementById('input')
 const typeList = document.getElementById('type')
 const fixtureList = document.getElementById('fixture')
-const result = document.getElementById('result')
+const resultTextarea = document.getElementById('result')
 
 function validate() {
-  const validFn = Anno.Schema.validate[typeList.value]
+  const validFn = AnnoSchema.validate[typeList.value]
+  const editor = resultTextarea.editor
+  const editorClassList = editor.getScrollerElement().classList
   try {
-    const valid = validFn(JSON.parse(input.editor.getDoc().getValue()))
-    result.classList[valid ? 'add' : 'remove']('success')
-    result.classList[valid ? 'remove' : 'add']('error')
+    const input = JSON.parse(inputTextarea.editor.getDoc().getValue())
+    const valid = validFn(input)
+    editorClassList[valid ? 'add' : 'remove']('success')
+    editorClassList[valid ? 'remove' : 'add']('error')
     if (!valid) {
-      result.innerHTML = JSON.stringify(validFn.errors, null, 2)
+      editor.setValue(JSON.stringify(validFn.errors, null, 2))
     } else {
-      result.innerHTML = "Valid"
+      editor.setValue("Valid")
     }
   } catch (err) {
-    result.innerHTML = err
-    result.classList.remove('valid')
-    result.classList.add('invalid')
+    editor.setValue(err)
+    editorClassList.remove('valid')
+    editorClassList.add('invalid')
   }
 }
 
 function loadFixture() {
   const [type, cat, file] = fixtureList.value.split('/')
-  input.editor.getDoc().setValue(JSON.stringify(Anno.fixtures[type][cat][file], null, 2))
+  inputTextarea.editor.getDoc().setValue(JSON.stringify(Anno.fixtures[type][cat][file], null, 2))
   typeList.value = type
 }
 
@@ -42,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  Object.keys(Anno.Schema.definitions)
+  Object.keys(AnnoSchema.definitions)
     .sort((a, b) => {
       const aUC = !!a.substr(0, 1).match(/[A-Z]/)
       const bUC = !!b.substr(0, 1).match(/[A-Z]/)
