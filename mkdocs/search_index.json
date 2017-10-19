@@ -432,13 +432,18 @@
         }, 
         {
             "location": "/server/", 
-            "text": "Setting up a server", 
+            "text": "Setting up a server\n\n\nSwagger\n\n\nYou can test your deployment \nwith Swagger\n.", 
             "title": "Home"
         }, 
         {
             "location": "/server/#setting-up-a-server", 
             "text": "", 
             "title": "Setting up a server"
+        }, 
+        {
+            "location": "/server/#swagger", 
+            "text": "You can test your deployment  with Swagger .", 
+            "title": "Swagger"
         }
     ]
 }
