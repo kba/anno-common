@@ -24,7 +24,7 @@ module.exports = function UserAuthMiddlewareFactory(cb) {
             }
             const {authToken} = req
             if (!authToken) {
-                console.log(errors.badRequest(`No token present, cannot authenticate.`))
+                // console.log(errors.badRequest(`No token present, cannot authenticate.`))
                 return next()
             }
 
