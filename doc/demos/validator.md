@@ -14,4 +14,4 @@
 <textarea class="codemirror" readonly id="result"></textarea>
 
 
-<script src="/assets/js/validator.js"></script>
+<script src="../../assets/js/validator.js"></script>

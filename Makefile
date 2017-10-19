@@ -16,8 +16,6 @@ REPORTER = tap
 # All Tests. Default: '$(TESTS)'
 TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
 
-SITEDIR = gh-pages
-
 # BEGIN-EVAL makefile-parser --make-help Makefile
 
 help:
@@ -39,8 +37,8 @@ help:
 	@echo "    webpack-watch             webpack -d -w"
 	@echo "    webpack-fixtures          webpack fixtures"
 	@echo "    webpack-min               webpack production version"
-	@echo "    site                      Generate static website in $(SITEDIR)"
-	@echo "    site-deploy               Generate site and deploy to github"
+	@echo "    site                      Generate Github Pages site in ./site"
+	@echo "    site-deploy               Deploy site to Github pages"
 	@echo ""
 	@echo "  Variables"
 	@echo ""
@@ -148,23 +146,23 @@ webpack-fixtures:
 webpack-min:
 	cd anno-webpack && webpack -p --output-filename anno.min.js
 
+# Remove all webpacked files
+webpack/clean:
+	rm -rvf anno-webpack/dist
+
 #
 # Github pages
 #
 
-$(SITEDIR):
-	git clone --branch gh-pages https://github.com/kba/anno $(SITEDIR)
-
-# Generate static website in $(SITEDIR)
+# Generate Github Pages site in ./site
 .PHONY: site
-site: $(SITEDIR)
-	cp anno-schema/context.json $(SITEDIR)/context.jsonld
-	$(MKDIR) $(SITEDIR)/dist/
-	cp anno-webpack/dist/* $(SITEDIR)/dist/
-	$(MAKE) -C $(SITEDIR) clean
-	cd $(SITEDIR) && $(MAKE) -j4 STAGE=prod all
+site: webpack/clean webpack-fixtures webpack-min
+	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
+	rm -rf doc/assets/dist
+	cp -r anno-webpack/dist doc/assets
+	cp anno-schema/context.json doc/context.jsonld
 
-# Generate site and deploy to github
+# Deploy site to Github pages
 .PHONY: site-deploy
 site-deploy: site
-	cd $(SITEDIR) && git add . && git commit --edit -m "updated docs `date`" && git push
+	mkdocs gh-deploy

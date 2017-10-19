@@ -50,4 +50,4 @@ function query() {
 ```
 
 
-<script src="/assets/js/queries.js"></script>
+<script src="../../assets/js/queries.js"></script>

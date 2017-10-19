@@ -16,3 +16,5 @@ anno-docker
 anno-webpack/deploy.mk
 package-lock.json
 site
+doc/assets/dist
+doc/context.jsonld
