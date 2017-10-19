@@ -46,7 +46,10 @@ Testing and building is orchestrated with a self-documenting Makefile. Running `
     webpack-watch             webpack -d -w
     webpack-fixtures          webpack fixtures
     webpack-min               webpack production version
-    site                      Generate Github Pages site in ./site
+    webpack/clean             Remove all webpacked files
+    site                      Build the documentation in './site'
+    site/serve                Continuously serve the site on localhost:8000
+    shinclude                 Run shinclude on markdown sources
     site-deploy               Deploy site to Github pages
 
   Variables

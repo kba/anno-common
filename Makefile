@@ -3,6 +3,8 @@ PATH := ./node_modules/.bin:$(PATH)
 MKDIR = mkdir -p
 RM = rm -rf
 
+export SHLOG_TERM=info
+
 # Directory for temporary data. Default: '$(TEMPDIR)'
 TEMPDIR = $(PWD)/temp
 
@@ -37,7 +39,10 @@ help:
 	@echo "    webpack-watch             webpack -d -w"
 	@echo "    webpack-fixtures          webpack fixtures"
 	@echo "    webpack-min               webpack production version"
-	@echo "    site                      Generate Github Pages site in ./site"
+	@echo "    webpack/clean             Remove all webpacked files"
+	@echo "    site                      Build the documentation in './site'"
+	@echo "    site/serve                Continuously serve the site on localhost:8000"
+	@echo "    shinclude                 Run shinclude on markdown sources"
 	@echo "    site-deploy               Deploy site to Github pages"
 	@echo ""
 	@echo "  Variables"
@@ -154,17 +159,34 @@ webpack/clean:
 # Github pages
 #
 
-# Generate Github Pages site in ./site
+# Build the documentation in './site'
 .PHONY: site
-site: webpack/clean webpack-fixtures webpack-min
+site:
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
-	@if ! which shinclude >/dev/null;then echo "shinclude not installed. See https://github.com/kba/shinclude'" ; exit 1 ;fi
-	rm -rf doc/assets/dist
-	cp -r anno-webpack/dist doc/assets
+	mkdocs build
+
+# Continuously serve the site on localhost:8000
+.PHONY: site/serve
+site/serve:
+	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
+	mkdocs serve
+
+.PHONY: site/assets/dist
+sites/assets/dist: webpack/clean webpack-fixtures webpack-min
+	rm -rvf $@
+	cp -r anno-webpack/dist $@
 	cp anno-schema/context.json doc/context.jsonld
+
+# Run shinclude on markdown sources
+.PHONY: shinclude
+shinclude:
+	@if ! which shinclude >/dev/null;then echo "shinclude not installed. See https://github.com/kba/shinclude'" ; exit 1 ;fi
 	find doc -name '*.md' -exec shinclude -c xml -i {} \;
+	shinclude -c pound -i Makefile
+	find . -maxdepth 1 -name 'README.md' -exec shinclude -c xml -i {} \;
 
 # Deploy site to Github pages
-.PHONY: site-deploy
+.PHONY: site/assets/dist shinclude
 site-deploy: site
+	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs gh-deploy
