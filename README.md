@@ -45,7 +45,7 @@ The [`store-mongolike`](./anno-store-mongolike) module implements most of the
 such as [mongodb](https://mongodb.com) or
 [NeDB](https://github.com/louischatriot/nedb).
 
-<img src="./doc/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
+<img src="./doc/img/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
 
 ### Plugins
 
@@ -89,7 +89,7 @@ To inspect your tokens, try [jwtinspector browser
 extension](https://www.jwtinspector.io/#) which will detect JWT in HTTP traffic
 and localStorage.
 
-<img src="./doc/authentication.png" height="400" title="Authentication flow"/>
+<img src="./doc/img/authentication.png" height="400" title="Authentication flow"/>
 
 ### Revisions
 
@@ -138,9 +138,10 @@ Context is at `https://anno.github.io/anno/context.jsonld`
 
 Click on the image for links
 
-<a href="./doc/repo-structure.svg"><img src="./doc/repo-structure.png"/></a>
+<a href="./doc/img/repo-structure.svg"><img src="./doc/img/repo-structure.png"/></a>
 
 <!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
+- [anno-auth-server](./anno-auth-server): Authentication and token generation server
 - [anno-cli](./anno-cli): Command line interface for anno-*
 - [anno-errors](./anno-errors): Shared errors for anno-*
 - [anno-fixtures](./anno-fixtures): Sample data for testing and experimentation
