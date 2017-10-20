@@ -1,25 +1,37 @@
+/* eslint spaced-comment:0 */
 const querystring = require('querystring')
 const {Router}    = require('express')
 const prune       = require('object-prune')
 const {envyConf}  = require('envyconf')
 const {targetId}  = require('@kba/anno-queries')
 
+function collectionConfigForAnno(req, anno) {
+  return req.annoOptions.collectionConfigFor
+    ? req.annoOptions.collectionConfigFor(anno.collection || 'default')
+    : {}
+}
+
+function purlForAnno(req, anno) {
+  const collectionConfig = collectionConfigForAnno(req, anno)
+  // console.log({targetId: targetId(anno)})
+  if (collectionConfig.purlTemplate && req.headers.accept && req.headers.accept.match('text/html')) {
+    return collectionConfig.purlTemplate
+      .replace('{{ targetId }}', targetId(anno))
+      .replace('{{ annoId }}', anno.id)
+      .replace('{{ slug }}', anno.id.replace(/^.*\//, ''))
+  }
+
+}
+
 module.exports = ({store}) => {
-    const storePromisified = store.promisify()
+    // const storePromisified = store.promisify()
     console.log("Entering Anno Router")
 
     function getAnnotation(req, resp, next) {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
-            const collectionConfig = req.annoOptions.collectionConfigFor
-                ? req.annoOptions.collectionConfigFor(doc.collection || 'default')
-                : {}
-            // console.log({targetId: targetId(doc)})
-            if (collectionConfig.purlTemplate && req.headers.accept && req.headers.accept.match('text/html')) {
-                const purl = collectionConfig.purlTemplate
-                    .replace('{{ targetId }}', targetId(doc))
-                    .replace('{{ annoId }}', doc.id)
-                    .replace('{{ slug }}', doc.id.replace(/^.*\//, ''))
+            const purl = purlForAnno(req, doc)
+            if (purl) {
                 resp.header('Location', purl)
                 resp.status(301)
                 resp.send(`Redirecting to ${purl}`)
