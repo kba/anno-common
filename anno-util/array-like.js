@@ -13,12 +13,13 @@
  *
  */
 function ensureArray(anno, k) {
-    if (Array.isArray(anno[k]))
-        return
-    if (anno[k] === undefined || anno[k] === null)
-        anno[k] = []
-    else
-        anno[k] = [anno[k]]
+    if (!Array.isArray(anno[k])) {
+        if (anno[k] === undefined || anno[k] === null)
+            anno[k] = []
+        else
+            anno[k] = [anno[k]]
+    }
+    return anno[k]
 }
 
 /**
