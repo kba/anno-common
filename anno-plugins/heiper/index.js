@@ -21,6 +21,7 @@ class AnnoDOI {
         body: JSON.stringify(heiperJson),
       })))
         .then(() => {
+          // XXX TODO how to get store?
           return cb()
         })
         .catch(err => {
