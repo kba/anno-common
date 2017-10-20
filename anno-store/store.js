@@ -415,8 +415,6 @@ class Store {
         const {anno, collectionConfig} = options
         if (!collectionConfig) {
           return cb(new Error("Cannot mint a DOI without a collection"))
-        } else if (!collectionConfig.heiperEndpoint) {
-          return cb(new Error("Collection must set 'heiperEndpoint'"))
         } else if (!collectionConfig.doiTemplate) {
           return cb(new Error("Collection must set 'doiTemplate'"))
         }

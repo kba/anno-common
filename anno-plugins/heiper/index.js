@@ -1,4 +1,5 @@
 const {envyLog} = require('envyconf')
+const {fetch} = require('fetch-ponyfill')()
 // const errors = require('@kba/anno-errors')
 
 class AnnoDOI {
@@ -8,33 +9,25 @@ class AnnoDOI {
     }
 
     process(ctx, cb) {
-      if (!ctx || ctx.method !== 'mintDoi')
+      if (ctx.method !== 'mintDoi')
         return cb()
 
-      console.log("DOING SHIT")
-
-      // if ('retvals' in ctx) {
-      //   const fn = (anno) => {
-      //     const user = this._lookupUser(anno.creator, ctx)
-      //     if (user && user.public) anno.creator = Object.assign(user.public, {id: user.id})
-      //   }
-      //   if (ctx.method === 'search') {
-      //     for (let anno of ctx.retvals[0]) {
-      //       applyToAnno(anno, fn)
-      //     }
-      //   } else if (ctx.method === 'get') {
-      //     applyToAnno(ctx.retvals[0], fn)
-      //   }
-      //   // pre-processing
-      // } else if (ctx.anno && ! ctx.metadataOnly && ! ctx.anno.creator && ctx.user && ctx.user.id) {
-      //   ctx.anno.creator = ctx.user.id
-      // }
-      return cb()
+      const {retvals, collectionConfig} = ctx
+      if (!collectionConfig.heiperEndpoint) {
+        return cb(new Error("Collection must set 'heiperEndpoint'"))
+      }
+      Promise.all(retvals.map(heiperJson => fetch(collectionConfig.heiperEndpoint, {
+        method: 'POST',
+        body: JSON.stringify(heiperJson),
+      })))
+        .then(() => {
+          return cb()
+        })
+        .catch(err => {
+          return cb(err)
+        })
     }
 
 }
 
 module.exports = AnnoDOI
-
-
-
