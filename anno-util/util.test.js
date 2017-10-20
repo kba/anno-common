@@ -1,5 +1,7 @@
 const tap = require('tap')
-const {splitIdRepliesRev} = require('./util')
+const {
+  splitIdRepliesRev,
+} = require('./util')
 
 tap.test('splitIdRepliesRev', t => {
     const tests = {
