@@ -4,8 +4,8 @@ const Store = require('@kba/anno-store-mongolike')
 
 class MemoryStore extends Store {
 
-    constructor() {
-        super()
+    constructor(...args) {
+        super(...args)
         this.db = new nedb({})
     }
 
