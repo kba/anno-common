@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
-  "basePath": "{{{ OPENAPI_BASEPATH }}}",
-  "host": "{{{ OPENAPI_HOST }}}",
+  "basePath": "/",
+  "host": "localhost:3000",
   "info": {
     "title": "Anno Server API",
     "version": "0.0.1",
@@ -36,7 +36,7 @@
     }
   },
   "paths": {
-    "/{{ OPENAPI_PATH }}": {
+    "/anno": {
       "head": {
         "tags": [
           "anno"
@@ -214,7 +214,7 @@
         }
       }
     },
-    "/{{ OPENAPI_PATH }}/{annoId}": {
+    "/anno/{annoId}": {
       "get": {
         "tags": [
           "anno"
@@ -701,6 +701,1062 @@
               "type": "object"
             }
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "xsd_dateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "iri": {
+      "type": "string",
+      "anyOf": [
+        {
+          "format": "uri"
+        },
+        {
+          "pattern": "^urn:"
+        }
+      ]
+    },
+    "iri_object": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        }
+      }
+    },
+    "mediaType": {
+      "type": "string",
+      "pattern": ".*/.*"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "[a-z]{2,3}"
+    },
+    "textDirection": {
+      "type": "string",
+      "enum": [
+        "",
+        "ltr",
+        "rtl",
+        "auto"
+      ]
+    },
+    "Annotation": {
+      "type": "object",
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "created": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "modified": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "generated": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "creator": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/Person"
+            }
+          ]
+        },
+        "generator": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Software"
+            }
+          ]
+        },
+        "canonical": {
+          "type": "string"
+        },
+        "via": {
+          "$ref": "#/definitions/iri"
+        },
+        "styledBy": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/CssStylesheet"
+            }
+          ]
+        },
+        "body": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/iri_object"
+            },
+            {
+              "$ref": "#/definitions/Resource"
+            },
+            {
+              "$ref": "#/definitions/TextualBody"
+            },
+            {
+              "$ref": "#/definitions/Choice"
+            },
+            {
+              "$ref": "#/definitions/SpecificResource"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/iri_object"
+                  },
+                  {
+                    "$ref": "#/definitions/Resource"
+                  },
+                  {
+                    "$ref": "#/definitions/TextualBody"
+                  },
+                  {
+                    "$ref": "#/definitions/Choice"
+                  },
+                  {
+                    "$ref": "#/definitions/SpecificResource"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/iri_object"
+            },
+            {
+              "$ref": "#/definitions/Resource"
+            },
+            {
+              "$ref": "#/definitions/SpecificResource"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/iri_object"
+                  },
+                  {
+                    "$ref": "#/definitions/Resource"
+                  },
+                  {
+                    "$ref": "#/definitions/SpecificResource"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Resource": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "format": {
+          "$ref": "#/definitions/mediaType"
+        },
+        "language": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/language"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/language"
+              }
+            }
+          ]
+        },
+        "processingLanguage": {
+          "$ref": "#/definitions/language"
+        },
+        "textDirection": {
+          "$ref": "#/definitions/textDirection"
+        }
+      }
+    },
+    "TargetResource": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "renderedVia": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "$ref": "#/definitions/Software"
+                }
+              ]
+            },
+            "styleClass": {
+              "type": "string"
+            },
+            "source": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "default": "http://foo"
+                }
+              ]
+            },
+            "scope": {
+              "$ref": "#/definitions/iri"
+            },
+            "selector": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/iri"
+                },
+                {
+                  "$ref": "#/definitions/Selector"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/iri"
+                      },
+                      {
+                        "$ref": "#/definitions/Selector"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "AnnotationMetadata": {
+      "type": "object",
+      "properties": {
+        "created": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "modified": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "generated": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "creator": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Person"
+            }
+          ]
+        },
+        "generator": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Software"
+            }
+          ]
+        }
+      }
+    },
+    "ResourceClass": {
+      "type": "string",
+      "enum": [
+        "Dataset",
+        "Image",
+        "Video",
+        "Sound",
+        "Text"
+      ]
+    },
+    "resourceClassType": {
+      "type": "string"
+    },
+    "TextualBody": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "TextualBody"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "TextualBody"
+              }
+            }
+          ]
+        },
+        "value": {
+          "type": "string"
+        },
+        "format": {
+          "$ref": "#/definitions/mediaType"
+        }
+      }
+    },
+    "Choice": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Choice"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/TextualBody"
+              },
+              {
+                "$ref": "#/definitions/Resource"
+              },
+              {
+                "$ref": "#/definitions/SpecificResource"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Motivation": {
+      "type": "string",
+      "enum": [
+        "bookmarking",
+        "classifying",
+        "commenting",
+        "describing",
+        "editing",
+        "highlighting",
+        "identifying",
+        "linking",
+        "moderating",
+        "questioning",
+        "replying",
+        "tagging"
+      ]
+    },
+    "Agent": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Person",
+            "Organization",
+            "Software"
+          ]
+        },
+        "name": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "email_sha1": {
+          "type": "string"
+        },
+        "homepage": {
+          "$ref": "#/definitions/iri"
+        }
+      }
+    },
+    "Person": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Agent"
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "Person"
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "name"
+          ]
+        }
+      ]
+    },
+    "SpecificResource": {
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "source",
+            "purpose"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "selector"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "styleClass"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "state"
+          ]
+        },
+        {
+          "required": [
+            "source",
+            "scope"
+          ]
+        },
+        {
+          "required": [
+            "source"
+          ]
+        }
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "SpecificResource"
+          ]
+        },
+        "styleClass": {
+          "type": "string"
+        },
+        "source": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Resource"
+            }
+          ]
+        },
+        "motivation": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Motivation"
+            },
+            {
+              "type": "array",
+              "contains": {
+                "$ref": "#/definitions/Motivation"
+              }
+            }
+          ]
+        },
+        "purpose": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Motivation"
+            },
+            {
+              "type": "array",
+              "contains": {
+                "$ref": "#/definitions/Motivation"
+              }
+            }
+          ]
+        },
+        "scope": {
+          "$ref": "#/definitions/iri"
+        },
+        "accessibility": {
+          "type": "string"
+        },
+        "state": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/iri_object"
+            },
+            {
+              "$ref": "#/definitions/State"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/iri"
+                  },
+                  {
+                    "$ref": "#/definitions/iri_object"
+                  },
+                  {
+                    "$ref": "#/definitions/State"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "selector": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Selector"
+            }
+          ]
+        }
+      }
+    },
+    "Selector": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/FragmentSelector"
+        },
+        {
+          "$ref": "#/definitions/CssSelector"
+        },
+        {
+          "$ref": "#/definitions/XPathSelector"
+        },
+        {
+          "$ref": "#/definitions/TextQuoteSelector"
+        },
+        {
+          "$ref": "#/definitions/TextPositionSelector"
+        },
+        {
+          "$ref": "#/definitions/DataPositionSelector"
+        },
+        {
+          "$ref": "#/definitions/SvgSelector"
+        },
+        {
+          "$ref": "#/definitions/RangeSelector"
+        }
+      ]
+    },
+    "FragmentSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FragmentSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        },
+        "conformsTo": {
+          "type": "string",
+          "enum": [
+            "http://tools.ietf.org/rfc/rfc3236",
+            "http://tools.ietf.org/rfc/rfc3778",
+            "http://tools.ietf.org/rfc/rfc5147",
+            "http://tools.ietf.org/rfc/rfc3023",
+            "http://tools.ietf.org/rfc/rfc3870",
+            "http://tools.ietf.org/rfc/rfc7111",
+            "http://www.w3.org/TR/media-frags/",
+            "http://www.w3.org/TR/SVG/",
+            "http://www.idpf.org/epub/linking/cfi/epub-cfi.html"
+          ]
+        }
+      }
+    },
+    "CssSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "CssSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "XPathSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "XPathSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "TextQuoteSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "exact"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TextQuoteSelector"
+          ]
+        },
+        "exact": {
+          "type": "string"
+        },
+        "suffix": {
+          "type": "string"
+        }
+      }
+    },
+    "TextPositionSelector": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TextPositionSelector"
+          ]
+        },
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        }
+      }
+    },
+    "DataPositionSelector": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "DataPositionSelector"
+          ]
+        },
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        }
+      }
+    },
+    "SvgSelector": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "value",
+            "type"
+          ]
+        }
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "SvgSelector"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "RangeSelector": {
+      "type": "object",
+      "required": [
+        "type",
+        "startSelector",
+        "endSelector"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "RangeSelector"
+          ]
+        },
+        "startSelector": {
+          "$ref": "#/definitions/Selector"
+        },
+        "endSelector": {
+          "$ref": "#/definitions/Selector"
+        }
+      }
+    },
+    "State": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeState"
+        },
+        {
+          "$ref": "#/definitions/HttpRequestState"
+        }
+      ]
+    },
+    "TimeState": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TimeState"
+          ]
+        },
+        "sourceDate": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "sourceDateStart": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "sourceDateEnd": {
+          "$ref": "#/definitions/xsd_dateTime"
+        },
+        "cached": {
+          "$ref": "#/definitions/iri"
+        }
+      }
+    },
+    "HttpRequestState": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "HttpRequestState"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "CssStylesheet": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "CssStylesheet"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Software": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Agent"
+        },
+        {
+          "required": [
+            "id",
+            "type"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/iri"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "Software"
+              ]
+            },
+            "schema:softwareVersion": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "AnnotationCollection": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "@context": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/ns/anno.jsonld"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "http://www.w3.org/ns/anno.jsonld"
+              }
+            }
+          ]
+        },
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "AnnotationCollection"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "AnnotationCollection"
+              }
+            }
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "total": {
+          "type": "number"
+        },
+        "first": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/AnnotationPage"
+            }
+          ]
+        },
+        "last": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/AnnotationPage"
+            }
+          ]
+        }
+      }
+    },
+    "AnnotationPage": {
+      "type": "object",
+      "properties": {
+        "@context": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/ns/anno.jsonld"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "http://www.w3.org/ns/anno.jsonld"
+              }
+            }
+          ]
+        },
+        "id": {
+          "$ref": "#/definitions/iri"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "AnnotationPage"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "AnnotationPage"
+              }
+            }
+          ]
+        },
+        "partOf": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/AnnotationPage"
+            }
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/iri"
+            },
+            {
+              "$ref": "#/definitions/Annotation"
+            }
+          ]
         }
       }
     }
