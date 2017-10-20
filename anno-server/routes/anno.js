@@ -1,9 +1,10 @@
 /* eslint spaced-comment:0 */
-const querystring = require('querystring')
-const {Router}    = require('express')
-const prune       = require('object-prune')
-const {envyConf}  = require('envyconf')
-const {targetId}  = require('@kba/anno-queries')
+const querystring   = require('querystring')
+const {Router}      = require('express')
+const prune         = require('object-prune')
+const {envyConf}    = require('envyconf')
+const {targetId}    = require('@kba/anno-queries')
+const async = require('async')
 
 function collectionConfigForAnno(req, anno) {
   return req.annoOptions.collectionConfigFor
@@ -13,14 +14,12 @@ function collectionConfigForAnno(req, anno) {
 
 function purlForAnno(req, anno) {
   const collectionConfig = collectionConfigForAnno(req, anno)
-  // console.log({targetId: targetId(anno)})
-  if (collectionConfig.purlTemplate && req.headers.accept && req.headers.accept.match('text/html')) {
+  if (collectionConfig.purlTemplate) {
     return collectionConfig.purlTemplate
       .replace('{{ targetId }}', targetId(anno))
       .replace('{{ annoId }}', anno.id)
       .replace('{{ slug }}', anno.id.replace(/^.*\//, ''))
   }
-
 }
 
 module.exports = ({store}) => {
@@ -31,7 +30,7 @@ module.exports = ({store}) => {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             const purl = purlForAnno(req, doc)
-            if (purl) {
+            if (purl && req.headers.accept && req.headers.accept.match('text/html')) {
                 resp.header('Location', purl)
                 resp.status(301)
                 resp.send(`Redirecting to ${purl}`)
@@ -238,10 +237,21 @@ module.exports = ({store}) => {
     // POST /anno/acl
     //
     router.post('/doi', (req, resp, next) => {
-        const urls = req.body.annoIds
-        store.mintDoi(url, req.annoOptions, (err, perms) => {
+        req.body.annoIds = (req.body.annoIds || [])
+        async.map(req.body.annoIds, (annoId, done) => {
+            store.get(annoId, req.annoOptions, (err, doc) => {
+                if (err) return done(err)
+                const options = JSON.parse(JSON.stringify(req.annoOptions))
+                // options.collection = collectionConfigForAnno(req, doc)
+                console.log(options.collectionConfigFor)
+                store.mintDoi(doc, options, (err, minted) => {
+                    if (err) return done(err)
+                    return done(null, {minted})
+                })
+            })
+        }, (err, {minted}) => {
             if (err) return next(err)
-            return resp.send(perms)
+            return resp.send({minted})
         })
     })
 

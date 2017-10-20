@@ -30,4 +30,3 @@ function anno2heiper(anno, collectionConfig) {
 }
 
 module.exports = {anno2heiper}
-

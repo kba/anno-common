@@ -1,6 +1,7 @@
 const slugid = require('slugid')
 const async = require('async')
-const {urlJoin, anno2heiper} = require('@kba/anno-util')
+const {urlJoin} = require('@kba/anno-util')
+const {anno2heiper} = require('@kba/anno-queries/anno2heiper')
 const {envyConf, envyLog} = require('envyconf')
 
 class Store {
@@ -402,19 +403,24 @@ class Store {
      * - `@param {function} callback`
      *
      */
-    mintDoi(annoId, options, cb) {
+    mintDoi(anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'mintDoi',
-            annoId,
+            anno,
         }), cb)
     }
 
     _mintDoi(options, cb) {
-        const ret = {}
-        const {annoId} = options
-        console.log('MINT MINT MINT', options)
-        return cb(null, JSON.stringify(options))
+        const {anno, collectionConfig} = options
+        if (!collectionConfig) {
+          return cb(new Error("Cannot mint a DOI without a collection"))
+        } else if (!collectionConfig.heiperEndpoint) {
+          return cb(new Error("Collection must set 'heiperEndpoint'"))
+        } else if (!collectionConfig.doiTemplate) {
+          return cb(new Error("Collection must set 'doiTemplate'"))
+        }
+        return cb(null, anno2heiper(anno, collectionConfig))
     }
 
 

@@ -18,6 +18,7 @@
     "@kba/anno-store": "^0.0.1",
     "@kba/anno-plugins": "^0.0.1",
     "@kba/anno-util": "^0.0.1",
+    "@kba/anno-queries": "^0.0.1",
     "@kba/anno-util-loaders": "^0.0.1",
     "@kba/anno-store-memory": "^0.0.1",
     "@kba/anno-store-file": "^0.0.1",

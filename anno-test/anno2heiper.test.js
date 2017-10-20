@@ -1,5 +1,5 @@
 const tap = require('tap')
-const {anno2heiper} = require('@kba/anno-plugins/heiper/anno2heiper')
+const {anno2heiper} = require('@kba/anno-queries/anno2heiper')
 
 tap.test('anno2heiper', t => {
 
