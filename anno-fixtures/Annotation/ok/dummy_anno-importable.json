@@ -1,17 +1,17 @@
 {
     "body": {"type": ["TextualBody"]},
-    "creator": "mike@example.org",
+    "creator": "mike",
     "target": "x://foo",
     "hasVersion": [
         {
             "body": {"type": ["TextualBody"]},
-            "creator": "mike@example.org",
+            "creator": "mike",
             "target": "x://foo2",
             "created": "2016-01-01T00:00:00Z"
         },
         {
             "body": {"type": ["TextualBody"]},
-            "creator": "mike@example.org",
+            "creator": "mike",
             "target": "x://foo",
             "created": "2017-01-01T00:00:00Z"
         }

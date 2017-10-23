@@ -15,7 +15,7 @@ john:
 
 mike:
   rules:
-    - [{collection: 'default'},         {role: 'create'}]
+    - [{collection: 'default'},         {role: 'importer'}]
     - [{collection: 'test-collection'}, {role: 'moderator'}]
 
 spambot3000:

@@ -79,6 +79,46 @@
     "Allow users to revise their own annotations / Allow users to reply to their own annotations"
   ],
   [
+    {
+      "method": "mintDoi",
+      "$or": [
+        {
+          "user.role": "moderator"
+        },
+        {
+          "anno.creator": {
+            "$exists": true
+          },
+          "user.id": {
+            "$exists": true
+          },
+          "$or": [
+            {
+              "anno.creator": {
+                "$ref": "/user/id"
+              }
+            },
+            {
+              "anno.creator.id": {
+                "$ref": "/user/id"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    true,
+    "Allow moderators and users for their own annotations to mint DOIS"
+  ],
+  [
+    {
+      "method": "import",
+      "user.role": "importer"
+    },
+    true,
+    "Importers may import"
+  ],
+  [
     {},
     false,
     "Fallback to disallow any interaction"
