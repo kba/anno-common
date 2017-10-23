@@ -69,6 +69,19 @@
             },
             {
               "$ref": "#/definitions/Person"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/Person"
+                  }
+                ]
+              }
             }
           ]
         },

@@ -66,6 +66,11 @@ definitions:
         oneOf:
           - {type: 'string'}
           - {$ref: '#/definitions/Person'}
+          - type: 'array'
+            items:
+              anyOf:
+                - {type: 'string'}
+                - {$ref: '#/definitions/Person'}
       generator:
         oneOf:
         - {$ref: '#/definitions/iri'}
