@@ -418,22 +418,21 @@ class Store {
     }
 
     _mintDoi(options, cb) {
-        const {anno, collectionConfig} = options
-        if (!collectionConfig) {
+        const {collectionConfig} = options
+        if (!options.anno)
+          return cb(new Error("Must pass an annotation"))
+        else if (!collectionConfig)
           return cb(new Error("Cannot mint a DOI without a collection"))
-        } else if (!collectionConfig.doiTemplate) {
+        else if (!collectionConfig.doiTemplate)
           return cb(new Error("Collection must set 'doiTemplate'"))
-        } else if (!collectionConfig.heiperEndpoint) {
+        else if (!collectionConfig.heiperEndpoint)
           return cb(new Error("Collection must set 'heiperEndpoint'"))
-        }
-        this.get(anno.id, options, (err, existingAnno) => {
+        this.get(options.anno.id, options, (err, existingAnno) => {
             if (err || ! existingAnno) {
-                return cb(new Error(`Cannot mint DOI for non-existant annotation '${anno.id}'`))
+                return cb(new Error(`Cannot mint DOI for non-existant annotation '${options.anno.id}'`))
             }
-            // TODO handle replies and revisions
-            // TODO return an array from anno2heiper
-            const heiperJson = anno2heiper(anno, collectionConfig)
-            console.log({heiperJson})
+            const {heiperJson, anno} = anno2heiper(existingAnno, collectionConfig.doiTemplate)
+            console.log({heiperJson, anno})
             fetch(collectionConfig.heiperEndpoint, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
@@ -447,8 +446,6 @@ class Store {
                         cb(data)
                     })
                 } else {
-                    const {doi} = heiperJson
-                    anno.doi = doi
                     const importOptions = Object.assign(JSON.parse(JSON.stringify(options)), {
                         recursive: true,
                         replaceAnnotation: false,
@@ -456,13 +453,12 @@ class Store {
                         slug: anno.id.replace(/.*\//, '')
                     })
                     this.import(anno, importOptions, (err, imported) => {
-                        console.log({err, imported})
                         if (err) return cb(err)
-                        else return cb(null, imported)
+                        else return this.get(anno.id, options, cb)
                     })
                 }
             }).catch(err => {
-                console.log("ERROR", err)
+                console.log("DOI registration failed", err)
                 return cb(err)
             })
         })

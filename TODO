@@ -43,3 +43,5 @@ mongo store
 [X] fix perm.nedb / acl
 [ ] ACL rules should emit status/message instead of true/false
 [ ] Unify ACL / User processor interfaces (DRY)
+[X] fix import (recursive will clobber revisions and replies!!!!)
+[ ] Send DOI if set as Link rel="canonical"

@@ -249,7 +249,7 @@ module.exports = ({store}) => {
                     return done(null, {minted})
                 })
             })
-        }, (err, {minted}) => {
+        }, (err, minted) => {
             if (err) return next(err)
             return resp.send({minted})
         })
