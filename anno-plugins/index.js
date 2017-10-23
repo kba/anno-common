@@ -4,14 +4,11 @@ const AclProcessor        = require('./acl')
 const UserProcessor       = require('./user')
 const CollectionProcessor = require('./collection')
 const CreatorInjector     = require('./creator-injector')
-const HeiperPost     = require('./heiper')
 
 module.exports = {
     defaultRules: require('./default-rules.json'),
     AclProcessor,
     UserProcessor,
-
-    HeiperPost:            (...args) => (...args) => new HeiperPost().process(...args),
 
     PreCollectionFile:     ConfigReloader(CollectionProcessor, 'COLLECTION_FILE'),
     PreCollectionStatic:   StaticLoader(CollectionProcessor,   'COLLECTION_DATA',   require('./collections.json')),

@@ -2,6 +2,7 @@ const slugid = require('slugid')
 const async = require('async')
 const {urlJoin} = require('@kba/anno-util')
 const {anno2heiper} = require('@kba/anno-queries/anno2heiper')
+const {fetch} = require('fetch-ponyfill')()
 const {envyConf, envyLog} = require('envyconf')
 
 class Store {
@@ -417,8 +418,44 @@ class Store {
           return cb(new Error("Cannot mint a DOI without a collection"))
         } else if (!collectionConfig.doiTemplate) {
           return cb(new Error("Collection must set 'doiTemplate'"))
+        } else if (!collectionConfig.heiperEndpoint) {
+          return cb(new Error("Collection must set 'heiperEndpoint'"))
         }
-        return cb(null, anno2heiper(anno, collectionConfig))
+        // TODO handle replies and revisions
+        const heiperJson = anno2heiper(anno, collectionConfig)
+      console.log({heiperJson})
+        fetch(collectionConfig.heiperEndpoint, {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(heiperJson),
+        }).then(resp => {
+            console.log("heiper returned", resp.status)
+            if (resp.status >= 400) {
+                resp.text().then(data => {
+                    console.log("DOI registration failed")
+                    console.log(data)
+                    cb(data)
+                })
+            } else {
+                const {doi} = heiperJson
+                anno.doi = doi
+                const importOptions = Object.assign(JSON.parse(JSON.stringify(options)), {
+                    recursive: false,
+                    upsert: false,
+                    slug: anno.id.replace(/.*\//, '')
+                })
+                this.import(anno, importOptions, (err, imported) => {
+                    console.log({err, imported})
+                    if (err) return cb(err)
+                    else return cb(null, imported)
+                })
+            }
+        }).catch(err => {
+            console.log("ERROR", err)
+            return cb(err)
+        })
     }
 
 
