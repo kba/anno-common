@@ -426,40 +426,45 @@ class Store {
         } else if (!collectionConfig.heiperEndpoint) {
           return cb(new Error("Collection must set 'heiperEndpoint'"))
         }
-        // TODO handle replies and revisions
-        const heiperJson = anno2heiper(anno, collectionConfig)
-      console.log({heiperJson})
-        fetch(collectionConfig.heiperEndpoint, {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(heiperJson),
-        }).then(resp => {
-            console.log("heiper returned", resp.status)
-            if (resp.status >= 400) {
-                resp.text().then(data => {
-                    console.log("DOI registration failed")
-                    console.log(data)
-                    cb(data)
-                })
-            } else {
-                const {doi} = heiperJson
-                anno.doi = doi
-                const importOptions = Object.assign(JSON.parse(JSON.stringify(options)), {
-                    recursive: false,
-                    upsert: false,
-                    slug: anno.id.replace(/.*\//, '')
-                })
-                this.import(anno, importOptions, (err, imported) => {
-                    console.log({err, imported})
-                    if (err) return cb(err)
-                    else return cb(null, imported)
-                })
+        this.get(anno.id, options, (err, existingAnno) => {
+            if (err || ! existingAnno) {
+                return cb(new Error(`Cannot mint DOI for non-existant annotation '${anno.id}'`))
             }
-        }).catch(err => {
-            console.log("ERROR", err)
-            return cb(err)
+            // TODO handle replies and revisions
+            // TODO return an array from anno2heiper
+            const heiperJson = anno2heiper(anno, collectionConfig)
+            console.log({heiperJson})
+            fetch(collectionConfig.heiperEndpoint, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(heiperJson),
+            }).then(resp => {
+                console.log("heiper returned", resp.status)
+                if (resp.status >= 400) {
+                    resp.text().then(data => {
+                        console.log("DOI registration failed")
+                        console.log(data)
+                        cb(data)
+                    })
+                } else {
+                    const {doi} = heiperJson
+                    anno.doi = doi
+                    const importOptions = Object.assign(JSON.parse(JSON.stringify(options)), {
+                        recursive: true,
+                        replaceAnnotation: false,
+                        updateAnnotation: true,
+                        slug: anno.id.replace(/.*\//, '')
+                    })
+                    this.import(anno, importOptions, (err, imported) => {
+                        console.log({err, imported})
+                        if (err) return cb(err)
+                        else return cb(null, imported)
+                    })
+                }
+            }).catch(err => {
+                console.log("ERROR", err)
+                return cb(err)
+            })
         })
     }
 
