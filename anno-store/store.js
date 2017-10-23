@@ -378,16 +378,21 @@ class Store {
      * ### `import(anno, options, callback)`
      *
      * Replaces the complete annotation with the passed annotation, not just revise it.
-     *
+     * 
      * - `@param {Object} anno`
      * - `@param {Options} options`
-     *   - `@param String options.slug Proposal for the ID to create`
-     *   - `@param {String} options.user`
+     *   - `@param {String} options.recursive` Whether to import replies and revisions recusively. Default: `true`
+     *   - `@param {String} options.replaceAnnotation` Whether to replace an existing annotation, i.e. fail if that annotation wasn't there before
+     *   - `@param {String} options.updateAnnotation` Patch an existing annotation, fail if not existing
+     *   - `@param {String} options.slug` Proposed ID for the annotation
      * - `@param {function} callback`
-     *
+     * 
      */
     import(anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
+        if (!('recursive' in options)) options.recursive = true
+        if (!('replaceAnnotation' in options)) options.replaceAnnotation = true
+        if (!('updateAnnotation' in options)) options.updateAnnotation = true
         this._callMethod(Object.assign(options, {
             method: 'import',
             anno,

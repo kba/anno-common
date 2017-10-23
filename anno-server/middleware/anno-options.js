@@ -39,6 +39,9 @@ module.exports = function AnnoOptionsMiddleware(cb) {
               'metadataOnly',
               'includeDeleted',
               'forceDelete',
+              'recursive',
+              'replaceAnnotation',
+              'updateAnnotation',
             ].forEach(option => {
                 const optionHeader = `X-Anno-${option}`.toLowerCase()
                 if (option in req.query) {
@@ -52,7 +55,7 @@ module.exports = function AnnoOptionsMiddleware(cb) {
             // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
             if (req.header('slug')) options.slug = req.header('slug')
 
-            log.silly("annoOptions scraped", options)
+            log.silly("annoOptions scraped: " + JSON.stringify(options))
             next()
         })
     }

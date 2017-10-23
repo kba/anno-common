@@ -144,42 +144,48 @@ class MongolikeStore extends Store {
         })
     }
 
+
     /* @override */
     _import(options, cb) {
-        let anno = options.anno
-        const fromJSONLD = (anno) => {
-            anno = this._normalizeType(anno)
-            const ret = {}
-            Object.keys(anno).forEach(prop => {
-                if (prop == 'hasVersion') {
-                    ret._revisions = anno[prop].map(fromJSONLD)
-                    delete anno[prop]
-                } else if (prop == 'hasReply') {
-                    ret._replies = anno[prop].map(fromJSONLD)
-                    delete anno[prop]
-                } else {
-                    ret[prop] = anno[prop]
-                }
-            })
-            if (!ret._revisions) {
-                const woReplies = JSON.parse(JSON.stringify(ret))
-                delete woReplies._replies
-                delete woReplies.id
-                ret._revisions = [woReplies]
+        let {anno, recursive, slug, replaceAnnotation, updateAnnotation} = options
+        if (replaceAnnotation && updateAnnotation) {
+            return cb(new Error("'replaceAnnotation' contradicts 'updateAnnotation'"))
+        }
+        if (replaceAnnotation && !slug) {
+            return cb(new Error("'replaceAnnotation' requires 'slug'!"))
+        }
+        if (replaceAnnotation && ! recursive) {
+            return cb(new Error("'replaceAnnotation' will clobber exixsting annotations unless 'recursive' is set!"))
+        }
+        console.log("import options", {options})
+
+        const _id = slug ? slug : this._genid()
+        console.log({_id, options})
+
+        this.get(_id, options, (err, existingAnno) => {
+            const found = !err && existingAnno
+            if (!found && (updateAnnotation || replaceAnnotation)) {
+                return cb(new Error(`'replaceAnnotation' is set, but annotation ${_id} wasn't found`))
             }
-            ret._replies = ret._replies || []
-            return ret
-        }
-        anno = fromJSONLD(anno)
-        if (options.slug) {
-            this.db.remove({_id: options.slug}, options, (err) => {
-                anno._id = options.slug
+            anno = this.jsonldToMongolike(anno, options)
+            if (!recursive) {
+                delete anno._revisions
+                delete anno._replies
+            }
+            // TODO support revisions and replies
+            anno._id = _id
+            if (replaceAnnotation) {
+                this.db.remove({_id}, options, (err) => {
+                    this._createInsert(anno, options, cb)
+                })
+            } else if (updateAnnotation) {
+                this.db.update({_id}, {$set: anno}, (err) => {
+                    this.get(_id, options, cb)
+                })
+            } else {
                 this._createInsert(anno, options, cb)
-            })
-        } else {
-            anno._id = this._genid()
-            this._createInsert(anno, options, cb)
-        }
+            }
+        })
     }
 
     /* @override */
@@ -410,6 +416,32 @@ class MongolikeStore extends Store {
                 ret[`_replies.${i}.target`]   = false
             }
         }
+        return ret
+    }
+
+    jsonldToMongolike(anno) {
+        anno = this._normalizeType(anno)
+        const ret = {}
+        // Recursively replace hasVersion -> _revisions, hasReply -> _replies
+        Object.keys(anno).forEach(prop => {
+            if (prop == 'hasVersion') {
+                ret._revisions = anno[prop].map(x => this.jsonldToMongolike(x))
+                delete anno[prop]
+            } else if (prop == 'hasReply') {
+                ret._replies = anno[prop].map(x => this.jsonldToMongolike(x))
+                delete anno[prop]
+            } else {
+                ret[prop] = anno[prop]
+            }
+        })
+        if (!ret._revisions) {
+            const woReplies = JSON.parse(JSON.stringify(ret))
+            delete woReplies._replies
+            delete woReplies.id
+            ret._revisions = [woReplies]
+        }
+        ret._revisions = ret._revisions || []
+        ret._replies = ret._replies || []
         return ret
     }
 
