@@ -12,7 +12,7 @@ function anno2heiper(anno, collectionConfig) {
     title: {eng: anno.title},
     availability: 'download',
     place: 'internet',
-    date: anno.modified,
+    date: anno.modified || new Date(),
     lang: "ger",
     license: {
       eng: {
