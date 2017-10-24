@@ -19,3 +19,7 @@ Include annotations that have been set to `deleted`, which would otherwise resul
 Completely remove an annotation, not just set it to `delete`. 
 
 Subsequent retrievals will result in `404` not `410`.
+
+## dryRun
+
+Do not actually run the action, only the plugins that hook before them.

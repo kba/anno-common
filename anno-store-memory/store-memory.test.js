@@ -5,7 +5,8 @@ const store = new(require('.'))()
 require('tap').test(store.constructor.name, async t => {
   const StoreTests = new(require('../anno-store/store-test'))(store)
 
-  await StoreTests.testAll(t)
+  await StoreTests.testSearch(t)
+  // await StoreTests.testAll(t)
 
   t.end()
 })

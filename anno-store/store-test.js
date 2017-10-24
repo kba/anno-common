@@ -99,10 +99,11 @@ module.exports = class StoreTests {
       await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
 
       annos = await store.search()
+      // console.log(annos.map(a => a.target))
       t.equals(annos.length, 4, '4 anno in store total')
 
       annos = await store.search({$target: input1.target})
-      t.equals(annos.length, 1, `search {$target:${input1.target}} -> 1`)
+      t.equals(annos.length, 3, `search {$target:${input1.target}} -> 3`)
 
       // TODO how to serialize this in a GET call?
       // cb => store.search({'target.source': {$in: [oldTarget, newTarget]}}, cb),
@@ -123,7 +124,7 @@ module.exports = class StoreTests {
       let saved1 = await store.create(input1)
       let reply = await store.reply(saved1.id, {body: {value: 'Nonsense!'}})
       let saved2 = await store.get(saved1.id)
-      t.equals(saved1.id + '.1', reply.id, 'URL has .1 added')
+      t.equals(reply.id, saved1.id + '.1', 'URL has .1 added')
       t.equals(saved2.hasReply.length, 1, 'now has 1 reply')
 
       t.end()
