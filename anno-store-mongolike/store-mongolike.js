@@ -265,12 +265,13 @@ class MongolikeStore extends Store {
                     delete options.anno
                     // TODO Make this optional via envyconf var
                     if (anno.doi) {
-                      this.mintDoi(_id, options, err => {
+                      this.mintDoi(_id, options, (err, anno) => {
                         if (err) return cb(err)
-                        return this.get(_id, options, cb)
+                        return cb(null, anno)
                       })
+                    } else {
+                      return this.get(_id, options, cb)
                     }
-                    return this.get(_id, options, cb)
                 })
             })
         })

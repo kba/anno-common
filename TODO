@@ -49,5 +49,6 @@ mongo store
 [ ] replace axios with fetch-ponyfill
 [-] handle DOI minting with revise
 [X] mintDoi should take an annotation ID not an annotation
-[ ] "Cannot set headers after sent" error
+[X] "Cannot set headers after sent" error
 [ ] Replace 'metadataOnly', 'skipVersions', ... with 'blacklist' and 'whitelist' options to allow/disallow certain props
+[ ] BUG: import in mongolike creates versions of versions which is very very wrong
