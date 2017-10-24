@@ -20,13 +20,16 @@ class AnnoAcl {
         ctx.collection = (ctx.collection || 'default')
         // process.env.SIFT_RULE_DEBUG = 'true'
         // log.silly("Matching against rules:", ctx)
-        // try {
-        //     log.silly(`Matching against rules:` + JSON.stringify({
-        //         'ctx.user': ctx.user,
-        //         'ctx.anno': ctx.anno,
-        //         'keys(ctx)': Object.keys(ctx)
-        //     }, null, 2))
-        // } catch (err) {}
+        try {
+            console.log(`Matching against rules:` + JSON.stringify({
+                'ctx.method': ctx.method,
+                'ctx.user': ctx.user,
+                'ctx.anno': ctx.anno,
+                'ctx.annoId': ctx.annoId,
+                'ctx.oldAnno': ctx.oldAnno,
+                'keys(ctx)': Object.keys(ctx)
+            }, null, 2))
+        } catch (err) {}
         process.env.SIFT_RULE_DEBUG = 'true'
         // console.log({
         //     rules: this.rules,

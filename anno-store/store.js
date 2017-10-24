@@ -49,6 +49,8 @@ class Store {
             process.exit(1)
         }
 
+        // TODO UNDOCUMENTED
+        // XXX it's a bit of a convoluted setup because of the requiring module
         const store = new(impl)()
         async.eachSeries(['pre', 'post'], (hookName, nextHook) => {
             loadPlugins(config[`STORE_HOOKS_${hookName.toUpperCase()}`], {
@@ -207,6 +209,8 @@ class Store {
      */
     get(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
+        if (!annoId)
+            return cb(new Error("Must pass 'annoId'"))
         this._callMethod(Object.assign(options, {
             method: 'get',
             annoId,
@@ -245,11 +249,21 @@ class Store {
      */
     revise(annoId, anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
+        const {dryRun} = options
+        options = JSON.parse(JSON.stringify(options))
         this._callMethod(Object.assign(options, {
-            method: 'revise',
+            method: 'get',
+            dryRun: false,
             annoId,
-            anno,
-        }), cb)
+        }), (err, oldAnno) => {
+            this._callMethod(Object.assign(options, {
+                method: 'revise',
+                dryRun,
+                oldAnno,
+                annoId,
+                anno,
+            }), cb)
+        })
     }
 
     /**
@@ -354,24 +368,27 @@ class Store {
     _aclCheck(options, cb) {
         const ret = {}
         const {targets} = options
-        async.forEach(targets, (url, urlDone) => {
-            ret[url] = {}
-            this.get(url, {metadataOnly: true}, (err, found) => {
-                const anno = {target: url}
+        async.forEach(targets, (annoId, urlDone) => {
+            ret[annoId] = {}
+            // TODO do not run get before, rely on the _callMethod logic in the method facades.
+            // Otherwise aclCheck and executing methods w/o dryRun might differ
+            // TODO get rid of metadataOnly
+            this.get(annoId, {metadataOnly: true}, (err, found) => {
+                const anno = {target: annoId}
                 if (found) {
-                    Object.assign(anno, found, {target: url})
+                    Object.assign(anno, found, {target: annoId})
                 }
                 // console.log({user: options.user.id, anno: anno.creator ? anno.creator.id : '---'})
-                // console.log(url, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
+                // console.log(annoId, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
                 options.dryRun = true
                 async.parallel({
                     read:   (cb) => cb(null, true), // since we know this anno could be read/retrieved
                     create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
-                    revise: (cb) => this.revise(url, anno, options, (err) => cb(null, !err)),
-                    remove: (cb) => this.delete(url, options, (err)       => cb(null, !err)),
-                    mintDoi: (cb) => this.mintDoi(url, options, (err)      => cb(null, !err)),
+                    revise: (cb) => this.revise(annoId, anno, options, (err) => cb(null, !err)),
+                    remove: (cb) => this.delete(annoId, options, (err)       => cb(null, !err)),
+                    mintDoi: (cb) => this.mintDoi(annoId, options, (err)      => cb(null, !err)),
                 }, (err, perms) => {
-                    ret[url] = perms
+                    ret[annoId] = perms
                     urlDone()
                 })
             })
@@ -394,9 +411,12 @@ class Store {
      */
     import(anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        if (!('recursive' in options)) options.recursive = true
-        if (!('replaceAnnotation' in options)) options.replaceAnnotation = true
-        if (!('updateAnnotation' in options)) options.updateAnnotation = true
+        // deliberately set to an incompatible option set so behavior must be set explicitly
+        options = Object.assign({
+          recursive: true,
+          replaceAnnotation: true,
+          updateAnnotation: true,
+        }, options)
         this._callMethod(Object.assign(options, {
             method: 'import',
             anno,
@@ -415,10 +435,20 @@ class Store {
      */
     mintDoi(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
+        // XXX Need to get 'anno' or the rules won't fire
+        const {dryRun} = options
+        options = JSON.parse(JSON.stringify(options))
         this._callMethod(Object.assign(options, {
-            method: 'mintDoi',
+            method: 'get',
+            dryRun: false,
             annoId,
-        }), cb)
+        }), (err, anno) => {
+            this._callMethod(Object.assign(options, {
+                method: 'mintDoi',
+                dryRun,
+                anno: JSON.parse(JSON.stringify(anno || {})),
+            }), cb)
+        })
     }
 
     _mintDoi(options, cb) {
@@ -585,3 +615,5 @@ Store.prototype.promisify = function() {
 }
 
 module.exports = Store
+
+// vim: sw=4

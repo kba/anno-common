@@ -24,13 +24,11 @@ class MongolikeStore extends Store {
     }
 
     /* @override */
-    // TODO replies!
     _get(options, cb) {
         let annoId = this._idFromURL(options.annoId)
         const projection = this._projectionFromOptions(options)
         let {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
-        const query = {_id}
-        this.db.findOne(query, projection, (err, doc) => {
+        this.db.findOne({_id}, projection, (err, doc) => {
             if (!doc) return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
             if (doc.deleted) return cb(errors.annotationDeleted(annoId, doc.deleted))
             for (let _replyid of _replyids) {
@@ -85,14 +83,13 @@ class MongolikeStore extends Store {
         if (options.collection) {
             anno.collection = options.collection
         }
-        this.db.insert(anno, (err, savedAnno) => {
+        this.db.insert(anno, (err, doc) => {
             // TODO differentiate, use errors from anno-errors
             if (err) return cb(err)
+
             // Mongodb returns an object describing the result, nedb returns just the results
-            if ('insertedIds' in savedAnno)
-                return this.get(savedAnno.insertedIds[0], options, cb)
-            else
-                return this.get(savedAnno._id, options, cb)
+            const _id = ('insertedIds' in doc) ? doc.insertedIds[0] : doc._id
+            return this.get(_id, options, cb)
         })
     }
 
@@ -117,11 +114,11 @@ class MongolikeStore extends Store {
             }
             const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
             // console.log("CREATEREPLY", {replyFullId, selector})
-            console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
+            // console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
             this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
-                options.latest = true
+                // options.latest = true
                 delete options.annoId
                 delete options.anno
                 return this.get(replyFullId, options, cb)
@@ -132,18 +129,14 @@ class MongolikeStore extends Store {
 
     /* @override */
     _import(options, cb) {
-        // TODO handle replies!
         let {anno, recursive, slug, replaceAnnotation, updateAnnotation} = options
-        if (replaceAnnotation && updateAnnotation) {
+        // console.log("import options", {options})
+        if (replaceAnnotation && updateAnnotation)
             return cb(new Error("'replaceAnnotation' contradicts 'updateAnnotation'"))
-        }
-        if (replaceAnnotation && !slug) {
+        if (replaceAnnotation && !slug)
             return cb(new Error("'replaceAnnotation' requires 'slug'!"))
-        }
-        if (replaceAnnotation && ! recursive) {
+        if (replaceAnnotation && !recursive)
             return cb(new Error("'replaceAnnotation' will clobber exixsting annotations unless 'recursive' is set!"))
-        }
-        console.log("import options", {options})
 
         const _fullid = slug ? slug : this._genid()
         const {_id, _replyids} =  splitIdRepliesRev(_fullid)
@@ -164,6 +157,7 @@ class MongolikeStore extends Store {
             // TODO support revisions and replies
             if (replaceAnnotation) {
                 if (isReply) {
+                    // TODO implement replacement of replies
                     return cb(errors.notImplemented(
                         'import/replaceAnnotation/reply',
                         "Replacing replies currently not implemented"
@@ -211,10 +205,10 @@ class MongolikeStore extends Store {
             if (!existingAnno)
                 return cb(errors.annotationNotFound(_id))
 
+            // TODO Handle read-only values
             for (let prop of ['canonical', 'via', 'hasReply', 'replyTo', 'hasVersion', 'versionOf']) {
                 // TODO should be deepEqual not ===
                 if (anno[prop] && anno[prop] !== existingAnno[prop]) {
-                    // TODO
                     // console.log(errors.readonlyValue(annoId, prop, existingAnno[prop], anno[prop]))
                     // delete anno[prop]
                 }
@@ -350,7 +344,7 @@ class MongolikeStore extends Store {
                 query.$or = []
             for (let i = 0; i < 20; i++) {
                 const queryHere = {}
-                // XXX BROKEN _reply should be _replies?
+                // TODO BROKEN _reply should be _replies?
                 for (let clause in query) {
                     queryHere[`_reply.${i}.${clause}`] = JSON.parse(JSON.stringify(query[clause]))
                 }
@@ -359,7 +353,6 @@ class MongolikeStore extends Store {
         }
 
 
-        // TODO check whether actually works for find
         const projection = this._projectionFromOptions(options)
 
         // console.log(JSON.stringify({query, projection}, null, 2))
@@ -371,7 +364,7 @@ class MongolikeStore extends Store {
             // mongodb returns a cursor, nedb a list of documents
             const docsToArray = (docs, cb) => Array.isArray(docs) ? cb(null, docs) : docs.toArray(cb)
             docsToArray(docs, (err, docs) => {
-                console.log('docsToArray', {err, docs, options})
+                // console.log('docsToArray', {err, docs, options})
                 if (err) return cb(err)
                 async.map(docs, (doc, done) => {
                     this._handleRevisions(doc._id, doc, options, done)
