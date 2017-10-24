@@ -40,6 +40,7 @@ module.exports = function AnnoOptionsMiddleware(cb) {
               'includeDeleted',
               'forceDelete',
               'recursive',
+              'latest',
               'replaceAnnotation',
               'updateAnnotation',
             ].forEach(option => {
