@@ -45,3 +45,5 @@ mongo store
 [ ] Unify ACL / User processor interfaces (DRY)
 [X] fix import (recursive will clobber revisions and replies!!!!)
 [ ] Send DOI if set as Link rel="canonical"
+[ ] handle multiple creators
+[ ] replace axios with fetch-ponyfill

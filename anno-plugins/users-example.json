@@ -47,6 +47,14 @@
     "rules": [
       [
         {
+          "collection": "test"
+        },
+        {
+          "role": "admin"
+        }
+      ],
+      [
+        {
           "collection": "default"
         },
         {

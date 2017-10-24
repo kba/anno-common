@@ -279,7 +279,11 @@ class Store {
      *
      * - `@param {Object} query`
      * - `@param {Options} options`
-     * - `@param {String} options.user`
+     *     - `@param {String} options.user`
+     *     - `@param {Boolean} options.latest` Return the latest revision only
+     *     - `@param {Boolean} options.metadataOnly` Return only metadata
+     *     - `@param {Boolean} options.skipVersions` Omit versions
+     *     - `@param {Boolean} options.skipReplies` Omit replies
      * - `@param {function} callback`
      */
     search(query, options, cb) {

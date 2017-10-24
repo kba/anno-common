@@ -15,6 +15,7 @@ john:
 
 mike:
   rules:
+    - [{collection: 'test'},         {role: 'admin'}]
     - [{collection: 'default'},         {role: 'importer'}]
     - [{collection: 'test-collection'}, {role: 'moderator'}]
 

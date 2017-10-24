@@ -17,6 +17,11 @@ export ANNO_COLLECTION_DATA='{
     "secret":"123",
     "doiTemplate": "10.5072/foo.{{ fullid }}",
     "heiperEndpoint": "http://localhost:8989/dummy/dummy"
+  },
+  "test": {
+    "secret":"wfnewjk17y84123hun,m4123781hnjkbnsdvjl.KJII*$!@#UIJWDKXMSdcs",
+    "doiTemplate": "10.5072/foo.{{ fullid }}",
+    "heiperEndpoint": "http://localhost:8989/dummy/dummy"
   }
 }'
 nodemon server.js
