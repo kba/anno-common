@@ -30,7 +30,7 @@ mongo store
     [ ] delete
 [ ] server
     [ ] auth
-    [ ] reply/comment
+    [X] reply/comment
     [-] handle id/via/canonical
     [X] RDF conneg
     [ ] 410
@@ -44,11 +44,11 @@ mongo store
 [ ] ACL rules should emit status/message instead of true/false
 [ ] Unify ACL / User processor interfaces (DRY)
 [X] fix import (recursive will clobber revisions and replies!!!!)
-[ ] Send DOI if set as Link rel="canonical"
+[X] Send DOI if set as Link rel="canonical"
 [ ] handle multiple creators
 [ ] replace axios with fetch-ponyfill
-[-] handle DOI minting with revise
+[X] handle DOI minting with revise
 [X] mintDoi should take an annotation ID not an annotation
 [X] "Cannot set headers after sent" error
-[ ] Replace 'metadataOnly', 'skipVersions', ... with 'blacklist' and 'whitelist' options to allow/disallow certain props
-[ ] BUG: import in mongolike creates versions of versions which is very very wrong
+[X] Replace 'metadataOnly', 'skipVersions', ... with 'blacklist' and 'whitelist' options to allow/disallow certain props
+[X] BUG: import in mongolike creates versions of versions which is very very wrong

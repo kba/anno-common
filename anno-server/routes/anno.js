@@ -30,6 +30,10 @@ module.exports = ({store}) => {
         store.get(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             const purl = purlForAnno(req, doc)
+            const canonical = doc.doi ? `https://doi.org/${doc.doi}`
+              : purl ? purl
+              : doc.canonical ? doc.canonical
+              : doc.id
             if (purl && req.headers.accept && req.headers.accept.match('text/html')) {
                 resp.header('Location', purl)
                 resp.status(301)
@@ -37,6 +41,7 @@ module.exports = ({store}) => {
             } else {
                 resp.header('Location', doc.id)
                 resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
+                resp.header('Link', `<${canonical}>; rel="canonical"`)
                 resp.header('Vary', 'Accept')
                 resp.header('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
                 resp.jsonld = doc
