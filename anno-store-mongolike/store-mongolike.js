@@ -263,6 +263,13 @@ class MongolikeStore extends Store {
                     if (err) return cb(err)
                     options.latest = true
                     delete options.anno
+                    // TODO Make this optional via envyconf var
+                    if (anno.doi) {
+                      this.mintDoi(_id, options, err => {
+                        if (err) return cb(err)
+                        return this.get(_id, options, cb)
+                      })
+                    }
                     return this.get(_id, options, cb)
                 })
             })
@@ -337,6 +344,7 @@ class MongolikeStore extends Store {
         }
 
 
+        // TODO check whether actually works
         const projection = this._projectionFromOptions(options)
 
         // console.log(JSON.stringify({query, projection}, null, 2))
@@ -359,7 +367,6 @@ class MongolikeStore extends Store {
      * Protected API
      * ******************************************
      */
-    // TODO make recursive
     _toJSONLD(annoId, anno, options={}, mergeProps={}) {
         // console.log(annoId, options)
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]

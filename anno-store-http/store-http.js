@@ -142,8 +142,7 @@ class HttpStore extends Store {
 
     _mintDoi(options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
-        const {anno} = options
-        const annoIds = [anno.id]
+        const annoIds = [options.annoId]
         return this._httpClient.post('/doi', {annoIds}, this._axiosConfigFromAnnoOptions(options))
             .then(resp => cb(null, resp.data))
             .catch(err => {

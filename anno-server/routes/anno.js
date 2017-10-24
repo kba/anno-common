@@ -33,8 +33,7 @@ module.exports = ({store}) => {
             if (purl && req.headers.accept && req.headers.accept.match('text/html')) {
                 resp.header('Location', purl)
                 resp.status(301)
-                resp.send(`Redirecting to ${purl}`)
-                return
+                return resp.send(`Redirecting to ${purl}`)
             } else {
                 resp.header('Location', doc.id)
                 resp.header('Link', '<http://www.w3.org/ns/ldp#Resource>; rel="type"')
@@ -167,10 +166,13 @@ module.exports = ({store}) => {
     //
     router.put('/:annoId', (req, resp, next) => {
         const anno = prune(req.body)
+        const {params} = req
         store.revise(req.params.annoId, anno, req.annoOptions, (err, doc) => {
             if (err) return next(err)
+            // XXX wtf
+            params.annoId = doc.id
+            req.params = params
             resp.status(201)
-            req.params.annoId = doc.id
             return getAnnotation(req, resp, next)
         })
     })
@@ -239,15 +241,12 @@ module.exports = ({store}) => {
     router.post('/doi', (req, resp, next) => {
         req.body.annoIds = (req.body.annoIds || [])
         async.map(req.body.annoIds, (annoId, done) => {
-            store.get(annoId, req.annoOptions, (err, doc) => {
+            const options = JSON.parse(JSON.stringify(req.annoOptions))
+            // options.collection = collectionConfigForAnno(req, doc)
+            // console.log(options.collectionConfigFor)
+            store.mintDoi(annoId, options, (err, minted) => {
                 if (err) return done(err)
-                const options = JSON.parse(JSON.stringify(req.annoOptions))
-                // options.collection = collectionConfigForAnno(req, doc)
-                console.log(options.collectionConfigFor)
-                store.mintDoi(doc, options, (err, minted) => {
-                    if (err) return done(err)
-                    return done(null, {minted})
-                })
+                return done(null, {minted})
             })
         }, (err, minted) => {
             if (err) return next(err)

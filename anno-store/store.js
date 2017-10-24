@@ -84,7 +84,8 @@ class Store {
         // XXX this is just to keep logs small
         const ctxCopy = Object.assign({}, ctx)
         // ;['anno', 'targets', 'retvals'].forEach(k => ctxCopy[k] = '[...]')
-        this.log.silly(`${msg}: ${JSON.stringify(ctxCopy)}`)
+        // this.log.silly(`${msg}: ${JSON.stringify(ctxCopy)}`)
+        this.log.debug(`${msg}`)
     }
 
     _callMethod(ctx, cb) {
@@ -125,6 +126,7 @@ class Store {
                     })
                 })
             } catch (exception) {
+              console.log(exception)
                 cb(exception)
             }
         })
@@ -408,41 +410,40 @@ class Store {
      *
      * Replaces the complete annotation with the passed annotation, not just revise it.
      *
-     * - `@param {Object} anno`
+     * - `@param {Object} annoId` Id of the annotation to create DOI(s) for
      * - `@param {Options} options`
      * - `@param {function} callback`
      *
      */
-    mintDoi(anno, options, cb) {
+    mintDoi(annoId, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
         this._callMethod(Object.assign(options, {
             method: 'mintDoi',
-            anno,
+            annoId,
         }), cb)
     }
 
     _mintDoi(options, cb) {
-        const {collectionConfig} = options
-        if (!options.anno)
-          return cb(new Error("Must pass an annotation"))
+        const {annoId, collectionConfig} = options
+        if (!annoId)
+          return cb(new Error("Must pass 'annoId'"))
         else if (!collectionConfig)
           return cb(new Error("Cannot mint a DOI without a collection"))
         else if (!collectionConfig.doiTemplate)
           return cb(new Error("Collection must set 'doiTemplate'"))
         else if (!collectionConfig.heiperEndpoint)
           return cb(new Error("Collection must set 'heiperEndpoint'"))
-        this.get(options.anno.id, options, (err, existingAnno) => {
+        this.get(annoId, options, (err, existingAnno) => {
             if (err || ! existingAnno) {
-                return cb(new Error(`Cannot mint DOI for non-existant annotation '${options.anno.id}'`))
+                return cb(new Error(`Cannot mint DOI for non-existant annotation '${annoId}'`))
             }
             const {heiperJson, anno} = anno2heiper(existingAnno, collectionConfig.doiTemplate)
-            console.log({heiperJson, anno})
+            // console.log({heiperJson, anno})
             fetch(collectionConfig.heiperEndpoint, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify(heiperJson),
             }).then(resp => {
-                console.log("heiper returned", resp.status)
                 if (resp.status >= 400) {
                     resp.text().then(data => {
                         console.log("DOI registration failed")
@@ -450,6 +451,7 @@ class Store {
                         cb(data)
                     })
                 } else {
+                    console.log("Registered DOIs, now re-importing annotation", resp.status)
                     const importOptions = Object.assign(JSON.parse(JSON.stringify(options)), {
                         recursive: true,
                         replaceAnnotation: false,

@@ -1,7 +1,7 @@
 #!/bin/bash
 lerna bootstrap --hoist
-export ANNO_LOGLEVEL="silly"
-# export ANNO_LOGLEVEL="debug"
+# export ANNO_LOGLEVEL="silly"
+export ANNO_LOGLEVEL="debug"
 export ANNO_STORE_FILE="/tmp/annotest.nedb"
 export ANNO_ENABLE_JWT_AUTH="true"
 export ANNO_MIDDLEWARE_PLUGINS='@kba/anno-plugins:PreCollectionStatic'
