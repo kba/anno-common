@@ -201,8 +201,7 @@ class Store {
      * - `@param {Object} options`
      *     - `@param {Boolean} options.latest` Return the latest revision only
      *     - `@param {Boolean} options.metadataOnly` Return only metadata
-     *     - `@param {Boolean} options.skipVersions` Omit versions
-     *     - `@param {Boolean} options.skipReplies` Omit replies
+     *     - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
      * - `@param {String} options.user`
      * - `@param {function} callback`
      */
@@ -284,8 +283,7 @@ class Store {
      *     - `@param {String} options.user`
      *     - `@param {Boolean} options.latest` Return the latest revision only
      *     - `@param {Boolean} options.metadataOnly` Return only metadata
-     *     - `@param {Boolean} options.skipVersions` Omit versions
-     *     - `@param {Boolean} options.skipReplies` Omit replies
+     *     - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
      * - `@param {function} callback`
      */
     search(query, options, cb) {

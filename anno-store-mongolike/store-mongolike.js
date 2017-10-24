@@ -154,9 +154,9 @@ class MongolikeStore extends Store {
             if (!found && (updateAnnotation || replaceAnnotation)) {
                 return cb(new Error(`'replaceAnnotation'/'updateAnnotation' are set, but annotation ${_fullid} wasn't found`))
             }
-            console.log({anno})
+            // console.log({anno})
             anno = this.jsonldToMongolike(anno, options)
-            console.log({anno})
+            // console.log({anno})
             if (!recursive) {
                 delete anno._revisions
                 delete anno._replies
@@ -350,6 +350,7 @@ class MongolikeStore extends Store {
                 query.$or = []
             for (let i = 0; i < 20; i++) {
                 const queryHere = {}
+                // XXX BROKEN _reply should be _replies?
                 for (let clause in query) {
                     queryHere[`_reply.${i}.${clause}`] = JSON.parse(JSON.stringify(query[clause]))
                 }
@@ -370,7 +371,7 @@ class MongolikeStore extends Store {
             // mongodb returns a cursor, nedb a list of documents
             const docsToArray = (docs, cb) => Array.isArray(docs) ? cb(null, docs) : docs.toArray(cb)
             docsToArray(docs, (err, docs) => {
-                console.log('docsToArray', {err, docs})
+                console.log('docsToArray', {err, docs, options})
                 if (err) return cb(err)
                 async.map(docs, (doc, done) => {
                     this._handleRevisions(doc._id, doc, options, done)
@@ -385,8 +386,9 @@ class MongolikeStore extends Store {
      */
     _toJSONLD(annoId, anno, options={}, mergeProps={}) {
         // console.log(annoId, options)
-        // console.log('_toJSONLD', {annoId, doi: anno.doi})
+        // console.log('_toJSONLD', {annoId, options})
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
+        options = Object.assign({filterProps: []}, options)
         const ret = Object.assign({}, mergeProps)
         if (!options.skipContext) {
             ret['@context'] = 'http://www.w3.org/ns/anno.jsonld'
@@ -394,9 +396,11 @@ class MongolikeStore extends Store {
         ret.id = this._urlFromId(annoId)
         ret.type = "Annotation"
         options.skipContext = true
-        Object.keys(anno).forEach(prop => {
+        Object.keys(anno)
+            .filter(prop => options.filterProps.indexOf(prop) === -1)
+            .forEach(prop => {
             if (prop === '_revisions' && !(annoId.match(/~\d$/))) {
-                if (anno._revisions.length > 0 && !options.skipVersions) {
+                if (anno._revisions.length > 0 && options.filterProps.indexOf('hasVersion') === -1) {
                     let revId = 0
                     ret.hasVersion = anno._revisions.map(revision => {
                         const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision, options, {
@@ -407,7 +411,7 @@ class MongolikeStore extends Store {
                 }
             // TODO sort before _revisions
             } else if (prop === '_replies') {
-                if (anno._replies.length > 0 && !options.skipReplies) {
+                if (anno._replies.length > 0 && options.filterProps.indexOf('hasReply') === -1) {
                     let replyId = 0
                     ret.hasReply = anno._replies
                         .map(reply => {
@@ -445,11 +449,10 @@ class MongolikeStore extends Store {
 
     jsonldToMongolike(anno, options) {
         options = Object.assign({
-            filterProps: [
-                'id',
-                '@context'
-            ]
+            filterProps: []
         }, JSON.parse(JSON.stringify(options)))
+        // ALWAY filter @context and id
+        options.filterProps.push(['id', '@context'])
         const {filterProps} = options
         anno = this._normalizeType(anno)
         const ret = {}
@@ -458,10 +461,10 @@ class MongolikeStore extends Store {
             .filter(prop => filterProps.indexOf(prop) === -1 )
             .forEach(prop => {
                 if (prop == 'hasVersion') {
-                    ret._revisions = anno[prop].map(x => this.jsonldToMongolike(x, filterProps))
+                    ret._revisions = anno[prop].map(x => this.jsonldToMongolike(x, options))
                     delete anno[prop]
                 } else if (prop == 'hasReply') {
-                    ret._replies = anno[prop].map(x => this.jsonldToMongolike(x, filterProps))
+                    ret._replies = anno[prop].map(x => this.jsonldToMongolike(x, options))
                     delete anno[prop]
                 } else {
                     ret[prop] = anno[prop]

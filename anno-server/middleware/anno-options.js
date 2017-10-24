@@ -53,10 +53,27 @@ module.exports = function AnnoOptionsMiddleware(cb) {
                 }
             })
 
+            // array values
+            ;[
+              'filterProps'
+            ].forEach(option => {
+                const optionHeader = `X-Anno-${option}`.toLowerCase()
+                let val = req.query[option]
+                if (!val) val = req.headers[optionHeader]
+                if (val) options[option] = val
+                if (option in req.query) {
+                    options[option] = req.query[option].trim().split(/\s*,\s*/)
+                    delete req.query[option]
+                } else if (optionHeader in req.headers) {
+                    options[option] = req.headers[optionHeader].trim().split(/\s*,\s*/)
+                }
+            })
+
             // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
             if (req.header('slug')) options.slug = req.header('slug')
 
-            log.silly("annoOptions scraped: " + JSON.stringify(options))
+            // log.silly("annoOptions scraped: " + JSON.stringify(options))
+            console.log("annoOptions scraped: " + JSON.stringify(options))
             next()
         })
     }
