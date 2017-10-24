@@ -7,7 +7,7 @@ function anno2heiper(tla, doiTemplate) {
     const {_fullid} = splitIdRepliesRev(anno.id)
     const doi = doiTemplate
       .replace('{{ fullid }}', _fullid)
-    console.log({doi, _fullid})
+    // console.log({doi, _fullid})
     const internalIdentifier = _fullid
     const url = anno.id
     anno.doi = doi

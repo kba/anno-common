@@ -21,9 +21,9 @@ tap.test('anno2heiper', t => {
     "target": "http://example.org/photo1"
   }
 
-  const collectionConfig = {
-    doiTemplate: '10.5072/foo.{{ fullid }}'
-  }
-  console.log('  #  ' + JSON.stringify(anno2heiper(anno5, collectionConfig)))
+  const doiTemplate = '10.5072/foo.{{ fullid }}'
+  const {heiperJson: [heiperJson]} = anno2heiper(anno5, doiTemplate)
+  // console.log('  #  ' + JSON.stringify(heiperJson))
+  t.equals(heiperJson.doi, '10.5072/foo.anno5')
   t.end()
 })

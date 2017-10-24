@@ -14,7 +14,7 @@ TEMPDIR = $(PWD)/temp
 REPORTER = tap
 
 # All Tests. Default: '$(TESTS)'
-TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js')
+TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js' -and -not -name 'store-sql.test.js')
 
 SITEDIR = gh-pages
 
