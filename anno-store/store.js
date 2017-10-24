@@ -424,7 +424,7 @@ class Store {
     }
 
     _mintDoi(options, cb) {
-        const {annoId, collectionConfig} = options
+        let {annoId, collectionConfig} = options
         if (!annoId)
           return cb(new Error("Must pass 'annoId'"))
         else if (!collectionConfig)
@@ -433,6 +433,7 @@ class Store {
           return cb(new Error("Collection must set 'doiTemplate'"))
         else if (!collectionConfig.heiperEndpoint)
           return cb(new Error("Collection must set 'heiperEndpoint'"))
+        annoId = annoId.replace(/\~\d+$/, '')
         this.get(annoId, options, (err, existingAnno) => {
             if (err || ! existingAnno) {
                 return cb(new Error(`Cannot mint DOI for non-existant annotation '${annoId}'`))
