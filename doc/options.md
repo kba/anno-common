@@ -1,12 +1,10 @@
 # Options
 
-## skipVersions
+## filterProps
 
-Return only the top-level annotation.
+Omit these properties in the output. Useful for reducing JSON size.
 
-## skipReplies
-
-Do not include replies with an annotation.
+Note that props are filtered after being retrieved from the store.
 
 ## metadataOnly
 

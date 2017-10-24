@@ -34,8 +34,6 @@ module.exports = function AnnoOptionsMiddleware(cb) {
 
             // boolean values
             ;[
-              'skipVersions',
-              'skipReplies',
               'metadataOnly',
               'includeDeleted',
               'forceDelete',

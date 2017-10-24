@@ -70,8 +70,7 @@ paths:
           type: 'string'
           format: 'url'
         - {in: 'query', name: 'metadataOnly', type: 'boolean', default: false, allowEmptyValue: true, description: 'Send only metadata'}
-        - {in: 'query', name: 'skipVersions', type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off versions'}
-        - {in: 'query', name: 'skipReplies',  type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off replies'}
+        - {in: 'query', name: 'filterProps', type: 'string', default: '', allowEmptyValue: true, description: 'Skip these properties, comma-separated'}
         - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
         - in: 'header'
           name: 'Prefer'
@@ -140,8 +139,7 @@ paths:
           description: 'ID of the annotation'
         - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
         - {in: 'query', name: 'metadataOnly', type: 'boolean', default: false, allowEmptyValue: true, description: 'Send only metadata'}
-        - {in: 'query', name: 'skipVersions', type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off versions'}
-        - {in: 'query', name: 'skipReplies',  type: 'boolean', default: false, allowEmptyValue: true, description: 'Leave off replies'}
+        - {in: 'query', name: 'filterProps', type: 'string', default: '', allowEmptyValue: true, description: 'Skip these properties, comma-separated'}
       responses:
         200:
           description: 'all okay'
