@@ -1,6 +1,7 @@
 const Store = require('@kba/anno-store')
 const schema = require('@kba/anno-schema')
 const errors = require('@kba/anno-errors')
+const async = require('async')
 const {
   splitIdRepliesRev,
   truthy,
@@ -39,23 +40,7 @@ class MongolikeStore extends Store {
                     return cb(errors.replyNotFound(annoId))
                 }
             }
-            if (!Array.isArray(doc._revisions)) {
-                console.error("BAD ANNOTATION IN STORE", annoId)
-            } else {
-                const rev = (_revid)
-                    ? doc._revisions[_revid -1]
-                    : doc._revisions[doc._revisions.length - 1]
-                if (!rev) return cb(errors.revisionNotFound(_id, _revid))
-
-                if (options.latest) {
-                    annoId = `${_id}~${doc._revisions.length}`
-                    doc = rev
-                }
-            }
-
-            if (_replyids.length) doc.replyTo = this._urlFromId(`${_id}${_replyids.map(x=>`.${x}`).join('')}`)
-            if (_revid) doc.versionOf = this._urlFromId(_id)
-            return cb(null, this._toJSONLD(annoId, doc, options))
+            this._handleRevisions(annoId, doc, options, cb)
         })
     }
 
@@ -147,6 +132,7 @@ class MongolikeStore extends Store {
 
     /* @override */
     _import(options, cb) {
+        // TODO handle replies!
         let {anno, recursive, slug, replaceAnnotation, updateAnnotation} = options
         if (replaceAnnotation && updateAnnotation) {
             return cb(new Error("'replaceAnnotation' contradicts 'updateAnnotation'"))
@@ -218,7 +204,7 @@ class MongolikeStore extends Store {
     _revise(options, cb) {
         const annoId = this._idFromURL(options.annoId)
         let anno = options.anno
-        const {_id, _replyids} = splitIdRepliesRev(annoId)
+        const {_id, _replyids, _unversioned} = splitIdRepliesRev(annoId)
         this.db.findOne({_id}, (err, existingAnno) => {
             if (err)
                 return cb(err)
@@ -287,16 +273,16 @@ class MongolikeStore extends Store {
                 if (err) return cb(err)
                 this.db.update({_id}, modQueries[1], {}, (err, arg) => {
                     if (err) return cb(err)
-                    options.latest = true
                     delete options.anno
                     // TODO Make this optional via envyconf var
                     if (anno.doi) {
-                      this.mintDoi(_id, options, (err, anno) => {
-                        if (err) return cb(err)
-                        return cb(null, anno)
-                      })
+                        this.mintDoi(_unversioned, options, (err, anno) => {
+                            if (err) return cb(err)
+                            return cb(null, anno)
+                        })
                     } else {
-                      return this.get(_id, options, cb)
+                        Object.assign(options, {latest: true})
+                        return this.get(_id, options, cb)
                     }
                 })
             })
@@ -358,6 +344,7 @@ class MongolikeStore extends Store {
             })
         }
 
+        // XXX UNDOCUMENTED
         if (nested) {
             if (!query.$or)
                 query.$or = []
@@ -371,7 +358,7 @@ class MongolikeStore extends Store {
         }
 
 
-        // TODO check whether actually works
+        // TODO check whether actually works for find
         const projection = this._projectionFromOptions(options)
 
         // console.log(JSON.stringify({query, projection}, null, 2))
@@ -379,14 +366,16 @@ class MongolikeStore extends Store {
             if (err) return cb(err)
             if (docs === undefined) docs = []
             options.skipContext = true
+
             // mongodb returns a cursor, nedb a list of documents
-            if (Array.isArray(docs))
-                return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
-            else
-                docs.toArray((err, docs) => {
-                    if (err) return cb(err)
-                    return cb(null, docs.map(doc => this._toJSONLD(doc._id, doc, options)))
-                })
+            const docsToArray = (docs, cb) => Array.isArray(docs) ? cb(null, docs) : docs.toArray(cb)
+            docsToArray(docs, (err, docs) => {
+                console.log('docsToArray', {err, docs})
+                if (err) return cb(err)
+                async.map(docs, (doc, done) => {
+                    this._handleRevisions(doc._id, doc, options, done)
+                }, cb)
+            })
         })
     }
 
@@ -396,6 +385,7 @@ class MongolikeStore extends Store {
      */
     _toJSONLD(annoId, anno, options={}, mergeProps={}) {
         // console.log(annoId, options)
+        // console.log('_toJSONLD', {annoId, doi: anno.doi})
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
         const ret = Object.assign({}, mergeProps)
         if (!options.skipContext) {
@@ -488,6 +478,41 @@ class MongolikeStore extends Store {
         return ret
     }
 
+    _handleRevisions(annoId, doc, options, cb) {
+        // console.log('_handleRevisions', {annoId, _id: doc._id})
+        const {_id, _unversioned, _revid, _replyids} = splitIdRepliesRev(annoId)
+        if (!Array.isArray(doc._revisions)) {
+            console.error("!!!! Database Error !!!! Annotation without _revisions", _unversioned)
+        } else {
+
+            const latestRevision = doc._revisions[doc._revisions.length - 1]
+
+            const rev = (_revid)
+                ? doc._revisions[_revid -1]
+                : latestRevision
+
+            if (!rev)
+                return cb(errors.revisionNotFound(_unversioned, _revid))
+
+            if (options.latest) {
+                annoId = `${_unversioned}~${doc._revisions.length}`
+                doc = rev
+            }
+
+            // Always send the DOI of the latest revision as the DOI of the TLA
+            // so people can cite this correctly
+            if (latestRevision.doi)
+                doc.doi = latestRevision.doi
+
+            // XXX TODO use urlJoin and such
+            if (_replyids.length) doc.replyTo = this._urlFromId(`${_id}${_replyids.map(x=>`.${x}`).join('')}`)
+            if (_revid) doc.versionOf = this._urlFromId(_id)
+        }
+        return cb(null, this._toJSONLD(annoId, doc, options))
+    }
+
 }
 
 module.exports = MongolikeStore
+
+// vim: sw=4
