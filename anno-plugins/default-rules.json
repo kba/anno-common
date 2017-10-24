@@ -43,19 +43,49 @@
   [
     {
       "method": "create",
-      "user.role": "create"
+      "user.role": "creator"
     },
     true,
-    "Allow users with 'create' role to create new annotations"
+    "Allow users with 'creator' role to create new annotations"
   ],
   [
     {
-      "method": {
-        "$or": [
-          "revise",
-          "create"
-        ]
+      "method": "revise",
+      "user.id": {
+        "$exists": true
       },
+      "oldAnno.creator": {
+        "$exists": true
+      },
+      "$or": [
+        {
+          "oldAnno.creator": {
+            "$ref": "/user/id"
+          }
+        },
+        {
+          "oldanno.creator.id": {
+            "$ref": "/user/id"
+          }
+        },
+        {
+          "oldanno.creator": {
+            "$ref": "/user"
+          }
+        },
+        {
+          "oldanno.creator.id": {
+            "$ref": "/user"
+          }
+        }
+      ]
+    },
+    true,
+    "Allow users to revise their own annotations"
+  ],
+  [
+    {
+      "method": "create",
       "anno.creator": {
         "$exists": true
       },
@@ -72,11 +102,21 @@
           "anno.creator.id": {
             "$ref": "/user/id"
           }
+        },
+        {
+          "anno.creator": {
+            "$ref": "/user"
+          }
+        },
+        {
+          "anno.creator.id": {
+            "$ref": "/user"
+          }
         }
       ]
     },
     true,
-    "Allow users to revise their own annotations / Allow users to reply to their own annotations"
+    "Allow users to reply to their own annotations"
   ],
   [
     {
@@ -89,10 +129,17 @@
           "anno.creator": {
             "$exists": true
           },
-          "user.id": {
-            "$exists": true
-          },
           "$or": [
+            {
+              "anno.creator": {
+                "$ref": "/user"
+              }
+            },
+            {
+              "anno.creator.id": {
+                "$ref": "/user"
+              }
+            },
             {
               "anno.creator": {
                 "$ref": "/user/id"
@@ -113,7 +160,38 @@
   [
     {
       "method": "import",
-      "user.role": "importer"
+      "$or": [
+        {
+          "user.role": "importer"
+        },
+        {
+          "anno.creator": {
+            "$exists": true
+          },
+          "$or": [
+            {
+              "anno.creator": {
+                "$ref": "/user"
+              }
+            },
+            {
+              "anno.creator.id": {
+                "$ref": "/user"
+              }
+            },
+            {
+              "anno.creator": {
+                "$ref": "/user/id"
+              }
+            },
+            {
+              "anno.creator.id": {
+                "$ref": "/user/id"
+              }
+            }
+          ]
+        }
+      ]
     },
     true,
     "Importers may import"

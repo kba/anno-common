@@ -29,34 +29,59 @@
   - "Allow moderators to revise / reply to any annotations"
 
 - - method: 'create'
-    user.role: 'create'
+    user.role: 'creator'
   - true
-  - "Allow users with 'create' role to create new annotations"
+  - "Allow users with 'creator' role to create new annotations"
 
-- - method: {$or: ['revise', 'create']}
+- - method: 'revise'
+    user.id: {$exists: true}
+    oldAnno.creator: {$exists: true}
+    # TODO check that oldAnno.creator == anno.creator
+    $or:
+      - oldAnno.creator: {$ref: '/user/id'}
+      - oldanno.creator.id: {$ref: '/user/id'}
+      - oldanno.creator: {$ref: '/user'}
+      - oldanno.creator.id: {$ref: '/user'}
+  - true
+  - "Allow users to revise their own annotations"
+
+- - method: 'create'
     anno.creator: {$exists: true}
     user.id: {$exists: true}
     $or:
-    - anno.creator: {$ref: '/user/id'}
-    - anno.creator.id: {$ref: '/user/id'}
+      - anno.creator: {$ref: '/user/id'}
+      - anno.creator.id: {$ref: '/user/id'}
+      - anno.creator: {$ref: '/user'}
+      - anno.creator.id: {$ref: '/user'}
   - true
-  - "Allow users to revise their own annotations / Allow users to reply to their own annotations"
+  - "Allow users to reply to their own annotations"
 
 - - method: 'mintDoi'
     $or:
-    - user.role: 'moderator'
-    - anno.creator: {$exists: true}
-      user.id: {$exists: true}
-      $or:
-      - anno.creator: {$ref: '/user/id'}
-      - anno.creator.id: {$ref: '/user/id'}
+      - user.role: 'moderator'
+      - anno.creator: {$exists: true}
+        # user: {$exists: true}
+        $or:
+          - anno.creator: {$ref: '/user'}
+          - anno.creator.id: {$ref: '/user'}
+          - anno.creator: {$ref: '/user/id'}
+          - anno.creator.id: {$ref: '/user/id'}
   - true
   - "Allow moderators and users for their own annotations to mint DOIS"
 
 - - method: 'import'
-    user.role: 'importer'
+    $or:
+    - user.role: 'importer'
+    - user.role: 'doiMinter'
+      anno.creator: {$exists: true}
+      # user: {$exists: true}
+      $or:
+        - anno.creator: {$ref: '/user'}
+        - anno.creator.id: {$ref: '/user'}
+        - anno.creator: {$ref: '/user/id'}
+        - anno.creator.id: {$ref: '/user/id'}
   - true
-  - "Importers may import"
+  - "Importers may import anything, doiMinters may import their own annotations"
 
 # Default Rule. Must be last
 - - {}

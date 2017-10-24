@@ -15,7 +15,7 @@ john:
 
 mike:
   rules:
-    - [{collection: 'test'},         {role: 'admin'}]
+    - [{collection: 'test'},         {role: ['doiMinter', 'creator']}]
     - [{collection: 'default'},         {role: 'importer'}]
     - [{collection: 'test-collection'}, {role: 'moderator'}]
 
