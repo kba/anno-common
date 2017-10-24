@@ -159,31 +159,57 @@ class MongolikeStore extends Store {
         }
         console.log("import options", {options})
 
-        const _id = slug ? slug : this._genid()
-        console.log({_id, options})
+        const _fullid = slug ? slug : this._genid()
+        const {_id, _replyids} =  splitIdRepliesRev(_fullid)
+        const isReply = !! _replyids.length
 
-        this.get(_id, options, (err, existingAnno) => {
+        this.get(_fullid, options, (err, existingAnno) => {
             const found = !err && existingAnno
             if (!found && (updateAnnotation || replaceAnnotation)) {
-                return cb(new Error(`'replaceAnnotation' is set, but annotation ${_id} wasn't found`))
+                return cb(new Error(`'replaceAnnotation'/'updateAnnotation' are set, but annotation ${_fullid} wasn't found`))
             }
+            console.log({anno})
             anno = this.jsonldToMongolike(anno, options)
+            console.log({anno})
             if (!recursive) {
                 delete anno._revisions
                 delete anno._replies
             }
             // TODO support revisions and replies
-            anno._id = _id
             if (replaceAnnotation) {
-                this.db.remove({_id}, options, (err) => {
-                    this._createInsert(anno, options, cb)
-                })
+                if (isReply) {
+                    return cb(errors.notImplemented(
+                        'import/replaceAnnotation/reply',
+                        "Replacing replies currently not implemented"
+                    ))
+                } else {
+                    Object.assign(anno, {_id})
+                    this.db.remove({_id}, options, (err) => {
+                        if (err) return cb(err)
+                        this._createInsert(anno, options, cb)
+                    })
+                }
             } else if (updateAnnotation) {
-                this.db.update({_id}, {$set: anno}, (err) => {
-                    this.get(_id, options, cb)
-                })
+                if (isReply) {
+                    const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
+                    // Prepend the selector to all fields that should be replaced
+                    const $set = Object.keys(anno).reduce((ret, k) => {
+                        ret[`${selector}.${k}`] = anno[k]
+                        return ret
+                    }, {})
+                    console.log("Import", {_id, $set})
+                    this.db.update({_id}, {$set}, {}, (err, arg) => {
+                        if (err) return cb(err)
+                        this.get(_fullid, options, cb)
+                    })
+                } else {
+                    this.db.update({_id}, {$set: anno}, (err) => {
+                        if (err) return cb(err)
+                        this.get(_fullid, options, cb)
+                    })
+                }
             } else {
-                this._createInsert(anno, options, cb)
+                this.create(anno, options, cb)
             }
         })
     }
@@ -427,21 +453,30 @@ class MongolikeStore extends Store {
         return ret
     }
 
-    jsonldToMongolike(anno) {
+    jsonldToMongolike(anno, options) {
+        options = Object.assign({
+            filterProps: [
+                'id',
+                '@context'
+            ]
+        }, JSON.parse(JSON.stringify(options)))
+        const {filterProps} = options
         anno = this._normalizeType(anno)
         const ret = {}
         // Recursively replace hasVersion -> _revisions, hasReply -> _replies
-        Object.keys(anno).forEach(prop => {
-            if (prop == 'hasVersion') {
-                ret._revisions = anno[prop].map(x => this.jsonldToMongolike(x))
-                delete anno[prop]
-            } else if (prop == 'hasReply') {
-                ret._replies = anno[prop].map(x => this.jsonldToMongolike(x))
-                delete anno[prop]
-            } else {
-                ret[prop] = anno[prop]
-            }
-        })
+        Object.keys(anno)
+            .filter(prop => filterProps.indexOf(prop) === -1 )
+            .forEach(prop => {
+                if (prop == 'hasVersion') {
+                    ret._revisions = anno[prop].map(x => this.jsonldToMongolike(x, filterProps))
+                    delete anno[prop]
+                } else if (prop == 'hasReply') {
+                    ret._replies = anno[prop].map(x => this.jsonldToMongolike(x, filterProps))
+                    delete anno[prop]
+                } else {
+                    ret[prop] = anno[prop]
+                }
+            })
         if (!ret._revisions) {
             const woReplies = JSON.parse(JSON.stringify(ret))
             delete woReplies._replies

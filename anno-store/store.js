@@ -1,6 +1,6 @@
 const slugid = require('slugid')
 const async = require('async')
-const {urlJoin} = require('@kba/anno-util')
+const {urlJoin, splitIdRepliesRev} = require('@kba/anno-util')
 const {anno2heiper} = require('@kba/anno-queries/anno2heiper')
 const {fetch} = require('fetch-ponyfill')()
 const {envyConf, envyLog} = require('envyconf')
@@ -433,7 +433,9 @@ class Store {
           return cb(new Error("Collection must set 'doiTemplate'"))
         else if (!collectionConfig.heiperEndpoint)
           return cb(new Error("Collection must set 'heiperEndpoint'"))
-        annoId = annoId.replace(/\~\d+$/, '')
+        // Strip revisions (we want DOIs for all revisions)
+        const {_unversioned, _id} = splitIdRepliesRev(annoId)
+        const isReply = _unversioned !== _id
         this.get(annoId, options, (err, existingAnno) => {
             if (err || ! existingAnno) {
                 return cb(new Error(`Cannot mint DOI for non-existant annotation '${annoId}'`))
@@ -457,7 +459,7 @@ class Store {
                         recursive: true,
                         replaceAnnotation: false,
                         updateAnnotation: true,
-                        slug: anno.id.replace(/.*\//, '')
+                        slug: anno.id
                     })
                     this.import(anno, importOptions, (err, imported) => {
                         if (err) return cb(err)

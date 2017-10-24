@@ -32,9 +32,10 @@ function splitIdRepliesRev(str) {
     if (str) throw new Error(`Could not parse '${origStr}' into id/replyid/revid, '${str}' remained`)
 
     let _fullid = _replyids.length ? `${_id}.${_replyids.join('.')}` : _id
+    let _unversioned = _fullid
     if  (_revid) _fullid += `~${_revid}`
 
-    return {_id, _replyids, _revid, _fullid}
+    return {_id, _replyids, _revid, _unversioned, _fullid}
 }
 
 module.exports = {splitIdRepliesRev}
