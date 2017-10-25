@@ -210,7 +210,7 @@ class MongolikeStore extends Store {
 
             // TODO Handle read-only values
             for (let prop of ['canonical', 'via', 'hasReply', 'replyTo', 'hasVersion', 'versionOf']) {
-                // TODO should be deepEqual not ===
+                // should be deepEqual not ===
                 if (anno[prop] && anno[prop] !== existingAnno[prop]) {
                     // console.log(errors.readonlyValue(annoId, prop, existingAnno[prop], anno[prop]))
                     // delete anno[prop]
@@ -223,7 +223,7 @@ class MongolikeStore extends Store {
             delete annoRevision.modified
             // Never change creator attribute
             delete annoRevision.creator
-            // A revision should not have an id TODO
+            // A revision should not have an id
             this._deleteId(annoRevision)
             this._normalizeType(annoRevision)
 
@@ -404,7 +404,6 @@ class MongolikeStore extends Store {
                         return revisionLD
                     })
                 }
-            // TODO sort before _revisions
             } else if (prop === '_replies') {
                 if (anno._replies.length > 0 && options.filterProps.indexOf('hasReply') === -1) {
                     let replyId = 0
@@ -476,6 +475,7 @@ class MongolikeStore extends Store {
         return ret
     }
 
+    // TODO call from _toJSONLD
     _handleRevisions(annoId, doc, options, cb) {
         // console.log('_handleRevisions', {annoId, _id: doc._id})
         const {_id, _unversioned, _revid, _replyids} = splitIdRepliesRev(annoId)

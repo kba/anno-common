@@ -157,7 +157,6 @@ class HttpStore extends Store {
     _axiosConfigFromAnnoOptions(options) {
         const ret = {}
 
-        // TODO
         // BasicAuth
         if (options.auth && options.auth.username) {
             ret.auth = ret.auth || {}

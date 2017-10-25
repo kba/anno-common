@@ -24,7 +24,7 @@ class AnnoCollection {
         }
         ctx.collectionConfigFor = c => this.collections[c]
         ctx.collectionsAvailable = Object.keys(this.collections)
-      console.log({ctx})
+      // console.log({ctx})
         return cb()
     }
 

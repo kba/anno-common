@@ -87,7 +87,7 @@ class Store {
         const ctxCopy = Object.assign({}, ctx)
         // ;['anno', 'targets', 'retvals'].forEach(k => ctxCopy[k] = '[...]')
         // this.log.silly(`${msg}: ${JSON.stringify(ctxCopy)}`)
-        this.log.debug(`${msg}`)
+        this.log.silly(`${msg}`)
     }
 
     _callMethod(ctx, cb) {

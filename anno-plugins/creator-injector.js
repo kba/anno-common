@@ -46,8 +46,19 @@ class CreatorInjector extends UserBase {
 
         if ('retvals' in ctx) {
             const fn = (anno) => {
-                const user = this._lookupUser(anno.creator, ctx)
-                if (user && user.public) anno.creator = Object.assign(user.public, {id: user.id})
+                if (Array.isArray(anno.creator)) {
+                    const creators = anno.creator.map(creator => {
+                        const user = this._lookupUser(creator, ctx)
+                        if (user && user.public)
+                            creator = Object.assign({}, user.public, {id: user.id})
+                        return creator
+                    })
+                    anno.creator = creators
+                } else {
+                    const user = this._lookupUser(anno.creator, ctx)
+                    if (user && user.public)
+                        anno.creator = Object.assign({}, user.public, {id: user.id})
+                }
             }
             if (ctx.method === 'search') {
                 for (let anno of ctx.retvals[0]) {
@@ -66,3 +77,5 @@ class CreatorInjector extends UserBase {
 }
 
 module.exports = CreatorInjector
+
+// vim: sw=4

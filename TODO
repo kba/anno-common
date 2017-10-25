@@ -15,7 +15,6 @@ TODO
     [-] search
     [X] revise
     [X] delete
-    [ ] cache
 mongo store
     [X] create
     [X] get
@@ -46,7 +45,7 @@ mongo store
 
 [X] fix import (recursive will clobber revisions and replies!!!!)
 [X] Send DOI if set as Link rel="canonical"
-[ ] handle multiple creators
+[X] handle multiple creators
 [ ] replace axios with fetch-ponyfill
 [X] handle DOI minting with revise
 [X] mintDoi should take an annotation ID not an annotation
@@ -61,3 +60,5 @@ mongo store
 [x] webpack anno-schema
 [x] fix validator sample
 [ ] Create multi-url search that returns count of annotations per target id
+[ ] store.search should be pageable
+[ ] Clean up collection injection code

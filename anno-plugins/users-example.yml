@@ -14,6 +14,8 @@ john:
     displayName: 'John Doe'
 
 mike:
+  public:
+    displayName: 'Mike Doe'
   rules:
     - [{collection: 'test'},         {role: ['doiMinter', 'creator']}]
     - [{collection: 'default'},         {role: 'importer'}]

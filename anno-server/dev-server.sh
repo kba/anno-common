@@ -11,7 +11,7 @@ export ANNO_STORE_HOOKS_PRE="
   @kba/anno-plugins:CreatorInjectorStatic
   "
 # export ANNO_USER_DATA='{"john":{"public":{"displayName": "T.U.F.K.A. John"}}}'
-export ANNO_STORE_HOOKS_POST=""
+export ANNO_STORE_HOOKS_POST="@kba/anno-plugins:CreatorInjectorStatic"
 export ANNO_COLLECTION_DATA='{
   "default": {
     "secret":"123",
