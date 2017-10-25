@@ -86,19 +86,11 @@
           },
           {
             "in": "query",
-            "name": "skipVersions",
-            "type": "boolean",
-            "default": false,
+            "name": "filterProps",
+            "type": "string",
+            "default": "",
             "allowEmptyValue": true,
-            "description": "Leave off versions"
-          },
-          {
-            "in": "query",
-            "name": "skipReplies",
-            "type": "boolean",
-            "default": false,
-            "allowEmptyValue": true,
-            "description": "Leave off replies"
+            "description": "Skip these properties, comma-separated"
           },
           {
             "in": "header",
@@ -244,19 +236,11 @@
           },
           {
             "in": "query",
-            "name": "skipVersions",
-            "type": "boolean",
-            "default": false,
+            "name": "filterProps",
+            "type": "string",
+            "default": "",
             "allowEmptyValue": true,
-            "description": "Leave off versions"
-          },
-          {
-            "in": "query",
-            "name": "skipReplies",
-            "type": "boolean",
-            "default": false,
-            "allowEmptyValue": true,
-            "description": "Leave off replies"
+            "description": "Skip these properties, comma-separated"
           }
         ],
         "responses": {
@@ -775,6 +759,19 @@
             },
             {
               "$ref": "#/definitions/Person"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/Person"
+                  }
+                ]
+              }
             }
           ]
         },

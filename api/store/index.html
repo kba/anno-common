@@ -454,6 +454,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mintdoianno-options-callback" title="mintDoi(anno, options, callback)" class="md-nav__link">
+    mintDoi(anno, options, callback)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -853,6 +860,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mintdoianno-options-callback" title="mintDoi(anno, options, callback)" class="md-nav__link">
+    mintDoi(anno, options, callback)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -963,8 +977,8 @@ A disconnected store cannot be used until <code class="codehilite">init</code> i
 - <code class="codehilite">@param {Object} options</code>
     - <code class="codehilite">@param {Boolean} options.latest</code> Return the latest revision only
     - <code class="codehilite">@param {Boolean} options.metadataOnly</code> Return only metadata
-    - <code class="codehilite">@param {Boolean} options.skipVersions</code> Omit versions
-    - <code class="codehilite">@param {Boolean} options.skipReplies</code> Omit replies
+    - <code class="codehilite">@param {Array[String]} options.filterProps</code> List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
+    - <code class="codehilite">@param {Boolean} options.includeDeleted</code> Include results that would be 410 Gone otherwise
 - <code class="codehilite">@param {String} options.user</code>
 - <code class="codehilite">@param {function} callback</code></p>
 <h3 id="createanno-options-callback"><code class="codehilite">create(anno, options, callback)</code><a class="headerlink" href="#createanno-options-callback" title="Permanent link">&para;</a></h3>
@@ -975,35 +989,49 @@ A disconnected store cannot be used until <code class="codehilite">init</code> i
 - <code class="codehilite">@param {String} options.user</code>
 - <code class="codehilite">@param {function} callback</code></p>
 <h3 id="reviseannoid-anno-options-callback"><code class="codehilite">revise(annoId, anno, options, callback)</code><a class="headerlink" href="#reviseannoid-anno-options-callback" title="Permanent link">&para;</a></h3>
-<p>Revise an annotation.
-- <code class="codehilite">@param {String} annoId</code>
-- <code class="codehilite">@param {Object} anno</code>
-- <code class="codehilite">@param {Options} options</code>
-  - <code class="codehilite">@param {String} options.user</code>
-- <code class="codehilite">@param {function} callback</code></p>
+<p>Revise an annotation.</p>
+<ul>
+<li><code class="codehilite">@param {String} annoId</code></li>
+<li><code class="codehilite">@param {Object} anno</code></li>
+<li><code class="codehilite">@param {Options} options</code></li>
+<li><code class="codehilite">@param {String} options.user</code></li>
+<li><code class="codehilite">@param {function} callback</code></li>
+</ul>
 <h3 id="deleteannoid-options-callback"><code class="codehilite">delete(annoId, options, callback)</code><a class="headerlink" href="#deleteannoid-options-callback" title="Permanent link">&para;</a></h3>
 <h3 id="removeannoid-options-callback"><code class="codehilite">remove(annoId, options, callback)</code><a class="headerlink" href="#removeannoid-options-callback" title="Permanent link">&para;</a></h3>
-<p>Delete an annotation, i.e. set the deleted date.
-- <code class="codehilite">@param {String} annoId</code>
-- <code class="codehilite">@param {Options} options</code>
-- <code class="codehilite">@param {Boolean} options.forceDelete</code> Set to <code class="codehilite">true</code> to hint the store to
-                                     actually delete, not just mark deleted
-- <code class="codehilite">@param {String} options.user</code>
-- <code class="codehilite">@param {function} callback</code></p>
+<p>Delete an annotation, i.e. set the deleted date.</p>
+<ul>
+<li><code class="codehilite">@param {String} annoId</code></li>
+<li><code class="codehilite">@param {Options} options</code></li>
+<li><code class="codehilite">@param {Boolean} options.forceDelete</code> Set to <code class="codehilite">true</code> to hint the store to
+                                     actually delete, not just mark deleted</li>
+<li><code class="codehilite">@param {String} options.user</code></li>
+<li><code class="codehilite">@param {function} callback</code></li>
+</ul>
 <h3 id="searchquery-options-callback"><code class="codehilite">search(query, options, callback)</code><a class="headerlink" href="#searchquery-options-callback" title="Permanent link">&para;</a></h3>
-<p>Search the store.
-- <code class="codehilite">@param {Object} query</code>
-- <code class="codehilite">@param {Options} options</code>
-- <code class="codehilite">@param {String} options.user</code>
-- <code class="codehilite">@param {function} callback</code></p>
+<p>Search the store.</p>
+<ul>
+<li><code class="codehilite">@param {Object} query</code></li>
+<li><code class="codehilite">@param {Options} options</code><ul>
+<li><code class="codehilite">@param {Boolean} options.latest</code> Return the latest revision only</li>
+<li><code class="codehilite">@param {Boolean} options.metadataOnly</code> Return only metadata, i.e. no body/target</li>
+<li><code class="codehilite">@param {Array[String]} options.filterProps</code> List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'</li>
+<li><code class="codehilite">@param {Boolean} options.includeDeleted</code> Include results that would be 410 Gone otherwise</li>
+<li><code class="codehilite">@param {String} options.user</code></li>
+</ul>
+</li>
+<li><code class="codehilite">@param {function} callback</code></li>
+</ul>
 <h3 id="replyannoid-anno-options-callback"><code class="codehilite">reply(annoId, anno, options, callback)</code><a class="headerlink" href="#replyannoid-anno-options-callback" title="Permanent link">&para;</a></h3>
 <h3 id="commentannoid-anno-options-callback"><code class="codehilite">comment(annoId, anno, options, callback)</code><a class="headerlink" href="#commentannoid-anno-options-callback" title="Permanent link">&para;</a></h3>
-<p>Reply to an annotation
-- <code class="codehilite">@param {String} annoId</code>
-- <code class="codehilite">@param {Object} anno</code>
-- <code class="codehilite">@param {Options} options</code>
-- <code class="codehilite">@param {String} options.user</code>
-- <code class="codehilite">@param {function} callback</code></p>
+<p>Reply to an annotation</p>
+<ul>
+<li><code class="codehilite">@param {String} annoId</code></li>
+<li><code class="codehilite">@param {Object} anno</code></li>
+<li><code class="codehilite">@param {Options} options</code></li>
+<li><code class="codehilite">@param {String} options.user</code></li>
+<li><code class="codehilite">@param {function} callback</code></li>
+</ul>
 <h3 id="aclchecktargets-options-callback"><code class="codehilite">aclcheck(targets, options, callback)</code><a class="headerlink" href="#aclchecktargets-options-callback" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code class="codehilite">@param {Array} targets</code></li>
@@ -1011,12 +1039,23 @@ A disconnected store cannot be used until <code class="codehilite">init</code> i
 <li><code class="codehilite">@param {function} callback</code></li>
 </ul>
 <h3 id="importanno-options-callback"><code class="codehilite">import(anno, options, callback)</code><a class="headerlink" href="#importanno-options-callback" title="Permanent link">&para;</a></h3>
-<p>Replaces the complete annotation with the passed annotation, not just revise it.
-- <code class="codehilite">@param {Object} anno</code>
-- <code class="codehilite">@param {Options} options</code>
-  - <code class="codehilite">@param String options.slug Proposal for the ID to create</code>
-  - <code class="codehilite">@param {String} options.user</code>
-- <code class="codehilite">@param {function} callback</code></p>
+<p>Replaces the complete annotation with the passed annotation, not just revise it.</p>
+<ul>
+<li><code class="codehilite">@param {Object} anno</code></li>
+<li><code class="codehilite">@param {Options} options</code></li>
+<li><code class="codehilite">@param {String} options.recursive</code> Whether to import replies and revisions recusively. Default: <code class="codehilite">true</code></li>
+<li><code class="codehilite">@param {String} options.replaceAnnotation</code> Whether to replace an existing annotation, i.e. fail if that annotation wasn't there before</li>
+<li><code class="codehilite">@param {String} options.updateAnnotation</code> Patch an existing annotation, fail if not existing</li>
+<li><code class="codehilite">@param {String} options.slug</code> Proposed ID for the annotation</li>
+<li><code class="codehilite">@param {function} callback</code></li>
+</ul>
+<h3 id="mintdoianno-options-callback"><code class="codehilite">mintDoi(anno, options, callback)</code><a class="headerlink" href="#mintdoianno-options-callback" title="Permanent link">&para;</a></h3>
+<p>Replaces the complete annotation with the passed annotation, not just revise it.</p>
+<ul>
+<li><code class="codehilite">@param {Object} annoId</code> Id of the annotation to create DOI(s) for</li>
+<li><code class="codehilite">@param {Options} options</code></li>
+<li><code class="codehilite">@param {function} callback</code></li>
+</ul>
 <h2 id="protected-api">Protected API<a class="headerlink" href="#protected-api" title="Permanent link">&para;</a></h2>
 <p>These methods are available for store implementations but should not be
 used by consumers.</p>

@@ -462,15 +462,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skipversions" title="skipVersions" class="md-nav__link">
-    skipVersions
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#skipreplies" title="skipReplies" class="md-nav__link">
-    skipReplies
+  <a href="#filterprops" title="filterProps" class="md-nav__link">
+    filterProps
   </a>
   
 </li>
@@ -492,6 +485,13 @@
         <li class="md-nav__item">
   <a href="#forcedelete" title="forceDelete" class="md-nav__link">
     forceDelete
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dryrun" title="dryRun" class="md-nav__link">
+    dryRun
   </a>
   
 </li>
@@ -603,15 +603,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skipversions" title="skipVersions" class="md-nav__link">
-    skipVersions
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#skipreplies" title="skipReplies" class="md-nav__link">
-    skipReplies
+  <a href="#filterprops" title="filterProps" class="md-nav__link">
+    filterProps
   </a>
   
 </li>
@@ -637,6 +630,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dryrun" title="dryRun" class="md-nav__link">
+    dryRun
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -653,10 +653,9 @@
                 
                 
                 <h1 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h1>
-<h2 id="skipversions">skipVersions<a class="headerlink" href="#skipversions" title="Permanent link">&para;</a></h2>
-<p>Return only the top-level annotation.</p>
-<h2 id="skipreplies">skipReplies<a class="headerlink" href="#skipreplies" title="Permanent link">&para;</a></h2>
-<p>Do not include replies with an annotation.</p>
+<h2 id="filterprops">filterProps<a class="headerlink" href="#filterprops" title="Permanent link">&para;</a></h2>
+<p>Omit these properties in the output. Useful for reducing JSON size.</p>
+<p>Note that props are filtered after being retrieved from the store.</p>
 <h2 id="metadataonly">metadataOnly<a class="headerlink" href="#metadataonly" title="Permanent link">&para;</a></h2>
 <p>Do not include the annotation body.</p>
 <h2 id="includedeleted">includeDeleted<a class="headerlink" href="#includedeleted" title="Permanent link">&para;</a></h2>
@@ -664,6 +663,8 @@
 <h2 id="forcedelete">forceDelete<a class="headerlink" href="#forcedelete" title="Permanent link">&para;</a></h2>
 <p>Completely remove an annotation, not just set it to <code class="codehilite">delete</code>. </p>
 <p>Subsequent retrievals will result in <code class="codehilite">404</code> not <code class="codehilite">410</code>.</p>
+<h2 id="dryrun">dryRun<a class="headerlink" href="#dryrun" title="Permanent link">&para;</a></h2>
+<p>Do not actually run the action, only the plugins that hook before them.</p>
                 
                   
                 
