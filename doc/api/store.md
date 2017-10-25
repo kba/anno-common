@@ -11,6 +11,7 @@ store.init(...)
 ```
 ### `use(proc, hook='pre')`
 Use processor before (`hook=pre`) or after (`hook=post`) store method.
+
 ### `init(options, cb)`
 Initialize a connection to the store.
 - `@param {Options} options`
@@ -33,8 +34,8 @@ Retrieve an annotation.
 - `@param {Object} options`
     - `@param {Boolean} options.latest` Return the latest revision only
     - `@param {Boolean} options.metadataOnly` Return only metadata
-    - `@param {Boolean} options.skipVersions` Omit versions
-    - `@param {Boolean} options.skipReplies` Omit replies
+    - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
+    - `@param {Boolean} options.includeDeleted` Include results that would be 410 Gone otherwise
 - `@param {String} options.user`
 - `@param {function} callback`
 ### `create(anno, options, callback)`
@@ -46,6 +47,7 @@ Create an annotation.
 - `@param {function} callback`
 ### `revise(annoId, anno, options, callback)`
 Revise an annotation.
+
 - `@param {String} annoId`
 - `@param {Object} anno`
 - `@param {Options} options`
@@ -54,6 +56,7 @@ Revise an annotation.
 ### `delete(annoId, options, callback)`
 ### `remove(annoId, options, callback)`
 Delete an annotation, i.e. set the deleted date.
+
 - `@param {String} annoId`
 - `@param {Options} options`
 - `@param {Boolean} options.forceDelete` Set to `true` to hint the store to
@@ -62,28 +65,45 @@ Delete an annotation, i.e. set the deleted date.
 - `@param {function} callback`
 ### `search(query, options, callback)`
 Search the store.
+
 - `@param {Object} query`
 - `@param {Options} options`
-- `@param {String} options.user`
+    - `@param {Boolean} options.latest` Return the latest revision only
+    - `@param {Boolean} options.metadataOnly` Return only metadata, i.e. no body/target
+    - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
+    - `@param {Boolean} options.includeDeleted` Include results that would be 410 Gone otherwise
+    - `@param {String} options.user`
 - `@param {function} callback`
 ### `reply(annoId, anno, options, callback)`
 ### `comment(annoId, anno, options, callback)`
 Reply to an annotation
+
 - `@param {String} annoId`
 - `@param {Object} anno`
 - `@param {Options} options`
 - `@param {String} options.user`
 - `@param {function} callback`
 ### `aclcheck(targets, options, callback)`
+
 - `@param {Array} targets`
 - `@param {Options} options`
 - `@param {function} callback`
 ### `import(anno, options, callback)`
 Replaces the complete annotation with the passed annotation, not just revise it.
+
 - `@param {Object} anno`
 - `@param {Options} options`
-  - `@param String options.slug Proposal for the ID to create`
-  - `@param {String} options.user`
+  - `@param {String} options.recursive` Whether to import replies and revisions recusively. Default: `true`
+  - `@param {String} options.replaceAnnotation` Whether to replace an existing annotation, i.e. fail if that annotation wasn't there before
+  - `@param {String} options.updateAnnotation` Patch an existing annotation, fail if not existing
+  - `@param {String} options.slug` Proposed ID for the annotation
+- `@param {function} callback`
+
+### `mintDoi(anno, options, callback)`
+Replaces the complete annotation with the passed annotation, not just revise it.
+
+- `@param {Object} annoId` Id of the annotation to create DOI(s) for
+- `@param {Options} options`
 - `@param {function} callback`
 ## Protected API
 These methods are available for store implementations but should not be

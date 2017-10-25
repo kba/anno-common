@@ -139,7 +139,7 @@ class Store {
      * ### `use(proc, hook='pre')`
      *
      * Use processor before (`hook=pre`) or after (`hook=post`) store method.
-     *
+     * 
      */
     use(middleware, hook='pre') {
         this.hooks[hook].push(middleware)
@@ -242,7 +242,7 @@ class Store {
      * ### `revise(annoId, anno, options, callback)`
      *
      * Revise an annotation.
-     *
+     * 
      * - `@param {String} annoId`
      * - `@param {Object} anno`
      * - `@param {Options} options`
@@ -273,7 +273,7 @@ class Store {
      * ### `remove(annoId, options, callback)`
      *
      * Delete an annotation, i.e. set the deleted date.
-     *
+     * 
      * - `@param {String} annoId`
      * - `@param {Options} options`
      * - `@param {Boolean} options.forceDelete` Set to `true` to hint the store to
@@ -293,7 +293,7 @@ class Store {
      * ### `search(query, options, callback)`
      *
      * Search the store.
-     *
+     * 
      * - `@param {Object} query`
      * - `@param {Options} options`
      *     - `@param {Boolean} options.latest` Return the latest revision only
@@ -317,7 +317,7 @@ class Store {
      * ### `comment(annoId, anno, options, callback)`
      *
      * Reply to an annotation
-     *
+     * 
      * - `@param {String} annoId`
      * - `@param {Object} anno`
      * - `@param {Options} options`
@@ -354,7 +354,7 @@ class Store {
 
     /**
      * ### `aclcheck(targets, options, callback)`
-     *
+     * 
      * - `@param {Array} targets`
      * - `@param {Options} options`
      * - `@param {function} callback`
@@ -434,7 +434,7 @@ class Store {
      * ### `mintDoi(anno, options, callback)`
      *
      * Replaces the complete annotation with the passed annotation, not just revise it.
-     *
+     * 
      * - `@param {Object} annoId` Id of the annotation to create DOI(s) for
      * - `@param {Options} options`
      * - `@param {function} callback`

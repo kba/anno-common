@@ -19,8 +19,6 @@ Click on the image for links
 - [anno-store-memory](./anno-store-memory): In-Memory store backed by NeDB
 - [anno-store-mongodb](./anno-store-mongodb): MongoDB store
 - [anno-store-mongolike](./anno-store-mongolike): Store base class for Mongo-like NoSQL databases
-- [anno-store-sql](./anno-store-sql): 
-- [anno-test](./anno-test): 
 - [anno-util](./anno-util): Utility functions
 - [anno-util-loaders](./anno-util-loaders): Wrappers to configure processors
 - [anno-webpack](./anno-webpack): Bundling the anno-* tools for browser use
