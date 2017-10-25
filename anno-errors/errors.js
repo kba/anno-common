@@ -4,7 +4,7 @@ module.exports = {
      * ## `badSlug(slug)`
      */
     badSlug(slug) {
-        const err = new Error(`Slug Bad: ${JSON.stringify(slug)}`)
+        const err = new Error(`Slug already exists: ${JSON.stringify(slug)}`)
         err.code = 400
         return err
     },

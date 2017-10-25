@@ -96,6 +96,7 @@ module.exports = class StoreTests {
       let annos
 
       await store.wipe()
+      await store.init()
       await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
 
       annos = await store.search()
@@ -155,6 +156,7 @@ module.exports = class StoreTests {
       const {store} = this
 
       await store.wipe()
+      await store.init()
       const [saved1, saved2] = await Promise.all([input1, input2, input3, input4].map(i => store.create(i)))
 
       let annos = await store.search()
@@ -180,7 +182,7 @@ module.exports = class StoreTests {
       annos = await store.search()
       t.equals(annos.length, 2, '2 anno after delete')
 
-      annos = await store.search({includeDeleted: true})
+      annos = await store.search({}, {includeDeleted: true})
       t.equals(annos.length, 3, '3 anno after delete including the one set to deleted')
 
       t.end()
@@ -190,30 +192,34 @@ module.exports = class StoreTests {
   async testImport(t) {
     return t.test('import', async t => {
       const {store} = this
+      t.plan(8)
 
-      let got
+      const options = {
+        replaceAnnotation: true,
+        updateAnnotation: false,
+        slug: 'foobar3000'
+      }
 
-      got = await store.import(JSON.parse(JSON.stringify(toImport)), {slug: 'foobar3000'})
+      let got = await store.import(JSON.parse(JSON.stringify(toImport)), options)
       t.equals(got.id, 'http://localhost:3000/anno/foobar3000', 'id okay')
       t.equals(got.hasVersion.length, 2, '2 versions')
       t.equals(got.hasReply.length, 1, '1 reply')
       t.equals(got.hasReply[0].hasVersion.length, 1, 'first reply has one version')
 
-      got = await store.import(toImport, {slug: 'foobar3000'})
+      got = await store.import(toImport, options)
       t.equals(got.id, 'http://localhost:3000/anno/foobar3000', 'id STILL okay')
       t.equals(got.hasVersion.length, 2, 'STILL 2 versions')
       t.equals(got.hasReply.length, 1, 'STILL 1 reply')
       t.equals(got.hasReply[0].hasVersion.length, 1, 'first reply has STILL one version')
 
-      t.ok(true, "testImport")
-      return Promise.resolve()
+      t.end()
     })
   }
 
   async testAll(t) {
     return t.test('all', async t => {
       const {store} = this
-      t.plan(6)
+      t.plan(8)
       await store.init()
       await this.testWipe(t)
       await this.testCreateGet(t)

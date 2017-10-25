@@ -52,5 +52,5 @@ mongo store
 [X] "Cannot set headers after sent" error
 [X] Replace 'metadataOnly', 'skipVersions', ... with 'blacklist' and 'whitelist' options to allow/disallow certain props
 [X] BUG: import in mongolike creates versions of versions which is very very wrong
-[ ] ACL is broken for array-creators and string creators?
-    => mintDoi MUST take anno not annoID :(
+[X] ACL is broken for array-creators and string creators?  => mintDoi MUST take anno not annoID :(
+[ ] rename user-auth -> jwt-auth

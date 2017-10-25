@@ -97,6 +97,7 @@ class Store {
             return cb(new Error(`${impl} not implemented`))
         }
         this.__logContext(`BEFORE Method: ${ctx.method}`, ctx)
+
         async.eachSeries(this.hooks.pre, (proc, next) => {
             proc(ctx, (...args) => {
                 this.__logContext(`After preproc ${proc.impl}`, ctx)
@@ -204,6 +205,7 @@ class Store {
      *     - `@param {Boolean} options.latest` Return the latest revision only
      *     - `@param {Boolean} options.metadataOnly` Return only metadata
      *     - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
+     *     - `@param {Boolean} options.includeDeleted` Include results that would be 410 Gone otherwise
      * - `@param {String} options.user`
      * - `@param {function} callback`
      */
@@ -294,10 +296,11 @@ class Store {
      *
      * - `@param {Object} query`
      * - `@param {Options} options`
-     *     - `@param {String} options.user`
      *     - `@param {Boolean} options.latest` Return the latest revision only
-     *     - `@param {Boolean} options.metadataOnly` Return only metadata
+     *     - `@param {Boolean} options.metadataOnly` Return only metadata, i.e. no body/target
      *     - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
+     *     - `@param {Boolean} options.includeDeleted` Include results that would be 410 Gone otherwise
+     *     - `@param {String} options.user`
      * - `@param {function} callback`
      */
     search(query, options, cb) {
@@ -411,12 +414,16 @@ class Store {
      */
     import(anno, options, cb) {
         if (typeof options === 'function') [cb, options] = [options, {}]
+        if (!anno)
+            return cb(new Error("Must pass 'anno'"))
+
         // deliberately set to an incompatible option set so behavior must be set explicitly
         options = Object.assign({
           recursive: true,
-          replaceAnnotation: true,
-          updateAnnotation: true,
+          replaceAnnotation: false,
+          updateAnnotation: false,
         }, options)
+
         this._callMethod(Object.assign(options, {
             method: 'import',
             anno,

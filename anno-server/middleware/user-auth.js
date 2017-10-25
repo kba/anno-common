@@ -7,7 +7,7 @@ module.exports = function UserAuthMiddlewareFactory(cb) {
       // console.log(req.annoOptions)
         const {collectionConfig, collection} = req.annoOptions = req.annoOptions || {}
         if (!collectionConfig) {
-            console.log(errors.badRequest("userAuth: Missing 'collection' in the request context"))
+            // console.log(errors.badRequest("userAuth: Missing 'collection' in the request context"))
             return next()
         }
 

@@ -189,7 +189,7 @@ module.exports = ({store}) => {
         store.delete(req.params.annoId, req.annoOptions, (err, doc) => {
             if (err) return next(err)
             resp.status(204)
-            return resp.send(doc)
+            return resp.end()
         })
     })
 

@@ -28,9 +28,10 @@ class MongolikeStore extends Store {
         let annoId = this._idFromURL(options.annoId)
         const projection = this._projectionFromOptions(options)
         let {_id, _replyids, _revid} = splitIdRepliesRev(annoId)
-        this.db.findOne({_id}, projection, (err, doc) => {
-            if (!doc) return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
-            if (doc.deleted) return cb(errors.annotationDeleted(annoId, doc.deleted))
+        const query = {_id}
+        this.db.findOne(query, projection, (err, doc) => {
+            if (!doc)
+                return cb(errors.annotationNotFound({annoId, _id, _replyids, _revid}))
             for (let _replyid of _replyids) {
                 // console.log({doc, _replyid})
                 doc = doc._replies[_replyid - 1]
@@ -38,6 +39,8 @@ class MongolikeStore extends Store {
                     return cb(errors.replyNotFound(annoId))
                 }
             }
+            if (doc.deleted && !options.includeDeleted)
+                return cb(errors.annotationDeleted(annoId, doc.deleted))
             this._handleRevisions(annoId, doc, options, cb)
         })
     }
@@ -133,6 +136,8 @@ class MongolikeStore extends Store {
         // console.log("import options", {options})
         if (replaceAnnotation && updateAnnotation)
             return cb(new Error("'replaceAnnotation' contradicts 'updateAnnotation'"))
+        if (!replaceAnnotation && !updateAnnotation)
+            return cb(new Error("Either 'replaceAnnotation' or 'updateAnnotation'"))
         if (replaceAnnotation && !slug)
             return cb(new Error("'replaceAnnotation' requires 'slug'!"))
         if (replaceAnnotation && !recursive)
@@ -144,7 +149,7 @@ class MongolikeStore extends Store {
 
         this.get(_fullid, options, (err, existingAnno) => {
             const found = !err && existingAnno
-            if (!found && (updateAnnotation || replaceAnnotation)) {
+            if (!found && (updateAnnotation)) {
                 return cb(new Error(`'replaceAnnotation'/'updateAnnotation' are set, but annotation ${_fullid} wasn't found`))
             }
             // console.log({anno})
@@ -188,8 +193,6 @@ class MongolikeStore extends Store {
                         this.get(_fullid, options, cb)
                     })
                 }
-            } else {
-                this.create(anno, options, cb)
             }
         })
     }
@@ -287,7 +290,7 @@ class MongolikeStore extends Store {
     _delete(options, cb) {
         const {_id, _replyids} = splitIdRepliesRev(this._idFromURL(options.annoId))
         if (options.forceDelete) {
-            console.log("FORCE DELETE", options)
+            // console.log("FORCE DELETE", options)
             this.db.remove({_id}, (err, numRemoved) => {
                 if (err) return cb(err)
                 return cb()
@@ -314,10 +317,9 @@ class MongolikeStore extends Store {
 
         const nested = truthy(query.$nested)
 
-        if (!(truthy(query.includeDeleted))) {
+        if (!options.includeDeleted) {
             query.deleted = {$exists: false}
         }
-        delete query.includeDeleted
 
         if ('$target' in query) {
             const needle = asRegex ? {$regex: query.$target} : query.$target

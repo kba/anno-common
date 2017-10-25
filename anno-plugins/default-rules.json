@@ -165,6 +165,7 @@
           "user.role": "importer"
         },
         {
+          "user.role": "doiMinter",
           "anno.creator": {
             "$exists": true
           },
@@ -194,7 +195,7 @@
       ]
     },
     true,
-    "Importers may import"
+    "Importers may import anything, doiMinters may import their own annotations"
   ],
   [
     {},

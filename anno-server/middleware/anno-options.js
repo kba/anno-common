@@ -71,7 +71,7 @@ module.exports = function AnnoOptionsMiddleware(cb) {
             if (req.header('slug')) options.slug = req.header('slug')
 
             // log.silly("annoOptions scraped: " + JSON.stringify(options))
-            console.log("annoOptions scraped: " + JSON.stringify(options))
+            // console.log("annoOptions scraped: " + JSON.stringify(options))
             next()
         })
     }
