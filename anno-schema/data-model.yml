@@ -224,7 +224,7 @@ definitions:
           - {type: 'string', enum: ['TextualBody']}
           - type: 'array'
             items: {type: 'string'}
-            contains: ['TextualBody']
+            contains: {const: 'TextualBody'}
       value:  {type: 'string'}
       format: {$ref: '#/definitions/mediaType'}
 
@@ -564,14 +564,14 @@ definitions:
           - {type: 'string', enum: ['http://www.w3.org/ns/anno.jsonld']}
           - type: 'array'
             items: {type: 'string'}
-            contains: ['http://www.w3.org/ns/anno.jsonld']
+            contains: {const: 'http://www.w3.org/ns/anno.jsonld'}
       id: {$ref: '#/definitions/iri'}
       type:
         oneOf: 
           - {type: 'string', enum: ['AnnotationCollection']}
           - type: 'array'
             items: {type: 'string'}
-            contains: ['AnnotationCollection']
+            contains: {const: 'AnnotationCollection'}
       label: {type: 'string'}
       total: {type: 'number'}
       first:
@@ -594,14 +594,14 @@ definitions:
           - {type: 'string', enum: ['http://www.w3.org/ns/anno.jsonld']}
           - type: 'array'
             items: {type: 'string'}
-            contains: ['http://www.w3.org/ns/anno.jsonld']
+            contains: {const: 'http://www.w3.org/ns/anno.jsonld'}
       id: {$ref: '#/definitions/iri'}
       type:
         oneOf:
           - {type: 'string', enum: ['AnnotationPage']}
           - type: 'array'
             items: {type: 'string'}
-            contains: ['AnnotationPage']
+            contains: {const: 'AnnotationPage'}
       partOf:
         oneOf:
           - {$ref: '#/definitions/iri'}

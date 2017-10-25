@@ -353,9 +353,9 @@
               "items": {
                 "type": "string"
               },
-              "contains": [
-                "TextualBody"
-              ]
+              "contains": {
+                "const": "TextualBody"
+              }
             }
           ]
         },
@@ -944,9 +944,9 @@
               "items": {
                 "type": "string"
               },
-              "contains": [
-                "http://www.w3.org/ns/anno.jsonld"
-              ]
+              "contains": {
+                "const": "http://www.w3.org/ns/anno.jsonld"
+              }
             }
           ]
         },
@@ -966,9 +966,9 @@
               "items": {
                 "type": "string"
               },
-              "contains": [
-                "AnnotationCollection"
-              ]
+              "contains": {
+                "const": "AnnotationCollection"
+              }
             }
           ]
         },
@@ -1016,9 +1016,9 @@
               "items": {
                 "type": "string"
               },
-              "contains": [
-                "http://www.w3.org/ns/anno.jsonld"
-              ]
+              "contains": {
+                "const": "http://www.w3.org/ns/anno.jsonld"
+              }
             }
           ]
         },
@@ -1038,9 +1038,9 @@
               "items": {
                 "type": "string"
               },
-              "contains": [
-                "AnnotationPage"
-              ]
+              "contains": {
+                "const": "AnnotationPage"
+              }
             }
           ]
         },

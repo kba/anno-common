@@ -36,7 +36,7 @@
     "express-jwt": "^5.1.0",
     "express-session": "^1.15.2",
     "express-unless": "^0.3.0",
-    "js-yaml": "^3.8.3",
+    "js-yaml": "3.10.0",
     "jsonld-rapper": "^0.2.4",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
@@ -45,7 +45,7 @@
     "object-prune": "^0.0.4",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.0-rc.1"
+    "pug": "^2.0.0-rc.4"
   },
   "devDependencies": {
     "pm2": "^2.4.6"

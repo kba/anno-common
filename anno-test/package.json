@@ -22,6 +22,6 @@
     "@kba/anno-util-loaders": "^0.0.1",
     "@kba/anno-store-memory": "^0.0.1",
     "@kba/anno-store-file": "^0.0.1",
-    "tap": "^10.3.0"
+    "tap": "^10.7.2"
   }
 }

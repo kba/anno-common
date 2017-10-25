@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/kba/anno-common.svg?branch=master)](https://travis-ci.org/kba/anno-common)
 
+Look here for the [documentation](https://kba.github.io/anno-common)
+
 This monorepo contains packages that provide the building blocks for annotation
 software implementing the [Web Annotation Data
 Model](http://www.w3.org/TR/annotation-model/) and [Web Annotation
@@ -13,14 +15,11 @@ reuse of components.
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Concepts](#concepts)
 	* [Store](#store)
-	* [Plugins](#plugins)
-		* [Registering plugins](#registering-plugins)
 	* [Authentication](#authentication)
 	* [Revisions](#revisions)
 	* [Comments / Replies / Nesting](#comments--replies--nesting)
 	* [URL schema](#url-schema)
 	* [Extensions to Web Annotation Data Model](#extensions-to-web-annotation-data-model)
-* [Modules](#modules)
 * [Hacking](#hacking)
 
 <!-- END-MARKDOWN-TOC -->
@@ -45,40 +44,8 @@ The [`store-mongolike`](./anno-store-mongolike) module implements most of the
 such as [mongodb](https://mongodb.com) or
 [NeDB](https://github.com/louischatriot/nedb).
 
-<img src="./doc/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
+<img src="./doc/assets/img/store-hierarchy.png" height="300" title="Hierarchy of stores"/>
 
-### Plugins
-
-When the method of a store is invoked, a **context** is created. The context is
-just an object with the method parameters, such as the new annotation in the
-case of `create` or the lookup ID in the case of `get`, as well as metadata
-pertinent to the annotation.
-
-Plugins can be registered to intercept the context at specific points in the
-processing lifecycle, currently `pre` and `post`.
-
-Plugins hooking into the `pre` phase can augment the context with additional
-metadata or prevent further processing if certain conditions are met. Plugins
-hooking into the `post` phase can access and modify the context after the method has been
-dispatched.
-
-Examples where plugins are useful:
-
-* Validation: Detect invalid arguments for an operation
-* Authentication: Inject a user id from a session into the context
-* Authorization: Determine whether the calling user is may execute this
-  operation.
-* User lookup: Provide user details from an external data source, such as the
-  display name.
-* Notification: Send an e-mail for new annotations
-
-#### Registering plugins
-
-To register plugins, add them to the `ANNO_PLUGINS_PRE` / `ANNO_PLUGINS_POST`
-config variables. The syntax is `<module>[:<export>]`:
-
-* `mod1:AuthPlugin` will use the function exported as `AuthPlugin` from a module `mod1`
-* `mod1` will use the default export of module `mod1` as the plugin
 
 
 ### Authentication
@@ -89,7 +56,7 @@ To inspect your tokens, try [jwtinspector browser
 extension](https://www.jwtinspector.io/#) which will detect JWT in HTTP traffic
 and localStorage.
 
-<img src="./doc/authentication.png" height="400" title="Authentication flow"/>
+<img src="./doc/assets/img/authentication.png" height="400" title="Authentication flow"/>
 
 ### Revisions
 
@@ -133,33 +100,6 @@ Replies reply to the generic not versioned annotation (for sanity)
 Namespace for extensions is `https://kba.github.io/anno/#`, short `annox`.
 
 Context is at `https://anno.github.io/anno/context.jsonld`
-
-## Modules
-
-Click on the image for links
-
-<a href="./doc/repo-structure.svg"><img src="./doc/repo-structure.png"/></a>
-
-<!-- BEGIN-EVAL bash ./scripts/summarize.sh -->
-- [anno-cli](./anno-cli): Command line interface for anno-*
-- [anno-errors](./anno-errors): Shared errors for anno-*
-- [anno-fixtures](./anno-fixtures): Sample data for testing and experimentation
-- [anno-plugins](./anno-plugins): Rights management for anno store (users and rules)
-- [anno-queries](./anno-queries): Search and create fragments of Web Annotations
-- [anno-schema](./anno-schema): JSON schema, OpenAPI and JSON-LD context
-- [anno-server](./anno-server): Web Annotation Protocol server with extensions
-- [anno-store](./anno-store): Interface for stores
-- [anno-store-file](./anno-store-file): Flat file store based on NeDB
-- [anno-store-http](./anno-store-http): HTTP Client to Web Annotation Protocol servers
-- [anno-store-memory](./anno-store-memory): In-Memory store backed by NeDB
-- [anno-store-mongodb](./anno-store-mongodb): MongoDB store
-- [anno-store-mongolike](./anno-store-mongolike): Store base class for Mongo-like NoSQL databases
-- [anno-test](./anno-test): 
-- [anno-util](./anno-util): Utility functions
-- [anno-util-loaders](./anno-util-loaders): Wrappers to configure processors
-- [anno-webpack](./anno-webpack): Bundling the anno-* tools for browser use
-
-<!-- END-EVAL -->
 
 ## Hacking
 

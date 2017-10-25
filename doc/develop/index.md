@@ -41,13 +41,16 @@ Testing and building is orchestrated with a self-documenting Makefile. Running `
     test                      Run all tests set as TESTS.
     test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql
     clean                     Remove tempdir
-    webpack                   webpack dev, min, fixtures
+    webpack                   webpack min, fixtures, schema, memory-store, schema
     webpack-dev               webpack -s
     webpack-watch             webpack -d -w
-    webpack-fixtures          webpack fixtures
     webpack-min               webpack production version
-    site                      Generate static website in gh-pages
-    site-deploy               Generate site and deploy to github
+    webpack-clean             Remove all webpacked files
+    site                      Build the documentation in './site'
+    site-serve                Continuously serve the site on localhost:8000
+    site-dist                 Rebuild the dist folder to be deployed
+    shinclude                 Run shinclude on markdown sources
+    site-deploy               Deploy site to Github pages
 
   Variables
 

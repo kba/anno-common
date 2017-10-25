@@ -480,7 +480,7 @@
             "required": true,
             "description": "Reply to post",
             "schema": {
-              "$ref": "#/definitions/AnnotationReply"
+              "$ref": "#/definitions/Annotation"
             }
           },
           {

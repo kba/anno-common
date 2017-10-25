@@ -43,6 +43,7 @@ mongo store
 [X] fix perm.nedb / acl
 [ ] ACL rules should emit status/message instead of true/false
 [ ] Unify ACL / User processor interfaces (DRY)
+
 [X] fix import (recursive will clobber revisions and replies!!!!)
 [X] Send DOI if set as Link rel="canonical"
 [ ] handle multiple creators
@@ -54,3 +55,9 @@ mongo store
 [X] BUG: import in mongolike creates versions of versions which is very very wrong
 [X] ACL is broken for array-creators and string creators?  => mintDoi MUST take anno not annoID :(
 [ ] rename user-auth -> jwt-auth
+
+[ ] Add option to choose anno env vars in demos
+[ ] Clean up plugins into proper hooks
+[x] webpack anno-schema
+[x] fix validator sample
+[ ] Create multi-url search that returns count of annotations per target id

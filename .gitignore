@@ -15,3 +15,6 @@ anno-docker
 .~*
 anno-webpack/deploy.mk
 site
+doc/assets/dist
+doc/context.jsonld
+doc/openapi.json

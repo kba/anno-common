@@ -304,7 +304,7 @@ paths:
           name: 'body'
           required: true
           description: 'Reply to post'
-          schema: {$ref: '#/definitions/AnnotationReply'}
+          schema: {$ref: '#/definitions/Annotation'}
         - {in: 'header', name: 'X-Anno-Collection', description: 'Anno Collection', default: 'default'}
         - {in: 'header', name: 'X-Anno-Context', description: 'Context from whence this annotation origins', required: true}
       responses:

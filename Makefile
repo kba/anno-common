@@ -3,6 +3,8 @@ PATH := ./node_modules/.bin:$(PATH)
 MKDIR = mkdir -p
 RM = rm -rf
 
+export SHLOG_TERM=info
+
 # Directory for temporary data. Default: '$(TEMPDIR)'
 TEMPDIR = $(PWD)/temp
 
@@ -16,8 +18,6 @@ REPORTER = tap
 # All Tests. Default: '$(TESTS)'
 TESTS = $(shell find . -mindepth 1 -maxdepth 2 -name '*.test.js' -and -not -name 'store-sql.test.js')
 
-SITEDIR = gh-pages
-
 # BEGIN-EVAL makefile-parser --make-help Makefile
 
 help:
@@ -25,6 +25,7 @@ help:
 	@echo "  Targets"
 	@echo ""
 	@echo "    bootstrap                 lerna bootstrap and check for binaries"
+	@echo "    prepublish                Compile YAML and such"
 	@echo "    anno-fixtures/index.json  Setup test fixtures"
 	@echo "    start\:%                  cd anno-% && make start"
 	@echo "    stop\:%                   cd anno-% && make stop"
@@ -34,13 +35,16 @@ help:
 	@echo "    test                      Run all tests set as TESTS."
 	@echo "    test\:%                   Run all unit/integration tests in <MODULE>, e.g. make test:store-sql"
 	@echo "    clean                     Remove tempdir"
-	@echo "    webpack                   webpack dev, min, fixtures"
+	@echo "    webpack                   webpack min, fixtures, schema, memory-store, schema"
 	@echo "    webpack-dev               webpack -s"
 	@echo "    webpack-watch             webpack -d -w"
-	@echo "    webpack-fixtures          webpack fixtures"
 	@echo "    webpack-min               webpack production version"
-	@echo "    site                      Generate static website in $(SITEDIR)"
-	@echo "    site-deploy               Generate site and deploy to github"
+	@echo "    webpack-clean             Remove all webpacked files"
+	@echo "    site                      Build the documentation in './site'"
+	@echo "    site-serve                Continuously serve the site on localhost:8000"
+	@echo "    site-dist                 Rebuild the dist folder to be deployed"
+	@echo "    shinclude                 Run shinclude on markdown sources"
+	@echo "    site-deploy               Deploy site to Github pages"
 	@echo ""
 	@echo "  Variables"
 	@echo ""
@@ -58,6 +62,11 @@ help:
 bootstrap:
 	@if ! which rapper >/dev/null;then echo "rapper not installed. try 'apt install raptor2-utils'" ; exit 1 ;fi
 	lerna bootstrap
+
+# Compile YAML and such
+prepublish:
+	cd anno-schema; npm run prepublish
+	cd anno-plugins; npm run prepublish
 
 # Setup test fixtures
 .PHONY: bootstrap-test
@@ -156,27 +165,26 @@ webpack-clean:
 # Github pages
 #
 
-$(SITEDIR):
-	git clone --branch gh-pages https://github.com/kba/anno $(SITEDIR)
-
-# Generate static website in $(SITEDIR)
+# Build the documentation in './site'
 .PHONY: site
 site:
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs build
 
 # Continuously serve the site on localhost:8000
-.PHONY: site/serve
-site/serve:
+.PHONY: site-serve
+site-serve:
 	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
 	mkdocs serve
 
 # Rebuild the dist folder to be deployed
 .PHONY: site-dist
-site-dist: webpack-clean webpack
-	rm -rvf site/assets/dist
-	cp -rv anno-webpack/dist site/assets/dist
-	cp -v anno-schema/context.json doc/context.jsonld
+site-dist: webpack-clean webpack prepublish
+	rm -rvf doc/assets/dist
+	cp -rv anno-webpack/dist doc/assets/dist
+	cd anno-schema; \
+		node -e "console.log(JSON.stringify(require('.').openapi, null, 2))" > ../doc/openapi.json ;\
+		node -e "console.log(JSON.stringify(require('.').jsonldContext, null, 2))" > ../doc/context.jsonld
 
 # Run shinclude on markdown sources
 .PHONY: shinclude
@@ -188,5 +196,6 @@ shinclude:
 
 # Deploy site to Github pages
 .PHONY: site-dist shinclude
-site-deploy: site
-	cd $(SITEDIR) && git add . && git commit --edit -m "updated docs `date`" && git push
+site-deploy: shinclude site-dist
+	@if ! which mkdocs >/dev/null;then echo "mkdocs not installed. try 'pip install mkdocs-material'" ; exit 1 ;fi
+	mkdocs gh-deploy

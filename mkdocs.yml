@@ -1,0 +1,35 @@
+site_name: Anno Documentation
+theme: material
+docs_dir: doc
+repo_name: 'kba/anno'
+repo_url: 'https://github.com/kba/anno'
+extra:
+  feature:
+    tabs: true
+extra_javascript:
+  - assets/dist/anno.min.js
+  - assets/dist/anno-fixtures.js
+  - assets/dist/anno-schema.js
+  # - assets/dist/anno-memory-store.js
+  - https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.30.0/codemirror.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.30.0/mode/javascript/javascript.min.js
+extra_css:
+  - assets/css/custom.css
+  - https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.30.0/codemirror.min.css
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc(permalink=true)
+  - pymdownx.arithmatex
+  - pymdownx.betterem(smart_enable=all)
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist(custom_checkbox=true)
+  - pymdownx.tilde
