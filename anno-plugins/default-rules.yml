@@ -35,13 +35,16 @@
 
 - - method: 'revise'
     user.id: {$exists: true}
-    oldAnno.creator: {$exists: true}
     # TODO check that oldAnno.creator == anno.creator
     $or:
-      - oldAnno.creator: {$ref: '/user/id'}
-      - oldanno.creator.id: {$ref: '/user/id'}
-      - oldanno.creator: {$ref: '/user'}
-      - oldanno.creator.id: {$ref: '/user'}
+      - oldAnno.creator.id: {$exists: true}
+        $or:
+          - oldAnno.creator.id: {$ref: '/user/id'}
+          - oldAnno.creator.id: {$ref: '/user'}
+      - oldAnno.creator: {$exists: true}
+        $or:
+          - oldAnno.creator: {$ref: '/user/id'}
+          - oldAnno.creator: {$ref: '/user'}
   - true
   - "Allow users to revise their own annotations"
 

@@ -376,11 +376,12 @@ class Store {
             // TODO do not run get before, rely on the _callMethod logic in the method facades.
             // Otherwise aclCheck and executing methods w/o dryRun might differ
             // TODO get rid of metadataOnly
-            this.get(annoId, {metadataOnly: true}, (err, found) => {
+            this.get(annoId, {metadataOnly: true}, (err, oldAnno) => {
                 const anno = {target: annoId}
-                if (found) {
-                    Object.assign(anno, found, {target: annoId})
+                if (oldAnno) {
+                    Object.assign(anno, oldAnno, {target: annoId})
                 }
+                Object.assign(options, {oldAnno})
                 // console.log({user: options.user.id, anno: anno.creator ? anno.creator.id : '---'})
                 // console.log(annoId, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
                 options.dryRun = true

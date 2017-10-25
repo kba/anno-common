@@ -54,29 +54,40 @@
       "user.id": {
         "$exists": true
       },
-      "oldAnno.creator": {
-        "$exists": true
-      },
       "$or": [
         {
+          "oldAnno.creator.id": {
+            "$exists": true
+          },
+          "$or": [
+            {
+              "oldAnno.creator.id": {
+                "$ref": "/user/id"
+              }
+            },
+            {
+              "oldAnno.creator.id": {
+                "$ref": "/user"
+              }
+            }
+          ]
+        },
+        {
           "oldAnno.creator": {
-            "$ref": "/user/id"
-          }
-        },
-        {
-          "oldanno.creator.id": {
-            "$ref": "/user/id"
-          }
-        },
-        {
-          "oldanno.creator": {
-            "$ref": "/user"
-          }
-        },
-        {
-          "oldanno.creator.id": {
-            "$ref": "/user"
-          }
+            "$exists": true
+          },
+          "$or": [
+            {
+              "oldAnno.creator": {
+                "$ref": "/user/id"
+              }
+            },
+            {
+              "oldAnno.creator": {
+                "$ref": "/user"
+              }
+            }
+          ]
         }
       ]
     },

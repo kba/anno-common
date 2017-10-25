@@ -20,6 +20,7 @@ class AnnoAcl {
         ctx.collection = (ctx.collection || 'default')
         // process.env.SIFT_RULE_DEBUG = 'true'
         // log.silly("Matching against rules:", ctx)
+        // if (ctx.method === 'revise')
         // try {
         //     console.log(`Matching against rules:` + JSON.stringify({
         //         'ctx.method': ctx.method,
