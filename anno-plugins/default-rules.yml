@@ -74,9 +74,8 @@
 
 - - method: 'import'
     $or:
-    - user.role: 'importer'
-    - user.role: 'doiMinter'
-      anno.creator: {$exists: true}
+    - user.role: 'moderator'
+    - anno.creator: {$exists: true}
       # user: {$exists: true}
       $or:
         - anno.creator: {$ref: '/user'}
