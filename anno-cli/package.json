@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Anno CLI",
   "author": "kba",
   "license": "ISC",
@@ -13,14 +13,13 @@
   "scripts": {
     "test": "echo no test"
   },
-  "devDependencies": {},
   "dependencies": {
+    "@kba/anno-queries": "^0.0.2",
+    "@kba/anno-schema": "^0.0.2",
+    "@kba/anno-store": "^0.0.2",
+    "@kba/anno-store-file": "^0.0.2",
+    "@kba/anno-util": "^0.0.2",
     "envyconf": "^0.0.5",
-    "@kba/anno-queries": "^0.0.1",
-    "@kba/anno-schema": "^0.0.1",
-    "@kba/anno-store": "^0.0.1",
-    "@kba/anno-store-file": "^0.0.1",
-    "@kba/anno-util": "^0.0.1",
     "get-stdin": "^5.0.1",
     "mustache": "^2.3.0",
     "object-prune": "^0.0.4",

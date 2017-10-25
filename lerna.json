@@ -1,8 +1,7 @@
 {
   "lerna": "2.4.0",
   "packages": [
-    "anno-*",
-    "envyconf"
+    "anno-*"
   ],
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

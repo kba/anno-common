@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-queries",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "High-level annotation query classes ",
   "main": "queries.js",
   "repository": {
@@ -10,10 +10,10 @@
   "author": "kba",
   "license": "ISC",
   "dependencies": {
-    "@kba/anno-util": "^0.0.1",
+    "@kba/anno-util": "^0.0.2",
     "object-prune": "^0.0.4"
   },
   "devDependencies": {
-    "@kba/anno-fixtures": "^0.0.1"
+    "@kba/anno-fixtures": "^0.0.2"
   }
 }

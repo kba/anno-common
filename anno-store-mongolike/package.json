@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-mongolike",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A partial implementation of a store for mongodb, nedb and such",
   "main": "store-mongolike.js",
   "XXX scripts": {
@@ -12,12 +12,11 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-mongolike#readme",
   "dependencies": {
-    "envyconf": "^0.0.5",
-    "@kba/anno-schema": "^0.0.1",
-    "@kba/anno-errors": "^0.0.1",
-    "@kba/anno-store": "^0.0.1",
-    "@kba/anno-util": "^0.0.1",
-    "async": "^2.3.0"
-  },
-  "devDependencies": {}
+    "@kba/anno-errors": "^0.0.2",
+    "@kba/anno-schema": "^0.0.2",
+    "@kba/anno-store": "^0.0.2",
+    "@kba/anno-util": "^0.0.2",
+    "async": "^2.3.0",
+    "envyconf": "^0.0.5"
+  }
 }

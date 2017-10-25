@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-mongodb",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Open Annotation mongodb store",
   "main": "store-mongodb.js",
   "scripts": {
@@ -12,11 +12,11 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-mongodb#readme",
   "dependencies": {
+    "@kba/anno-store-mongolike": "^0.0.2",
     "envyconf": "^0.0.5",
-    "@kba/anno-store-mongolike": "^0.0.1",
     "mongodb": "^2.2.25"
   },
   "devDependencies": {
-    "@kba/anno-store": "^0.0.1"
+    "@kba/anno-store": "^0.0.2"
   }
 }
