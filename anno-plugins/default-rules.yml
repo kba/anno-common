@@ -75,13 +75,14 @@
 - - method: 'import'
     $or:
     - user.role: 'moderator'
-    - anno.creator: {$exists: true}
-      # user: {$exists: true}
-      $or:
-        - anno.creator: {$ref: '/user'}
-        - anno.creator.id: {$ref: '/user'}
-        - anno.creator: {$ref: '/user/id'}
-        - anno.creator.id: {$ref: '/user/id'}
+    # - role: 'doiMinter'
+    #   anno.creator: {$exists: true}
+    #   # user: {$exists: true}
+    #   $or:
+    #     - anno.creator: {$ref: '/user'}
+    #     - anno.creator.id: {$ref: '/user'}
+    #     - anno.creator: {$ref: '/user/id'}
+    #     - anno.creator.id: {$ref: '/user/id'}
   - true
   - "Importers may import anything, doiMinters may import their own annotations"
 
