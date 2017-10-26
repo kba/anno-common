@@ -472,6 +472,7 @@ class Store {
           return cb(new Error("Collection must set 'heiperEndpoint'"))
         // Strip revisions (we want DOIs for all revisions)
         const {_unversioned, _id} = splitIdRepliesRev(annoId)
+        // console.log("Mint a DOI for", {_unversioned, _id, annoId})
         const isReply = _unversioned !== _id
         this.get(annoId, options, (err, existingAnno) => {
             if (err || ! existingAnno) {
