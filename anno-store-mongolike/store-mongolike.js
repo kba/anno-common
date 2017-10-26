@@ -332,6 +332,7 @@ class MongolikeStore extends Store {
             delete query.$target
         }
 
+        // XXX UNDOCUMENTED
         if (asRegex) {
             Object.keys(query).forEach(k => {
                 if (typeof query[k] === 'string') {

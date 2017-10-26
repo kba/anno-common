@@ -59,7 +59,7 @@ module.exports =
       this.router.use((req, resp, next) => {
         if (req.query.from && req.query.from !== 'undefined') req.from = req.query.from
         else req.from = ''
-        if (truthy(req.query.debugAuth)) req.debugAuth = true
+        req.debugAuth = 'debugAuth' in req.query
         return next()
       })
 
@@ -161,7 +161,7 @@ module.exports =
         const sub = this.determineUser(req)
         const success = req.query.ok
         const {collectionsAvailable} = req
-        const collectionsSelected = new Set((req.query.c || '').split(','))
+        const collectionsSelected = new Set((req.query.c || '').split(',').map(c => c.trim()))
         resp.status(200).render('request', {
           from: 'request',
           debugAuth: req.debugAuth,
@@ -180,28 +180,23 @@ module.exports =
         const sub = this.determineUser(req)
         const collections = Object.keys(req.body).filter(c => c.match(/^c_/)).map(c => c.substr(2))
         const {displayName, reasons, email} = req.body || 'None'
-        let success = sub && collections.length
-        const redirect = () => resp.redirect(`request?ok=${success}`)
-        if (success) {
-          const text = textRequestMail({sub, displayName, collections, reasons, email})
-          smtp.sendMail({
-            from: SMTP_FROM,
-            to: SMTP_TO,
-            subject: `Anno-Registrierung ${sub}`,
-            text
-          }, (err) => {
-            if (err) {
-              console.log(err)
-              console.log("Failed to send this data by mail")
-              console.log({sub, displayName, collections, reasons, email})
-            }
-            redirect()
-          })
-        } else {
-          redirect()
+        const text = textRequestMail({sub, displayName, collections, reasons, email})
+        const mail = {
+          from: SMTP_FROM,
+          to: SMTP_TO,
+          subject: `Anno-Registrierung ${sub}`,
+          text
         }
+        smtp.sendMail(mail, err => {
+          if (err) {
+            console.log(err)
+            console.log("Failed to send this data by mail")
+            console.log({mail})
+          }
+          resp.redirect(`request?ok=1`)
+        })
+        console.log({mail})
       })
-
 
       return this.router
     }

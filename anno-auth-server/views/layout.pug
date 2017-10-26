@@ -15,7 +15,7 @@ html
 							a(href="register") Register
 					else
 						li
-							a(href=debugAuth ? sub : '')= 'Logged in as ' + sub.replace(/.*\//, '')
+							a(href=debugAuth ? sub : false)= 'Logged in as ' + sub.replace(/.*\//, '')
 						if debugAuth
 							li.dropdown
 								a.dropdown-toggle(data-toggle="dropdown") Tokens #[span.caret]
