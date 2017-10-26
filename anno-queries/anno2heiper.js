@@ -32,7 +32,7 @@ function anno2heiper(tla, doiTemplate) {
         type: 'person',
       }})
     })
-  })
+  }, {nestedProps: ['hasVersion']})
   return {heiperJson, anno: tla}
 }
 
