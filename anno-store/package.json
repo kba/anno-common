@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Open Annotation Store (base class)",
   "main": "store.js",
   "scripts": {

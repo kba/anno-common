@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-sql",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Open Annotation sql store",
   "main": "store-sql.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "@kba/anno-errors": "^0.0.2",
     "@kba/anno-queries": "^0.0.2",
     "@kba/anno-schema": "^0.0.2",
-    "@kba/anno-store": "^0.0.2",
+    "@kba/anno-store": "^0.0.3",
     "@kba/anno-util": "^0.0.2",
     "envyconf": "^0.0.5",
     "knex": "^0.13.0",

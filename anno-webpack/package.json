@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-webpack",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Browser version",
   "main": "dist/anno.min.js",
   "scripts": {
@@ -18,9 +18,9 @@
     "@kba/anno-errors": "^0.0.2",
     "@kba/anno-queries": "^0.0.2",
     "@kba/anno-schema": "^0.0.2",
-    "@kba/anno-store": "^0.0.2",
-    "@kba/anno-store-http": "^0.0.2",
-    "@kba/anno-store-memory": "^0.0.2"
+    "@kba/anno-store": "^0.0.3",
+    "@kba/anno-store-http": "^0.0.3",
+    "@kba/anno-store-memory": "^0.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

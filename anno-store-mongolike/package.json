@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-mongolike",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A partial implementation of a store for mongodb, nedb and such",
   "main": "store-mongolike.js",
   "XXX scripts": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "@kba/anno-errors": "^0.0.2",
     "@kba/anno-schema": "^0.0.2",
-    "@kba/anno-store": "^0.0.2",
+    "@kba/anno-store": "^0.0.3",
     "@kba/anno-util": "^0.0.2",
     "async": "^2.3.0",
     "envyconf": "^0.0.5"
