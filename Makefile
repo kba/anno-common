@@ -155,7 +155,8 @@ webpack/%:
 # webpack production version
 .PHONY: webpack-min
 webpack-min:
-	cd anno-webpack && webpack -p --output-filename anno.min.js
+	cd anno-webpack && webpack -p
+	# cd anno-webpack && webpack -p --output-filename anno.min.js
 
 # Remove all webpacked files
 webpack-clean:

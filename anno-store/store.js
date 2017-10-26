@@ -112,7 +112,8 @@ class Store {
                 return cb(err)
             if (ctx.dryRun)
                 return cb(null)
-            this.__logContext(`NOW Method: ${ctx.method}`, ctx)
+            // this.__logContext(`NOW Method: ${ctx.method}`, ctx)
+            // console.log(`NOW Method: ${ctx.method}`)
             try {
                 this[impl](ctx, (err, ...retvals) => {
                     if (err) return cb(err)
@@ -371,28 +372,28 @@ class Store {
     _aclCheck(options, cb) {
         const ret = {}
         const {targets} = options
-        async.forEach(targets, (annoId, urlDone) => {
-            ret[annoId] = {}
+        async.forEach(targets, (target, urlDone) => {
+            ret[target] = {}
             // TODO do not run get before, rely on the _callMethod logic in the method facades.
             // Otherwise aclCheck and executing methods w/o dryRun might differ
             // TODO get rid of metadataOnly
-            this.get(annoId, {metadataOnly: true}, (err, oldAnno) => {
-                const anno = {target: annoId}
+            this.get(target, {metadataOnly: true}, (err, oldAnno) => {
+                const anno = {target}
                 if (oldAnno) {
-                    Object.assign(anno, oldAnno, {target: annoId})
+                    Object.assign(anno, oldAnno, {target})
                 }
                 Object.assign(options, {oldAnno})
                 // console.log({user: options.user.id, anno: anno.creator ? anno.creator.id : '---'})
-                // console.log(annoId, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
+                // console.log(target, {user_equals_anno: options.user.id == (anno.creator ? anno.creator.id : '---')})
                 options.dryRun = true
                 async.parallel({
                     read:   (cb) => cb(null, true), // since we know this anno could be read/retrieved
                     create: (cb) => this.create(anno, options, (err)      => cb(null, !err)),
-                    revise: (cb) => this.revise(annoId, anno, options, (err) => cb(null, !err)),
-                    remove: (cb) => this.delete(annoId, options, (err)       => cb(null, !err)),
-                    mintDoi: (cb) => this.mintDoi(annoId, options, (err)      => cb(null, !err)),
+                    revise: (cb) => this.revise(target, anno, options, (err) => cb(null, !err)),
+                    remove: (cb) => this.delete(target, options, (err)       => cb(null, !err)),
+                    mintDoi: (cb) => this.mintDoi(target, options, (err)      => cb(null, !err)),
                 }, (err, perms) => {
-                    ret[annoId] = perms
+                    ret[target] = perms
                     urlDone()
                 })
             })
