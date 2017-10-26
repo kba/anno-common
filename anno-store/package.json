@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Open Annotation Store (base class)",
   "main": "store.js",
   "scripts": {
@@ -12,8 +12,8 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store#readme",
   "dependencies": {
-    "@kba/anno-queries": "^0.0.2",
-    "@kba/anno-schema": "^0.0.2",
+    "@kba/anno-queries": "0.0.4",
+    "@kba/anno-schema": "0.0.4",
     "@kba/anno-util": "^0.0.2",
     "async": "^2.3.0",
     "envyconf": "^0.0.5",

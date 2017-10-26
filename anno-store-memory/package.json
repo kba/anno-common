@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-memory",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Open Annotation in-memory store",
   "main": "store-memory.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-memory#readme",
   "dependencies": {
-    "@kba/anno-store-mongolike": "^0.0.3",
+    "@kba/anno-store-mongolike": "0.0.4",
     "nedb": "^1.8.0"
   }
 }
