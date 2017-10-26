@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@kba/anno-fixtures",
   "version": "0.0.2",
   "description": "Test fixtures for anno",

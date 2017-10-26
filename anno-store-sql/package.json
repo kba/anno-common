@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@kba/anno-store-sql",
   "version": "0.0.3",
   "description": "Open Annotation sql store",

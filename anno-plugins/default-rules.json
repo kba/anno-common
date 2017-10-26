@@ -173,10 +173,9 @@
       "method": "import",
       "$or": [
         {
-          "user.role": "importer"
+          "user.role": "moderator"
         },
         {
-          "user.role": "doiMinter",
           "anno.creator": {
             "$exists": true
           },
