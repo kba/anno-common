@@ -135,33 +135,6 @@
       "$or": [
         {
           "user.role": "moderator"
-        },
-        {
-          "anno.creator": {
-            "$exists": true
-          },
-          "$or": [
-            {
-              "anno.creator": {
-                "$ref": "/user"
-              }
-            },
-            {
-              "anno.creator.id": {
-                "$ref": "/user"
-              }
-            },
-            {
-              "anno.creator": {
-                "$ref": "/user/id"
-              }
-            },
-            {
-              "anno.creator.id": {
-                "$ref": "/user/id"
-              }
-            }
-          ]
         }
       ]
     },
@@ -173,35 +146,7 @@
       "method": "import",
       "$or": [
         {
-          "user.role": "importer"
-        },
-        {
-          "user.role": "doiMinter",
-          "anno.creator": {
-            "$exists": true
-          },
-          "$or": [
-            {
-              "anno.creator": {
-                "$ref": "/user"
-              }
-            },
-            {
-              "anno.creator.id": {
-                "$ref": "/user"
-              }
-            },
-            {
-              "anno.creator": {
-                "$ref": "/user/id"
-              }
-            },
-            {
-              "anno.creator.id": {
-                "$ref": "/user/id"
-              }
-            }
-          ]
+          "user.role": "moderator"
         }
       ]
     },

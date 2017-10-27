@@ -62,13 +62,13 @@
 - - method: 'mintDoi'
     $or:
       - user.role: 'moderator'
-      - anno.creator: {$exists: true}
-        # user: {$exists: true}
-        $or:
-          - anno.creator: {$ref: '/user'}
-          - anno.creator.id: {$ref: '/user'}
-          - anno.creator: {$ref: '/user/id'}
-          - anno.creator.id: {$ref: '/user/id'}
+      # - anno.creator: {$exists: true}
+        # # user: {$exists: true}
+        # $or:
+        #   - anno.creator: {$ref: '/user'}
+        #   - anno.creator.id: {$ref: '/user'}
+        #   - anno.creator: {$ref: '/user/id'}
+        #   - anno.creator.id: {$ref: '/user/id'}
   - true
   - "Allow moderators and users for their own annotations to mint DOIS"
 
