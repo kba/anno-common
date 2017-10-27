@@ -1,7 +1,7 @@
 {
   "name": "anno-tests",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Tests",
   "scripts": {
     "test": "tap *.test.js"
@@ -13,7 +13,7 @@
   "homepage": "https://github.com/kba/anno",
   "dependencies": {
     "@kba/anno-errors": "^0.0.2",
-    "@kba/anno-plugins": "0.0.4",
+    "@kba/anno-plugins": "^0.0.5",
     "@kba/anno-queries": "0.0.4",
     "@kba/anno-schema": "0.0.4",
     "@kba/anno-store": "0.0.4",
