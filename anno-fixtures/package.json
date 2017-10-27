@@ -1,6 +1,7 @@
 {
+  "private": true,
   "name": "@kba/anno-fixtures",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Test fixtures for anno",
   "main": "index.json",
   "repository": "github:kba/anno",

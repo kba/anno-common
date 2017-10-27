@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-file",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Open Annotation nedb store",
   "main": "store-file.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-store-file#readme",
   "dependencies": {
-    "@kba/anno-store-mongolike": "^0.0.2",
+    "@kba/anno-store-mongolike": "0.0.4",
     "envyconf": "^0.0.5",
     "nedb": "^1.8.0"
   }

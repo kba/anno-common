@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-util-loaders",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Loaders for processors",
   "main": "util-loaders.js",
   "repository": "github:kba/anno",
@@ -12,7 +12,7 @@
   "author": "kba",
   "license": "ISC",
   "devDependencies": {
-    "@kba/anno-fixtures": "^0.0.2"
+    "@kba/anno-fixtures": "0.0.4"
   },
   "dependencies": {
     "@kba/anno-errors": "^0.0.2",
