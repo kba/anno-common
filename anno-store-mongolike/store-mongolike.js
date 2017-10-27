@@ -384,19 +384,21 @@ class MongolikeStore extends Store {
         // console.log(annoId, options)
         // console.log('_toJSONLD', {annoId, options})
         if (typeof annoId === 'object') [annoId, anno] = [annoId._id, annoId]
-        options = Object.assign({filterProps: []}, options)
+        const {filterProps, skipContext} = options = Object.assign({filterProps: []}, options)
         const ret = Object.assign({}, mergeProps)
-        if (!options.skipContext) {
+        if (!skipContext) {
             ret['@context'] = 'http://www.w3.org/ns/anno.jsonld'
         }
         ret.id = this._urlFromId(annoId)
-        ret.type = "Annotation"
+        if (filterProps.indexOf('type') === -1)
+            ret.type = "Annotation"
+
         options.skipContext = true
         Object.keys(anno)
-            .filter(prop => options.filterProps.indexOf(prop) === -1)
+            .filter(prop => filterProps.indexOf(prop) === -1)
             .forEach(prop => {
             if (prop === '_revisions' && !(annoId.match(/~\d$/))) {
-                if (anno._revisions.length > 0 && options.filterProps.indexOf('hasVersion') === -1) {
+                if (anno._revisions.length > 0 && filterProps.indexOf('hasVersion') === -1) {
                     let revId = 0
                     ret.hasVersion = anno._revisions.map(revision => {
                         const revisionLD = this._toJSONLD(`${annoId}~${++revId}`, revision, options, {
@@ -406,7 +408,7 @@ class MongolikeStore extends Store {
                     })
                 }
             } else if (prop === '_replies') {
-                if (anno._replies.length > 0 && options.filterProps.indexOf('hasReply') === -1) {
+                if (anno._replies.length > 0 && filterProps.indexOf('hasReply') === -1) {
                     let replyId = 0
                     ret.hasReply = anno._replies
                         .map(reply => {
