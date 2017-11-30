@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-store-http",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "A store acessed via OA Protocol",
   "main": "store-http.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "@kba/anno-errors": "^0.0.2",
     "@kba/anno-schema": "0.0.4",
-    "@kba/anno-store": "0.0.4",
+    "@kba/anno-store": "^0.0.6",
     "@kba/anno-util": "^0.0.2",
     "axios": "^0.15.3",
     "envyconf": "^0.0.5",
