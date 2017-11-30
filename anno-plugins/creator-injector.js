@@ -68,7 +68,15 @@ class CreatorInjector extends UserBase {
                 applyToAnno(ctx.retvals[0], fn)
             }
         // pre-processing
-        } else if (ctx.anno && ! ctx.metadataOnly && ! ctx.anno.creator && ctx.user && ctx.user.id) {
+        // XXX buggy this injects the CURRENT user as the creator for create which is very very wrong
+        } else if (
+               ctx.anno
+            && ! ctx.metadataOnly
+            && ! ctx.anno.creator
+            && ctx.anno.title
+            && ctx.user
+            && ctx.user.id
+        ) {
             ctx.anno.creator = ctx.user.id
         }
         return cb()

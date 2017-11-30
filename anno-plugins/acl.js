@@ -19,7 +19,7 @@ class AnnoAcl {
         const log = envyLog('ANNO', 'acl')
         ctx.collection = (ctx.collection || 'default')
         // process.env.SIFT_RULE_DEBUG = 'true'
-        // log.silly("Matching against rules:", ctx)
+        // log.debug("Matching against rules:", ctx)
         // if (ctx.method === 'revise')
         // try {
         //     console.log(`Matching against rules:` + JSON.stringify({
@@ -48,6 +48,11 @@ class AnnoAcl {
             // log.debug(`Rule '${matchingRule}' matched`, {anno})
            // log.silly(`Rule '${matchingRule}' matched`)
         }
+        // if (ctx.user && ctx.method == 'create') {
+        //   log.debug(JSON.stringify(Object.keys(ctx)))
+        //   log.debug(ctx.anno)
+        //   log.debug(matchingRule.name)
+        // }
         this.reason = matchingRule.name
         if (matchingRule.tail)
             return cb(null, matchingRule.name)

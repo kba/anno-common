@@ -104,14 +104,18 @@ class Store {
                 next(...args)
             })
         }, (err, pass) => {
-            if (err) {
-                const userId = ctx.user && ctx.user.id ? ctx.user.id : ctx.user
-                this.log.silly(`${userId} may not ${ctx.method}: ${err}`)
+            const userId = ctx.user && ctx.user.id ? ctx.user.id : ctx.user
+            if (userId) {
+                if (err) {
+                    // this.log.debug(`${userId} may not ${ctx.method}: ${err}`)
+                } else {
+                    // this.log.debug(`${userId} MAY ${ctx.method}: ${pass}`)
+                }
             }
             if (err)
                 return cb(err)
             if (ctx.dryRun)
-                return cb(null)
+                return cb(null, pass)
             // this.__logContext(`NOW Method: ${ctx.method}`, ctx)
             // console.log(`NOW Method: ${ctx.method}`)
             try {
@@ -130,7 +134,7 @@ class Store {
                     })
                 })
             } catch (exception) {
-              console.log(exception)
+                console.log(exception)
                 cb(exception)
             }
         })
