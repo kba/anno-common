@@ -24,13 +24,17 @@ function start(app, cb) {
     // Static files
     app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
 
+    app.use(bodyParser.json({
+      type: '*/*',
+      limit: 2 * 1024 * 1024
+    }))
+
     app.use(morgan('short', {
         skip: (req, res) => {
             return req.method === 'OPTIONS' || req.originalUrl === '/anno/acl'
         }
     }))
 
-    app.use(bodyParser.json({type: '*/*', limit: 1 * 1024 * 1024}))
 
     const store = require('@kba/anno-store').load({
         loadingModule: module,
