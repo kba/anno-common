@@ -21,9 +21,6 @@ function start(app, cb) {
 
     app.set('trust proxy', 'loopback')
 
-    // Static files
-    app.use('/dist', express.static(envyConf('ANNO').DIST_DIR))
-
     app.use(bodyParser.json({
       type: '*/*',
       limit: 2 * 1024 * 1024
@@ -60,6 +57,13 @@ function start(app, cb) {
         if (err)
             return cb(err)
         app.use(cors)
+
+        // Static files
+        app.use('/dist', (req, resp, next) => {
+          resp.header('Access-Control-Allow-Origin', '*')
+          next()
+        }, express.static(envyConf('ANNO').DIST_DIR))
+
         store.init(err => {
             if (err) return cb(err)
 
