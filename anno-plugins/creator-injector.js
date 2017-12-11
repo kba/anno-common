@@ -73,7 +73,7 @@ class CreatorInjector extends UserBase {
                ctx.anno
             && ! ctx.metadataOnly
             && ! ctx.anno.creator
-            && ctx.anno.title
+            && (ctx.anno.title || ctx.anno.motivation)
             && ctx.user
             && ctx.user.id
         ) {
