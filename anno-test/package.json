@@ -1,7 +1,7 @@
 {
   "name": "anno-tests",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Tests",
   "scripts": {
     "test": "tap *.test.js"
@@ -13,14 +13,14 @@
   "homepage": "https://github.com/kba/anno",
   "dependencies": {
     "@kba/anno-errors": "^0.0.2",
-    "@kba/anno-plugins": "^0.0.7",
+    "@kba/anno-plugins": "^0.0.8",
     "@kba/anno-queries": "0.0.4",
-    "@kba/anno-schema": "0.0.4",
-    "@kba/anno-store": "^0.0.6",
-    "@kba/anno-store-file": "^0.0.6",
-    "@kba/anno-store-memory": "^0.0.6",
+    "@kba/anno-schema": "^0.0.8",
+    "@kba/anno-store": "^0.0.8",
+    "@kba/anno-store-file": "^0.0.8",
+    "@kba/anno-store-memory": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
-    "@kba/anno-util-loaders": "0.0.4",
+    "@kba/anno-util-loaders": "^0.0.8",
     "envyconf": "^0.0.5",
     "tap": "^10.7.2"
   }

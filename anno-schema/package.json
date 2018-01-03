@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-schema",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "description": "Anno JSON schema",
   "main": "schema.js",
   "repository": "github:kba/anno",

@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-util-loaders",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "description": "Loaders for processors",
   "main": "util-loaders.js",
   "repository": "github:kba/anno",

@@ -1,6 +1,6 @@
 {
   "name": "@kba/anno-server",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Open Annotation Server",
   "main": "server.js",
   "scripts": {
@@ -16,14 +16,14 @@
   "dependencies": {
     "@kba/anno-errors": "^0.0.2",
     "@kba/anno-fixtures": "0.0.4",
-    "@kba/anno-plugins": "^0.0.7",
+    "@kba/anno-plugins": "^0.0.8",
     "@kba/anno-queries": "0.0.4",
-    "@kba/anno-schema": "0.0.4",
-    "@kba/anno-store": "^0.0.6",
-    "@kba/anno-store-file": "^0.0.6",
-    "@kba/anno-store-mongodb": "^0.0.6",
+    "@kba/anno-schema": "^0.0.8",
+    "@kba/anno-store": "^0.0.8",
+    "@kba/anno-store-file": "^0.0.8",
+    "@kba/anno-store-mongodb": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
-    "@kba/anno-util-loaders": "0.0.4",
+    "@kba/anno-util-loaders": "^0.0.8",
     "async": "^2.3.0",
     "axios": "^0.15.3",
     "body-parser": "^1.17.0",
