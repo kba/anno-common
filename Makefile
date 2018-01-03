@@ -61,6 +61,7 @@ help:
 .PHONY: bootstrap
 bootstrap:
 	@if ! which rapper >/dev/null;then echo "rapper not installed. try 'apt install raptor2-utils'" ; exit 1 ;fi
+	@if [ ! -d node_modules ];then npm install;fi
 	lerna bootstrap
 
 # Compile YAML and such

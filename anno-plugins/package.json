@@ -16,13 +16,13 @@
     "@kba/anno-fixtures": "0.0.4"
   },
   "dependencies": {
-    "@kba/anno-errors": "^0.0.2",
-    "@kba/anno-util": "^0.0.2",
+    "@kba/anno-errors": "0.0.2",
+    "@kba/anno-util": "0.0.2",
     "@kba/anno-util-loaders": "0.0.4",
-    "ajv": "^5.2.0",
+    "ajv": "^5.5.2",
     "deep-extend": "^0.5.0",
-    "envyconf": "^0.0.5",
+    "envyconf": "0.0.5",
     "lodash.set": "^4.3.2",
-    "sift-rule": "^0.1.1"
+    "sift-rule": "^0.1.3"
   }
 }
