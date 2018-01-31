@@ -10,7 +10,11 @@ function anno2heiper(tla, doiTemplate) {
     // console.log({doi, _fullid})
     const internalIdentifier = _fullid
     const url = anno.id
+    const creators = anno.creator && anno.creator.length
+      ? anno.creator
+      : tla.creator
     anno.doi = doi
+
     heiperJson.push({
       url,
       doi,
@@ -27,7 +31,7 @@ function anno2heiper(tla, doiTemplate) {
           url: anno.rights
         }
       },
-      creators: ensureArray(anno, 'creator').map(c => {return {
+      creators: creators.map(c => {return {
         displayForm: {eng: c.displayName},
         type: 'person',
       }})
