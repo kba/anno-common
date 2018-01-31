@@ -31,7 +31,7 @@ class AnnoAcl {
         //         'keys(ctx)': Object.keys(ctx)
         //     }, null, 2))
         // } catch (err) {}
-        process.env.SIFT_RULE_DEBUG = 'true'
+        // process.env.SIFT_RULE_DEBUG = 'true'
         // console.log({
         //     rules: this.rules,
         //     user: ctx.user ? ctx.user.id : 'no user',
