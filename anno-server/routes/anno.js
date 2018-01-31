@@ -241,7 +241,7 @@ module.exports = ({store}) => {
     })
 
     //
-    // POST /anno/acl
+    // POST /anno/doi
     //
     router.post('/doi', (req, resp, next) => {
         req.body.annoIds = (req.body.annoIds || [])

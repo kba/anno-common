@@ -501,8 +501,8 @@ class MongolikeStore extends Store {
             }
 
             // Always send the DOI of the latest revision as the DOI of the TLA
-            // so people can cite this correctly
-            if (latestRevision.doi)
+            // so people can cite this correctly unless the root has its own DOI
+            if (!doc.doi && latestRevision.doi)
                 doc.doi = latestRevision.doi
 
             // XXX TODO use urlJoin and such
