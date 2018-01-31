@@ -150,6 +150,41 @@ module.exports = ({store}) => {
         })
     })
 
+    router.get('/rss', (req, resp, next) => {
+      store.search((err, docs) => {
+        const items = docs.sort((a, b) => {
+          return Date.parse(b.modified) - Date.parse(a.modified)
+        })
+          .map(a => {
+            const author = ! a.creator ? '??????'
+              : typeof a.creator === 'string' ? a.creator
+              : Array.isArray(a.creator) ? a.creator.map(b => b.displayName || b.id).join(', ')
+              : a.creator.displayName || a.creator.id
+            return `<item>
+            <title>${a.title}</title>
+            <author>${author}</author>
+            <link>${a.target.scope || a.id}</link>
+            <pubDate>${a.modified}</pubDate>
+            </item>
+            `
+          })
+          .slice(0, 10)
+        resp
+          .status(200)
+          .header('Content-Type', 'application/rss+xml')
+          .send(`<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>Annotations Feed</title>
+  <link>https://anno.ub.uni-heidelberg.de</link>
+  ${items.join('\n')}
+</channel>
+</rss>
+        `)
+      })
+    })
+
 
     //
     // HEAD /anno/{annoId}

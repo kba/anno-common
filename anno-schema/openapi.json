@@ -206,6 +206,19 @@
         }
       }
     },
+    "/{{ OPENAPI_PATH }}/rss": {
+      "get": {
+        "tags": [
+          "anno"
+        ],
+        "summary": "Get the 10 last modified annotations as an RSS 2.0 feed",
+        "responses": {
+          "200": {
+            "description": "the 10 last modified annotations"
+          }
+        }
+      }
+    },
     "/{{ OPENAPI_PATH }}/{annoId}": {
       "get": {
         "tags": [
