@@ -118,7 +118,10 @@ class MongolikeStore extends Store {
             const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
             // console.log("CREATEREPLY", {replyFullId, selector})
             // console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
-            this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
+            this.db.update({_id}, {
+                $set: {_lastReplied: new Date()},
+                $push: {[selector+'_replies']: anno}
+            }, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
                 // options.latest = true
@@ -247,7 +250,9 @@ class MongolikeStore extends Store {
                 const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
 
                 // Prepend the selector to all fields that should be replaced
-                const setQuery = {}
+                const setQuery = {
+                    _lastReplied: new Date()
+                }
                 Object.keys(annoRoot).forEach(k => setQuery[`${selector}.${k}`] = annoRoot[k])
                 modQueries = [
                     {$set: setQuery},
