@@ -151,24 +151,23 @@ module.exports = ({store}) => {
     })
 
     router.get('/rss', (req, resp, next) => {
-      store.search((err, docs) => {
-        const items = docs.sort((a, b) => {
-          return Date.parse(b.modified) - Date.parse(a.modified)
-        })
-          .map(a => {
-            const author = ! a.creator ? '??????'
-              : typeof a.creator === 'string' ? a.creator
-              : Array.isArray(a.creator) ? a.creator.map(b => b.displayName || b.id).join(', ')
-              : a.creator.displayName || a.creator.id
-            return `<item>
+      store.search({}, {
+        sort: 'modified.desc',
+        limit: 20
+      }, (err, docs) => {
+        const items = docs.map(a => {
+          const author = ! a.creator ? '??????'
+            : typeof a.creator === 'string' ? a.creator
+            : Array.isArray(a.creator) ? a.creator.map(b => b.displayName || b.id).join(', ')
+            : a.creator.displayName || a.creator.id
+          return `<item>
             <title>${a.title}</title>
             <author>${author}</author>
             <link>${a.id}</link>
             <pubDate>${a.modified}</pubDate>
             </item>
             `
-          })
-          .slice(0, 10)
+        })
         resp
           .status(200)
           .header('Content-Type', 'application/rss+xml')
