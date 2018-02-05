@@ -163,7 +163,7 @@ module.exports = ({store}) => {
             return `<item>
             <title>${a.title}</title>
             <author>${author}</author>
-            <link>${a.target.scope || a.id}</link>
+            <link>${a.id}</link>
             <pubDate>${a.modified}</pubDate>
             </item>
             `

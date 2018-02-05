@@ -67,6 +67,32 @@ module.exports = function AnnoOptionsMiddleware(cb) {
                 }
             })
 
+            // string values
+            ;[
+              'sort',
+            ].forEach(option => {
+              const optionHeader = `X-Anno-${option}`.toLowerCase()
+              if (option in req.query) {
+                options[option] = req.query[option].trim()
+                delete req.query[option]
+              } else if (optionHeader in req.headers) {
+                options[option] = req.headers[optionHeader].trim()
+              }
+            })
+
+            // number values
+            ;[
+              'limit',
+            ].forEach(option => {
+              const optionHeader = `X-Anno-${option}`.toLowerCase()
+              if (option in req.query) {
+                options[option] = parseFloat(req.query[option])
+                delete req.query[option]
+              } else if (optionHeader in req.headers) {
+                options[option] = parseFloat(req.headers[optionHeader])
+              }
+            })
+
             // https://www.w3.org/TR/annotation-protocol/#suggesting-an-iri-for-an-annotation
             if (req.header('slug')) options.slug = req.header('slug')
 

@@ -359,20 +359,30 @@ class MongolikeStore extends Store {
         const projection = this._projectionFromOptions(options)
 
         // console.log(JSON.stringify({query, projection}, null, 2))
-        this.db.find(query, projection, (err, docs) => {
+        const cursor = this.db.find(query, projection)
+
+        const limit = parseInt(options.limit) || 500
+        cursor.limit(limit)
+
+        if (options.sort) {
+            let [sortField, sortDir] = options.sort.split('.')
+            sortDir = sortDir === 'asc' ? +1 : -1
+            cursor.sort({[sortField]: sortDir})
+        }
+        const execFind = (cb) => {
+            // nedb's cursor must be executed, docs are an array
+            if (cursor.exec) return cursor.exec(cb)
+            // mongodb's cursor already executed but needs toArray for results
+            return cursor.toArray(cb)
+        }
+        execFind((err, docs) => {
             if (err) return cb(err)
             if (docs === undefined) docs = []
+            // console.log(err, docs.length)
             options.skipContext = true
-
-            // mongodb returns a cursor, nedb a list of documents
-            const docsToArray = (docs, cb) => Array.isArray(docs) ? cb(null, docs) : docs.toArray(cb)
-            docsToArray(docs, (err, docs) => {
-                // console.log('docsToArray', {err, docs, options})
-                if (err) return cb(err)
-                async.map(docs, (doc, done) => {
-                    this._handleRevisions(doc._id, doc, options, done)
-                }, cb)
-            })
+            async.map(docs, (doc, done) => {
+                this._handleRevisions(doc._id, doc, options, done)
+            }, cb)
         })
     }
 
