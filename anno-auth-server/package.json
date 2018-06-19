@@ -21,7 +21,7 @@
     "express": "^4.15.0",
     "express-session": "^1.15.2",
     "express-unless": "^0.3.0",
-    "jsonwebtoken": "^7.3.0",
+    "jsonwebtoken": "^8.0.0",
     "morgan": "^1.8.1",
     "nodemailer": "^4.0.1",
     "passport": "^0.3.2",
