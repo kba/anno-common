@@ -5,7 +5,9 @@
   "description": "Open Annotation sql store",
   "main": "store-sql.js",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "tap *.test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "kba",
   "license": "ISC",
@@ -22,9 +24,11 @@
     "knex": "^0.13.0",
     "knex-cleaner": "1.1.3",
     "objection": "^0.8.9",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "snyk": "^1.88.0"
   },
   "devDependencies": {
     "@kba/anno-fixtures": "0.0.4"
-  }
+  },
+  "snyk": true
 }
