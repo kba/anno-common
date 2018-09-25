@@ -1,5 +1,17 @@
 const {applyToAnno, ensureArray, splitIdRepliesRev} = require('@kba/anno-util')
 
+function toArray(value) {
+  if (!Array.isArray(value)) {
+    if (value === undefined || value === null) {
+      return []
+    }
+    else {
+      return [value]
+    }
+  }
+  return value
+}
+
 // TODO configurable defaults
 function anno2heiper(tla, doiTemplate) {
   const heiperJson = []
@@ -10,9 +22,9 @@ function anno2heiper(tla, doiTemplate) {
     // console.log({doi, _fullid})
     const internalIdentifier = _fullid
     const url = anno.id
-    const creators = anno.creator && anno.creator.length
-      ? anno.creator
-      : tla.creator
+    const annoCreators = toArray(anno.creator)
+    const tlaCreators = toArray(tla.creator)
+    const creators = annoCreators.length > 0 ? annoCreators : tlaCreators
     anno.doi = doi
 
     heiperJson.push({
