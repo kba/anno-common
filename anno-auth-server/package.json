@@ -21,12 +21,12 @@
     "express": "^4.15.0",
     "express-session": "^1.15.2",
     "express-unless": "^0.3.0",
-    "jsonwebtoken": "^7.3.0",
-    "morgan": "^1.8.1",
+    "jsonwebtoken": "^7.4.3",
+    "morgan": "^1.9.1",
     "nodemailer": "^4.0.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.0-rc.4",
+    "pug": "^2.0.0",
     "truthy": "0.0.1"
   },
   "devDependencies": {
