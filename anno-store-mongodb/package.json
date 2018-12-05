@@ -14,7 +14,7 @@
   "dependencies": {
     "@kba/anno-store-mongolike": "^0.0.8",
     "envyconf": "^0.0.5",
-    "mongodb": "^2.2.25"
+    "mongodb": "^2.2.31"
   },
   "devDependencies": {
     "@kba/anno-store": "^0.0.8"
