@@ -44,6 +44,12 @@ class CreatorInjector extends UserBase {
         if (!METHODS.has(ctx.method))
             return cb()
 
+        // for DWork => Trigger project reindexing
+        if(!ctx.dryRun && (ctx.method==='create' || ctx.method==='revise') && ctx.collection==='diglit' && ctx.metadata.projectname.match(/^[^.\/][^\/]*$/)) {
+          const fs=require('fs');
+          fs.appendFileSync('/data/diglitData/import/reindex/'+ctx.metadata.projectname+'.ready', "anno-plugins/creator-injektor.js\n");
+        }
+
         if ('retvals' in ctx) {
             const fn = (anno) => {
                 if (Array.isArray(anno.creator)) {
