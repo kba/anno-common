@@ -17,6 +17,12 @@
     "@kba/anno-store": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
     "async": "^2.3.0",
-    "envyconf": "^0.0.5"
-  }
+    "envyconf": "^0.0.5",
+    "snyk": "^1.316.1"
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "snyk": true
 }
