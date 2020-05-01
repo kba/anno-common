@@ -4,7 +4,9 @@
   "version": "0.0.8",
   "description": "Tests",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "tap *.test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "kba",
   "license": "ISC",
@@ -22,6 +24,8 @@
     "@kba/anno-util": "^0.0.2",
     "@kba/anno-util-loaders": "^0.0.8",
     "envyconf": "^0.0.5",
-    "tap": "^11.0.1"
-  }
+    "tap": "^11.0.1",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
