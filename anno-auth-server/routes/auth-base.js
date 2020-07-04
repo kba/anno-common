@@ -14,6 +14,10 @@ Dear Admin,
 
 a user '${displayName}' (Email: ${email}, ID: ${sub}) has requested access to these collections: ${collections.map(c => `\n  * ${c}`)}
 
+Reasons given:
+
+${reasons}
+
 If the user is not yet in the users.yml, add an entry such as this:
 
 '${sub}':
