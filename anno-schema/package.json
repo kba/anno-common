@@ -13,7 +13,7 @@
   "author": "kba",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^5.2.0",
+    "ajv": "^6.12.3",
     "envyconf": "^0.0.5",
     "js-yaml": "3.10.0",
     "mustache": "^2.3.0"
