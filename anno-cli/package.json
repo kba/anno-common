@@ -23,6 +23,6 @@
     "get-stdin": "^5.0.1",
     "mustache": "^2.3.0",
     "object-prune": "^0.0.4",
-    "yargs": "^7.0.2"
+    "yargs": "^16.0.0"
   }
 }
