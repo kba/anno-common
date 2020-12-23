@@ -16,7 +16,7 @@
     "@kba/anno-schema": "^0.0.8",
     "@kba/anno-store": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "envyconf": "^0.0.5",
     "querystring": "^0.2.0"
   }
