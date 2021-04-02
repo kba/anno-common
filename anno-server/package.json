@@ -37,7 +37,7 @@
     "express-session": "^1.15.2",
     "express-unless": "^0.3.0",
     "js-yaml": "3.10.0",
-    "jsonld-rapper": "^0.2.4",
+    "jsonld-rapper": "^0.2.5",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
     "mustache": "^2.3.0",
