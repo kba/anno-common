@@ -4,7 +4,9 @@
   "description": "Open Annotation Store (base class)",
   "main": "store.js",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "tap *.test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "kba",
   "license": "ISC",
@@ -18,6 +20,8 @@
     "async": "^2.3.0",
     "envyconf": "^0.0.5",
     "fetch-ponyfill": "4.1.0",
-    "slugid": "^1.1.0"
-  }
+    "slugid": "^1.1.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
