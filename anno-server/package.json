@@ -45,7 +45,7 @@
     "object-prune": "^0.0.4",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.0-rc.4"
+    "pug": "^2.0.0"
   },
   "devDependencies": {
     "pm2": "^2.4.6"
