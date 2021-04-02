@@ -15,7 +15,7 @@
   "dependencies": {
     "ajv": "^5.2.0",
     "envyconf": "^0.0.5",
-    "js-yaml": "3.10.0",
+    "js-yaml": "3.13.1",
     "mustache": "^2.3.0"
   },
   "devDependencies": {
