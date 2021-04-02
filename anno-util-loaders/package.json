@@ -7,7 +7,9 @@
   "bugs": "https://github.com/kba/anno/issues",
   "homepage": "https://github.com/kba/anno/tree/master/anno-util-loaders#readme",
   "scripts": {
-    "test": "tap *.test.js"
+    "test": "tap *.test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "kba",
   "license": "ISC",
@@ -19,6 +21,8 @@
     "async": "^2.3.0",
     "chokidar": "^1.7.0",
     "envyconf": "^0.0.5",
-    "js-yaml": "3.10.0"
-  }
+    "js-yaml": "3.10.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
