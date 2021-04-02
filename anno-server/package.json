@@ -6,7 +6,9 @@
   "scripts": {
     "test": "tap test/*.test.js",
     "start": "node server.js",
-    "docker": "docker build -t kbai/anno-server"
+    "docker": "docker build -t kbai/anno-server",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": "github:kba/anno",
   "bugs": "https://github.com/kba/anno/issues",
@@ -45,9 +47,11 @@
     "object-prune": "^0.0.4",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.0-rc.4"
+    "pug": "^2.0.0-rc.4",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "pm2": "^2.4.6"
-  }
+  },
+  "snyk": true
 }
