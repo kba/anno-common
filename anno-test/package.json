@@ -22,6 +22,6 @@
     "@kba/anno-util": "^0.0.2",
     "@kba/anno-util-loaders": "^0.0.8",
     "envyconf": "^0.0.5",
-    "tap": "^11.0.1"
+    "tap": "^12.0.2"
   }
 }
