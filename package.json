@@ -2,8 +2,8 @@
   "private": true,
   "name": "anno",
   "scripts": {
-    "bootstrap": "./node_modules/.bin/lerna bootstrap",
-    "X postinstall": "npm run bootstrap ; npm run link-all",
+    "sh": "\"$@\"",
+    "bootstrap": "./install.sh",
     "link-all": "lerna exec npm link",
     "docker": "docker build -t kbai/anno -f Dockerfile ."
   },

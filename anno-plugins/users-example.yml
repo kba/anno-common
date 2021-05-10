@@ -1,3 +1,7 @@
+%YAML 1.2
+# -*- coding: UTF-8, tab-width: 2 -*-
+---
+
 admin-user:
   role: 'admin'
   rules:
@@ -17,9 +21,22 @@ mike:
   public:
     displayName: 'Mike Doe'
   rules:
-    - [{collection: 'test'},         {role: ['doiMinter', 'creator']}]
+    - [{collection: 'test'},            {role: ['doiMinter', 'creator']}]
     - [{collection: 'default'},         {role: 'importer'}]
     - [{collection: 'test-collection'}, {role: 'moderator'}]
 
 spambot3000:
   inactive: true
+
+
+
+
+
+
+
+
+
+
+
+
+...
