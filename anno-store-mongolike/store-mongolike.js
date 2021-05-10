@@ -118,7 +118,10 @@ class MongolikeStore extends Store {
             const replyFullId = this._idFromURL(anno.replyTo + '.' + (parent._replies.length + 1))
             // console.log("CREATEREPLY", {replyFullId, selector})
             // console.log("CREATEREPLY", JSON.stringify({replyFullId, anno}, null, 2))
-            this.db.update({_id}, {$push: {[selector+'_replies']: anno}}, (err, arg) => {
+            this.db.update({_id}, {
+                $set: {_lastReplied: new Date()},
+                $push: {[selector+'_replies']: anno}
+            }, (err, arg) => {
                 // TODO differentiate, use errors from anno-errors
                 if (err) return cb(err)
                 // options.latest = true
@@ -247,7 +250,9 @@ class MongolikeStore extends Store {
                 const selector = _replyids.map(_replyid => `_replies.${_replyid - 1}`).join('.')
 
                 // Prepend the selector to all fields that should be replaced
-                const setQuery = {}
+                const setQuery = {
+                    _lastReplied: new Date()
+                }
                 Object.keys(annoRoot).forEach(k => setQuery[`${selector}.${k}`] = annoRoot[k])
                 modQueries = [
                     {$set: setQuery},
@@ -359,20 +364,30 @@ class MongolikeStore extends Store {
         const projection = this._projectionFromOptions(options)
 
         // console.log(JSON.stringify({query, projection}, null, 2))
-        this.db.find(query, projection, (err, docs) => {
+        const cursor = this.db.find(query, projection)
+
+        const limit = parseInt(options.limit) || 500
+        cursor.limit(limit)
+
+        if (options.sort) {
+            let [sortField, sortDir] = options.sort.split('.')
+            sortDir = sortDir === 'asc' ? +1 : -1
+            cursor.sort({[sortField]: sortDir})
+        }
+        const execFind = (cb) => {
+            // nedb's cursor must be executed, docs are an array
+            if (cursor.exec) return cursor.exec(cb)
+            // mongodb's cursor already executed but needs toArray for results
+            return cursor.toArray(cb)
+        }
+        execFind((err, docs) => {
             if (err) return cb(err)
             if (docs === undefined) docs = []
+            // console.log(err, docs.length)
             options.skipContext = true
-
-            // mongodb returns a cursor, nedb a list of documents
-            const docsToArray = (docs, cb) => Array.isArray(docs) ? cb(null, docs) : docs.toArray(cb)
-            docsToArray(docs, (err, docs) => {
-                // console.log('docsToArray', {err, docs, options})
-                if (err) return cb(err)
-                async.map(docs, (doc, done) => {
-                    this._handleRevisions(doc._id, doc, options, done)
-                }, cb)
-            })
+            async.map(docs, (doc, done) => {
+                this._handleRevisions(doc._id, doc, options, done)
+            }, cb)
         })
     }
 
@@ -501,8 +516,8 @@ class MongolikeStore extends Store {
             }
 
             // Always send the DOI of the latest revision as the DOI of the TLA
-            // so people can cite this correctly
-            if (latestRevision.doi)
+            // so people can cite this correctly unless the root has its own DOI
+            if (!doc.doi && latestRevision.doi)
                 doc.doi = latestRevision.doi
 
             // XXX TODO use urlJoin and such

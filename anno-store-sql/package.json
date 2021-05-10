@@ -22,7 +22,7 @@
     "knex": "^0.13.0",
     "knex-cleaner": "1.1.3",
     "objection": "^0.8.9",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "@kba/anno-fixtures": "0.0.4"

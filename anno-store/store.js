@@ -306,6 +306,8 @@ class Store {
      *     - `@param {Array[String]} options.filterProps` List of properties NOT to return, e.g. 'hasVersion' and 'hasReply'
      *     - `@param {Boolean} options.includeDeleted` Include results that would be 410 Gone otherwise
      *     - `@param {String} options.user`
+     *     - `@param {String} options.limit` Sort field and direction
+     *     - `@param {String} options.sort` Sort field and direction, e.g. `created.asc` or `canonical.desc`
      * - `@param {function} callback`
      */
     search(query, options, cb) {

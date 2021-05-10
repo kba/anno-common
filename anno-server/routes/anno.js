@@ -150,6 +150,46 @@ module.exports = ({store}) => {
         })
     })
 
+  function sendRss(resp, title, docs) {
+    const items = docs.map(a => {
+      const author = ! a.creator ? '??????'
+        : typeof a.creator === 'string' ? a.creator
+        : Array.isArray(a.creator) ? a.creator.map(b => b.displayName || b.id).join(', ')
+        : a.creator.displayName || a.creator.id
+      return `<item>
+            <title>${a.title}</title>
+            <author>${author}</author>
+            <link>${a.id}</link>
+            <pubDate>${a.modified}</pubDate>
+            </item>
+            `
+    }).join('\n')
+    resp
+      .status(200)
+      .header('Content-Type', 'application/rss+xml')
+      .send(`<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>${title}</title>
+  <link>https://anno.ub.uni-heidelberg.de</link>
+  ${items}
+</channel>
+</rss>`)
+  }
+
+    router.get('/rss', (req, resp, next) => {
+      store.search({}, {sort: 'modified.desc', limit: 20}, (err, docs) => {
+        sendRss(resp, 'Last modified Annotations', docs)
+      })
+    })
+
+    router.get('/rss/comments', (req, resp, next) => {
+      store.search({}, {sort: '_lastReplied.desc', limit: 20}, (err, docs) => {
+        sendRss(resp, 'Last commented Annotations', docs)
+      })
+    })
+
 
     //
     // HEAD /anno/{annoId}
@@ -241,7 +281,7 @@ module.exports = ({store}) => {
     })
 
     //
-    // POST /anno/acl
+    // POST /anno/doi
     //
     router.post('/doi', (req, resp, next) => {
         req.body.annoIds = (req.body.annoIds || [])

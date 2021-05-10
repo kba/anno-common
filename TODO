@@ -38,6 +38,7 @@ mongo store
     [X] hasParent undefined?
 [ ] store.search should return a Collection not an array
 [ ] honor Prefer: return=representation / return=minimal to imply skipVersions/metadataOnly, Preference-Applied sent back
+    [ ] DROP skipVersions (not implemented anymore)
 [X] schema: use getters and load config
 [X] fix perm.nedb / acl
 [ ] ACL rules should emit status/message instead of true/false
