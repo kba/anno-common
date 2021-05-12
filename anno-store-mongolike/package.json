@@ -16,7 +16,7 @@
     "@kba/anno-schema": "^0.0.8",
     "@kba/anno-store": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
-    "async": "^2.3.0",
+    "async": "^2.5.0",
     "envyconf": "^0.0.5"
   }
 }
