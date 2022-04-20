@@ -33,7 +33,7 @@
     "cookie-parser": "^1.4.3",
     "envyconf": "^0.0.5",
     "express": "^4.15.0",
-    "express-jwt": "^5.1.0",
+    "express-jwt": "^6.1.2",
     "express-session": "^1.15.2",
     "express-unless": "^0.3.0",
     "js-yaml": "3.10.0",
