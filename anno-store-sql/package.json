@@ -19,7 +19,7 @@
     "@kba/anno-store": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
     "envyconf": "^0.0.5",
-    "knex": "^0.13.0",
+    "knex": "^2.4.0",
     "knex-cleaner": "1.1.3",
     "objection": "^0.8.9",
     "sqlite3": "^5.0.2"
